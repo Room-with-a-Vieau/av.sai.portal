@@ -148,8 +148,61 @@ const QUERY_STOP_WORDS = new Set([
   'you',
 ]);
 
-function unsplash(path: string) {
-  return `https://images.unsplash.com/${path}?auto=format&fit=crop&w=800&h=520&q=80`;
+/**
+ * Photo IDs verified with HEAD requests — many legacy Unsplash paths now 404.
+ * ixlib/crop/w params match current CDN expectations for stable resizing.
+ */
+const UNSPLASH_PHOTO_IDS: readonly string[] = [
+  '1581091226825-a6a2a5aee158',
+  '1518770660439-4636190af475',
+  '1582719478250-c89cae4dc85b',
+  '1581092162384-8987c1d64718',
+  '1531297484001-80022131f5a1',
+  '1551288049-bebda4e38f71',
+  '1504328345606-18bbc8c9d7d1',
+  '1589829545856-d10d557cf95f',
+  '1565043666747-69f6646db940',
+  '1576091160550-2173dba999ef',
+  '1576091160399-112ba8d25d1d',
+  '1587854692152-cbe660dbde88',
+  '1504711434969-e33886168f5c',
+  '1505751172876-fa1923c5c528',
+  '1571019613454-1cb2f99b2d8b',
+  '1451187580459-43490279c0fa',
+  '1489515217757-5fd1be406fef',
+  '1500530855697-b586d89ba3ee',
+  '1460925895917-afdab827c52f',
+  '1581094794329-c8112a89af12',
+  '1558618666-fcd25c85cd64',
+  '1519389950473-47ba0277781c',
+  '1573164713714-d95e436ab8d6',
+  '1677442136019-21780ecad995',
+  '1515886657613-9f3515b0c78f',
+  '1554224155-6726b3ff858f',
+  '1497366216548-37526070297c',
+  '1497366754035-f200968a6e72',
+  '1600585154340-be6161a56a0c',
+  '1617791160505-6f00504e3519',
+  '1522071820081-009f0129c71c',
+  '1531482615713-2afd69097998',
+  '1557804506-669a67965ba0',
+  '1563986768609-322da13575f3',
+  '1573496359142-b8d87734a5a2',
+  '1504384308090-c894fdcc538d',
+  '1517245386807-bb43f82c33c4',
+  '1551434678-e076c223a692',
+  '1556761175-b413da4baf72',
+];
+
+function buildCatalogImageUrl(id: string): string {
+  return `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80`;
+}
+
+/** Distinct demo thumbnails; cycles only after all IDs are used once */
+function catalogDemoImage(slot: number): string {
+  const len = UNSPLASH_PHOTO_IDS.length;
+  const id = UNSPLASH_PHOTO_IDS[((slot % len) + len) % len]!;
+  return buildCatalogImageUrl(id);
 }
 
 export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
@@ -262,7 +315,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
           {
             sku: 'ME-SP-01',
             priceLabel: 'Field kit',
-            imageSrc: unsplash('photo-1581091226825-a6a2a5aee158'),
+            imageSrc: catalogDemoImage(0),
             isNew: true,
             title: 'Spare regulator seats & diaphragm kit — PM checklist',
             description:
@@ -277,7 +330,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
             matchTerms: ['spare', 'regulator', 'diaphragm', 'maintenance', 'kit'],
           },
           {
-            imageSrc: unsplash('photo-1581092160562-40aa08f11460'),
+            imageSrc: catalogDemoImage(1),
             title: 'Rounds log: compare field gauge vs control room DP',
             description:
               'One-page template for differential pressure checks across filters and coils — aligns with daily operator rounds.',
@@ -296,7 +349,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
             {
               sku: 'EC-SPEC-88',
               priceLabel: 'Consulting',
-              imageSrc: unsplash('photo-1581092918056-0c4c1ac51795'),
+              imageSrc: catalogDemoImage(2),
               isNew: true,
               title: 'Spec sheet bundle: regulators for cleanroom cascades',
               description:
@@ -311,7 +364,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
               matchTerms: ['specification', 'cleanroom', 'cascade', 'regulator'],
             },
             {
-              imageSrc: unsplash('photo-1518770660439-4636190af475'),
+              imageSrc: catalogDemoImage(3),
               title: 'IIoT architecture note: edge vs cloud historian',
               description:
                 'When to buffer logs at the gateway versus streaming to SCADA — written for retrofit projects using Omega wireless layers.',
@@ -328,7 +381,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
         : [
             {
               sku: 'PT-CHK-03',
-              imageSrc: unsplash('photo-1582719478250-c89cae4dc85b'),
+              imageSrc: catalogDemoImage(4),
               title: 'Line break card: zero-energy verification for regulators',
               description:
                 'Field safety steps before swapping a failed pressure reducing station — includes tag-out references.',
@@ -342,7 +395,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
               matchTerms: ['lockout', 'regulator', 'zero energy', 'line break'],
             },
             {
-              imageSrc: unsplash('photo-1558346490-bff35548aedf'),
+              imageSrc: catalogDemoImage(5),
               title: 'Wireless logger placement for rotating equipment',
               description:
                 'Vibration and temperature logger mounting patterns that survive washdown — plant technician playbook.',
@@ -364,7 +417,7 @@ export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): 
   }));
 }
 
-const defaultImg = unsplash('photo-1581092160562-40aa08f11460');
+const defaultImg = catalogDemoImage(6);
 
 function p(
   partial: Omit<SearchResultItem, 'id' | 'href'> & { id: string; href?: string }
@@ -394,7 +447,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['pressure', 'regulator', 'regulators', 'air', 'diaphragm'],
-    imageSrc: unsplash('photo-1558346490-bff35548aedf'),
+    imageSrc: catalogDemoImage(7),
     isNew: true,
     breadcrumb: ['Products', 'Pressure', 'Regulators'],
   }),
@@ -410,7 +463,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['regulator', 'brass', 'miniature', 'panel', 'low flow'],
-    imageSrc: unsplash('photo-1504917595217-d002cbf56fc7'),
+    imageSrc: catalogDemoImage(8),
     breadcrumb: ['Products', 'Pressure'],
   }),
   p({
@@ -425,7 +478,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['gauge', 'pressure', 'stainless', 'liquid filled'],
-    imageSrc: unsplash('photo-1581091226825-a6a2a5aee158'),
+    imageSrc: catalogDemoImage(9),
     breadcrumb: ['Products', 'Pressure', 'Gauges'],
   }),
   p({
@@ -438,7 +491,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['regulator', 'selection', 'natural gas', 'test bench'],
-    imageSrc: unsplash('photo-1581092162384-8987c1d64718'),
+    imageSrc: catalogDemoImage(10),
     breadcrumb: ['Learn', 'Featured'],
   }),
   p({
@@ -451,7 +504,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['differential', 'dp', 'filter', 'trend'],
-    imageSrc: unsplash('photo-1565514020163-395f34250af5'),
+    imageSrc: catalogDemoImage(11),
     breadcrumb: ['Resources', 'Application notes'],
   }),
   p({
@@ -464,7 +517,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['manual', 'installation', 'regulator', 'startup'],
-    imageSrc: unsplash('photo-1581092918056-0c4c1ac51795'),
+    imageSrc: catalogDemoImage(12),
     breadcrumb: ['Support', 'Manuals'],
   }),
   p({
@@ -478,7 +531,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['rebuild', 'regulator', 'field', 'maintenance'],
-    imageSrc: unsplash('photo-1581092160562-40aa08f11460'),
+    imageSrc: catalogDemoImage(13),
     visibleForDemoUsers: ['Maintenance Engineer'],
     demoUserTaxonomy: 'Maintenance Engineer',
     breadcrumb: ['Maintenance', 'Kits'],
@@ -493,7 +546,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['authority', 'turndown', 'engineering', 'prv'],
-    imageSrc: unsplash('photo-1531297484001-80022131f5a1'),
+    imageSrc: catalogDemoImage(14),
     visibleForDemoUsers: ['Engineering Consultant'],
     demoUserTaxonomy: 'Engineering Consultant',
     breadcrumb: ['Resources', 'Whitepapers'],
@@ -508,7 +561,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['creep', 'test', 'regulator', 'leak'],
-    imageSrc: unsplash('photo-1581092162384-8987c1d64718'),
+    imageSrc: catalogDemoImage(15),
     visibleForDemoUsers: ['Plant Technician'],
     demoUserTaxonomy: 'Plant Technician',
     breadcrumb: ['Operations', 'Shift aids'],
@@ -525,7 +578,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['pressure', 'datalogger'],
     matchTerms: ['transmitter', '4-20', 'pressure', 'loop'],
-    imageSrc: unsplash('photo-1518770660439-4636190af475'),
+    imageSrc: catalogDemoImage(16),
     breadcrumb: ['Products', 'Pressure', 'Transmitters'],
   }),
   p({
@@ -540,7 +593,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['differential', 'magnehelic', 'gauge', 'filter'],
-    imageSrc: unsplash('photo-1551288049-bebda4e38f71'),
+    imageSrc: catalogDemoImage(17),
     isNew: true,
     breadcrumb: ['Products', 'Pressure'],
   }),
@@ -554,7 +607,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer', 'omega'],
     searchBuckets: ['pressure'],
     matchTerms: ['hydronic', 'regulator', 'bypass', 'engineering'],
-    imageSrc: unsplash('photo-1504328345606-18bbc8c9d7d1'),
+    imageSrc: catalogDemoImage(18),
     breadcrumb: ['Learn', 'HVAC'],
   }),
   p({
@@ -567,7 +620,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['photohelic', 'minihelic', 'relay', 'manual'],
-    imageSrc: unsplash('photo-1589829545856-d10d557cf95f'),
+    imageSrc: catalogDemoImage(19),
     breadcrumb: ['Support', 'Manuals'],
   }),
   p({
@@ -582,7 +635,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['pressure'],
     matchTerms: ['regulator', 'low flow', 'analyzer', 'sample'],
-    imageSrc: unsplash('photo-1581091226825-a6a2a5aee158'),
+    imageSrc: catalogDemoImage(20),
     breadcrumb: ['Products', 'Pressure'],
   }),
   p({
@@ -595,7 +648,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['relief', 'regulator', 'sizing', 'inlet'],
-    imageSrc: unsplash('photo-1565043666747-69f6646db940'),
+    imageSrc: catalogDemoImage(21),
     breadcrumb: ['Resources', 'Safety'],
   }),
   p({
@@ -610,7 +663,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['manifold', 'differential', 'transmitter', 'block'],
-    imageSrc: unsplash('photo-1581092162384-8987c1d64718'),
+    imageSrc: catalogDemoImage(22),
     breadcrumb: ['Products', 'Valves'],
   }),
   p({
@@ -623,7 +676,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer', 'omega'],
     searchBuckets: ['pressure'],
     matchTerms: ['digital', 'regulator', 'skid', 'oem'],
-    imageSrc: unsplash('photo-1531297484001-80022131f5a1'),
+    imageSrc: catalogDemoImage(23),
     breadcrumb: ['Learn', 'OEM'],
   }),
   p({
@@ -636,7 +689,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['pressure'],
     matchTerms: ['lockup', 'regulator', 'verification', 'manual'],
-    imageSrc: unsplash('photo-1576091160550-2173dba999ef'),
+    imageSrc: catalogDemoImage(24),
     breadcrumb: ['Support', 'Field'],
   }),
 
@@ -653,7 +706,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['data', 'logger', 'temperature', 'thermocouple', 'mapping'],
-    imageSrc: unsplash('photo-1582719478250-c89cae4dc85b'),
+    imageSrc: catalogDemoImage(25),
     isNew: true,
     breadcrumb: ['Products', 'Data acquisition'],
   }),
@@ -669,7 +722,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['daq', 'usb', 'acquisition', 'logger', 'portable'],
-    imageSrc: unsplash('photo-1518770660439-4636190af475'),
+    imageSrc: catalogDemoImage(26),
     breadcrumb: ['Products', 'DAQ'],
   }),
   p({
@@ -682,7 +735,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['mapping', 'logger', 'autoclave', 'validation'],
-    imageSrc: unsplash('photo-1576091160399-112ba8d25d1d'),
+    imageSrc: catalogDemoImage(27),
     breadcrumb: ['Learn', 'Life sciences'],
   }),
   p({
@@ -695,7 +748,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['alarm', 'software', 'data', 'logger'],
-    imageSrc: unsplash('photo-1551288049-bebda4e38f71'),
+    imageSrc: catalogDemoImage(28),
     breadcrumb: ['Resources', 'Software'],
   }),
   p({
@@ -708,7 +761,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['manual', 'calibration', 'certificate', 'logger'],
-    imageSrc: unsplash('photo-1587854692152-cbe660dbde88'),
+    imageSrc: catalogDemoImage(29),
     breadcrumb: ['Support', 'Manuals'],
   }),
   p({
@@ -721,7 +774,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['battery', 'logger', 'maintenance', 'stock'],
-    imageSrc: unsplash('photo-1565043666747-69f6646db940'),
+    imageSrc: catalogDemoImage(30),
     visibleForDemoUsers: ['Maintenance Engineer'],
     demoUserTaxonomy: 'Maintenance Engineer',
     breadcrumb: ['Maintenance', 'CMMS'],
@@ -736,7 +789,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['uncertainty', 'logger', 'engineering', 'budget'],
-    imageSrc: unsplash('photo-1504711434969-e33886168f5c'),
+    imageSrc: catalogDemoImage(31),
     visibleForDemoUsers: ['Engineering Consultant'],
     demoUserTaxonomy: 'Engineering Consultant',
     breadcrumb: ['Resources', 'Metrology'],
@@ -751,7 +804,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['chart', 'recorder', 'swap', 'technician'],
-    imageSrc: unsplash('photo-1581092160562-40aa08f11460'),
+    imageSrc: catalogDemoImage(32),
     visibleForDemoUsers: ['Plant Technician'],
     demoUserTaxonomy: 'Plant Technician',
     breadcrumb: ['Operations', 'Retrofits'],
@@ -768,7 +821,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['datalogger', 'pressure'],
     matchTerms: ['logger', 'pressure', 'temperature', 'audit'],
-    imageSrc: unsplash('photo-1505751172876-fa1923c5c528'),
+    imageSrc: catalogDemoImage(33),
     breadcrumb: ['Products', 'Loggers'],
   }),
   p({
@@ -783,7 +836,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['cold chain', 'logger', 'usb', 'pdf'],
-    imageSrc: unsplash('photo-1571019613454-1cb2f99b2d8b'),
+    imageSrc: catalogDemoImage(34),
     breadcrumb: ['Products', 'Loggers'],
   }),
   p({
@@ -796,7 +849,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega', 'redLion'],
     searchBuckets: ['datalogger'],
     matchTerms: ['historian', 'digital', 'migration', 'logger'],
-    imageSrc: unsplash('photo-1451187580459-43490279c0fa'),
+    imageSrc: catalogDemoImage(35),
     breadcrumb: ['Learn', 'Utilities'],
   }),
   p({
@@ -809,7 +862,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['driver', 'daq', 'windows', 'manual'],
-    imageSrc: unsplash('photo-1517694712202-3dd5170e001d'),
+    imageSrc: catalogDemoImage(36),
     breadcrumb: ['Support', 'IT'],
   }),
   p({
@@ -824,7 +877,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['usb', 'logger', 'humidity', 'temperature'],
-    imageSrc: unsplash('photo-1581091226825-a6a2a5aee158'),
+    imageSrc: catalogDemoImage(37),
     isNew: true,
     breadcrumb: ['Products', 'Loggers'],
   }),
@@ -840,7 +893,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['logger', 'channel', 'voltage', 'csv'],
-    imageSrc: unsplash('photo-1581092918056-0c4c1ac51795'),
+    imageSrc: catalogDemoImage(38),
     breadcrumb: ['Products', 'DAQ'],
   }),
   p({
@@ -853,7 +906,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['sampling', 'logger', 'aliasing', 'engineering'],
-    imageSrc: unsplash('photo-1504711434969-e33886168f5c'),
+    imageSrc: catalogDemoImage(39),
     breadcrumb: ['Resources', 'Education'],
   }),
   p({
@@ -868,7 +921,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['datalogger'],
     matchTerms: ['scada', 'logger', 'modbus', 'utility'],
-    imageSrc: unsplash('photo-1551288049-bebda4e38f71'),
+    imageSrc: catalogDemoImage(40),
     breadcrumb: ['Products', 'Software'],
   }),
   p({
@@ -881,7 +934,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['data', 'logger', 'compliance', 'cfr'],
-    imageSrc: unsplash('photo-1576091160399-112ba8d25d1d'),
+    imageSrc: catalogDemoImage(41),
     breadcrumb: ['Learn', 'Regulatory'],
   }),
   p({
@@ -894,7 +947,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['datalogger'],
     matchTerms: ['ethernet', 'logger', 'firewall', 'manual'],
-    imageSrc: unsplash('photo-1517694712202-3dd5170e001d'),
+    imageSrc: catalogDemoImage(42),
     breadcrumb: ['Support', 'IT'],
   }),
 
@@ -911,7 +964,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['wireless', 'mesh', 'iiot', 'transmitter', 'temperature'],
-    imageSrc: unsplash('photo-1558346490-bff35548aedf'),
+    imageSrc: catalogDemoImage(43),
     isNew: true,
     breadcrumb: ['Products', 'Wireless'],
   }),
@@ -927,7 +980,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['gateway', 'mqtt', 'iiot', 'edge', 'cloud'],
-    imageSrc: unsplash('photo-1518770660439-4636190af475'),
+    imageSrc: catalogDemoImage(44),
     breadcrumb: ['Products', 'Connectivity'],
   }),
   p({
@@ -940,7 +993,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega', 'redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['iiot', 'secure', 'pilot', 'plc'],
-    imageSrc: unsplash('photo-1451187580459-43490279c0fa'),
+    imageSrc: catalogDemoImage(45),
     breadcrumb: ['Learn', 'IIoT'],
   }),
   p({
@@ -953,7 +1006,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['wireless', 'survey', 'antenna', 'rssi'],
-    imageSrc: unsplash('photo-1565514020163-395f34250af5'),
+    imageSrc: catalogDemoImage(46),
     breadcrumb: ['Resources', 'Field'],
   }),
   p({
@@ -966,7 +1019,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['gateway', 'sim', 'commissioning', 'manual'],
-    imageSrc: unsplash('photo-1581092918056-0c4c1ac51795'),
+    imageSrc: catalogDemoImage(47),
     breadcrumb: ['Support', 'Manuals'],
   }),
   p({
@@ -979,7 +1032,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['antenna', 'spare', 'wireless', 'maintenance'],
-    imageSrc: unsplash('photo-1581092160562-40aa08f11460'),
+    imageSrc: catalogDemoImage(48),
     visibleForDemoUsers: ['Maintenance Engineer'],
     demoUserTaxonomy: 'Maintenance Engineer',
     breadcrumb: ['Maintenance', 'Spares'],
@@ -994,7 +1047,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['sparkplug', 'scada', 'architecture', 'cloud'],
-    imageSrc: unsplash('photo-1531297484001-80022131f5a1'),
+    imageSrc: catalogDemoImage(49),
     visibleForDemoUsers: ['Engineering Consultant'],
     demoUserTaxonomy: 'Engineering Consultant',
     breadcrumb: ['Resources', 'Architecture'],
@@ -1009,7 +1062,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['cellular', 'gateway', 'swap', 'downtime'],
-    imageSrc: unsplash('photo-1581092162384-8987c1d64718'),
+    imageSrc: catalogDemoImage(50),
     visibleForDemoUsers: ['Plant Technician'],
     demoUserTaxonomy: 'Plant Technician',
     breadcrumb: ['Operations', 'Runbooks'],
@@ -1026,7 +1079,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot', 'datalogger'],
     matchTerms: ['cloud', 'dashboard', 'wireless', 'logger'],
-    imageSrc: unsplash('photo-1551288049-bebda4e38f71'),
+    imageSrc: catalogDemoImage(51),
     breadcrumb: ['Products', 'Software'],
   }),
   p({
@@ -1041,7 +1094,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['dwyer'],
     searchBuckets: ['iiot', 'pressure'],
     matchTerms: ['wireless', 'pressure', 'transmitter', 'battery'],
-    imageSrc: unsplash('photo-1504917595217-d002cbf56fc7'),
+    imageSrc: catalogDemoImage(52),
     breadcrumb: ['Products', 'Wireless'],
   }),
   p({
@@ -1054,7 +1107,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['iiot', 'wireless', 'systems', 'pilot'],
-    imageSrc: unsplash('photo-1489515217757-5fd1be406fef'),
+    imageSrc: catalogDemoImage(53),
     breadcrumb: ['Learn', 'Strategy'],
   }),
   p({
@@ -1067,7 +1120,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['pairing', 'security', 'wireless', 'manual'],
-    imageSrc: unsplash('photo-1589829545856-d10d557cf95f'),
+    imageSrc: catalogDemoImage(54),
     breadcrumb: ['Support', 'Manuals'],
   }),
   p({
@@ -1082,7 +1135,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot', 'datalogger'],
     matchTerms: ['edge', 'mqtt', 'acquisition', 'preprocess'],
-    imageSrc: unsplash('photo-1517694712202-3dd5170e001d'),
+    imageSrc: catalogDemoImage(55),
     breadcrumb: ['Products', 'IIoT'],
   }),
   p({
@@ -1097,7 +1150,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['wireless', 'mesh', 'repeater', 'iiot'],
-    imageSrc: unsplash('photo-1565514020163-395f34250af5'),
+    imageSrc: catalogDemoImage(56),
     breadcrumb: ['Products', 'Wireless'],
   }),
   p({
@@ -1110,7 +1163,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['iiot', 'ot', 'it', 'firewall'],
-    imageSrc: unsplash('photo-1451187580459-43490279c0fa'),
+    imageSrc: catalogDemoImage(57),
     breadcrumb: ['Resources', 'Security'],
   }),
   p({
@@ -1125,7 +1178,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['cellular', '5g', 'router', 'wireless'],
-    imageSrc: unsplash('photo-1489515217757-5fd1be406fef'),
+    imageSrc: catalogDemoImage(58),
     isNew: true,
     breadcrumb: ['Products', 'Connectivity'],
   }),
@@ -1139,7 +1192,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion', 'omega'],
     searchBuckets: ['iiot'],
     matchTerms: ['wireless', 'systems', 'commissioning', 'iiot'],
-    imageSrc: unsplash('photo-1504328345606-18bbc8c9d7d1'),
+    imageSrc: catalogDemoImage(59),
     breadcrumb: ['Learn', 'Deployment'],
   }),
   p({
@@ -1152,7 +1205,7 @@ export const searchCatalog: SearchResultItem[] = [
     brands: ['redLion'],
     searchBuckets: ['iiot'],
     matchTerms: ['mqtt', 'topic', 'manual', 'oem'],
-    imageSrc: unsplash('photo-1589829545856-d10d557cf95f'),
+    imageSrc: catalogDemoImage(60),
     breadcrumb: ['Support', 'Developers'],
   }),
 ];
