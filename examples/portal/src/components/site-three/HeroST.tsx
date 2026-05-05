@@ -18,6 +18,14 @@ interface Fields {
   Link2: LinkField;
 }
 
+/**
+ * Full-bleed hero backgrounds previously used `object-cover`, which crops to fill the hero box and
+ * defaults to center — wide artwork with logos pinned top-left (e.g. Burns strip) loses edges.
+ * `object-contain` + top-left anchor shows the whole image; `bg-muted` fills letterbox gutters.
+ */
+const HERO_BG_IMAGE_CLASS = 'h-full w-full object-contain object-left object-top';
+const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
+
 type PageHeaderSTProps = {
   params: { [key: string]: string };
   fields: Fields;
@@ -29,14 +37,14 @@ export const Default = (props: PageHeaderSTProps) => {
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
     >
-      <div className="absolute inset-0 z-10">
+      <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
           field={props?.fields?.Image1}
           width={1920}
           height={1080}
           priority={true}
           fetchPriority="high"
-          className="w-full h-full object-cover"
+          className={HERO_BG_IMAGE_CLASS}
         />
       </div>
         <div className="relative z-20 mx-auto w-full lg:container lg:flex">
@@ -73,14 +81,14 @@ export const Right = (props: PageHeaderSTProps) => {
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
     >
-      <div className="absolute inset-0 z-10">
+      <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
           field={props?.fields?.Image1}
           width={1920}
           height={1080}
           priority={true}
           fetchPriority="high"
-          className="w-full h-full object-cover"
+          className={HERO_BG_IMAGE_CLASS}
         />
       </div>
       <div className="relative z-20 mx-auto w-full lg:container lg:flex lg:flex-row-reverse">
@@ -117,14 +125,14 @@ export const Centered = (props: PageHeaderSTProps) => {
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
     >
-      <div className="absolute inset-0 z-10">
+      <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
           field={props?.fields?.Image1}
           width={1920}
           height={1080}
           priority={true}
           fetchPriority="high"
-          className="w-full h-full object-cover"
+          className={HERO_BG_IMAGE_CLASS}
         />
       </div>
       <div className="relative z-20 mx-auto w-full lg:container lg:flex">
@@ -183,14 +191,14 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
             />
           </div>
         </div>
-        <div className="relative aspect-3/2 min-h-[16rem] w-full lg:basis-full lg:aspect-auto lg:min-h-0">
+        <div className="relative aspect-3/2 min-h-[16rem] w-full bg-muted lg:basis-full lg:aspect-auto lg:min-h-0">
           <ContentSdkImage
             field={props?.fields?.Image1}
             width={1920}
             height={1080}
             priority={true}
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 ${HERO_BG_IMAGE_CLASS}`}
           />
         </div>
       </div>
@@ -227,13 +235,13 @@ export const Stacked = (props: PageHeaderSTProps) => {
           </div>
         </div>
       </div>
-      <div className="relative aspect-3/2 lg:absolute lg:aspect-auto inset-0 flex z-10">
+      <div className="relative aspect-3/2 lg:absolute lg:aspect-auto inset-0 flex z-10 bg-muted">
         <div className="relative w-1/3">
           <ContentSdkImage
             field={props?.fields?.Image2}
             width={1920}
             height={1080}
-            className="absolute w-full h-full inset-0 object-cover"
+            className={`absolute inset-0 ${HERO_BG_IMAGE_CLASS}`}
           />
         </div>
         <div className="relative w-2/3">
@@ -241,7 +249,7 @@ export const Stacked = (props: PageHeaderSTProps) => {
             field={props?.fields?.Image1}
             width={1920}
             height={1080}
-            className="absolute inset-0 z-10 h-full w-full object-cover"
+            className={`absolute inset-0 z-10 ${HERO_BG_IMAGE_CLASS}`}
           />
         </div>
       </div>

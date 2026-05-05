@@ -56,6 +56,35 @@ export type SearchResultsProps = {
 
 type SortMode = 'relevance' | 'az';
 
+/** Official Dwyer Omega product imagery — used for every `contentType: product` card */
+const DWYER_OMEGA_PRODUCT_IMAGES: readonly string[] = [
+  'https://assets.dwyeromega.com/do-product-images/Series-DA-DS_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-A6_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-A1F_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-A2_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-APS-AVS_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-A9_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/Series-SA1100_L.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/ap_600x600new.gif?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/PSW-500_l.jpg?imwidth=150',
+  'https://assets.dwyeromega.com/do-product-images/PSW-100_l.jpg?imwidth=150',
+];
+
+function productImageForResultId(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  }
+  return DWYER_OMEGA_PRODUCT_IMAGES[h % DWYER_OMEGA_PRODUCT_IMAGES.length]!;
+}
+
+function resolveResultCardImage(item: SearchResultItem): string {
+  if (item.contentType === 'product') {
+    return productImageForResultId(item.id);
+  }
+  return item.imageSrc ?? getDefaultCardImage();
+}
+
 function SearchFacetsPanel({
   selectedTypes,
   selectedCategories,
@@ -199,8 +228,25 @@ function ctaLabel(item: SearchResultItem): string {
   }
 }
 
-function ResultCard({ item }: { item: SearchResultItem }) {
-  const img = item.imageSrc ?? getDefaultCardImage();
+/** Dwyer Omega–style nav blue for image overlay pills (category + price) */
+const DWYER_CARD_PILL =
+  'rounded-full border border-white/20 bg-[#003b73] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
+
+/** Whole-dollar list price in USD, stable per row id (demo: User 1–3 selected in header) */
+function stableListPriceUsd(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  }
+  return 20 + (h % 11);
+}
+
+function formatSearchListPrice(id: string): string {
+  return `$${stableListPriceUsd(id)}`;
+}
+
+function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDemoUserSelected: boolean }) {
+  const img = resolveResultCardImage(item);
   const Icon = contentTypeIcons[item.contentType];
   const meta = itemMetadataLine(item);
   const brandLine = item.brands.map((b) => searchFacetLabels.brand[b]).join(' · ');
@@ -229,15 +275,13 @@ function ResultCard({ item }: { item: SearchResultItem }) {
             </span>
           ) : null}
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-medium text-foreground shadow-sm backdrop-blur">
-              <Icon className="size-3.5 text-primary" aria-hidden />
+            <span className={cn('inline-flex items-center gap-1.5', DWYER_CARD_PILL)}>
+              <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
               {searchFacetLabels.contentType[item.contentType]}
             </span>
-            {item.priceLabel ? (
-              <span className="rounded-full bg-primary/95 px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow">
-                {item.priceLabel}
-              </span>
-            ) : null}
+            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', DWYER_CARD_PILL)}>
+              {isDemoUserSelected ? formatSearchListPrice(item.id) : 'Login for pricing'}
+            </span>
           </div>
         </div>
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3.5">
@@ -687,7 +731,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <>
                 <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {pagedResults.map((item) => (
-                    <ResultCard key={item.id} item={item} />
+                    <ResultCard key={item.id} item={item} isDemoUserSelected={Boolean(activeDemoUserTaxonomy)} />
                   ))}
                 </div>
                 {filtered.length > RESULTS_PAGE_SIZE ? (
