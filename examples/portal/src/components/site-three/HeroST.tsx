@@ -22,9 +22,17 @@ interface Fields {
  * Full-bleed hero backgrounds previously used `object-cover`, which crops to fill the hero box and
  * defaults to center — wide artwork with logos pinned top-left (e.g. Burns strip) loses edges.
  * `object-contain` + top-left anchor shows the whole image; `bg-muted` fills letterbox gutters.
+ *
+ * Vertical band: mobile ~400–600px, laptop (md) ~500–600px, desktop (lg+) ~600–800px.
+ * Next/Image `width`/`height` (e.g. 1920×1080) are intrinsic aspect hints; that resolution stays a
+ * solid choice for crisp wide layouts even when the rendered hero is shorter.
  */
 const HERO_BG_IMAGE_CLASS = 'h-full w-full object-contain object-left object-top';
 const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
+
+/** Responsive hero content column / split row height band */
+const HERO_CONTENT_BAND_CLASS =
+  'min-h-[400px] max-h-[600px] md:min-h-[500px] md:max-h-[600px] lg:min-h-[600px] lg:max-h-[800px]';
 
 type PageHeaderSTProps = {
   params: { [key: string]: string };
@@ -48,7 +56,9 @@ export const Default = (props: PageHeaderSTProps) => {
         />
       </div>
         <div className="relative z-20 mx-auto w-full lg:container lg:flex">
-          <div className="flex min-h-[24rem] flex-col justify-center px-4 py-8 lg:min-h-[50rem] lg:w-2/3 lg:p-8">
+          <div
+            className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+          >
             <div className="lg:max-w-3xl">
               <h1 className="text-primary text-xl lg:text-3xl pb-4">
                 <ContentSdkText field={props?.fields?.Eyebrow} />
@@ -92,7 +102,9 @@ export const Right = (props: PageHeaderSTProps) => {
         />
       </div>
       <div className="relative z-20 mx-auto w-full lg:container lg:flex lg:flex-row-reverse">
-        <div className="flex min-h-[24rem] flex-col justify-center px-4 py-8 lg:min-h-[50rem] lg:w-2/3 lg:p-8">
+        <div
+          className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+        >
           <div className="lg:max-w-3xl lg:ml-auto text-right">
             <h1 className="text-primary text-xl lg:text-3xl pb-4">
               <ContentSdkText field={props?.fields?.Eyebrow} />
@@ -136,7 +148,9 @@ export const Centered = (props: PageHeaderSTProps) => {
         />
       </div>
       <div className="relative z-20 mx-auto w-full lg:container lg:flex">
-        <div className="lg:relative lg:left-1/6 flex min-h-[24rem] flex-col justify-center px-4 py-8 lg:min-h-[50rem] lg:w-2/3 lg:p-8">
+        <div
+          className={`lg:relative lg:left-1/6 flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+        >
           <div className="lg:max-w-3xl lg:mx-auto text-center">
             <h1 className="text-primary text-xl lg:text-3xl pb-4">
               <ContentSdkText field={props?.fields?.Eyebrow} />
@@ -170,7 +184,7 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
       className={`relative bg-primary border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
     >
-      <div className="flex flex-col lg:flex-row lg:min-h-[50rem]">
+      <div className={`flex flex-col lg:flex-row ${HERO_CONTENT_BAND_CLASS}`}>
         <div className="p-8 lg:basis-full lg:self-center lg:p-14">
           <h1 className="text-xl lg:text-3xl pb-4">
             <ContentSdkText field={props?.fields?.Eyebrow} />
@@ -210,7 +224,7 @@ export const Stacked = (props: PageHeaderSTProps) => {
 
   return (
     <section
-      className={`relative flex flex-col bg-primary lg:flex-row lg:items-center lg:min-h-[50rem] lg:bg-transparent ${props?.params?.styles || ''}`}
+      className={`relative flex flex-col bg-primary lg:flex-row lg:items-center lg:bg-transparent ${HERO_CONTENT_BAND_CLASS} ${props?.params?.styles || ''}`}
       data-class-change
     >
       <div className="container px-4 mx-auto">
