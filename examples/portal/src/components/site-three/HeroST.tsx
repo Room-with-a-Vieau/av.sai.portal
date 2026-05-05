@@ -34,6 +34,9 @@ const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
 const HERO_CONTENT_BAND_CLASS =
   'min-h-[400px] max-h-[600px] md:min-h-[500px] md:max-h-[600px] lg:min-h-[600px] lg:max-h-[800px]';
 
+/** Main headline scale (smaller than previous display sizes for shorter hero band) */
+const HERO_TITLE_CLASS = 'text-3xl md:text-4xl lg:text-5xl';
+
 type PageHeaderSTProps = {
   params: { [key: string]: string };
   fields: Fields;
@@ -63,7 +66,7 @@ export const Default = (props: PageHeaderSTProps) => {
               <h1 className="text-primary text-xl lg:text-3xl pb-4">
                 <ContentSdkText field={props?.fields?.Eyebrow} />
               </h1>
-              <h1 className="text-4xl lg:text-7xl">
+              <h1 className={HERO_TITLE_CLASS}>
                 <ContentSdkText field={props?.fields?.Title} />
               </h1>
               <div className="mt-8">
@@ -109,7 +112,7 @@ export const Right = (props: PageHeaderSTProps) => {
             <h1 className="text-primary text-xl lg:text-3xl pb-4">
               <ContentSdkText field={props?.fields?.Eyebrow} />
             </h1>
-            <h1 className="text-4xl lg:text-7xl">
+            <h1 className={HERO_TITLE_CLASS}>
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">
@@ -155,7 +158,7 @@ export const Centered = (props: PageHeaderSTProps) => {
             <h1 className="text-primary text-xl lg:text-3xl pb-4">
               <ContentSdkText field={props?.fields?.Eyebrow} />
             </h1>
-            <h1 className="text-4xl lg:text-7xl">
+            <h1 className={HERO_TITLE_CLASS}>
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">
@@ -189,7 +192,7 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
           <h1 className="text-xl lg:text-3xl pb-4">
             <ContentSdkText field={props?.fields?.Eyebrow} />
           </h1>
-          <h1 className="text-4xl lg:text-6xl">
+          <h1 className={HERO_TITLE_CLASS}>
             <ContentSdkText field={props?.fields?.Title} />
           </h1>
           <div className="mt-8">
@@ -232,7 +235,7 @@ export const Stacked = (props: PageHeaderSTProps) => {
           <h1 className="text-xl lg:text-3xl pb-4">
             <ContentSdkText field={props?.fields?.Eyebrow} />
           </h1>
-          <h1 className="text-4xl lg:text-6xl">
+          <h1 className={HERO_TITLE_CLASS}>
             <ContentSdkText field={props?.fields?.Title} />
           </h1>
           <div className="mt-8">
