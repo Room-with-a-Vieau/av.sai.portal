@@ -16,7 +16,7 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline after:text-primary after:content-[">"]',
         topic:
-          'bg-accent hover:bg-primary-hover text-accent-foreground font-heading rounded-full px-4 py-2 text-sm font-medium transition-colors',
+          'bg-accent hover:bg-accent/90 text-accent-foreground font-heading rounded-full px-4 py-2 text-sm font-medium transition-colors',
         'rounded-white':
           'rounded-full bg-white text-secondary-foreground hover:bg-gray-100 transition-all duration-300',
       },

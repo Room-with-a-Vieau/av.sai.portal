@@ -1,6 +1,6 @@
 import './globals.css';
 
-import { Inter } from 'next/font/google';
+import { Inter, Open_Sans } from 'next/font/google';
 import { resolveAppTheme } from '@/lib/app-theme';
 
 const inter = Inter({
@@ -10,13 +10,20 @@ const inter = Inter({
   preload: true,
 });
 
+const openSans = Open_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-open-sans',
+  display: 'swap',
+  preload: false,
+});
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const appTheme = resolveAppTheme();
 
   return (
     <html
       lang="en"
-      className={inter.variable}
+      className={`${inter.variable} ${openSans.variable}`}
       data-theme={appTheme}
       suppressHydrationWarning
     >

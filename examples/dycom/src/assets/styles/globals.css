@@ -293,9 +293,10 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | dycom"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
+ * dycom: corporate blue primary (#005696), lime accent CTAs (#76BC21), cool gray surfaces (#e9edf0) — dycomind.com.
  */
 [data-theme='dwyeromega'] {
   --background-image-gradient: linear-gradient(180deg, #da2a2b 0%, #2a2b67 100%);
@@ -336,5 +337,46 @@
 
 /* On primary (e.g. footer) surfaces, headings inherit body foreground — force light text for contrast. */
 [data-theme='dwyeromega'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='dycom'] {
+  --background-image-gradient: linear-gradient(180deg, #76bc21 0%, #005696 100%);
+  --background-image-gradient-secondary: linear-gradient(90deg, #005696 0%, #76bc21 50%, #005696 100%);
+  --color-background: #ffffff;
+  --color-foreground: #2b2b2b;
+  --color-card: #ffffff;
+  --color-card-foreground: #2b2b2b;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #2b2b2b;
+  --color-primary: #005696;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #004578;
+  --color-secondary: #e9edf0;
+  --color-secondary-foreground: #2b2b2b;
+  --color-secondary-hover: #dde3e8;
+  --color-muted: #e9edf0;
+  --color-muted-foreground: #5c5c5c;
+  --color-accent: #76bc21;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #c62828;
+  --color-destructive-hover: #a52222;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d1d9df;
+  --color-input: #d1d9df;
+  --color-ring: #005696;
+  --color-tertiary-foreground: #2b2b2b;
+  --color-tertiary-hover: #dde3e8;
+  --color-tertiary: #e9edf0;
+  --color-dark-foreground: #ffffff;
+  --color-dark-hover: #5a5e5d;
+  --color-dark: #707372;
+  --color-light: #f7f8f9;
+  --color-light-hover: #e9edf0;
+  --color-light-foreground: #2b2b2b;
+  --color-overlay: rgb(0 86 150 / 0.35);
+}
+
+[data-theme='dycom'] .bg-primary {
   color: var(--color-primary-foreground);
 }
