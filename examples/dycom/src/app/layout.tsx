@@ -1,4 +1,4 @@
-import './globals.css';
+import '@/assets/styles/application.css';
 
 import { Inter, Open_Sans } from 'next/font/google';
 import { resolveAppTheme } from '@/lib/app-theme';

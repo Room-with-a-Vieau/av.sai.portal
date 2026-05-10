@@ -1,6 +1,6 @@
-@import '../assets/styles/globals.css';
-@import '../assets/styles/tailwind-bootstrap-grid.css';
-@import '../assets/styles/column-splitter.css';
+@import './globals.css';
+@import './tailwind-bootstrap-grid.css';
+@import './column-splitter.css';
 @import 'tailwindcss';
 
 /* bootstrap grid to tailwind plugin */
@@ -126,6 +126,32 @@
 
     &:hover {
       @apply bg-primary-hover;
+    }
+  }
+
+  /* Dycom: darker green on hover (tokens file is generated; keep hover here). */
+  html[data-theme='dycom'] {
+    --color-accent-hover: #5fa019;
+  }
+
+  /* Dycom: hero/link CTAs use .btn-primary — brand green is accent; keep --color-primary blue for text-primary etc. */
+  html[data-theme='dycom'] .btn.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+      color: var(--color-accent-foreground);
+    }
+  }
+
+  html[data-theme='dycom'] .btn.btn-outline {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+      color: var(--color-accent-foreground);
     }
   }
 
@@ -265,8 +291,10 @@ main {
   @apply static mb-0 overflow-hidden;
 }
 
-/* Brand palette overrides (BCBS-style blues; primary used for buttons and CTAs) */
-@theme {
+/*
+ * BCBS blues — scoped to bcbst only. A global @theme here was overriding dycom/dwyeromega tokens from globals.css.
+ */
+html[data-theme='bcbst'] {
   --font-family-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
   --color-primary: #328ac9;
   --color-primary-foreground: #ffffff;

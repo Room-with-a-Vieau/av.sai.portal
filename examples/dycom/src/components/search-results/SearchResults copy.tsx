@@ -36,7 +36,7 @@ type SearchTopic = 'coverage' | 'costs' | 'care' | 'wellness' | 'news' | 'about'
 type SearchAudience = 'members' | 'employers' | 'brokers' | 'providers';
 
 /** Demo role keys aligned with `DemoUserSwitcher` / localStorage taxonomy values */
-type DemoUserTaxonomy = 'Maintenance Engineer' | 'Engineering Consultant' | 'Plant Technician';
+type DemoUserTaxonomy = 'Job Seeker' | 'Investor' | 'Telecom Provider';
 
 type SearchResultItem = {
   id: string;
@@ -171,185 +171,105 @@ function unsplashPhoto(path: string) {
 
 function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
   const t = raw?.trim();
-  if (t === 'Maintenance Engineer' || t === 'Engineering Consultant' || t === 'Plant Technician') {
+  if (t === 'Job Seeker' || t === 'Investor' || t === 'Telecom Provider') {
     return t;
   }
   return null;
 }
 
-const dwyerOmegaBaseHref = 'https://www.dwyeromega.com/';
+const supplementalDocsBaseHref = 'https://www.bcbs.com/';
 
 function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): SearchResultItem[] {
-  const code =
-    plan === 'Maintenance Engineer' ? 'me' : plan === 'Engineering Consultant' ? 'ec' : 'pt';
+  const code = plan === 'Job Seeker' ? 'js' : plan === 'Investor' ? 'inv' : 'tp';
 
   const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    plan === 'Maintenance Engineer'
+    plan === 'Job Seeker'
       ? [
           {
-            imageSrc: unsplashPhoto('photo-1581091226825-a6a2a5aee158'),
+            imageSrc: unsplashPhoto('photo-1576091160399-112ba8d25d1d'),
             isNew: true,
-            title: 'Maintenance Engineer — CMMS work orders & instrument calibration windows',
+            title: 'Job seeker — compare plans before you enroll',
             description:
-              'Close the loop between rounds data and calibration due dates for gauges, transmitters, and switches — aligned with preventive maintenance programs common in process plants.',
-            href: dwyerOmegaBaseHref,
+              'Use BCBS articles on deductibles and networks to short-list employers offering strong in-network access.',
+            href: supplementalDocsBaseHref,
             contentType: 'article',
-            topics: ['costs', 'coverage'],
+            topics: ['coverage', 'costs'],
             audiences: ['members'],
-            dateLabel: 'Field guide',
-            breadcrumb: ['Maintenance', 'Calibration'],
-            matchTerms: ['calibration', 'cmms', 'preventive maintenance', 'instrument', 'schedule'],
+            dateLabel: 'Guide',
+            breadcrumb: ['Members', 'Coverage'],
+            matchTerms: ['plan', 'deductible', 'network', 'enroll', 'benefits'],
           },
           {
-            imageSrc: unsplashPhoto('photo-1504917595217-d002cbf56fc7'),
-            title: 'Shutdown prep: isolation, tagging & verification for control loops',
+            imageSrc: unsplashPhoto('photo-1551288049-bebda4e38f71'),
+            title: 'Find care — primary care vs urgent vs ER',
             description:
-              'Step-by-step checks before energizing or de-energizing loops that use pressure, flow, or level instrumentation — reduce rework during outages.',
-            href: dwyerOmegaBaseHref,
-            contentType: 'form',
-            topics: ['care', 'costs'],
-            audiences: ['members', 'providers'],
-            dateLabel: 'Checklist',
-            breadcrumb: ['Maintenance', 'Shutdown'],
-            matchTerms: ['shutdown', 'lockout', 'loop', 'instrumentation', 'verification'],
-          },
-          {
-            imageSrc: unsplashPhoto('photo-1582719478250-c89cae4dc85b'),
-            isNew: true,
-            title: 'Troubleshooting erratic readings: wiring, grounding & sensor placement',
-            description:
-              'Field playbook for distinguishing wiring issues from sensor drift or process upset — includes quick tests for DP and electronic transmitters.',
-            href: dwyerOmegaBaseHref,
-            contentType: 'tool',
-            topics: ['coverage', 'care'],
-            audiences: ['members', 'brokers'],
-            dateLabel: 'Toolkit',
-            breadcrumb: ['Support', 'Diagnostics'],
-            matchTerms: ['troubleshoot', 'transmitter', 'grounding', 'sensor', 'dp'],
-          },
-          {
-            imageSrc: unsplashPhoto('photo-1565043666747-69f6646db940'),
-            title: 'Spare strategy for critical measurement points',
-            description:
-              'How to stock and rotate spares for switches, gauges, and transmitters without over-inventorying — ties to reliability-centered maintenance goals.',
-            href: dwyerOmegaBaseHref,
-            contentType: 'plan',
-            topics: ['costs', 'about'],
-            audiences: ['employers', 'brokers'],
-            dateLabel: 'Reliability',
-            breadcrumb: ['Operations', 'Spares'],
-            matchTerms: ['spare parts', 'inventory', 'reliability', 'measurement', 'stock'],
+              'Decision guide that mirrors bcbs.com flows so candidates understand how benefits behave day one.',
+            href: supplementalDocsBaseHref,
+            contentType: 'provider',
+            topics: ['care', 'coverage'],
+            audiences: ['members'],
+            dateLabel: 'Care finder',
+            breadcrumb: ['Members', 'Find care'],
+            matchTerms: ['doctor', 'primary care', 'urgent', 'emergency', 'copay'],
           },
         ]
-      : plan === 'Engineering Consultant'
+      : plan === 'Investor'
         ? [
             {
-              imageSrc: unsplashPhoto('photo-1581092160562-40aa08f11460'),
+              imageSrc: unsplashPhoto('photo-1454165804606-c3d57bc86b40'),
               isNew: true,
-              title: 'Engineering Consultant — specifying DP instruments for HVAC & cleanroom',
+              title: 'Investor lens — employer-sponsored healthcare costs & trends',
               description:
-                'Application notes on range selection, accuracy classes, and installation effects when specifying differential pressure for filtration and pressurization systems.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'article',
-              topics: ['coverage', 'costs'],
-              audiences: ['brokers', 'employers'],
-              dateLabel: 'Application note',
-              breadcrumb: ['Design', 'HVAC'],
-              matchTerms: ['differential pressure', 'specification', 'cleanroom', 'hvac', 'engineering'],
-            },
-            {
-              imageSrc: unsplashPhoto('photo-1504328345606-18bbc8c9d7d1'),
-              title: 'Energy audits: flow measurement points that pay back fastest',
-              description:
-                'Prioritize metering locations for steam, compressed air, and hydronic loops — improve ROI on efficiency projects with better baseline data.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'tool',
-              topics: ['costs', 'wellness'],
+                'Macro reads on medical trend and pharmacy leverage — helpful when evaluating benefits-heavy employers in diligence.',
+              href: supplementalDocsBaseHref,
+              contentType: 'news',
+              topics: ['costs', 'news'],
               audiences: ['employers', 'brokers'],
-              dateLabel: 'Guide',
-              breadcrumb: ['Efficiency', 'Flow'],
-              matchTerms: ['energy audit', 'flow meter', 'steam', 'compressed air', 'baseline'],
+              dateLabel: 'Trend brief',
+              breadcrumb: ['Employers', 'Trends'],
+              matchTerms: ['trend', 'employer', 'stop loss', 'pharmacy', 'cost'],
             },
             {
-              imageSrc: unsplashPhoto('photo-1513828583688-c52646db42da'),
-              title: 'Commissioning packages: test records & as-built instrumentation lists',
+              imageSrc: unsplashPhoto('photo-1507679799987-c73779587ccf'),
+              title: 'Self-funded vs fully insured — governance checklist',
               description:
-                'Templates consultants can adapt for turnover documentation — loop folders, calibration certificates, and red-line drawings for process skids.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'form',
+                'Board-ready overview of fiduciary duties, stop-loss triggers, and broker oversight touchpoints.',
+              href: supplementalDocsBaseHref,
+              contentType: 'plan',
               topics: ['coverage', 'about'],
-              audiences: ['brokers', 'providers'],
-              dateLabel: 'Templates',
-              breadcrumb: ['Commissioning', 'Documentation'],
-              matchTerms: ['commissioning', 'as-built', 'loop folder', 'calibration certificate', 'turnover'],
-            },
-            {
-              imageSrc: unsplashPhoto('photo-1531297484001-80022131f5a1'),
-              title: 'Process optimization: pairing measurement with control valve health',
-              description:
-                'Use differential pressure trends across strainers and coils to catch fouling early — pairs well with distributed control narratives for retrofits.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'article',
-              topics: ['care', 'news'],
-              audiences: ['employers', 'providers'],
-              dateLabel: 'Insight',
-              breadcrumb: ['Process', 'Optimization'],
-              matchTerms: ['process optimization', 'control valve', 'differential pressure', 'fouling', 'retrofit'],
+              audiences: ['employers', 'brokers'],
+              dateLabel: 'Checklist',
+              breadcrumb: ['Employers', 'Finance'],
+              matchTerms: ['self-funded', 'fully insured', 'fiduciary', 'stop loss', 'governance'],
             },
           ]
         : [
             {
-              imageSrc: unsplashPhoto('photo-1581092918056-0c4c1ac51795'),
+              imageSrc: unsplashPhoto('photo-1579684385127-1ef15d508118'),
               isNew: true,
-              title: 'Plant Technician — daily rounds: gauges, switches & transmitters',
+              title: 'Telecom provider workflow — prior authorization shortcuts',
               description:
-                'A concise route sheet for verifying local indicators against control room values and flagging drift before it becomes downtime.',
-              href: dwyerOmegaBaseHref,
+                'Operational tips for clinics coordinating imaging and specialty drugs with payer policies.',
+              href: supplementalDocsBaseHref,
               contentType: 'form',
               topics: ['care', 'coverage'],
-              audiences: ['members', 'providers'],
-              dateLabel: 'Route sheet',
-              breadcrumb: ['Operations', 'Rounds'],
-              matchTerms: ['rounds', 'gauge', 'transmitter', 'plant', 'technician'],
+              audiences: ['providers'],
+              dateLabel: 'Ops note',
+              breadcrumb: ['Providers', 'Authorizations'],
+              matchTerms: ['prior authorization', 'clinical', 'specialty', 'imaging', 'payer'],
             },
             {
-              imageSrc: unsplashPhoto('photo-1581092162384-8987c1d64718'),
-              title: 'Safe line breaks: depressurize, verify zero energy, then isolate',
+              imageSrc: unsplashPhoto('photo-1582719478250-c89cae4dc85b'),
+              title: 'Value-based care metrics your contracting team tracks',
               description:
-                'Field card for technicians working on process lines with pressure switches and block-and-bleed arrangements — emphasizes verification steps.',
-              href: dwyerOmegaBaseHref,
+                'Quality gates and attribution basics when partnering with Blues-owned networks.',
+              href: supplementalDocsBaseHref,
               contentType: 'article',
-              topics: ['care', 'costs'],
-              audiences: ['members'],
-              dateLabel: 'Safety',
-              breadcrumb: ['Safety', 'Line break'],
-              matchTerms: ['line break', 'depressure', 'isolation', 'safety', 'zero energy'],
-            },
-            {
-              imageSrc: unsplashPhoto('photo-1565514020163-395f34250af5'),
-              title: 'Leak detection on compressed air and hydronic circuits',
-              description:
-                'Ultrasonic and soap-bubble basics plus when to upgrade to permanent leak monitors — reduce utility waste on rotating shifts.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'tool',
-              topics: ['wellness', 'costs'],
-              audiences: ['members', 'employers'],
-              dateLabel: 'How-to',
-              breadcrumb: ['Utilities', 'Leak detection'],
-              matchTerms: ['leak', 'compressed air', 'hydronic', 'ultrasonic', 'utility'],
-            },
-            {
-              imageSrc: unsplashPhoto('photo-1489515217757-5fd1be406fef'),
-              title: 'Handoff to maintenance: what to log when an alarm clears',
-              description:
-                'Structured notes that help the next shift reproduce context — alarm tag, setpoint, corrective action, and instrument tag references.',
-              href: dwyerOmegaBaseHref,
-              contentType: 'news',
-              topics: ['about', 'care'],
-              audiences: ['providers', 'members'],
-              dateLabel: 'Shift log',
-              breadcrumb: ['Operations', 'Handoff'],
-              matchTerms: ['alarm', 'handoff', 'shift log', 'instrument tag', 'maintenance'],
+              topics: ['care', 'news'],
+              audiences: ['providers', 'employers'],
+              dateLabel: 'Partnerships',
+              breadcrumb: ['Providers', 'VBC'],
+              matchTerms: ['value based', 'quality', 'attribution', 'contract', 'network'],
             },
           ];
 

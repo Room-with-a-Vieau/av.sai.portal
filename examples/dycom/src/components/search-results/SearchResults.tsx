@@ -8,12 +8,12 @@ import {
   ArrowUpRight,
   BookOpen,
   ChevronDown,
-  FileText,
   Loader2,
   Package,
   Search,
   Sparkles,
-  Wrench,
+  TrendingUp,
+  Users,
   X,
 } from 'lucide-react';
 
@@ -56,32 +56,7 @@ export type SearchResultsProps = {
 
 type SortMode = 'relevance' | 'az';
 
-/** Official Dwyer Omega product imagery — used for every `contentType: product` card */
-const DWYER_OMEGA_PRODUCT_IMAGES: readonly string[] = [
-  'https://assets.dwyeromega.com/do-product-images/Series-DA-DS_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A6_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A1F_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A2_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-APS-AVS_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A9_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-SA1100_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/ap_600x600new.gif?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/PSW-500_l.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/PSW-100_l.jpg?imwidth=150',
-];
-
-function productImageForResultId(id: string): string {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) {
-    h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  }
-  return DWYER_OMEGA_PRODUCT_IMAGES[h % DWYER_OMEGA_PRODUCT_IMAGES.length]!;
-}
-
 function resolveResultCardImage(item: SearchResultItem): string {
-  if (item.contentType === 'product') {
-    return productImageForResultId(item.id);
-  }
   return item.imageSrc ?? getDefaultCardImage();
 }
 
@@ -141,7 +116,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Product family">
+        <FacetSection title="Topic">
           <div className="flex flex-col gap-2.5">
             {categories.map((key) => (
               <label
@@ -161,7 +136,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Brand" defaultOpen={false}>
+        <FacetSection title="Site area" defaultOpen={false}>
           <div className="flex flex-col gap-2.5">
             {brands.map((key) => (
               <label
@@ -207,42 +182,36 @@ function FacetSection({
 }
 
 const contentTypeIcons: Record<SearchContentType, typeof Package> = {
-  product: Package,
-  featuredArticle: BookOpen,
-  technicalResource: Wrench,
-  productManual: FileText,
+  serviceLine: Package,
+  careersPage: Users,
+  investorResource: TrendingUp,
+  companyPage: BookOpen,
 };
 
 function ctaLabel(item: SearchResultItem): string {
   switch (item.contentType) {
-    case 'product':
-      return 'View product';
-    case 'featuredArticle':
-      return 'Read article';
-    case 'technicalResource':
+    case 'serviceLine':
+      return 'View service';
+    case 'careersPage':
+      return 'View careers';
+    case 'investorResource':
       return 'Open resource';
-    case 'productManual':
-      return 'View manual';
+    case 'companyPage':
+      return 'View page';
     default:
       return 'Open';
   }
 }
 
-/** Dwyer Omega–style nav blue for image overlay pills (category + price) */
-const DWYER_CARD_PILL =
+/** Card overlay pills — Dycom corporate blue */
+const SEARCH_CARD_PILL =
   'rounded-full border border-white/20 bg-[#003b73] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
 
-/** Whole-dollar list price in USD, stable per row id (demo: User 1–3 selected in header) */
-function stableListPriceUsd(id: string): number {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) {
-    h = (h * 31 + id.charCodeAt(i)) >>> 0;
+function secondaryResultBadge(item: SearchResultItem, isDemoUserSelected: boolean): string {
+  if (isDemoUserSelected && item.demoUserTaxonomy) {
+    return 'Personalized';
   }
-  return 20 + (h % 11);
-}
-
-function formatSearchListPrice(id: string): string {
-  return `$${stableListPriceUsd(id)}`;
+  return item.badgeLabel ?? item.dateLabel ?? 'Dycom';
 }
 
 function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDemoUserSelected: boolean }) {
@@ -275,12 +244,12 @@ function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDe
             </span>
           ) : null}
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className={cn('inline-flex items-center gap-1.5', DWYER_CARD_PILL)}>
+            <span className={cn('inline-flex items-center gap-1.5', SEARCH_CARD_PILL)}>
               <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
               {searchFacetLabels.contentType[item.contentType]}
             </span>
-            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', DWYER_CARD_PILL)}>
-              {isDemoUserSelected ? formatSearchListPrice(item.id) : 'Login for pricing'}
+            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', SEARCH_CARD_PILL)}>
+              {secondaryResultBadge(item, isDemoUserSelected)}
             </span>
           </div>
         </div>
@@ -537,7 +506,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search products, articles, manuals, and technical resources…"
+                placeholder="Search careers, services, investor resources, and company pages…"
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -574,19 +543,19 @@ export const SearchResults: FC<SearchResultsProps> = ({
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Dwyer Omega</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Dycom Industries</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Instrument search'
+                  'Site search'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Faceted navigation mirrors a modern commerce experience: filter by content type, product family, and
-                brand. Switch the demo user to see different personalized rows and AI guidance.
+                Filter by content type, topic, and site area — modeled on careers, services, and investor journeys from
+                DycomInd.com. Switch the demo user for supplemental rows and persona-aware AI tips.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
@@ -782,8 +751,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
                 <p className="text-sm font-medium text-secondary-foreground">No matches for that combination.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try clearing filters or a phrase like &ldquo;Pressure regulators&rdquo;, &ldquo;Data loggers&rdquo;, or
-                  &ldquo;IIoT&rdquo;.
+                  Try clearing filters or phrases like &ldquo;Careers&rdquo;, &ldquo;Wireless construction&rdquo;, or
+                  &ldquo;Investor filings&rdquo;.
                 </p>
                 <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
                   Clear filters

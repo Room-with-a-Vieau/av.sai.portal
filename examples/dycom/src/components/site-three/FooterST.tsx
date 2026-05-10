@@ -31,6 +31,10 @@ function hasValidLink(field: LinkField | undefined): boolean {
   return !!(href && href !== '#' && !href.startsWith('http://#'));
 }
 
+/** Dycom footer band uses bg-primary (#005696); keep copy and links on primary-foreground. */
+const FOOTER_SURFACE_CLASS =
+  'bg-primary text-primary-foreground [&_a]:text-inherit [&_a:hover]:opacity-90';
+
 const SocialLinks = ({ fields }: { fields: Fields }) => (
   <div className="flex justify-center gap-4">
     {hasValidLink(fields?.FacebookLink) ? (
@@ -78,7 +82,7 @@ const SocialLinks = ({ fields }: { fields: Fields }) => (
 export const Default = (props: FooterSTProps) => {
   return (
     <section
-      className={`relative bg-primary pt-16 lg:pt-30 pb-8 ${props.params.styles}`}
+      className={`relative ${FOOTER_SURFACE_CLASS} pt-16 lg:pt-30 pb-8 ${props.params.styles}`}
       data-class-change
     >
       <div className="container mx-auto px-4">
@@ -117,7 +121,7 @@ export const Default = (props: FooterSTProps) => {
 export const LogoLeft = (props: FooterSTProps) => {
   return (
     <section
-      className={`relative bg-primary pt-16 lg:pt-30 ${props.params.styles}`}
+      className={`relative ${FOOTER_SURFACE_CLASS} pt-16 lg:pt-30 ${props.params.styles}`}
       data-class-change
     >
       <div className="container mx-auto px-4">
@@ -158,7 +162,7 @@ export const LogoLeft = (props: FooterSTProps) => {
 export const LogoRight = (props: FooterSTProps) => {
   return (
     <section
-      className={`relative bg-primary pb-8 ${props.params.styles}`}
+      className={`relative ${FOOTER_SURFACE_CLASS} pb-8 ${props.params.styles}`}
       data-class-change
     >
       <div className="container mx-auto px-4">
@@ -199,7 +203,7 @@ export const LogoRight = (props: FooterSTProps) => {
 export const Centered = (props: FooterSTProps) => {
   return (
     <section
-      className={`relative bg-primary py-8 lg:py-20 ${props.params.styles}`}
+      className={`relative ${FOOTER_SURFACE_CLASS} py-8 lg:py-20 ${props.params.styles}`}
       data-class-change
     >
       <div className="relative container mx-auto px-4 z-20">

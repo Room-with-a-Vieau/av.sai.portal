@@ -1,26 +1,33 @@
 /**
- * Mock search catalog for Dwyer Omega–style instrumentation demo.
+ * Mock search catalog for Dycom Industries–style site search demo.
+ * Inspired by public pages and themes from dycomind.com (careers, services, investors).
  * Data only — UI lives in SearchResults.tsx.
  */
 
-export type DemoUserTaxonomy = 'Maintenance Engineer' | 'Engineering Consultant' | 'Plant Technician';
+export type DemoUserTaxonomy = 'Job Seeker' | 'Investor' | 'Telecom Provider';
 
-export type SearchContentType = 'product' | 'featuredArticle' | 'technicalResource' | 'productManual';
+export type SearchContentType = 'serviceLine' | 'careersPage' | 'investorResource' | 'companyPage';
 
-/** Left-rail facet: measurement / application family */
+/** Topic / line-of-business facet */
 export type SearchCategory =
-  | 'pressure'
-  | 'temperature'
-  | 'flowLevel'
-  | 'dataAcquisition'
-  | 'wirelessIiot'
-  | 'calibrationServices';
+  | 'wirelineConstruction'
+  | 'wirelessConstruction'
+  | 'engineering'
+  | 'locating'
+  | 'fulfillment'
+  | 'maintenanceRestoration'
+  | 'projectManagement'
+  | 'careersPrograms'
+  | 'benefitsAndWellbeing'
+  | 'investorFilings'
+  | 'investorEvents'
+  | 'corporateGovernance';
 
-/** Brand / product line facet */
-export type SearchBrand = 'dwyer' | 'omega' | 'redLion';
+/** Site area facet (maps to primary navigation sections) */
+export type SearchBrand = 'services' | 'careers' | 'investors' | 'corporate';
 
-/** Which keyword buckets surface this row (OR within bucket; AND with query text when no bucket hit) */
-export type SearchBucket = 'pressure' | 'datalogger' | 'iiot';
+/** Keyword buckets for curated queries */
+export type SearchBucket = 'careers' | 'services' | 'investors';
 
 export type SearchResultItem = {
   id: string;
@@ -30,21 +37,16 @@ export type SearchResultItem = {
   contentType: SearchContentType;
   categories: SearchCategory[];
   brands: SearchBrand[];
-  /** Keyword buckets for curated queries (pressure regulators, data loggers, IIoT / wireless) */
   searchBuckets: SearchBucket[];
   dateLabel?: string;
   breadcrumb?: string[];
   matchTerms?: string[];
   imageSrc?: string;
   isNew?: boolean;
-  /** When set, strong relevance boost for that demo persona */
   demoUserTaxonomy?: DemoUserTaxonomy;
-  /** If set, this row only appears for these personas (different result sets per user) */
   visibleForDemoUsers?: DemoUserTaxonomy[];
-  /** Mock SKU for products */
-  sku?: string;
-  /** e.g. "From $245" */
-  priceLabel?: string;
+  /** Secondary badge text on cards (e.g. audience or content subtype) */
+  badgeLabel?: string;
 };
 
 export type AiSearchInsight = {
@@ -56,82 +58,114 @@ export type AiSearchInsight = {
   learnMoreLabel?: string;
 };
 
-export const DWYER_OMEGA_BASE = 'https://www.dwyeromega.com/';
+export const DYCOM_PUBLIC_BASE = 'https://www.dycomind.com/';
 
 export const RESULTS_PAGE_SIZE = 9;
 
 export const searchFacetLabels = {
   contentType: {
-    product: 'Products',
-    featuredArticle: 'Featured articles',
-    technicalResource: 'Technical resources',
-    productManual: 'Product manuals',
+    serviceLine: 'Services',
+    careersPage: 'Careers',
+    investorResource: 'Investor relations',
+    companyPage: 'Company',
   },
   category: {
-    pressure: 'Pressure & valves',
-    temperature: 'Temperature & process',
-    flowLevel: 'Flow & level',
-    dataAcquisition: 'Data acquisition & recording',
-    wirelessIiot: 'Wireless & IIoT',
-    calibrationServices: 'Calibration & services',
+    wirelineConstruction: 'Wireline construction',
+    wirelessConstruction: 'Wireless construction',
+    engineering: 'Engineering',
+    locating: 'Locating',
+    fulfillment: 'Fulfillment',
+    maintenanceRestoration: 'Maintenance & restoration',
+    projectManagement: 'Project management',
+    careersPrograms: 'Careers programs',
+    benefitsAndWellbeing: 'Benefits & wellbeing',
+    investorFilings: 'Filings & financials',
+    investorEvents: 'Events & presentations',
+    corporateGovernance: 'Governance',
   },
   brand: {
-    dwyer: 'Dwyer Instruments',
-    omega: 'Omega',
-    redLion: 'Red Lion / connectivity',
+    services: 'Services',
+    careers: 'Careers',
+    investors: 'Investors',
+    corporate: 'Corporate',
   },
 } as const;
 
 export const popularSearches = [
-  'Pressure regulators',
-  'Data loggers',
-  'IIoT and Wireless Systems',
-  'Series 2000 transmitter',
-  'Thermocouple reference',
+  'What we do',
+  'Careers and opportunities',
+  'Employee benefits',
+  'Wireless construction',
+  'Investor news and filings',
+  'Recruitment process',
 ];
 
-/** Synonyms → bucket; used to mimic category landing search */
 export const QUERY_BUCKET_SYNONYMS: Record<SearchBucket, readonly string[]> = {
-  pressure: [
-    'pressure',
-    'regulator',
-    'regulators',
-    'valve',
-    'valves',
-    'gauge',
-    'gauges',
-    'manifold',
-    'transmitter',
-    'dp',
-    'differential',
+  careers: [
+    'career',
+    'careers',
+    'job',
+    'jobs',
+    'hiring',
+    'recruit',
+    'recruitment',
+    'opportunit',
+    'apply',
+    'applicant',
+    'benefit',
+    'benefits',
+    'life@',
+    'life at',
+    'talent',
+    'workforce',
+    'onboarding',
   ],
-  datalogger: [
-    'data',
-    'logger',
-    'loggers',
-    'logging',
-    'log',
-    'recorder',
-    'recording',
-    'acquisition',
-    'daq',
-    'chart',
-    'portable',
-    'usb',
-  ],
-  iiot: [
-    'iiot',
-    'iot',
+  services: [
+    'service',
+    'services',
+    'wireline',
     'wireless',
-    'gateway',
-    'gateways',
-    'cloud',
-    'remote',
-    'mesh',
-    'cellular',
-    'systems',
-    'system',
+    'construction',
+    'fiber',
+    'broadband',
+    'telecom',
+    'engineering',
+    'locating',
+    'fulfillment',
+    'maintenance',
+    'restoration',
+    'project management',
+    'macro',
+    'small cell',
+    '5g',
+    '4g',
+    'utility',
     'network',
+    'build',
+    'what we do',
+    'capabilities',
+  ],
+  investors: [
+    'investor',
+    'investors',
+    'invest',
+    'stock',
+    'share',
+    'sec',
+    'filing',
+    'filings',
+    'earnings',
+    'dividend',
+    'annual report',
+    'quarterly',
+    'governance',
+    'board',
+    'presentation',
+    'event',
+    'financial',
+    'ir',
+    'alerts',
+    'proxy',
   ],
 };
 
@@ -146,12 +180,10 @@ const QUERY_STOP_WORDS = new Set([
   'our',
   'are',
   'you',
+  'what',
+  'does',
 ]);
 
-/**
- * Photo IDs verified with HEAD requests — many legacy Unsplash paths now 404.
- * ixlib/crop/w params match current CDN expectations for stable resizing.
- */
 const UNSPLASH_PHOTO_IDS: readonly string[] = [
   '1581091226825-a6a2a5aee158',
   '1518770660439-4636190af475',
@@ -183,22 +215,12 @@ const UNSPLASH_PHOTO_IDS: readonly string[] = [
   '1497366754035-f200968a6e72',
   '1600585154340-be6161a56a0c',
   '1617791160505-6f00504e3519',
-  '1522071820081-009f0129c71c',
-  '1531482615713-2afd69097998',
-  '1557804506-669a67965ba0',
-  '1563986768609-322da13575f3',
-  '1573496359142-b8d87734a5a2',
-  '1504384308090-c894fdcc538d',
-  '1517245386807-bb43f82c33c4',
-  '1551434678-e076c223a692',
-  '1556761175-b413da4baf72',
 ];
 
 function buildCatalogImageUrl(id: string): string {
   return `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80`;
 }
 
-/** Distinct demo thumbnails; cycles only after all IDs are used once */
 function catalogDemoImage(slot: number): string {
   const len = UNSPLASH_PHOTO_IDS.length;
   const id = UNSPLASH_PHOTO_IDS[((slot % len) + len) % len]!;
@@ -207,7 +229,7 @@ function catalogDemoImage(slot: number): string {
 
 export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
   const t = raw?.trim();
-  if (t === 'Maintenance Engineer' || t === 'Engineering Consultant' || t === 'Plant Technician') {
+  if (t === 'Job Seeker' || t === 'Investor' || t === 'Telecom Provider') {
     return t;
   }
   return null;
@@ -263,7 +285,6 @@ export function itemMatchesQuery(item: SearchResultItem, q: string): boolean {
     item.description,
     ...(item.breadcrumb ?? []),
     ...(item.matchTerms ?? []),
-    ...(item.sku ? [item.sku] : []),
   ]
     .join(' ')
     .toLowerCase();
@@ -306,107 +327,108 @@ export function relevanceScore(
   return score;
 }
 
-/** Persona-specific supplemental rows (always merged when a demo user is active) */
 export function supplementalResultsForDemoUserTaxonomy(plan: DemoUserTaxonomy): SearchResultItem[] {
-  const code = plan === 'Maintenance Engineer' ? 'me' : plan === 'Engineering Consultant' ? 'ec' : 'pt';
+  const code = plan === 'Job Seeker' ? 'js' : plan === 'Investor' ? 'inv' : 'tp';
   const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    plan === 'Maintenance Engineer'
+    plan === 'Job Seeker'
       ? [
           {
-            sku: 'ME-SP-01',
-            priceLabel: 'Field kit',
+            badgeLabel: 'For job seekers',
             imageSrc: catalogDemoImage(0),
             isNew: true,
-            title: 'Spare regulator seats & diaphragm kit — PM checklist',
+            title: 'Open roles updated weekly — field & corporate',
             description:
-              'O-rings and soft goods matched to common Dwyer low-pressure regulators. Stock for turnaround windows and reduce emergency orders.',
-            href: DWYER_OMEGA_BASE,
-            contentType: 'technicalResource',
-            categories: ['pressure', 'calibrationServices'],
-            brands: ['dwyer'],
-            searchBuckets: ['pressure'],
-            dateLabel: 'PM brief',
-            breadcrumb: ['Maintenance', 'Spares'],
-            matchTerms: ['spare', 'regulator', 'diaphragm', 'maintenance', 'kit'],
+              'Dycom subsidiaries hire technicians, project managers, engineers, and safety leaders nationwide. Filter by region and craft on the careers portal.',
+            href: `${DYCOM_PUBLIC_BASE}`,
+            contentType: 'careersPage',
+            categories: ['careersPrograms'],
+            brands: ['careers'],
+            searchBuckets: ['careers'],
+            dateLabel: 'Weekly',
+            breadcrumb: ['Careers', 'Opportunities'],
+            matchTerms: ['opportunities', 'roles', 'openings', 'apply'],
           },
           {
+            badgeLabel: 'Benefits snapshot',
             imageSrc: catalogDemoImage(1),
-            title: 'Rounds log: compare field gauge vs control room DP',
+            title: 'Total rewards: medical, retirement, and tuition support',
             description:
-              'One-page template for differential pressure checks across filters and coils — aligns with daily operator rounds.',
-            href: DWYER_OMEGA_BASE,
-            contentType: 'productManual',
-            categories: ['pressure', 'dataAcquisition'],
-            brands: ['omega'],
-            searchBuckets: ['pressure', 'datalogger'],
-            dateLabel: 'PDF',
-            breadcrumb: ['Operations', 'Rounds'],
-            matchTerms: ['rounds', 'differential', 'field', 'log'],
+              'Overview of health plans, 401(k), paid time off, and professional development aligned to craft and leadership paths.',
+            href: `${DYCOM_PUBLIC_BASE}`,
+            contentType: 'careersPage',
+            categories: ['benefitsAndWellbeing'],
+            brands: ['careers'],
+            searchBuckets: ['careers'],
+            dateLabel: 'Guide',
+            breadcrumb: ['Careers', 'Benefits'],
+            matchTerms: ['benefits', 'wellbeing', '401', 'pto', 'medical'],
           },
         ]
-      : plan === 'Engineering Consultant'
+      : plan === 'Investor'
         ? [
             {
-              sku: 'EC-SPEC-88',
-              priceLabel: 'Consulting',
+              badgeLabel: 'IR hub',
               imageSrc: catalogDemoImage(2),
               isNew: true,
-              title: 'Spec sheet bundle: regulators for cleanroom cascades',
+              title: 'Earnings materials & SEC filings in one place',
               description:
-                'Accuracy classes, crack pressures, and authority limits for specifying Dwyer regulators in ISO-rated spaces.',
-              href: DWYER_OMEGA_BASE,
-              contentType: 'technicalResource',
-              categories: ['pressure', 'calibrationServices'],
-              brands: ['dwyer'],
-              searchBuckets: ['pressure'],
-              dateLabel: 'Specifier',
-              breadcrumb: ['Design', 'HVAC'],
-              matchTerms: ['specification', 'cleanroom', 'cascade', 'regulator'],
+                'Quarterly releases, prepared remarks, and supplemental slides for Dycom Industries — bookmark the investor relations landing page.',
+              href: `${DYCOM_PUBLIC_BASE}`,
+              contentType: 'investorResource',
+              categories: ['investorFilings'],
+              brands: ['investors'],
+              searchBuckets: ['investors'],
+              dateLabel: 'Filings',
+              breadcrumb: ['Investors', 'Financials'],
+              matchTerms: ['earnings', 'sec', '10-q', '10-k', 'filings'],
             },
             {
+              badgeLabel: 'Events',
               imageSrc: catalogDemoImage(3),
-              title: 'IIoT architecture note: edge vs cloud historian',
+              title: 'Conference replays & shareholder communications',
               description:
-                'When to buffer logs at the gateway versus streaming to SCADA — written for retrofit projects using Omega wireless layers.',
-              href: DWYER_OMEGA_BASE,
-              contentType: 'featuredArticle',
-              categories: ['wirelessIiot', 'dataAcquisition'],
-              brands: ['omega', 'redLion'],
-              searchBuckets: ['iiot', 'datalogger'],
-              dateLabel: 'Insight',
-              breadcrumb: ['Engineering', 'IIoT'],
-              matchTerms: ['edge', 'historian', 'gateway', 'architecture'],
+                'Catch up on recent investor conferences and governance notices — subscribe for email alerts when new events post.',
+              href: `${DYCOM_PUBLIC_BASE}`,
+              contentType: 'investorResource',
+              categories: ['investorEvents'],
+              brands: ['investors'],
+              searchBuckets: ['investors'],
+              dateLabel: 'On-demand',
+              breadcrumb: ['Investors', 'Events'],
+              matchTerms: ['presentation', 'webcast', 'shareholder', 'conference'],
             },
           ]
         : [
             {
-              sku: 'PT-CHK-03',
+              badgeLabel: 'Partner briefing',
               imageSrc: catalogDemoImage(4),
-              title: 'Line break card: zero-energy verification for regulators',
+              isNew: true,
+              title: 'National wireline & wireless programs — capacity & safety',
               description:
-                'Field safety steps before swapping a failed pressure reducing station — includes tag-out references.',
-              href: DWYER_OMEGA_BASE,
-              contentType: 'productManual',
-              categories: ['pressure'],
-              brands: ['dwyer'],
-              searchBuckets: ['pressure'],
-              dateLabel: 'Safety',
-              breadcrumb: ['Plant', 'Safety'],
-              matchTerms: ['lockout', 'regulator', 'zero energy', 'line break'],
+                'Enterprise tooling augments craft labor for long-haul fiber, small cells, and emergency restoration — ideal for carrier and MSO programs.',
+              href: `${DYCOM_PUBLIC_BASE}`,
+              contentType: 'serviceLine',
+              categories: ['wirelineConstruction', 'wirelessConstruction', 'projectManagement'],
+              brands: ['services'],
+              searchBuckets: ['services'],
+              dateLabel: 'Capabilities',
+              breadcrumb: ['Services', 'Overview'],
+              matchTerms: ['fiber', 'small cell', 'macro', 'program', 'carrier'],
             },
             {
+              badgeLabel: 'Delivery',
               imageSrc: catalogDemoImage(5),
-              title: 'Wireless logger placement for rotating equipment',
+              title: 'Fulfillment & maintenance for broadband installations',
               description:
-                'Vibration and temperature logger mounting patterns that survive washdown — plant technician playbook.',
-              href: DWYER_OMEGA_BASE,
-              contentType: 'technicalResource',
-              categories: ['wirelessIiot', 'dataAcquisition', 'temperature'],
-              brands: ['omega'],
-              searchBuckets: ['iiot', 'datalogger'],
-              dateLabel: 'How-to',
-              breadcrumb: ['Reliability', 'Wireless'],
-              matchTerms: ['wireless', 'logger', 'vibration', 'mounting'],
+                'In-home installs, drop maintenance, and restoration crews aligned to SLA-driven telecommunications partners.',
+              href: `${DYCOM_PUBLIC_BASE}`,
+              contentType: 'serviceLine',
+              categories: ['fulfillment', 'maintenanceRestoration'],
+              brands: ['services'],
+              searchBuckets: ['services'],
+              dateLabel: 'Operations',
+              breadcrumb: ['Services', 'Fulfillment'],
+              matchTerms: ['install', 'drop', 'maintenance', 'sla', 'broadband'],
             },
           ];
 
@@ -423,790 +445,410 @@ function p(
   partial: Omit<SearchResultItem, 'id' | 'href'> & { id: string; href?: string }
 ): SearchResultItem {
   return {
-    href: partial.href ?? DWYER_OMEGA_BASE,
+    href: partial.href ?? DYCOM_PUBLIC_BASE,
     imageSrc: partial.imageSrc ?? defaultImg,
     ...partial,
   };
 }
 
-/**
- * Rich mock catalog: multi-bucket tags + persona-only rows → different sets per query × user.
- * ≥18 rows per major bucket after filters (for two pages at 9/page).
- */
+/** Faceted catalog mirroring dycomind.com themes (careers, services, investors, corporate). */
 export const searchCatalog: SearchResultItem[] = [
-  // —— Pressure / regulators (shared + varied) ——
+  // —— Careers & talent ——
   p({
-    id: 'pr-1',
-    sku: 'DRF-SS',
-    priceLabel: 'From $189',
-    title: 'Series DRF Carbon Steel Pressure Regulator',
+    id: 'car-1',
+    badgeLabel: 'Careers home',
+    title: 'Careers at Dycom — build critical telecom infrastructure',
     description:
-      'Precision diaphragm regulator for air and compatible gases — stable outlet pressure across varying inlet conditions.',
-    contentType: 'product',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['pressure', 'regulator', 'regulators', 'air', 'diaphragm'],
+      'Learn how field and corporate teams deliver fiber, wireless, and fulfillment programs with safety-first culture and advancement paths.',
+    contentType: 'careersPage',
+    categories: ['careersPrograms'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['careers', 'home', 'culture', 'teams', 'jobs'],
     imageSrc: catalogDemoImage(7),
-    isNew: true,
-    breadcrumb: ['Products', 'Pressure', 'Regulators'],
+    breadcrumb: ['Careers'],
   }),
   p({
-    id: 'pr-2',
-    sku: 'M4-02',
-    priceLabel: 'From $312',
-    title: 'Miniature Pressure Regulator — Brass Body',
+    id: 'car-2',
+    badgeLabel: 'Now hiring',
+    title: 'Opportunities — nationwide technician & project roles',
     description:
-      'Compact low-flow regulator for panels and analyzers; ideal OEM footprint for instrumentation skids.',
-    contentType: 'product',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['regulator', 'brass', 'miniature', 'panel', 'low flow'],
+      'Search openings by craft and geography — includes apprentice-friendly paths into aerial, buried, and wireless disciplines.',
+    contentType: 'careersPage',
+    categories: ['careersPrograms'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['opportunities', 'openings', 'technician', 'apply'],
     imageSrc: catalogDemoImage(8),
-    breadcrumb: ['Products', 'Pressure'],
+    isNew: true,
+    breadcrumb: ['Careers', 'Opportunities'],
   }),
   p({
-    id: 'pr-3',
-    sku: '160G-15',
-    priceLabel: '$98',
-    title: '160 Series Stainless Pressure Gauge',
+    id: 'car-3',
+    badgeLabel: 'Benefits',
+    title: 'Benefits page — health, wellbeing, and retirement programs',
     description:
-      'Liquid-filled option for pulsation damping on pumps and compressors — maintenance-friendly ¼ NPT lower mount.',
-    contentType: 'product',
-    categories: ['pressure', 'calibrationServices'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['gauge', 'pressure', 'stainless', 'liquid filled'],
+      'Medical, dental, vision, disability coverage, plus retirement savings and employee assistance resources.',
+    contentType: 'careersPage',
+    categories: ['benefitsAndWellbeing'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['benefits', 'wellbeing', 'retirement', 'health'],
     imageSrc: catalogDemoImage(9),
-    breadcrumb: ['Products', 'Pressure', 'Gauges'],
+    breadcrumb: ['Careers', 'Benefits'],
   }),
   p({
-    id: 'pr-4',
-    title: 'Featured article: Selecting a pressure regulator for natural gas test benches',
+    id: 'car-4',
+    badgeLabel: 'Culture',
+    title: 'Life@Dycom — stories from the field and office',
     description:
-      'Walkthrough of setpoint drift, lockup, and droop — authored for test-and-measurement teams standardizing on Dwyer hardware.',
-    contentType: 'featuredArticle',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['regulator', 'selection', 'natural gas', 'test bench'],
+      'Spotlights on crews, mentors, and community projects that highlight Dycom’s operating companies.',
+    contentType: 'careersPage',
+    categories: ['careersPrograms'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['life', 'culture', 'community', 'field'],
     imageSrc: catalogDemoImage(10),
-    breadcrumb: ['Learn', 'Featured'],
+    breadcrumb: ['Careers', 'Life@Dycom'],
   }),
   p({
-    id: 'pr-5',
-    title: 'Technical resource: Differential pressure across coalescing filters',
+    id: 'car-5',
+    badgeLabel: 'Process',
+    title: 'Our recruitment process — what to expect after you apply',
     description:
-      'Trend interpretation for DP transmitters and manifolds; includes alarm thresholds for loaded elements.',
-    contentType: 'technicalResource',
-    categories: ['pressure', 'flowLevel'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['differential', 'dp', 'filter', 'trend'],
+      'Screening, interviews, safety orientation, and onboarding checkpoints for craft and professional candidates.',
+    contentType: 'careersPage',
+    categories: ['careersPrograms'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['recruitment', 'process', 'interview', 'onboarding', 'apply'],
     imageSrc: catalogDemoImage(11),
-    breadcrumb: ['Resources', 'Application notes'],
+    breadcrumb: ['Careers', 'Recruitment'],
   }),
   p({
-    id: 'pr-6',
-    title: 'Product manual: RPF Series regulator installation & startup',
+    id: 'car-6',
+    badgeLabel: 'Disclosures',
+    title: 'Benefit plan disclosures & notices',
     description:
-      'PDF manual with torque values, startup sequence, and leak-check procedure for field technicians.',
-    contentType: 'productManual',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['manual', 'installation', 'regulator', 'startup'],
+      'Plan documents and regulatory notices for eligible participants — bookmark for open enrollment periods.',
+    contentType: 'companyPage',
+    categories: ['benefitsAndWellbeing'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['benefit', 'disclosure', 'plan', 'notices'],
     imageSrc: catalogDemoImage(12),
-    breadcrumb: ['Support', 'Manuals'],
+    breadcrumb: ['Careers', 'Compliance'],
   }),
   p({
-    id: 'pr-me-only',
-    sku: 'PM-KIT-7',
-    title: 'Maintenance-only: Field rebuild kit for legacy miniature regulators',
+    id: 'car-js-only',
+    badgeLabel: 'Candidates',
+    title: 'Job seeker toolkit — résumé tips for telecom craft roles',
     description:
-      'Diaphragm and seat assortment sized for high-cycle panel regulators — not shown in standard catalog filters.',
-    contentType: 'product',
-    categories: ['pressure', 'calibrationServices'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['rebuild', 'regulator', 'field', 'maintenance'],
+      'Highlight certifications (OSHA, CDL), travel flexibility, and safety metrics recruiters scan first.',
+    contentType: 'careersPage',
+    categories: ['careersPrograms'],
+    brands: ['careers'],
+    searchBuckets: ['careers'],
+    matchTerms: ['resume', 'certification', 'osha', 'candidate'],
     imageSrc: catalogDemoImage(13),
-    visibleForDemoUsers: ['Maintenance Engineer'],
-    demoUserTaxonomy: 'Maintenance Engineer',
-    breadcrumb: ['Maintenance', 'Kits'],
+    visibleForDemoUsers: ['Job Seeker'],
+    demoUserTaxonomy: 'Job Seeker',
+    breadcrumb: ['Careers', 'Resources'],
   }),
   p({
-    id: 'pr-ec-only',
-    title: 'Consulting-only: Authority & turndown whitepaper for regulator stations',
+    id: 'car-inv-only',
+    badgeLabel: 'Talent signal',
+    title: 'Investor lens — workforce trends in telecom construction',
     description:
-      'Engineering memo on parallel regulator sizing for N+1 redundancy in campus steam PRV stations.',
-    contentType: 'technicalResource',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['authority', 'turndown', 'engineering', 'prv'],
+      'Macro view on labor availability, training investments, and backlog implications for specialty contractors.',
+    contentType: 'investorResource',
+    categories: ['investorFilings'],
+    brands: ['investors'],
+    searchBuckets: ['careers', 'investors'],
+    matchTerms: ['workforce', 'labor', 'training', 'backlog'],
     imageSrc: catalogDemoImage(14),
-    visibleForDemoUsers: ['Engineering Consultant'],
-    demoUserTaxonomy: 'Engineering Consultant',
-    breadcrumb: ['Resources', 'Whitepapers'],
+    visibleForDemoUsers: ['Investor'],
+    demoUserTaxonomy: 'Investor',
+    breadcrumb: ['Investors', 'ESG context'],
   }),
   p({
-    id: 'pr-pt-only',
-    title: 'Technician-only: Shift card — regulator creep test in 5 minutes',
+    id: 'car-tp-only',
+    badgeLabel: 'Partners',
+    title: 'Telecom providers — Dycom surge staffing for major builds',
     description:
-      'Quick isolation and downstream bleed steps to verify seat leakage before returning a line to service.',
-    contentType: 'productManual',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['creep', 'test', 'regulator', 'leak'],
+      'How operating companies align crews, engineers, and PMOs to accelerate fiber and 5G densification programs.',
+    contentType: 'companyPage',
+    categories: ['careersPrograms'],
+    brands: ['services'],
+    searchBuckets: ['careers', 'services'],
+    matchTerms: ['staffing', 'surge', 'fiber', '5g', 'program'],
     imageSrc: catalogDemoImage(15),
-    visibleForDemoUsers: ['Plant Technician'],
-    demoUserTaxonomy: 'Plant Technician',
-    breadcrumb: ['Operations', 'Shift aids'],
+    visibleForDemoUsers: ['Telecom Provider'],
+    demoUserTaxonomy: 'Telecom Provider',
+    breadcrumb: ['Partners', 'Capacity'],
   }),
+
+  // —— Services ——
   p({
-    id: 'pr-7',
-    sku: 'AT2-110A',
-    priceLabel: '$1,245',
-    title: 'AT2 Series Electronic Pressure Transmitter',
+    id: 'svc-1',
+    badgeLabel: 'Capabilities',
+    title: 'What we do — telecommunications specialty contracting',
     description:
-      '4–20 mA loop-powered transmitter with field-selectable ranges — pairs with Omega displays for turnkey panels.',
-    contentType: 'product',
-    categories: ['pressure', 'dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['pressure', 'datalogger'],
-    matchTerms: ['transmitter', '4-20', 'pressure', 'loop'],
+      'Nationwide construction, engineering, fulfillment, and restoration supporting broadband and wireless operators.',
+    contentType: 'companyPage',
+    categories: ['projectManagement'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['what', 'capabilities', 'telecommunications', 'contracting'],
     imageSrc: catalogDemoImage(16),
-    breadcrumb: ['Products', 'Pressure', 'Transmitters'],
+    breadcrumb: ['Company', 'What we do'],
   }),
   p({
-    id: 'pr-8',
-    sku: 'MAGNEHELIC',
-    priceLabel: 'From $67',
-    title: 'Magnehelic® Differential Pressure Gauge',
+    id: 'svc-2',
+    badgeLabel: 'Wireline',
+    title: 'Wireline construction — fiber and copper outside plant',
     description:
-      'Industry-standard DP indication for filters, fans, and isolation rooms — high-visibility dial options.',
-    contentType: 'product',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['differential', 'magnehelic', 'gauge', 'filter'],
+      'Long-haul and metro fiber builds with crews augmented by enterprise scheduling and quality tooling.',
+    contentType: 'serviceLine',
+    categories: ['wirelineConstruction'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['wireline', 'fiber', 'copper', 'osp'],
     imageSrc: catalogDemoImage(17),
-    isNew: true,
-    breadcrumb: ['Products', 'Pressure'],
+    breadcrumb: ['Services', 'Wireline'],
   }),
   p({
-    id: 'pr-9',
-    title: 'Featured article: Best practices for regulator stations in hydronic systems',
+    id: 'svc-3',
+    badgeLabel: 'Wireless',
+    title: 'Wireless construction — macro sites to small cells',
     description:
-      'Avoid hunting and water hammer with staged pressure drops and proper bypass — written for consulting engineers.',
-    contentType: 'featuredArticle',
-    categories: ['pressure', 'flowLevel'],
-    brands: ['dwyer', 'omega'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['hydronic', 'regulator', 'bypass', 'engineering'],
+      'Expert wireless communications construction for 4G and 5G networks at scalable program volumes.',
+    contentType: 'serviceLine',
+    categories: ['wirelessConstruction'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['wireless', 'macro', 'small cell', '5g', '4g'],
     imageSrc: catalogDemoImage(18),
-    breadcrumb: ['Learn', 'HVAC'],
+    isNew: true,
+    breadcrumb: ['Services', 'Wireless'],
   }),
   p({
-    id: 'pr-10',
-    title: 'Product manual: Minihelic® / Photohelic® installation addendum',
+    id: 'svc-4',
+    badgeLabel: 'Safety',
+    title: 'Locating — identify utilities before excavation',
     description:
-      'Wiring, setpoint, and relay configuration for switching gauges used in fan proving applications.',
-    contentType: 'productManual',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['photohelic', 'minihelic', 'relay', 'manual'],
+      'Skilled locate technicians protect underground utilities prior to construction starts.',
+    contentType: 'serviceLine',
+    categories: ['locating'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['locating', 'utilities', '811', 'damage prevention'],
     imageSrc: catalogDemoImage(19),
-    breadcrumb: ['Support', 'Manuals'],
+    breadcrumb: ['Services', 'Locating'],
   }),
   p({
-    id: 'pr-11',
-    sku: 'PRV-2LF',
-    priceLabel: '$156',
-    title: 'Low-flow precision regulator for analyzers',
+    id: 'svc-5',
+    badgeLabel: 'Design',
+    title: 'Engineering — survey and design for copper, coax, and fiber',
     description:
-      'Stainless seat option for corrosive sample gases — outlet stability for GC and CEMS sample conditioning.',
-    contentType: 'product',
-    categories: ['pressure', 'calibrationServices'],
-    brands: ['omega'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['regulator', 'low flow', 'analyzer', 'sample'],
+      'Field surveys and facility design supporting carrier network expansions and upgrades.',
+    contentType: 'serviceLine',
+    categories: ['engineering'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['engineering', 'survey', 'design', 'fiber'],
     imageSrc: catalogDemoImage(20),
-    breadcrumb: ['Products', 'Pressure'],
+    breadcrumb: ['Services', 'Engineering'],
   }),
   p({
-    id: 'pr-12',
-    title: 'Technical resource: Sizing a relief valve upstream of a regulator',
+    id: 'svc-6',
+    badgeLabel: 'Install',
+    title: 'Fulfillment — in-home and drop installations',
     description:
-      'Avoid nuisance lifts when inlet pressure spikes — includes capacity curves and vent line sizing notes.',
-    contentType: 'technicalResource',
-    categories: ['pressure', 'flowLevel'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['relief', 'regulator', 'sizing', 'inlet'],
+      'Residential and commercial fulfillment including installs, upgrades, and broadband repairs.',
+    contentType: 'serviceLine',
+    categories: ['fulfillment'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['fulfillment', 'install', 'in-home', 'drop'],
     imageSrc: catalogDemoImage(21),
-    breadcrumb: ['Resources', 'Safety'],
+    breadcrumb: ['Services', 'Fulfillment'],
   }),
   p({
-    id: 'pr-13',
-    sku: 'DH3-004',
-    priceLabel: '$412',
-    title: 'Differential pressure manifold — 3-valve block for transmitters',
+    id: 'svc-7',
+    badgeLabel: 'Operate',
+    title: 'Maintenance & restoration — keep networks running',
     description:
-      'Isolate, equalize, and vent in one compact body for DP transmitters on steam and hydronic systems.',
-    contentType: 'product',
-    categories: ['pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['manifold', 'differential', 'transmitter', 'block'],
+      'Ongoing maintenance and emergency restoration for telecommunications infrastructure nationwide.',
+    contentType: 'serviceLine',
+    categories: ['maintenanceRestoration'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['maintenance', 'restoration', 'emergency', 'network'],
     imageSrc: catalogDemoImage(22),
-    breadcrumb: ['Products', 'Valves'],
+    breadcrumb: ['Services', 'Maintenance'],
   }),
   p({
-    id: 'pr-14',
-    title: 'Featured article: Digital vs mechanical regulators in skids',
+    id: 'svc-8',
+    badgeLabel: 'Programs',
+    title: 'Project management — turnkey and managed telecom projects',
     description:
-      'When electronic piloting pays off versus traditional spring-loaded regulators for packaged equipment OEMs.',
-    contentType: 'featuredArticle',
-    categories: ['pressure', 'dataAcquisition'],
-    brands: ['dwyer', 'omega'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['digital', 'regulator', 'skid', 'oem'],
+      'From small towns to major metros — coordinated scheduling, safety, and customer reporting.',
+    contentType: 'serviceLine',
+    categories: ['projectManagement'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['project', 'management', 'turnkey', 'program'],
     imageSrc: catalogDemoImage(23),
-    breadcrumb: ['Learn', 'OEM'],
+    breadcrumb: ['Services', 'PMO'],
   }),
   p({
-    id: 'pr-15',
-    title: 'Product manual: Field verification of regulator lockup pressure',
+    id: 'svc-tp-only',
+    badgeLabel: 'Provider FAQ',
+    title: 'Telecom providers — integrated safety & QA dashboards',
     description:
-      'Step-by-step procedure with data sheet template for QA sign-off after maintenance.',
-    contentType: 'productManual',
-    categories: ['pressure', 'calibrationServices'],
-    brands: ['dwyer'],
-    searchBuckets: ['pressure'],
-    matchTerms: ['lockup', 'regulator', 'verification', 'manual'],
+      'Mock overview of how Dycom subsidiaries align OSHA metrics and close-out packages for carrier QA teams.',
+    contentType: 'serviceLine',
+    categories: ['projectManagement', 'wirelessConstruction'],
+    brands: ['services'],
+    searchBuckets: ['services'],
+    matchTerms: ['qa', 'osha', 'dashboard', 'close-out'],
     imageSrc: catalogDemoImage(24),
-    breadcrumb: ['Support', 'Field'],
+    visibleForDemoUsers: ['Telecom Provider'],
+    demoUserTaxonomy: 'Telecom Provider',
+    breadcrumb: ['Partners', 'Quality'],
   }),
 
-  // —— Data loggers / acquisition ——
+  // —— Investors ——
   p({
-    id: 'dl-1',
-    sku: 'OM-CP-OCTPRO',
-    priceLabel: 'From $389',
-    title: 'OM-CP-OctPro Multi-Channel Temperature Logger',
+    id: 'inv-1',
+    badgeLabel: 'Overview',
+    title: 'Investor relations — news, events, and filings',
     description:
-      'Eight thermocouple channels with onboard memory and USB offload — suited for oven mapping and cold chain studies.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'temperature'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['data', 'logger', 'temperature', 'thermocouple', 'mapping'],
+      'Central entry point for earnings, SEC documents, stock information, and governance updates.',
+    contentType: 'investorResource',
+    categories: ['investorFilings'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['investor', 'relations', 'news', 'stock'],
     imageSrc: catalogDemoImage(25),
-    isNew: true,
-    breadcrumb: ['Products', 'Data acquisition'],
+    breadcrumb: ['Investors'],
   }),
   p({
-    id: 'dl-2',
-    sku: 'OM-DAQ-1200',
-    priceLabel: '$2,150',
-    title: 'Portable USB DAQ — 16-bit, 100 kS/s',
+    id: 'inv-2',
+    badgeLabel: 'Filings',
+    title: 'Financials & filings — quarterly and annual reports',
     description:
-      'Benchtop acquisition for lab characterization with bundled Omega software drivers and example projects.',
-    contentType: 'product',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['daq', 'usb', 'acquisition', 'logger', 'portable'],
+      'Access SEC filings, quarterly highlights, and annual report archives for Dycom Industries, Inc.',
+    contentType: 'investorResource',
+    categories: ['investorFilings'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['financial', 'sec', '10-k', '10-q', 'annual'],
     imageSrc: catalogDemoImage(26),
-    breadcrumb: ['Products', 'DAQ'],
+    breadcrumb: ['Investors', 'Financials'],
   }),
   p({
-    id: 'dl-3',
-    title: 'Featured article: Mapping an autoclave with battery-powered loggers',
+    id: 'inv-3',
+    badgeLabel: 'Stock',
+    title: 'Stock information — quote tools & historical lookup',
     description:
-      'Sensor placement, sampling intervals, and report generation for validation engineers.',
-    contentType: 'featuredArticle',
-    categories: ['dataAcquisition', 'temperature'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['mapping', 'logger', 'autoclave', 'validation'],
+      'Market data references and historical price lookup aligned to Dycom listed securities.',
+    contentType: 'investorResource',
+    categories: ['investorFilings'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['stock', 'quote', 'price', 'ticker'],
     imageSrc: catalogDemoImage(27),
-    breadcrumb: ['Learn', 'Life sciences'],
+    breadcrumb: ['Investors', 'Stock'],
   }),
   p({
-    id: 'dl-4',
-    title: 'Technical resource: Alarming and statistics in Omega data software',
+    id: 'inv-4',
+    badgeLabel: 'Leadership',
+    title: 'Governance — board, committees, and officers',
     description:
-      'How to configure rolling min/max, MKT, and email alerts for cold rooms using Omega desktop suite.',
-    contentType: 'technicalResource',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['alarm', 'software', 'data', 'logger'],
+      'Profiles and documents covering board structure, committee charters, and executive leadership.',
+    contentType: 'investorResource',
+    categories: ['corporateGovernance'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['governance', 'board', 'committee', 'officers'],
     imageSrc: catalogDemoImage(28),
-    breadcrumb: ['Resources', 'Software'],
+    breadcrumb: ['Investors', 'Governance'],
   }),
   p({
-    id: 'dl-5',
-    title: 'Product manual: OM-CP series quick start & calibration certificate template',
+    id: 'inv-5',
+    badgeLabel: 'Calendar',
+    title: 'Events & presentations — conferences and webcasts',
     description:
-      'PDF quick start with traceable calibration worksheet references for auditors.',
-    contentType: 'productManual',
-    categories: ['dataAcquisition', 'calibrationServices'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['manual', 'calibration', 'certificate', 'logger'],
+      'Upcoming and archived management presentations for shareholders and analysts.',
+    contentType: 'investorResource',
+    categories: ['investorEvents'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['events', 'presentation', 'webcast', 'conference'],
     imageSrc: catalogDemoImage(29),
-    breadcrumb: ['Support', 'Manuals'],
+    breadcrumb: ['Investors', 'Events'],
   }),
   p({
-    id: 'dl-me-only',
-    title: 'Maintenance-only: Logger battery rotation matrix',
+    id: 'inv-inv-only',
+    badgeLabel: 'Deep dive',
+    title: 'Investor-only briefing — backlog & fiber cycle indicators',
     description:
-      'SKU cross-reference for coin-cell and lithium packs used across Omega OM-CP loggers — reduces stockouts.',
-    contentType: 'technicalResource',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['battery', 'logger', 'maintenance', 'stock'],
+      'Supplemental narrative on backlog composition and wireless capex cadence (demo personalization row).',
+    contentType: 'investorResource',
+    categories: ['investorFilings'],
+    brands: ['investors'],
+    searchBuckets: ['investors'],
+    matchTerms: ['backlog', 'capex', 'fiber', 'wireless'],
     imageSrc: catalogDemoImage(30),
-    visibleForDemoUsers: ['Maintenance Engineer'],
-    demoUserTaxonomy: 'Maintenance Engineer',
-    breadcrumb: ['Maintenance', 'CMMS'],
-  }),
-  p({
-    id: 'dl-ec-only',
-    title: 'Consulting-only: Uncertainty budget for multi-channel logger systems',
-    description:
-      'Worked example combining sensor interchangeability, cold junction error, and logger quantization.',
-    contentType: 'technicalResource',
-    categories: ['dataAcquisition', 'calibrationServices'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['uncertainty', 'logger', 'engineering', 'budget'],
-    imageSrc: catalogDemoImage(31),
-    visibleForDemoUsers: ['Engineering Consultant'],
-    demoUserTaxonomy: 'Engineering Consultant',
-    breadcrumb: ['Resources', 'Metrology'],
-  }),
-  p({
-    id: 'dl-pt-only',
-    title: 'Technician-only: Field swap guide — logger vs chart recorder legacy loops',
-    description:
-      'Stepwise decommission of circular chart drives and reuse of existing TC wells with digital loggers.',
-    contentType: 'productManual',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['chart', 'recorder', 'swap', 'technician'],
-    imageSrc: catalogDemoImage(32),
-    visibleForDemoUsers: ['Plant Technician'],
-    demoUserTaxonomy: 'Plant Technician',
-    breadcrumb: ['Operations', 'Retrofits'],
-  }),
-  p({
-    id: 'dl-6',
-    sku: 'DW-LOG-PRO',
-    priceLabel: '$425',
-    title: 'Dwyer Series DW-LOG Pressure & Temperature Logger',
-    description:
-      'Combined absolute/gauge pressure with ambient temperature logging for compressed air audits.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['datalogger', 'pressure'],
-    matchTerms: ['logger', 'pressure', 'temperature', 'audit'],
-    imageSrc: catalogDemoImage(33),
-    breadcrumb: ['Products', 'Loggers'],
-  }),
-  p({
-    id: 'dl-7',
-    sku: 'OM-SQ-2040',
-    priceLabel: '$199',
-    title: 'Single-use temperature logger — flat shipping profile',
-    description:
-      'Cold chain compliance with PDF trip report on USB — ideal for lane qualification studies.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'temperature'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['cold chain', 'logger', 'usb', 'pdf'],
-    imageSrc: catalogDemoImage(34),
-    breadcrumb: ['Products', 'Loggers'],
-  }),
-  p({
-    id: 'dl-8',
-    title: 'Featured article: From strip charts to digital historians on a budget',
-    description:
-      'Migration path for small utilities upgrading legacy recording without rip-and-replace DCS work.',
-    contentType: 'featuredArticle',
-    categories: ['dataAcquisition'],
-    brands: ['omega', 'redLion'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['historian', 'digital', 'migration', 'logger'],
-    imageSrc: catalogDemoImage(35),
-    breadcrumb: ['Learn', 'Utilities'],
-  }),
-  p({
-    id: 'dl-9',
-    title: 'Product manual: DAQ driver installation for Windows 11 environments',
-    description:
-      'Signed driver packages, UAC prompts, and firewall exceptions for lab PCs.',
-    contentType: 'productManual',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['driver', 'daq', 'windows', 'manual'],
-    imageSrc: catalogDemoImage(36),
-    breadcrumb: ['Support', 'IT'],
-  }),
-  p({
-    id: 'dl-10',
-    sku: 'OM-EL-USB',
-    priceLabel: '$72',
-    title: 'EL-USB Temperature & Humidity Logger',
-    description:
-      'Set-and-forget USB logger with LED status — thousands deployed in warehouses and clinics.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'temperature'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['usb', 'logger', 'humidity', 'temperature'],
-    imageSrc: catalogDemoImage(37),
-    isNew: true,
-    breadcrumb: ['Products', 'Loggers'],
-  }),
-  p({
-    id: 'dl-11',
-    sku: 'OM-DAQ-USB8',
-    priceLabel: '$289',
-    title: '8-channel voltage logger with software triggers',
-    description:
-      'Log 0–10 V and 4–20 mA with configurable thresholds — ship logs to CSV for Six Sigma studies.',
-    contentType: 'product',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['logger', 'channel', 'voltage', 'csv'],
-    imageSrc: catalogDemoImage(38),
-    breadcrumb: ['Products', 'DAQ'],
-  }),
-  p({
-    id: 'dl-12',
-    title: 'Technical resource: Logger sampling jitter and aliasing primer',
-    description:
-      'Short guide for engineers choosing sample rates for rotating equipment and fast thermal transients.',
-    contentType: 'technicalResource',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['sampling', 'logger', 'aliasing', 'engineering'],
-    imageSrc: catalogDemoImage(39),
-    breadcrumb: ['Resources', 'Education'],
-  }),
-  p({
-    id: 'dl-13',
-    sku: 'DW-SCADA-LITE',
-    priceLabel: '$560',
-    title: 'Lightweight SCADA logger bridge for small utilities',
-    description:
-      'Poll Modbus registers and persist to removable media — bridge legacy PLCs to modern reporting.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'wirelessIiot'],
-    brands: ['dwyer'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['scada', 'logger', 'modbus', 'utility'],
-    imageSrc: catalogDemoImage(40),
-    breadcrumb: ['Products', 'Software'],
-  }),
-  p({
-    id: 'dl-14',
-    title: 'Featured article: Data integrity for 21 CFR Part 11 studies',
-    description:
-      'Audit trails, user accounts, and electronic signatures when Omega software is used in regulated labs.',
-    contentType: 'featuredArticle',
-    categories: ['dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['data', 'logger', 'compliance', 'cfr'],
-    imageSrc: catalogDemoImage(41),
-    breadcrumb: ['Learn', 'Regulatory'],
-  }),
-  p({
-    id: 'dl-15',
-    title: 'Product manual: Ethernet logger firewall exceptions',
-    description:
-      'IT-friendly port matrix for Omega Ethernet loggers in segmented OT networks.',
-    contentType: 'productManual',
-    categories: ['dataAcquisition', 'wirelessIiot'],
-    brands: ['omega'],
-    searchBuckets: ['datalogger'],
-    matchTerms: ['ethernet', 'logger', 'firewall', 'manual'],
-    imageSrc: catalogDemoImage(42),
-    breadcrumb: ['Support', 'IT'],
+    visibleForDemoUsers: ['Investor'],
+    demoUserTaxonomy: 'Investor',
+    breadcrumb: ['Investors', 'Insights'],
   }),
 
-  // —— IIoT / Wireless ——
+  // —— Corporate ——
   p({
-    id: 'iot-1',
-    sku: 'OM-WLS-01',
-    priceLabel: 'From $510',
-    title: 'Wireless Temperature Transmitter — Mesh repeater capable',
+    id: 'corp-1',
+    badgeLabel: 'Trust',
+    title: 'Privacy policy — data stewardship for visitors',
     description:
-      'License-free sub-GHz mesh for plant-wide temperature visibility without running new conduit.',
-    contentType: 'product',
-    categories: ['wirelessIiot', 'temperature', 'dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['wireless', 'mesh', 'iiot', 'transmitter', 'temperature'],
-    imageSrc: catalogDemoImage(43),
-    isNew: true,
-    breadcrumb: ['Products', 'Wireless'],
+      'How Dycom handles personal information collected through websites and investor alerts.',
+    contentType: 'companyPage',
+    categories: ['corporateGovernance'],
+    brands: ['corporate'],
+    searchBuckets: ['investors'],
+    matchTerms: ['privacy', 'policy', 'data', 'cookies'],
+    imageSrc: catalogDemoImage(31),
+    breadcrumb: ['Corporate', 'Privacy'],
   }),
   p({
-    id: 'iot-2',
-    sku: 'RL-GW-IO',
-    priceLabel: '$1,890',
-    title: 'Red Lion Edge Gateway — MQTT & Sparkplug B',
+    id: 'corp-2',
+    badgeLabel: 'Legal',
+    title: 'Terms of use — website policies',
     description:
-      'Publish OT tags to cloud historians with store-and-forward for unreliable cellular uplinks.',
-    contentType: 'product',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['gateway', 'mqtt', 'iiot', 'edge', 'cloud'],
-    imageSrc: catalogDemoImage(44),
-    breadcrumb: ['Products', 'Connectivity'],
+      'Terms governing access to Dycom digital properties and acceptable use expectations.',
+    contentType: 'companyPage',
+    categories: ['corporateGovernance'],
+    brands: ['corporate'],
+    searchBuckets: ['services'],
+    matchTerms: ['terms', 'legal', 'website'],
+    imageSrc: catalogDemoImage(32),
+    breadcrumb: ['Corporate', 'Legal'],
   }),
   p({
-    id: 'iot-3',
-    title: 'Featured article: Designing a secure IIoT pilot on brownfield assets',
+    id: 'corp-3',
+    badgeLabel: 'Thanks',
+    title: 'Thank you for subscribing — preferences confirmation',
     description:
-      'Segmentation, read-only PLC taps, and certificate rotation patterns for first production pilots.',
-    contentType: 'featuredArticle',
-    categories: ['wirelessIiot'],
-    brands: ['omega', 'redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['iiot', 'secure', 'pilot', 'plc'],
-    imageSrc: catalogDemoImage(45),
-    breadcrumb: ['Learn', 'IIoT'],
-  }),
-  p({
-    id: 'iot-4',
-    title: 'Technical resource: Wireless site survey checklist for metal buildings',
-    description:
-      'RSSI targets, antenna height rules, and interference sources common in process plants.',
-    contentType: 'technicalResource',
-    categories: ['wirelessIiot'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['wireless', 'survey', 'antenna', 'rssi'],
-    imageSrc: catalogDemoImage(46),
-    breadcrumb: ['Resources', 'Field'],
-  }),
-  p({
-    id: 'iot-5',
-    title: 'Product manual: Edge gateway commissioning & SIM provisioning',
-    description:
-      'APN settings, firewall pinholes, and OT/IT handoff checklist for operations teams.',
-    contentType: 'productManual',
-    categories: ['wirelessIiot'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['gateway', 'sim', 'commissioning', 'manual'],
-    imageSrc: catalogDemoImage(47),
-    breadcrumb: ['Support', 'Manuals'],
-  }),
-  p({
-    id: 'iot-me-only',
-    title: 'Maintenance-only: Spare antenna kit list by panel type',
-    description:
-      'Cross-reference whip vs remote-mount kits for Omega wireless receivers in MCC rooms.',
-    contentType: 'technicalResource',
-    categories: ['wirelessIiot'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['antenna', 'spare', 'wireless', 'maintenance'],
-    imageSrc: catalogDemoImage(48),
-    visibleForDemoUsers: ['Maintenance Engineer'],
-    demoUserTaxonomy: 'Maintenance Engineer',
-    breadcrumb: ['Maintenance', 'Spares'],
-  }),
-  p({
-    id: 'iot-ec-only',
-    title: 'Consulting-only: Reference architecture — SCADA to cloud via Sparkplug',
-    description:
-      'Single-line diagrams and topic naming conventions for multi-site OEM rollouts.',
-    contentType: 'technicalResource',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['sparkplug', 'scada', 'architecture', 'cloud'],
-    imageSrc: catalogDemoImage(49),
-    visibleForDemoUsers: ['Engineering Consultant'],
-    demoUserTaxonomy: 'Engineering Consultant',
-    breadcrumb: ['Resources', 'Architecture'],
-  }),
-  p({
-    id: 'iot-pt-only',
-    title: 'Technician-only: Swap procedure — cellular gateway without process downtime',
-    description:
-      'Hot-swap using redundant path and validation pings before cutover.',
-    contentType: 'productManual',
-    categories: ['wirelessIiot'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['cellular', 'gateway', 'swap', 'downtime'],
-    imageSrc: catalogDemoImage(50),
-    visibleForDemoUsers: ['Plant Technician'],
-    demoUserTaxonomy: 'Plant Technician',
-    breadcrumb: ['Operations', 'Runbooks'],
-  }),
-  p({
-    id: 'iot-6',
-    sku: 'OM-CLOUD-LITE',
-    priceLabel: '$29/mo',
-    title: 'Omega Cloud Lite — dashboards for wireless loggers',
-    description:
-      'Pre-built tiles for min/max, excursions, and CSV export — pairs with Omega wireless endpoints.',
-    contentType: 'product',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['iiot', 'datalogger'],
-    matchTerms: ['cloud', 'dashboard', 'wireless', 'logger'],
-    imageSrc: catalogDemoImage(51),
-    breadcrumb: ['Products', 'Software'],
-  }),
-  p({
-    id: 'iot-7',
-    sku: 'DW-WPT',
-    priceLabel: '$268',
-    title: 'Wireless Pressure Transmitter — battery powered',
-    description:
-      'Remote monitoring for filter banks and coil DP where wiring is cost-prohibitive.',
-    contentType: 'product',
-    categories: ['wirelessIiot', 'pressure'],
-    brands: ['dwyer'],
-    searchBuckets: ['iiot', 'pressure'],
-    matchTerms: ['wireless', 'pressure', 'transmitter', 'battery'],
-    imageSrc: catalogDemoImage(52),
-    breadcrumb: ['Products', 'Wireless'],
-  }),
-  p({
-    id: 'iot-8',
-    title: 'Featured article: IIoT and Wireless Systems — where to start in 2026',
-    description:
-      'Decision tree for pilot scope: sensors first vs network first vs historian first.',
-    contentType: 'featuredArticle',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['iiot', 'wireless', 'systems', 'pilot'],
-    imageSrc: catalogDemoImage(53),
-    breadcrumb: ['Learn', 'Strategy'],
-  }),
-  p({
-    id: 'iot-9',
-    title: 'Product manual: Wireless receiver pairing & security keys',
-    description:
-      'Factory default rotation, pairing timeout behavior, and lost-device revocation.',
-    contentType: 'productManual',
-    categories: ['wirelessIiot'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['pairing', 'security', 'wireless', 'manual'],
-    imageSrc: catalogDemoImage(54),
-    breadcrumb: ['Support', 'Manuals'],
-  }),
-  p({
-    id: 'iot-10',
-    sku: 'RL-DA10D',
-    priceLabel: '$640',
-    title: 'Data Acquisition Module — edge preprocessing',
-    description:
-      'Scale and linearize raw counts before MQTT publish — reduces cloud ingress costs.',
-    contentType: 'product',
-    categories: ['dataAcquisition', 'wirelessIiot'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot', 'datalogger'],
-    matchTerms: ['edge', 'mqtt', 'acquisition', 'preprocess'],
-    imageSrc: catalogDemoImage(55),
-    breadcrumb: ['Products', 'IIoT'],
-  }),
-  p({
-    id: 'iot-11',
-    sku: 'OM-WG-MESH',
-    priceLabel: '$348',
-    title: 'Wireless mesh repeater — extend plant coverage',
-    description:
-      'Self-healing mesh for Omega W-series endpoints; DIN-rail mount with diagnostics LEDs.',
-    contentType: 'product',
-    categories: ['wirelessIiot'],
-    brands: ['omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['wireless', 'mesh', 'repeater', 'iiot'],
-    imageSrc: catalogDemoImage(56),
-    breadcrumb: ['Products', 'Wireless'],
-  }),
-  p({
-    id: 'iot-12',
-    title: 'Technical resource: OT/IT demarcation for IIoT pilots',
-    description:
-      'RACI matrix for firewall changes, historian ownership, and backup responsibilities.',
-    contentType: 'technicalResource',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['iiot', 'ot', 'it', 'firewall'],
-    imageSrc: catalogDemoImage(57),
-    breadcrumb: ['Resources', 'Security'],
-  }),
-  p({
-    id: 'iot-13',
-    sku: 'RL-CELL-5G',
-    priceLabel: '$920',
-    title: 'Industrial 5G cellular router with GPS',
-    description:
-      'Primary or failover uplink for remote assets — GPS for fleet maps in Omega Cloud dashboards.',
-    contentType: 'product',
-    categories: ['wirelessIiot'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['cellular', '5g', 'router', 'wireless'],
-    imageSrc: catalogDemoImage(58),
-    isNew: true,
-    breadcrumb: ['Products', 'Connectivity'],
-  }),
-  p({
-    id: 'iot-14',
-    title: 'Featured article: Wireless Systems commissioning playbook',
-    description:
-      'End-to-end checklist from FAT through SAT for IIoT rollouts with Red Lion gateways.',
-    contentType: 'featuredArticle',
-    categories: ['wirelessIiot'],
-    brands: ['redLion', 'omega'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['wireless', 'systems', 'commissioning', 'iiot'],
-    imageSrc: catalogDemoImage(59),
-    breadcrumb: ['Learn', 'Deployment'],
-  }),
-  p({
-    id: 'iot-15',
-    title: 'Product manual: MQTT topic design for multi-site OEMs',
-    description:
-      'Versioned topic trees, birth certificates, and dead-band publishing guidance.',
-    contentType: 'productManual',
-    categories: ['wirelessIiot', 'dataAcquisition'],
-    brands: ['redLion'],
-    searchBuckets: ['iiot'],
-    matchTerms: ['mqtt', 'topic', 'manual', 'oem'],
-    imageSrc: catalogDemoImage(60),
-    breadcrumb: ['Support', 'Developers'],
+      'Confirmation page shown after email alert or newsletter preferences are saved.',
+    contentType: 'companyPage',
+    categories: ['investorEvents'],
+    brands: ['corporate'],
+    searchBuckets: ['investors'],
+    matchTerms: ['subscribe', 'preferences', 'thank', 'alert'],
+    imageSrc: catalogDemoImage(33),
+    breadcrumb: ['Investors', 'Subscribe'],
   }),
 ];
 
@@ -1224,7 +866,6 @@ function insightKey(buckets: SearchBucket[], user: DemoUserTaxonomy | null): str
   return `${b}::${u}`;
 }
 
-/** Mock “AI” narrative that shifts with query buckets + demo persona */
 export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | null): AiSearchInsight | null {
   const n = normalizeQuery(query);
   if (n.length < 2) return null;
@@ -1232,127 +873,126 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const key = insightKey(buckets, user);
 
   const pool: Record<string, AiSearchInsight> = {
-    'pressure::Maintenance Engineer': {
-      id: 'ai-pr-me',
-      headline: 'AI suggestion — keep regulators reliable between cal windows',
+    'careers::Job Seeker': {
+      id: 'ai-car-js',
+      headline: 'AI suggestion — map your craft to Dycom subsidiaries',
       body:
-        'For your role, prioritize spare soft goods and creep checks on low-flow panels. Dwyer miniature regulators respond well to documented seat torque — add a PM line item after filter replacements.',
+        'Technician resumes land faster when they cite travel radius, climber certifications, and aerial/buried experience. Start at Careers home, then narrow Opportunities by state.',
       bullets: [
-        'Stock diaphragm kits for your top three regulator SKUs',
-        'Log outlet drift after inlet swings > 20%',
-        'Pair field gauges with a single reference transmitter for quick triage',
+        'Compare Benefits and Life@Dycom pages before interviews',
+        'Review the recruitment process timeline to prep safety screenings',
+        'Save Benefit Plan Disclosures for enrollment conversations',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Pressure products on DwyerOmega.com',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Explore Dycom careers content',
     },
-    'pressure::Engineering Consultant': {
-      id: 'ai-pr-ec',
-      headline: 'AI suggestion — specify authority before you pick a catalog model',
+    'careers::Investor': {
+      id: 'ai-car-inv',
+      headline: 'AI suggestion — correlate hiring narratives with backlog commentary',
       body:
-        'Consulting teams win fewer callbacks when turndown and lockup are modeled against worst-case inlet decay. Consider documenting parallel PRV staging for campus steam drops.',
+        'Labor availability often appears alongside backlog and wireless capex commentary. Pair Careers highlights with Financials & Filings for context on execution capacity.',
       bullets: [
-        'Ask for droop curves at minimum fire / maximum fire',
-        'Specify sensing port location relative to flow disturbances',
-        'Bundle Omega transmitters when clients want 4–20 mA loop evidence',
+        'Scan earnings decks for training and retention initiatives',
+        'Compare governance disclosures with workforce risk factors',
+        'Use Events & Presentations for management Q&A on hiring',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Application engineering hub',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Investor relations overview',
     },
-    'pressure::Plant Technician': {
-      id: 'ai-pr-pt',
-      headline: 'AI suggestion — fast isolation beats guessing on hunting regulators',
+    'careers::Telecom Provider': {
+      id: 'ai-car-tp',
+      headline: 'AI suggestion — align staffing plans with Dycom program offices',
       body:
-        'Technicians shorten mean-time-to-repair by proving downstream demand before adjusting springs. Use a downstream bleed to verify seat leakage in under five minutes.',
+        'Carrier program managers should sync forecasted volumes with Dycom PMOs early — recruitment pages signal regional bench strength for wireless and wireline surges.',
       bullets: [
-        'Tag both upstream and downstream isolation before spring changes',
-        'Photograph dial setpoints for shift handoff',
-        'Escalate if hunting persists after element replacement',
+        'Reference Maintenance & Restoration pages for storm response playbooks',
+        'Share fulfillment SLAs when scoping in-home install waves',
+        'Cross-check Engineering offerings for survey-heavy fiber expansions',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Field service resources',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Services overview',
     },
-    'datalogger::Maintenance Engineer': {
-      id: 'ai-dl-me',
-      headline: 'AI suggestion — logger fleets fail on batteries, not sensors',
+    'services::Job Seeker': {
+      id: 'ai-svc-js',
+      headline: 'AI suggestion — pick a craft lane before browsing openings',
       body:
-        'Rotate coin cells on a calendar basis and keep a one-to-one spare for mission-critical ovens. Omega OM-CP families share battery trays — simplify storeroom SKUs.',
+        'Wireless construction, wireline fiber, and fulfillment each emphasize different certifications. Read service pages to vocabulary-match your experience in applications.',
       bullets: [
-        'Export trip PDFs before clearing memory',
-        'Align logger IDs with asset tags in CMMS',
-        'Batch-download after PM windows to avoid USB conflicts',
+        'Wireless openings highlight climbing and RF safety exposure',
+        'Wireline roles reward OTDR and fusion splicing experience',
+        'Fulfillment emphasizes customer-facing installs and truck stock discipline',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Data loggers overview',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'What we do',
     },
-    'datalogger::Engineering Consultant': {
-      id: 'ai-dl-ec',
-      headline: 'AI suggestion — publish an uncertainty story with every validation study',
+    'services::Investor': {
+      id: 'ai-svc-inv',
+      headline: 'AI suggestion — tie service lines to revenue mix narratives',
       body:
-        'Auditors ask how logger resolution maps to process tolerance. Pre-build an uncertainty appendix using channel count, sensor class, and sampling interval.',
+        'Dycom’s publicly described capabilities span construction, engineering, and fulfillment — useful when reconciling segment commentary in filings.',
       bullets: [
-        'Prefer loggers with locked firmware revisions per protocol',
-        'Document cold-junction strategy for multi-channel TC studies',
-        'Pair portable DAQ with loggers for high-speed anomalies',
+        'Wireless vs wireline mix often surfaces in macro carrier spend cycles',
+        'Maintenance & restoration content explains recurring storm revenue',
+        'Project management pages illustrate turnkey program economics',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Metrology & DAQ',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Financials & filings',
     },
-    'datalogger::Plant Technician': {
-      id: 'ai-dl-pt',
-      headline: 'AI suggestion — chart recorder retirements need a physical walk-down',
-      bullets: [
-        'Confirm TC well depth matches new logger probes',
-        'Label USB ports on shared PCs for logger-only use',
-        'Run a 24h parallel before decommissioning circular charts',
-      ],
+    'services::Telecom Provider': {
+      id: 'ai-svc-tp',
+      headline: 'AI suggestion — bundle scopes across engineering + construction',
       body:
-        'Technicians reduce rework by photographing pen arm geometry and well orientation before digital swap. Keep one legacy chart on hand for dispute resolution.',
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Logger quick starts',
+        'Telecom programs compress schedules when survey, locate, and construction share one PMO rhythm — mirror Dycom’s turnkey framing in your RFP structure.',
+      bullets: [
+        'Add locating milestones ahead of fiber platoon mobilization',
+        'Specify restoration SLAs aligned to storm mutual-aid commitments',
+        'Reference fulfillment pages for residential install surge capacity',
+      ],
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Services catalog',
     },
-    'iiot::Maintenance Engineer': {
-      id: 'ai-iot-me',
-      headline: 'AI suggestion — treat wireless like rotating equipment',
+    'investors::Job Seeker': {
+      id: 'ai-inv-js',
+      headline: 'AI suggestion — understand employer stability before you apply',
       body:
-        'Antennas and coax fatigue before radios do. Add visual inspection to rounds and keep spare whips for MCC installs with tight cable bend radius.',
+        'Public filings summarize Dycom’s markets and risks — helpful context when evaluating long-term craft employment and geographic transfers.',
       bullets: [
-        'Check RSSI quarterly on border nodes',
-        'Verify ground planes are not painted over',
-        'Log firmware versions next to asset IDs',
+        'Read the latest annual report overview for strategic priorities',
+        'Compare shareholder communications with regional hiring pushes',
+        'Use governance pages to learn about leadership stability',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Wireless accessories',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Investor news hub',
     },
-    'iiot::Engineering Consultant': {
-      id: 'ai-iot-ec',
-      headline: 'AI suggestion — name topics before you pick hardware',
+    'investors::Investor': {
+      id: 'ai-inv-inv',
+      headline: 'AI suggestion — stack filings, events, and stock tools',
       body:
-        'Sparkplug topic namespaces pay dividends when OEMs duplicate lines. Edge gateways from Red Lion pair cleanly with Omega wireless sensors for brownfield pilots.',
+        'Start from Investor Relations, then drill into SEC filings and replay recent conferences — Dycom surfaces governance documents alongside financial archives.',
       bullets: [
-        'Define single source of truth for tag naming',
-        'Segment OT VLANs before enabling cloud routes',
-        'Prototype historian retention policies on pilot lines only',
+        'Bookmark quarterly packets for estimate reconciliation',
+        'Download committee charters when evaluating oversight quality',
+        'Enable email alerts for new filings and presentations',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'IIoT solutions',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'SEC filings & reports',
     },
-    'iiot::Plant Technician': {
-      id: 'ai-iot-pt',
-      headline: 'AI suggestion — cellular swaps need a comms dry run',
+    'investors::Telecom Provider': {
+      id: 'ai-inv-tp',
+      headline: 'AI suggestion — monitor supplier financial health',
       body:
-        'Run ping and MQTT publish tests from maintenance bench before truck roll. Keep SIM ICCIDs in the shift log for faster carrier support calls.',
+        'Telecom procurement teams use investor updates to gauge subcontractor capacity and capital discipline during multi-year fiber awards.',
       bullets: [
-        'Photo existing antenna routing before disconnect',
-        'Validate APN on a hotspot before installing in panel',
-        'Coordinate OT window with IT firewall changes',
+        'Read earnings commentary on backlog coverage vs labor supply',
+        'Track covenant and liquidity metrics in periodic filings',
+        'Watch event replays for commentary on carrier spending outlook',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Gateway manuals',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Investor events',
     },
   };
 
-  // Multi-bucket queries: merge first matching bucket priority pressure > datalogger > iiot
-  const order: SearchBucket[] = ['pressure', 'datalogger', 'iiot'];
+  const order: SearchBucket[] = ['careers', 'services', 'investors'];
   for (const b of order) {
     if (buckets.includes(b)) {
       const singleKey = `${b}::${user ?? 'any'}`;
@@ -1360,64 +1000,66 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
     }
   }
 
-  // Generic fallback when keywords match but no persona-specific block
-  if (buckets.includes('pressure')) {
+  if (buckets.includes('careers')) {
     return (
-      pool[`pressure::${user ?? 'any'}`] ?? {
-        id: 'ai-pr-gen',
-        headline: 'AI suggestion — narrow to application before comparing models',
+      pool[`careers::${user ?? 'any'}`] ?? {
+        id: 'ai-car-gen',
+        headline: 'AI suggestion — start with Careers home',
         body:
-          'Pressure regulation performance depends on media, droop tolerance, and sensing location. Use category filters for Pressure & valves, then compare diaphragm vs piston families.',
+          'Filter Opportunities after reading Benefits and the recruitment process — Dycom mirrors typical enterprise ATS flows with safety onboarding checkpoints.',
         bullets: [
-          'Filter to regulators first, then add transmitters for closed-loop evidence',
-          'Open manuals for torque and startup sequences',
-          'Save articles to share with operations on hunting issues',
+          'Use Benefits pages to compare medical and retirement options',
+          'Life@Dycom helps explain regional culture differences',
+          'Benefit plan disclosures contain regulatory plan notices',
         ],
-        learnMoreHref: DWYER_OMEGA_BASE,
-        learnMoreLabel: 'Explore pressure',
+        learnMoreHref: DYCOM_PUBLIC_BASE,
+        learnMoreLabel: 'Careers landing',
       }
     );
   }
-  if (buckets.includes('datalogger')) {
+  if (buckets.includes('services')) {
     return (
-      pool[`datalogger::${user ?? 'any'}`] ?? {
-        id: 'ai-dl-gen',
-        headline: 'AI suggestion — match logger memory to trip length',
+      pool[`services::${user ?? 'any'}`] ?? {
+        id: 'ai-svc-gen',
+        headline: 'AI suggestion — choose a service line to narrow results',
         body:
-          'Sampling rate × channel count drives memory. For validation, prefer loggers with locked configurations and PDF trip reports for auditors.',
-        bullets: ['Use Technical resources for software alarming', 'Download manuals for IT/driver installs'],
-        learnMoreHref: DWYER_OMEGA_BASE,
-        learnMoreLabel: 'Data acquisition',
+          'Wireline construction, wireless builds, engineering, locating, fulfillment, and maintenance each map to different carrier procurement tracks.',
+        bullets: [
+          'What we do summarizes Dycom’s nationwide contracting footprint',
+          'Project management ties turnkey governance for large programs',
+          'Pair Engineering with Wireline when scopes include survey-to-build handoffs',
+        ],
+        learnMoreHref: DYCOM_PUBLIC_BASE,
+        learnMoreLabel: 'Services overview',
       }
     );
   }
-  if (buckets.includes('iiot')) {
+  if (buckets.includes('investors')) {
     return (
-      pool[`iiot::${user ?? 'any'}`] ?? {
-        id: 'ai-iot-gen',
-        headline: 'AI suggestion — prove the network before scaling sensors',
+      pool[`investors::${user ?? 'any'}`] ?? {
+        id: 'ai-inv-gen',
+        headline: 'AI suggestion — anchor on filings first',
         body:
-          'Pilot IIoT with one line, one gateway, and historian retention policy. Omega wireless layers plus Red Lion gateways are a common brownfield stack.',
-        bullets: ['Survey RSSI early', 'Publish read-only PLC topics first', 'Document security key rotation'],
-        learnMoreHref: DWYER_OMEGA_BASE,
-        learnMoreLabel: 'Wireless & IIoT',
+          'Financials & filings host SEC documents; governance covers committees and leadership; events capture management narratives.',
+        bullets: ['Stock information tools supplement filing metrics', 'Email alerts help track new disclosures'],
+        learnMoreHref: DYCOM_PUBLIC_BASE,
+        learnMoreLabel: 'Investor relations',
       }
     );
   }
 
-  // Keyword search without bucket: lightweight assistant
   if (n.length >= 3) {
     const generic: AiSearchInsight = {
       id: `ai-gen-${key}`,
-      headline: 'AI suggestion — refine with categories on the left',
+      headline: 'AI suggestion — try careers, services, or investor keywords',
       body:
-        'Try popular terms like “Pressure regulators”, “Data loggers”, or “IIoT and Wireless Systems” to load curated mixes of products, articles, manuals, and technical PDFs.',
+        'Popular Dycom site searches combine talent topics (benefits, recruitment), delivery topics (wireless, fiber, fulfillment), and capital-markets topics (filings, stock, governance).',
       bullets: [
-        'Combine Content type filters with Product family for faster triage',
-        'Demo user switcher changes personalized rows and AI tips',
+        'Switch demo users to see personalized supplemental rows',
+        'Use content type filters to separate Careers pages from Services lines',
       ],
-      learnMoreHref: DWYER_OMEGA_BASE,
-      learnMoreLabel: 'Visit DwyerOmega.com',
+      learnMoreHref: DYCOM_PUBLIC_BASE,
+      learnMoreLabel: 'Visit DycomInd.com',
     };
     return generic;
   }
@@ -1427,9 +1069,9 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
 
 export function itemMetadataLine(item: SearchResultItem): string {
   const type = searchFacetLabels.contentType[item.contentType];
-  const when = item.dateLabel ?? (item.contentType === 'product' ? 'In stock' : 'Resource');
+  const when = item.dateLabel ?? 'Dycom';
   const trail = item.breadcrumb?.length ? item.breadcrumb.join(' · ') : '';
-  const sku = item.sku ? `SKU ${item.sku}` : '';
-  const bits = [type, when, sku, trail].filter(Boolean);
+  const badge = item.badgeLabel ?? '';
+  const bits = [type, when, badge, trail].filter(Boolean);
   return bits.join(' · ');
 }
