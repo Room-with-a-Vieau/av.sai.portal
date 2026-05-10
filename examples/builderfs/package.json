@@ -167,13 +167,14 @@
     "type-check": "tsc --noEmit --incremental false",
     "build": "cross-env NODE_ENV=production npm-run-all --serial sitecore-tools:generate-map sitecore-tools:build next:build",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "next:build": "next build",
-    "next:dev": "cross-env NODE_OPTIONS='--inspect' next dev",
-    "next:start": "next start",
-    "sitecore-tools:build": "sitecore-tools project build",
-    "sitecore-tools:generate-map": "sitecore-tools project component generate-map",
-    "sitecore-tools:generate-map:watch": "sitecore-tools project component generate-map --watch",
-    "dev": "cross-env NODE_ENV=development npm-run-all --serial sitecore-tools:generate-map sitecore-tools:build --parallel next:dev sitecore-tools:generate-map:watch",
+    "next:build": "node --no-inspect ./node_modules/next/dist/bin/next build --webpack",
+    "next:dev": "node --no-inspect ./node_modules/next/dist/bin/next dev --webpack",
+    "next:dev:inspect": "node --inspect=127.0.0.1:9239 ./node_modules/next/dist/bin/next dev --webpack",
+    "next:start": "node --no-inspect ./node_modules/next/dist/bin/next start",
+    "sitecore-tools:build": "node --no-inspect ./node_modules/@sitecore-content-sdk/cli/dist/cjs/bin/sitecore-tools.js project build",
+    "sitecore-tools:generate-map": "node --no-inspect ./node_modules/@sitecore-content-sdk/cli/dist/cjs/bin/sitecore-tools.js project component generate-map",
+    "sitecore-tools:generate-map:watch": "node --no-inspect ./node_modules/@sitecore-content-sdk/cli/dist/cjs/bin/sitecore-tools.js project component generate-map --watch",
+    "dev": "node --no-inspect ./scripts/run-dev.cjs",
     "start": "cross-env-shell NODE_ENV=production npm-run-all --serial build next:start"
   }
 }

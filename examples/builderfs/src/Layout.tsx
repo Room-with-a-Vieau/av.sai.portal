@@ -12,9 +12,10 @@ import componentMap from '.sitecore/component-map';
 import { generateOrganizationSchema, generateWebSiteSchema } from 'src/lib/structured-data/schema';
 import { StructuredData } from 'src/components/structured-data/StructuredData';
 
-const accent = IBM_Plex_Mono({
+/** Optional mono stack — do not use `--font-accent`; that token is the themed UI accent face on <html>. */
+const ibmPlexMono = IBM_Plex_Mono({
   weight: ['400', '500', '600'],
-  variable: '--font-accent',
+  variable: '--font-ibm-plex-mono',
   subsets: ['latin', 'latin-ext'],
   display: 'swap',
   preload: true,
@@ -61,7 +62,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
   const isPartialDesignEditing = route?.templateName === 'Partial Design';
   const mainClassPartialDesignEditing = isPartialDesignEditing ? 'partial-editing-mode' : '';
   const mainClassPageEditing = isEditing ? 'editing-mode' : 'prod-mode';
-  const classNamesMain = `${mainClassPageEditing} ${mainClassPartialDesignEditing} ${accent.variable} main-layout`;
+  const classNamesMain = `${mainClassPageEditing} ${mainClassPartialDesignEditing} ${ibmPlexMono.variable} main-layout`;
 
   // Generate JSON-LD structured data for Organization and WebSite (use request-derived baseUrl when provided)
   const baseUrl = baseUrlProp ?? process.env.NEXT_PUBLIC_SITE_URL ?? '';

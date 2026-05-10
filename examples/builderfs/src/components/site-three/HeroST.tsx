@@ -19,15 +19,14 @@ interface Fields {
 }
 
 /**
- * Full-bleed hero backgrounds previously used `object-cover`, which crops to fill the hero box and
- * defaults to center — wide artwork with logos pinned top-left (e.g. Burns strip) loses edges.
- * `object-contain` + top-left anchor shows the whole image; `bg-muted` fills letterbox gutters.
+ * Full-bleed hero backgrounds use `object-cover` so the image always fills the hero box.
+ * Cropping is expected when the image aspect ratio differs from the rendered hero.
  *
  * Vertical band: mobile ~400–600px, laptop (md) ~500–600px, desktop (lg+) ~600–800px.
  * Next/Image `width`/`height` (e.g. 1920×1080) are intrinsic aspect hints; that resolution stays a
  * solid choice for crisp wide layouts even when the rendered hero is shorter.
  */
-const HERO_BG_IMAGE_CLASS = 'h-full w-full object-contain object-left object-top';
+const HERO_BG_IMAGE_CLASS = 'h-full w-full object-cover object-center';
 const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
 
 /** Responsive hero content column / split row height band */

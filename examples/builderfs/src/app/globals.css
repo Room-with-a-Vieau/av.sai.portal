@@ -1,3 +1,4 @@
+/* Same @import order as examples/portal/src/app/globals.css */
 @import '../assets/styles/globals.css';
 @import '../assets/styles/tailwind-bootstrap-grid.css';
 @import '../assets/styles/column-splitter.css';
@@ -15,9 +16,11 @@
 
 @layer base {
   html {
+    /* BCBS / default — Inter everywhere; overridden per theme below (higher specificity). */
     --font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
     --font-heading: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
     --font-accent: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-weight-heading: 600;
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.5;
@@ -42,7 +45,7 @@
   h6,
   .h6 {
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: var(--font-weight-heading, 600);
     @apply leading-normal;
 
     span {
@@ -122,6 +125,44 @@
       @apply bg-primary-hover;
     }
   }
+}
+
+/*
+ * Per-theme typography (`NEXT_PUBLIC_APP_THEME` → <html data-theme>).
+ * Unlayered `html[data-theme]` overrides `@layer base` html defaults.
+ */
+html[data-theme='dwyeromega'] {
+  --font-body: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-barlow-condensed), 'Barlow Condensed', ui-sans-serif, system-ui,
+    sans-serif;
+  --font-accent: var(--font-barlow-condensed), 'Barlow Condensed', ui-sans-serif, system-ui,
+    sans-serif;
+  --font-weight-heading: 700;
+}
+
+/* bldr.com: Open Sans body / nav; Roboto Condensed for industrial display type & buttons */
+html[data-theme='builderfs'] {
+  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-roboto-condensed), 'Roboto Condensed', ui-sans-serif, system-ui,
+    sans-serif;
+  --font-accent: var(--font-roboto-condensed), 'Roboto Condensed', ui-sans-serif, system-ui,
+    sans-serif;
+  --font-weight-heading: 700;
+}
+
+html[data-theme='builderfs'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
+  letter-spacing: 0.03em;
+}
+
+html[data-theme='builderfs'] .btn.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  border-radius: 0;
+}
+
+html[data-theme='builderfs'] .btn.btn-primary:hover {
+  background-color: var(--color-destructive-hover);
+  color: var(--color-accent-foreground);
 }
 
 /* BUTTONS END */
@@ -234,9 +275,8 @@ main {
   @apply static mb-0 overflow-hidden;
 }
 
-/* Brand palette overrides (BCBS-style blues; primary used for buttons and CTAs) */
-@theme {
-  --font-family-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+/* BCBS palette overrides; other named themes are defined in src/assets/styles/globals.css. */
+html[data-theme='bcbst'] {
   --color-primary: #328ac9;
   --color-primary-foreground: #ffffff;
   --color-primary-hover: #2b78b3;

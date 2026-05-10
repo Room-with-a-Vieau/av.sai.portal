@@ -1,7 +1,27 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
+/** App root (this folder). Turbopack otherwise picks a parent lockfile and breaks CSS/asset resolution. */
+const turbopackRoot = path.dirname(fileURLToPath(import.meta.url));
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: turbopackRoot,
+  },
+
+  /**
+   * Monorepo / multi-lockfile layouts can leave webpack’s `context` at `…/examples`,
+   * so CSS `@import '../assets/…')` from `src/app/globals.css` resolves incorrectly.
+   * Force the Next app directory (same as examples/portal when run from this folder).
+   */
+  webpack: (config, { dir }) => {
+    config.context = dir;
+    return config;
+  },
+
   // Allow specifying a distinct distDir when concurrently running app in a container
   distDir: process.env.NEXTJS_DIST_DIR || '.next',
 
