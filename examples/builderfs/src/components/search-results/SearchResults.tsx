@@ -56,18 +56,13 @@ export type SearchResultsProps = {
 
 type SortMode = 'relevance' | 'az';
 
-/** Official Dwyer Omega product imagery — used for every `contentType: product` card */
-const DWYER_OMEGA_PRODUCT_IMAGES: readonly string[] = [
-  'https://assets.dwyeromega.com/do-product-images/Series-DA-DS_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A6_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A1F_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A2_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-APS-AVS_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-A9_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/Series-SA1100_L.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/ap_600x600new.gif?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/PSW-500_l.jpg?imwidth=150',
-  'https://assets.dwyeromega.com/do-product-images/PSW-100_l.jpg?imwidth=150',
+/** Construction-themed fallback imagery for product cards */
+const BLDR_PRODUCT_IMAGES: readonly string[] = [
+  'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
 ];
 
 function productImageForResultId(id: string): string {
@@ -75,7 +70,7 @@ function productImageForResultId(id: string): string {
   for (let i = 0; i < id.length; i++) {
     h = (h * 31 + id.charCodeAt(i)) >>> 0;
   }
-  return DWYER_OMEGA_PRODUCT_IMAGES[h % DWYER_OMEGA_PRODUCT_IMAGES.length]!;
+  return BLDR_PRODUCT_IMAGES[h % BLDR_PRODUCT_IMAGES.length]!;
 }
 
 function resolveResultCardImage(item: SearchResultItem): string {
@@ -208,41 +203,33 @@ function FacetSection({
 
 const contentTypeIcons: Record<SearchContentType, typeof Package> = {
   product: Package,
-  featuredArticle: BookOpen,
-  technicalResource: Wrench,
-  productManual: FileText,
+  blog: BookOpen,
+  service: Wrench,
+  content: FileText,
 };
 
 function ctaLabel(item: SearchResultItem): string {
   switch (item.contentType) {
     case 'product':
       return 'View product';
-    case 'featuredArticle':
+    case 'blog':
       return 'Read article';
-    case 'technicalResource':
-      return 'Open resource';
-    case 'productManual':
-      return 'View manual';
+    case 'service':
+      return 'View service';
+    case 'content':
+      return 'Open content';
     default:
       return 'Open';
   }
 }
 
-/** Dwyer Omega–style nav blue for image overlay pills (category + price) */
-const DWYER_CARD_PILL =
-  'rounded-full border border-white/20 bg-[#003b73] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
+const BLDR_CARD_PILL =
+  'border border-white/20 bg-[#292670] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
 
-/** Whole-dollar list price in USD, stable per row id (demo: User 1–3 selected in header) */
-function stableListPriceUsd(id: string): number {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) {
-    h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  }
-  return 20 + (h % 11);
-}
-
-function formatSearchListPrice(id: string): string {
-  return `$${stableListPriceUsd(id)}`;
+function resultStatusLabel(item: SearchResultItem, isDemoUserSelected: boolean): string {
+  if (item.priceLabel) return item.priceLabel;
+  if (item.contentType === 'product') return isDemoUserSelected ? 'Request quote' : 'Login for quote';
+  return item.dateLabel ?? searchFacetLabels.contentType[item.contentType];
 }
 
 function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDemoUserSelected: boolean }) {
@@ -275,12 +262,12 @@ function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDe
             </span>
           ) : null}
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className={cn('inline-flex items-center gap-1.5', DWYER_CARD_PILL)}>
+            <span className={cn('inline-flex items-center gap-1.5', BLDR_CARD_PILL)}>
               <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
               {searchFacetLabels.contentType[item.contentType]}
             </span>
-            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', DWYER_CARD_PILL)}>
-              {isDemoUserSelected ? formatSearchListPrice(item.id) : 'Login for pricing'}
+            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', BLDR_CARD_PILL)}>
+              {resultStatusLabel(item, isDemoUserSelected)}
             </span>
           </div>
         </div>
@@ -537,7 +524,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search products, articles, manuals, and technical resources…"
+                placeholder="Search products, blogs, services, and content..."
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -574,19 +561,19 @@ export const SearchResults: FC<SearchResultsProps> = ({
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Dwyer Omega</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Builders FirstSource</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Instrument search'
+                  'Builder search'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Faceted navigation mirrors a modern commerce experience: filter by content type, product family, and
-                brand. Switch the demo user to see different personalized rows and AI guidance.
+                Faceted navigation mirrors a Builder FirstSource experience: filter by content type,
+                solution area, and brand family. Switch the demo user to see personalized rows and AI guidance.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">

@@ -12,9 +12,9 @@ import {
 import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
 
 const DEMO_USERS = [
-  { label: 'User 1 - Maintenance Engineer', taxonomy: 'Maintenance Engineer' },
-  { label: 'User 2 - Engineering Consultant', taxonomy: 'Engineering Consultant' },
-  { label: 'User 3 - Plant Technician', taxonomy: 'Plant Technician' },
+  { label: 'User 1 - Developers and Contractors', taxonomy: 'Developers and Contractors' },
+  { label: 'User 2 - Single-Family Homebuilders', taxonomy: 'Single-Family Homebuilders' },
+  { label: 'User 3 - Large Enterprise Builders', taxonomy: 'Large Enterprise Builders' },
 ] as const;
 
 export function DemoUserSwitcher() {
