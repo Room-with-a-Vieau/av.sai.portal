@@ -8,6 +8,7 @@ import {
   Field,
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
+import { cn } from '@/lib/utils';
 
 interface Fields {
   Eyebrow: Field<string>;
@@ -36,12 +37,49 @@ const HERO_CONTENT_BAND_CLASS =
 /** Main headline scale (smaller than previous display sizes for shorter hero band) */
 const HERO_TITLE_CLASS = 'text-3xl md:text-4xl lg:text-5xl';
 
+/** Light text over dark hero imagery (theme token — typically white / near-white). */
+const HERO_TEXT_ON_DARK_IMAGE_CLASS = 'text-primary-foreground';
+
 type PageHeaderSTProps = {
   params: { [key: string]: string };
   fields: Fields;
 };
 
+/** Sitecore checkbox rendering parameters often arrive as 1 / true / yes / on (strings). */
+function isCheckboxParamEnabled(value: string | undefined): boolean {
+  if (value == null || typeof value !== 'string') return false;
+  const v = value.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes' || v === 'on';
+}
+
+/**
+ * Rendering parameter "Dark Image" (checkbox). Matches keys regardless of spacing/casing
+ * (e.g. DarkImage, Dark Image, darkImage).
+ */
+function isDarkImageHero(params: PageHeaderSTProps['params'] | undefined): boolean {
+  if (!params) return false;
+  for (const [key, value] of Object.entries(params)) {
+    const normalized = key.replace(/[\s_-]/g, '').toLowerCase();
+    if (normalized === 'darkimage' && isCheckboxParamEnabled(value)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function heroEyebrowOverPhotoClass(darkImage: boolean): string {
+  return cn(
+    'text-xl lg:text-3xl pb-4',
+    darkImage ? HERO_TEXT_ON_DARK_IMAGE_CLASS : 'text-primary'
+  );
+}
+
+function heroTitleOverPhotoClass(darkImage: boolean): string {
+  return cn(HERO_TITLE_CLASS, darkImage && HERO_TEXT_ON_DARK_IMAGE_CLASS);
+}
+
 export const Default = (props: PageHeaderSTProps) => {
+  const darkImage = isDarkImageHero(props.params);
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
@@ -62,10 +100,10 @@ export const Default = (props: PageHeaderSTProps) => {
             className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
           >
             <div className="lg:max-w-3xl">
-              <h1 className="text-primary text-xl lg:text-3xl pb-4">
+              <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
                 <ContentSdkText field={props?.fields?.Eyebrow} />
               </h1>
-              <h1 className={HERO_TITLE_CLASS}>
+              <h1 className={heroTitleOverPhotoClass(darkImage)}>
                 <ContentSdkText field={props?.fields?.Title} />
               </h1>
               <div className="mt-8">
@@ -88,6 +126,7 @@ export const Default = (props: PageHeaderSTProps) => {
 };
 
 export const Right = (props: PageHeaderSTProps) => {
+  const darkImage = isDarkImageHero(props.params);
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
@@ -108,10 +147,10 @@ export const Right = (props: PageHeaderSTProps) => {
           className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
           <div className="lg:max-w-3xl lg:ml-auto text-right">
-            <h1 className="text-primary text-xl lg:text-3xl pb-4">
+            <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
               <ContentSdkText field={props?.fields?.Eyebrow} />
             </h1>
-            <h1 className={HERO_TITLE_CLASS}>
+            <h1 className={heroTitleOverPhotoClass(darkImage)}>
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">
@@ -134,6 +173,7 @@ export const Right = (props: PageHeaderSTProps) => {
 };
 
 export const Centered = (props: PageHeaderSTProps) => {
+  const darkImage = isDarkImageHero(props.params);
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
@@ -154,10 +194,10 @@ export const Centered = (props: PageHeaderSTProps) => {
           className={`lg:relative lg:left-1/6 flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
           <div className="lg:max-w-3xl lg:mx-auto text-center">
-            <h1 className="text-primary text-xl lg:text-3xl pb-4">
+            <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
               <ContentSdkText field={props?.fields?.Eyebrow} />
             </h1>
-            <h1 className={HERO_TITLE_CLASS}>
+            <h1 className={heroTitleOverPhotoClass(darkImage)}>
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">

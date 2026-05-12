@@ -93,6 +93,33 @@ describe('HeroST', () => {
       expect(screen.getByText('Shop Now')).toBeInTheDocument();
       expect(screen.getByText('Learn More')).toBeInTheDocument();
     });
+
+    it('applies light text on eyebrow and title when Dark Image param is enabled', () => {
+      const { container } = render(
+        <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '1' }} />
+      );
+      const headings = container.querySelectorAll('h1');
+      expect(headings[0]).toHaveClass('text-primary-foreground');
+      expect(headings[1]).toHaveClass('text-primary-foreground');
+    });
+
+    it('recognizes Dark Image checkbox under alternate param key spellings', () => {
+      const { container } = render(
+        <HeroSTDefault {...mockProps} params={{ ...mockProps.params, 'Dark Image': 'true' }} />
+      );
+      const headings = container.querySelectorAll('h1');
+      expect(headings[0]).toHaveClass('text-primary-foreground');
+      expect(headings[1]).toHaveClass('text-primary-foreground');
+    });
+
+    it('does not force light text when Dark Image is off', () => {
+      const { container } = render(
+        <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '0' }} />
+      );
+      const headings = container.querySelectorAll('h1');
+      expect(headings[0]).not.toHaveClass('text-primary-foreground');
+      expect(headings[1]).not.toHaveClass('text-primary-foreground');
+    });
   });
 
   describe('Centered variant', () => {
