@@ -294,10 +294,11 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
+ * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -380,5 +381,46 @@
 }
 
 [data-theme='builderfs'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='basspro'] {
+  --background-image-gradient: linear-gradient(180deg, #f2c029 0%, #a02621 100%);
+  --background-image-gradient-secondary: linear-gradient(90deg, #004b23 0%, #a02621 50%, #f2c029 100%);
+  --color-background: #ffffff;
+  --color-foreground: #333333;
+  --color-card: #ffffff;
+  --color-card-foreground: #333333;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #333333;
+  --color-primary: #a02621;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #8b2318;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #333333;
+  --color-secondary-hover: #ebebeb;
+  --color-muted: #ebebeb;
+  --color-muted-foreground: #525252;
+  --color-accent: #f2c029;
+  --color-accent-foreground: #000000;
+  --color-destructive: #cc0000;
+  --color-destructive-hover: #a02621;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d4d4d4;
+  --color-input: #ebebeb;
+  --color-ring: #a02621;
+  --color-tertiary-foreground: #333333;
+  --color-tertiary-hover: #ebebeb;
+  --color-tertiary: #f5f5f5;
+  --color-dark-foreground: #333333;
+  --color-dark-hover: #ebebeb;
+  --color-dark: #f5f5f5;
+  --color-light: #fafafa;
+  --color-light-hover: #f5f5f5;
+  --color-light-foreground: #333333;
+  --color-overlay: rgb(160 38 33 / 0.45);
+}
+
+[data-theme='basspro'] .bg-primary {
   color: var(--color-primary-foreground);
 }
