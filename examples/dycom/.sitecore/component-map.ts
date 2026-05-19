@@ -431,7 +431,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Logo', { ...Logodev }],
   ['LocationUsMap', { ...LocationUsMap, componentType: 'client' }],
   ['LocationSearchView', { ...LocationSearchView, componentType: 'client' }],
-  ['LocationSearch', { ...LocationSearch, componentType: 'client' }],
+  ['LocationSearch', { ...LocationSearch }],
   ['location-search', { ...locationsearchtypes, ...locationsearchquery, ...locationsearchfetch, ...locationsearchactions }],
   ['location-geo', { ...locationgeoutils }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],

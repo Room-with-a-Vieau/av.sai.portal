@@ -102,6 +102,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                 <nav id="header" aria-label="Main navigation">
                   {route && (
                     <AppPlaceholder
+                      key="headless-header"
                       page={page}
                       componentMap={componentMap}
                       name="headless-header"
@@ -114,6 +115,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                 <section id="content" aria-label="Main content">
                   {route && (
                     <AppPlaceholder
+                      key="headless-main"
                       page={page}
                       componentMap={componentMap}
                       name="headless-main"
@@ -126,6 +128,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                 <div id="footer">
                   {route && (
                     <AppPlaceholder
+                      key="headless-footer"
                       page={page}
                       componentMap={componentMap}
                       name="headless-footer"

@@ -130,15 +130,28 @@ async function fetchPageWithSitecoreClient(
   });
 }
 
-/**
- * Loads all children under the datasource folder (paginated).
- * ComponentQuery on the rendering often returns only 10 unless children(first: N) is set in CM.
- */
-export async function fetchAllLocationItems(
+/** In-process dedupe so Pages editor remounts do not spam Edge GraphQL. */
+const fetchCache = new Map<string, Promise<LocationItemFields[]>>();
+
+/** Normalizes rendering datasource (GUID or content path) for item(path:). */
+export function normalizeDatasourcePath(datasourcePath: string): string {
+  const trimmed = datasourcePath.trim();
+  if (!trimmed) return trimmed;
+  if (trimmed.startsWith('/')) return trimmed;
+
+  const guid = trimmed.replace(/[{}]/g, '');
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guid)) {
+    return `{${guid.toUpperCase()}}`;
+  }
+
+  return trimmed;
+}
+
+async function fetchAllLocationItemsUncached(
   datasourcePath: string,
   language: string
 ): Promise<LocationItemFields[]> {
-  const path = datasourcePath.trim();
+  const path = normalizeDatasourcePath(datasourcePath);
   if (!path) return [];
 
   const graphClient = createGraphClient();
@@ -162,4 +175,27 @@ export async function fetchAllLocationItems(
   }
 
   return all;
+}
+
+/**
+ * Loads all children under the datasource folder (paginated).
+ * ComponentQuery on the rendering often returns only 10 unless children(first: N) is set in CM.
+ */
+export async function fetchAllLocationItems(
+  datasourcePath: string,
+  language: string
+): Promise<LocationItemFields[]> {
+  const path = normalizeDatasourcePath(datasourcePath);
+  if (!path) return [];
+
+  const cacheKey = `${path}|${language}`;
+  const existing = fetchCache.get(cacheKey);
+  if (existing) return existing;
+
+  const promise = fetchAllLocationItemsUncached(datasourcePath, language).catch((error) => {
+    fetchCache.delete(cacheKey);
+    throw error;
+  });
+  fetchCache.set(cacheKey, promise);
+  return promise;
 }

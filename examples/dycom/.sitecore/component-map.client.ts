@@ -80,7 +80,6 @@ import * as meteors from 'src/components/magicui/meteors';
 import * as LogoTabs from 'src/components/logo-tabs/LogoTabs';
 import * as LocationUsMap from 'src/components/location-search/LocationUsMap';
 import * as LocationSearchView from 'src/components/location-search/LocationSearchView';
-import * as LocationSearch from 'src/components/location-search/LocationSearch';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
 import * as ImageGalleryGriddev from 'src/components/image-gallery/ImageGalleryGrid.dev';
 import * as ImageGalleryFiftyFiftydev from 'src/components/image-gallery/ImageGalleryFiftyFifty.dev';
@@ -209,7 +208,6 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['LogoTabs', { ...LogoTabs }],
   ['LocationUsMap', { ...LocationUsMap }],
   ['LocationSearchView', { ...LocationSearchView }],
-  ['LocationSearch', { ...LocationSearch }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],
   ['ImageGalleryGrid', { ...ImageGalleryGriddev }],
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],

@@ -1,46 +1,50 @@
-'use client';
-
-import { useMemo, useRef, type JSX } from 'react';
+import { cache } from 'react';
+import type { JSX } from 'react';
 import { LocationSearchView } from './LocationSearchView';
+import { fetchAllLocationItems } from './location-search.fetch';
 import {
   hasDatasourceAssigned,
   resolveDatasource,
   resolveLocationItems,
   type LocationItemFields,
-  type LocationSearchFields,
   type LocationSearchProps,
 } from './location-search.types';
 
-/**
- * Keeps the last non-empty children list when Sitecore Pages sends transient empty
- * layout payloads between editor refreshes (avoids flash + setState loops).
- */
-function useStickyLocationItems(
-  fields: LocationSearchFields | undefined
-): LocationItemFields[] {
-  const layoutItems = useMemo(
-    () => resolveLocationItems(resolveDatasource(fields)),
-    [fields]
-  );
-  const stickyRef = useRef<LocationItemFields[]>(layoutItems);
-
-  if (layoutItems.length > 0) {
-    stickyRef.current = layoutItems;
+const loadLocationItems = cache(
+  async (datasourcePath: string, language: string): Promise<LocationItemFields[]> => {
+    return fetchAllLocationItems(datasourcePath, language);
   }
+);
 
-  return layoutItems.length > 0 ? layoutItems : stickyRef.current;
+async function resolveItems(
+  fields: LocationSearchProps['fields'],
+  dataSource: string | undefined,
+  language: string
+): Promise<LocationItemFields[]> {
+  const layoutItems = resolveLocationItems(resolveDatasource(fields));
+  if (layoutItems.length > 0) return layoutItems;
+
+  const path = dataSource?.trim();
+  if (!path) return [];
+
+  try {
+    return await loadLocationItems(path, language);
+  } catch (error) {
+    console.error('[LocationSearch] Failed to load location children:', error);
+    return [];
+  }
 }
 
 /**
- * Location rows from datasource.children.results (ComponentQuery in Sitecore CM).
- * Configure children(first: N) on the rendering query — see location-search.query.ts.
+ * Server component: layout children from ComponentQuery, with one Edge fetch per request
+ * when layout children are empty. Avoids client effects/server actions that retrigger Pages preview.
  */
-export const Default = (props: LocationSearchProps): JSX.Element => {
-  const items = useStickyLocationItems(props.fields);
-
+export const Default = async (props: LocationSearchProps): Promise<JSX.Element> => {
   const dataSource = props.rendering?.dataSource
     ? String(props.rendering.dataSource)
     : undefined;
+  const language = props.page?.locale || 'en';
+  const items = await resolveItems(props.fields, dataSource, language);
 
   return (
     <LocationSearchView

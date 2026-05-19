@@ -29,21 +29,18 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
   const searchBaseHref = searchLink?.value?.href;
   const hasValidSearchLink = hasValidHref(searchBaseHref);
 
+  /** Keeps relative hrefs stable between SSR and hydration (no window.location.origin). */
   const buildSearchUrl = (): string | null => {
-    if (!hasValidSearchLink) return null;
-    try {
-      const url = new URL(searchBaseHref!, window.location.origin);
-      if (searchTerm.trim()) {
-        url.searchParams.set('q', searchTerm.trim());
-      } else {
-        url.searchParams.delete('q');
-      }
-      return url.toString();
-    } catch {
-      return searchTerm.trim()
-        ? `${searchBaseHref}?q=${encodeURIComponent(searchTerm.trim())}`
-        : searchBaseHref ?? null;
-    }
+    if (!hasValidSearchLink || !searchBaseHref) return null;
+    const term = searchTerm.trim();
+    if (!term) return searchBaseHref;
+
+    const hashIndex = searchBaseHref.indexOf('#');
+    const hash = hashIndex >= 0 ? searchBaseHref.slice(hashIndex) : '';
+    const pathAndQuery = hashIndex >= 0 ? searchBaseHref.slice(0, hashIndex) : searchBaseHref;
+    const separator = pathAndQuery.includes('?') ? '&' : '?';
+
+    return `${pathAndQuery}${separator}q=${encodeURIComponent(term)}${hash}`;
   };
 
   const searchUrl = buildSearchUrl();
@@ -113,15 +110,8 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
                 className="btn btn-primary btn-sharp"
                 aria-label={t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || SEARCH_GO_ARIA_LABEL}
                 onClick={() => {
-                  if (searchTerm.trim() && searchBaseHref) {
-                    try {
-                      const url = new URL(searchBaseHref, window.location.origin);
-                      url.searchParams.set('q', searchTerm.trim());
-                      window.location.href = url.toString();
-                    } catch {
-                      // no-op if URL invalid
-                    }
-                  }
+                  const href = buildSearchUrl();
+                  if (href) window.location.href = href;
                 }}
               >
                 {t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || t(DICTIONARY_KEYS.SEARCH_GO_LABEL) || SEARCH_GO_ARIA_LABEL}
