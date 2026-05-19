@@ -16,7 +16,7 @@ const LOCATION_CHILDREN_PAGE_QUERY = /* GraphQL */ `
       children(first: $first, after: $after) {
         total
         pageInfo {
-          hasNextPage
+          hasNext
           endCursor
         }
         results {
@@ -61,7 +61,7 @@ interface LocationChildrenPageResult {
     children?: {
       total?: number;
       pageInfo?: {
-        hasNextPage?: boolean;
+        hasNext?: boolean;
         endCursor?: string | null;
       };
       results?: RawLocationRow[];
@@ -155,7 +155,7 @@ export async function fetchAllLocationItems(
     const batch = (connection?.results ?? []).map(normalizeRow);
     all.push(...batch);
 
-    hasNext = Boolean(connection?.pageInfo?.hasNextPage);
+    hasNext = Boolean(connection?.pageInfo?.hasNext);
     after = connection?.pageInfo?.endCursor ?? null;
 
     if (batch.length === 0) break;
