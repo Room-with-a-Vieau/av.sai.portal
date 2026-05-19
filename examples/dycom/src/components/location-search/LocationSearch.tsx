@@ -1,48 +1,62 @@
 'use client';
 
-import type React from 'react';
-import type { LocationSearchProps } from './location-search.props';
-import { LocationSearchNationwide } from './LocationSearchNationwide.dev';
-import { LocationSearchDefault } from './LocationSearchDefault.dev';
-import { LocationSearchMapRight } from './LocationSearchMapRight.dev';
-import { LocationSearchMapTopAllCentered } from './LocationSearchMapTopAllCentered.dev';
-import { LocationSearchMapRightTitleZipCentered } from './LocationSearchMapRightTitleZipCentered.dev';
-import { LocationSearchTitleZipCentered } from './LocationSearchTitleZipCentered.dev';
+import { useEffect, useMemo, useState, type JSX } from 'react';
+import { LocationSearchView } from './LocationSearchView';
+import { loadAllLocationItems } from './location-search.actions';
+import {
+  hasDatasourceAssigned,
+  resolveDatasource,
+  resolveLocationItems,
+  type LocationItemFields,
+  type LocationSearchProps,
+} from './location-search.types';
 
-/** Dycom nationwide companies map — datasource: Data/Locations folder. */
-export const Default: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchNationwide {...props} isPageEditing={isPageEditing} />;
-};
+/**
+ * Lists locations from the datasource folder. Layout ComponentQuery may return only 10 children;
+ * we load the full folder via a server action (paginated Edge GraphQL).
+ */
+export const Default = (props: LocationSearchProps): JSX.Element => {
+  const layoutItems = useMemo(
+    () => resolveLocationItems(resolveDatasource(props.fields)),
+    [props.fields]
+  );
+  const [items, setItems] = useState<LocationItemFields[]>(layoutItems);
 
-/** Legacy zip-code dealer locator (Google Maps). */
-export const DealerLocator: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchDefault {...props} isPageEditing={isPageEditing} />;
-};
+  const dataSource = props.rendering?.dataSource
+    ? String(props.rendering.dataSource)
+    : undefined;
+  const language = props.page?.locale || 'en';
 
-export const MapRight: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchMapRight {...props} isPageEditing={isPageEditing} />;
-};
+  useEffect(() => {
+    setItems(layoutItems);
+  }, [layoutItems]);
 
-export const MapTopAllCentered: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchMapTopAllCentered {...props} isPageEditing={isPageEditing} />;
-};
+  useEffect(() => {
+    if (!dataSource?.trim()) return;
 
-export const MapRightTitleZipCentered: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchMapRightTitleZipCentered {...props} isPageEditing={isPageEditing} />;
-};
+    let cancelled = false;
 
-export const MapLeftTitleZipCentered: React.FC<LocationSearchProps> = (props) => {
-  const { page } = props;
-  const isPageEditing = page.mode.isEditing;
-  return <LocationSearchTitleZipCentered {...props} isPageEditing={isPageEditing} />;
+    loadAllLocationItems(dataSource, language)
+      .then((allItems) => {
+        if (!cancelled && allItems.length > 0) {
+          setItems(allItems);
+        }
+      })
+      .catch((error) => {
+        console.error('[LocationSearch] Failed to load all location children:', error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dataSource, language]);
+
+  return (
+    <LocationSearchView
+      items={items}
+      isPageEditing={props.page?.mode?.isEditing ?? false}
+      datasourceAssigned={hasDatasourceAssigned(props)}
+      dataSource={dataSource}
+    />
+  );
 };

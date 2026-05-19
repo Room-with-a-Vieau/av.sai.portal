@@ -143,21 +143,14 @@ import * as LogoItem from 'src/components/logo-tabs/LogoItem';
 import * as logotabsprops from 'src/components/logo-tabs/logo-tabs.props';
 import * as logoprops from 'src/components/logo/logo.props';
 import * as Logodev from 'src/components/logo/Logo.dev';
-import * as utils from 'src/components/location-search/utils';
-import * as UsNationwideMapdev from 'src/components/location-search/UsNationwideMap.dev';
-import * as LocationSearchTitleZipCentereddev from 'src/components/location-search/LocationSearchTitleZipCentered.dev';
-import * as LocationSearchNationwidedev from 'src/components/location-search/LocationSearchNationwide.dev';
-import * as LocationSearchMapTopAllCentereddev from 'src/components/location-search/LocationSearchMapTopAllCentered.dev';
-import * as LocationSearchMapRightTitleZipCentereddev from 'src/components/location-search/LocationSearchMapRightTitleZipCentered.dev';
-import * as LocationSearchMapRightdev from 'src/components/location-search/LocationSearchMapRight.dev';
-import * as LocationSearchItemdev from 'src/components/location-search/LocationSearchItem.dev';
-import * as LocationSearchDefaultdev from 'src/components/location-search/LocationSearchDefault.dev';
+import * as LocationUsMap from 'src/components/location-search/LocationUsMap';
+import * as LocationSearchView from 'src/components/location-search/LocationSearchView';
 import * as LocationSearch from 'src/components/location-search/LocationSearch';
-import * as locationsearchprops from 'src/components/location-search/location-search.props';
-import * as locationsearchitemprops from 'src/components/location-search/location-search-item.props';
-import * as locationitemutils from 'src/components/location-search/location-item.utils';
-import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
-import * as googlemapsprops from 'src/components/location-search/google-maps.props';
+import * as locationsearchtypes from 'src/components/location-search/location-search.types';
+import * as locationsearchquery from 'src/components/location-search/location-search.query';
+import * as locationsearchfetch from 'src/components/location-search/location-search.fetch';
+import * as locationsearchactions from 'src/components/location-search/location-search.actions';
+import * as locationgeoutils from 'src/components/location-search/location-geo.utils';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
 import * as ImageGalleryGriddev from 'src/components/image-gallery/ImageGalleryGrid.dev';
 import * as ImageGalleryFiftyFiftydev from 'src/components/image-gallery/ImageGalleryFiftyFifty.dev';
@@ -436,21 +429,11 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['logo-tabs', { ...logotabsprops }],
   ['logo', { ...logoprops }],
   ['Logo', { ...Logodev }],
-  ['utils', { ...utils }],
-  ['UsNationwideMap', { ...UsNationwideMapdev }],
-  ['LocationSearchTitleZipCentered', { ...LocationSearchTitleZipCentereddev }],
-  ['LocationSearchNationwide', { ...LocationSearchNationwidedev }],
-  ['LocationSearchMapTopAllCentered', { ...LocationSearchMapTopAllCentereddev }],
-  ['LocationSearchMapRightTitleZipCentered', { ...LocationSearchMapRightTitleZipCentereddev }],
-  ['LocationSearchMapRight', { ...LocationSearchMapRightdev }],
-  ['LocationSearchItem', { ...LocationSearchItemdev }],
-  ['LocationSearchDefault', { ...LocationSearchDefaultdev }],
+  ['LocationUsMap', { ...LocationUsMap, componentType: 'client' }],
+  ['LocationSearchView', { ...LocationSearchView, componentType: 'client' }],
   ['LocationSearch', { ...LocationSearch, componentType: 'client' }],
-  ['location-search', { ...locationsearchprops }],
-  ['location-search-item', { ...locationsearchitemprops }],
-  ['location-item', { ...locationitemutils }],
-  ['GoogleMap', { ...GoogleMapdev }],
-  ['google-maps', { ...googlemapsprops }],
+  ['location-search', { ...locationsearchtypes, ...locationsearchquery, ...locationsearchfetch, ...locationsearchactions }],
+  ['location-geo', { ...locationgeoutils }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],
   ['ImageGalleryGrid', { ...ImageGalleryGriddev }],
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],
@@ -540,7 +523,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['container-303030', { ...container303030props }],
   ['Container25252525', { ...Container25252525 }],
   ['Testimonials', { ...Testimonials }],
-  ['TeamSection', { ...TeamSection }],
+  ['TeamSection', { ...TeamSection, componentType: 'client' }],
   ['StatsSection', { ...StatsSection }],
   ['ProductsSection', { ...ProductsSection, componentType: 'client' }],
   ['PlaceholderTabs', { ...PlaceholderTabs }],

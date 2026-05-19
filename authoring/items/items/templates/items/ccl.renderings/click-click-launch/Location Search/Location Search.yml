@@ -28,7 +28,7 @@ SharedFields:
         locationsCount: field(name: "locationsCount") {
           jsonValue
         }
-        children {
+        children(first: 500) {
           results {
             id
             itemName: name
@@ -47,7 +47,7 @@ SharedFields:
             zip: field(name: "ZIP") {
               jsonValue
             }
-            geo: field(name: "GEO") {
+            GEO: field(name: "GEO") {
               jsonValue
             }
             locationType: field(name: "Type") {
@@ -109,7 +109,7 @@ SharedFields:
   Value: "{673C2756-3107-4C99-9CFB-75CC27B080BA}"
 - ID: "b5b27af1-25ef-405c-87ce-369b3a004016"
   Hint: Datasource Location
-  Value: "query:$site/*[@@name='Data']/*[@@templatename='Location Search Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='Location Search Folder']"
+  Value: "query:$site/*[@@name='Data']/*[@@name='Locations']|query:$sharedSites/*[@@name='Data']/*[@@name='Locations']|query:$site/*[@@name='Data']/*[@@templatename='Location Search Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='Location Search Folder']"
 - ID: "c39a90ce-0035-41bb-90f6-3c8a6ea87797"
   Hint: AddFieldEditorButton
   Value: 
