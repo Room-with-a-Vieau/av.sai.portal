@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, type JSX } from 'react';
+import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import { LocationSearchView } from './LocationSearchView';
 import { loadAllLocationItems } from './location-search.actions';
 import {
@@ -21,15 +21,24 @@ export const Default = (props: LocationSearchProps): JSX.Element => {
     [props.fields]
   );
   const [items, setItems] = useState<LocationItemFields[]>(layoutItems);
+  const edgeLoadedRef = useRef(false);
 
   const dataSource = props.rendering?.dataSource
     ? String(props.rendering.dataSource)
     : undefined;
   const language = props.page?.locale || 'en';
 
+  // Use layout children only until Edge fetch completes. Sitecore often re-renders with
+  // empty fields after hydration/editing, which must not wipe items we already loaded.
   useEffect(() => {
+    if (edgeLoadedRef.current) return;
+    if (layoutItems.length === 0) return;
     setItems(layoutItems);
   }, [layoutItems]);
+
+  useEffect(() => {
+    edgeLoadedRef.current = false;
+  }, [dataSource]);
 
   useEffect(() => {
     if (!dataSource?.trim()) return;
@@ -38,7 +47,9 @@ export const Default = (props: LocationSearchProps): JSX.Element => {
 
     loadAllLocationItems(dataSource, language)
       .then((allItems) => {
-        if (!cancelled && allItems.length > 0) {
+        if (cancelled) return;
+        edgeLoadedRef.current = true;
+        if (allItems.length > 0) {
           setItems(allItems);
         }
       })
