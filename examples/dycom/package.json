@@ -99,6 +99,7 @@
     "react-hook-form": "^7.59.0",
     "react-icons": "^5.5.0",
     "react-resizable-panels": "^2.1.9",
+    "react-simple-maps": "^3.0.0",
     "react-youtube": "^10.1.0",
     "recharts": "^2.15.4",
     "rsc-env": "0.0.2",

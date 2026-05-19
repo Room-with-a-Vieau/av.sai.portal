@@ -144,7 +144,9 @@ import * as logotabsprops from 'src/components/logo-tabs/logo-tabs.props';
 import * as logoprops from 'src/components/logo/logo.props';
 import * as Logodev from 'src/components/logo/Logo.dev';
 import * as utils from 'src/components/location-search/utils';
+import * as UsNationwideMapdev from 'src/components/location-search/UsNationwideMap.dev';
 import * as LocationSearchTitleZipCentereddev from 'src/components/location-search/LocationSearchTitleZipCentered.dev';
+import * as LocationSearchNationwidedev from 'src/components/location-search/LocationSearchNationwide.dev';
 import * as LocationSearchMapTopAllCentereddev from 'src/components/location-search/LocationSearchMapTopAllCentered.dev';
 import * as LocationSearchMapRightTitleZipCentereddev from 'src/components/location-search/LocationSearchMapRightTitleZipCentered.dev';
 import * as LocationSearchMapRightdev from 'src/components/location-search/LocationSearchMapRight.dev';
@@ -153,6 +155,7 @@ import * as LocationSearchDefaultdev from 'src/components/location-search/Locati
 import * as LocationSearch from 'src/components/location-search/LocationSearch';
 import * as locationsearchprops from 'src/components/location-search/location-search.props';
 import * as locationsearchitemprops from 'src/components/location-search/location-search-item.props';
+import * as locationitemutils from 'src/components/location-search/location-item.utils';
 import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
 import * as googlemapsprops from 'src/components/location-search/google-maps.props';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
@@ -434,7 +437,9 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['logo', { ...logoprops }],
   ['Logo', { ...Logodev }],
   ['utils', { ...utils }],
+  ['UsNationwideMap', { ...UsNationwideMapdev }],
   ['LocationSearchTitleZipCentered', { ...LocationSearchTitleZipCentereddev }],
+  ['LocationSearchNationwide', { ...LocationSearchNationwidedev }],
   ['LocationSearchMapTopAllCentered', { ...LocationSearchMapTopAllCentereddev }],
   ['LocationSearchMapRightTitleZipCentered', { ...LocationSearchMapRightTitleZipCentereddev }],
   ['LocationSearchMapRight', { ...LocationSearchMapRightdev }],
@@ -443,6 +448,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['LocationSearch', { ...LocationSearch, componentType: 'client' }],
   ['location-search', { ...locationsearchprops }],
   ['location-search-item', { ...locationsearchitemprops }],
+  ['location-item', { ...locationitemutils }],
   ['GoogleMap', { ...GoogleMapdev }],
   ['google-maps', { ...googlemapsprops }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],

@@ -78,7 +78,9 @@ import * as modetoggledev from 'src/components/mode-toggle/mode-toggle.dev';
 import * as MediaSectiondev from 'src/components/media-section/MediaSection.dev';
 import * as meteors from 'src/components/magicui/meteors';
 import * as LogoTabs from 'src/components/logo-tabs/LogoTabs';
+import * as UsNationwideMapdev from 'src/components/location-search/UsNationwideMap.dev';
 import * as LocationSearchTitleZipCentereddev from 'src/components/location-search/LocationSearchTitleZipCentered.dev';
+import * as LocationSearchNationwidedev from 'src/components/location-search/LocationSearchNationwide.dev';
 import * as LocationSearchMapTopAllCentereddev from 'src/components/location-search/LocationSearchMapTopAllCentered.dev';
 import * as LocationSearchMapRightTitleZipCentereddev from 'src/components/location-search/LocationSearchMapRightTitleZipCentered.dev';
 import * as LocationSearchMapRightdev from 'src/components/location-search/LocationSearchMapRight.dev';
@@ -210,7 +212,9 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MediaSection', { ...MediaSectiondev }],
   ['meteors', { ...meteors }],
   ['LogoTabs', { ...LogoTabs }],
+  ['UsNationwideMap', { ...UsNationwideMapdev }],
   ['LocationSearchTitleZipCentered', { ...LocationSearchTitleZipCentereddev }],
+  ['LocationSearchNationwide', { ...LocationSearchNationwidedev }],
   ['LocationSearchMapTopAllCentered', { ...LocationSearchMapTopAllCentereddev }],
   ['LocationSearchMapRightTitleZipCentered', { ...LocationSearchMapRightTitleZipCentereddev }],
   ['LocationSearchMapRight', { ...LocationSearchMapRightdev }],

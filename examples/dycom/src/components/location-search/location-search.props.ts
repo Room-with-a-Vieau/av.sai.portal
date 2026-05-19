@@ -1,7 +1,7 @@
 import type { Field } from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps } from '@/lib/component-props';
 
-// These fields are authored in Sitecore
+/** Legacy dealer-locator fields (zip / Google Maps variants). */
 export interface DealershipFields {
   dealershipName: { jsonValue: Field<string> };
   dealershipAddress: { jsonValue: Field<string> };
@@ -10,37 +10,72 @@ export interface DealershipFields {
   dealershipZipCode: { jsonValue: Field<string> };
 }
 
-// This extends the authored fields with runtime calculated values
 export interface Dealership extends DealershipFields {
-  // These fields are calculated at runtime, not authored in Sitecore
   distance?: number;
   latitude?: number;
   longitude?: number;
 }
 
+/** Sitecore Location template ({0A93F003-2EF3-4A66-9FB6-95C10B95532B}) under Data/Locations. */
+export interface LocationItemFields {
+  id: string;
+  itemName?: string;
+  name?: { jsonValue: Field<string> };
+  streetAddress?: { jsonValue: Field<string> };
+  city?: { jsonValue: Field<string> };
+  state?: { jsonValue: Field<string> };
+  zip?: { jsonValue: Field<string> };
+  geo?: { jsonValue: Field<string> };
+  locationType?: { jsonValue: Field<string> };
+}
+
+export interface LocationPoint {
+  id: string;
+  name: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zip: string;
+  locationType: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface LocationSearchParams {
-  [key: string]: any; // eslint-disable-line
+  [key: string]: string | undefined; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export interface LocationSearchFields {
-  googleMapsApiKey: string;
-  title: { jsonValue: Field<string> };
-  defaultZipCode: string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CompatibleLocationSearchParams = LocationSearchParams & Record<string, any>;
+
+export interface LocationSearchDatasourceFields {
+  title?: { jsonValue: Field<string> };
+  companiesCount?: { jsonValue: Field<string> };
+  statesCount?: { jsonValue: Field<string> };
+  locationsCount?: { jsonValue: Field<string> };
+  /** Legacy dealer-locator datasource fields */
+  googleMapsApiKey?: string;
+  defaultZipCode?: string;
 }
 
-export interface LocationSearchProps extends ComponentProps {
+export interface LocationSearchProps extends Omit<ComponentProps, 'params'> {
   isPageEditing?: boolean;
-  params: LocationSearchParams;
-  fields: {
-    data: {
-      datasource: LocationSearchFields;
-      dealerships: {
-        results: DealershipFields[]; // Note: This comes from Sitecore without the runtime fields
+  params: CompatibleLocationSearchParams & ComponentProps['params'];
+  fields?: {
+    data?: {
+      datasource?: LocationSearchDatasourceFields & {
+        id?: string;
+        children?: {
+          results?: LocationItemFields[];
+        };
+      };
+      dealerships?: {
+        results: DealershipFields[];
       };
     };
   };
   defaultZipCode?: string;
-  googleMapsApiKey: string;
+  googleMapsApiKey?: string;
 }
 
 export interface LocationSearchItemProps {

@@ -170,7 +170,7 @@ export const LocationSearchTitleZipCentered = (props: LocationSearchProps) => {
           <div
             className={cn('group', {
               'position-center': !hasPagesPositionStyles,
-              [props?.params?.styles]: props?.params?.styles,
+              ...(props?.params?.styles ? { [props.params.styles]: props.params.styles } : {}),
             })}
             data-class-change
           >

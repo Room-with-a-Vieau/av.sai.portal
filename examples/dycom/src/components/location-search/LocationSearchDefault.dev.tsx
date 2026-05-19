@@ -148,7 +148,7 @@ export const LocationSearchDefault = (props: LocationSearchProps) => {
     return (
       <div
         className={cn('@container bg-background text-foreground relative', {
-          [props?.params?.styles]: props?.params?.styles,
+          ...(props?.params?.styles ? { [props.params.styles]: props.params.styles } : {}),
         })}
         data-class-change
         data-component="LocationSearch"

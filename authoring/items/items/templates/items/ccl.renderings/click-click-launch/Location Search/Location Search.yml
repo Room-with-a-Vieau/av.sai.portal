@@ -13,31 +13,66 @@ SharedFields:
 - ID: "17bb046a-a32a-41b3-8315-81217947611b"
   Hint: ComponentQuery
   Value: |
-    query GlobalFooter($datasource: String!, $language: String!) {
+    query LocationSearchQuery($datasource: String!, $language: String!) {
       datasource: item(path: $datasource, language: $language) {
-        ...on LocationSearch {
-          title {
-            jsonValue
+        id
+        title: field(name: "title") {
+          jsonValue
+        }
+        companiesCount: field(name: "companiesCount") {
+          jsonValue
+        }
+        statesCount: field(name: "statesCount") {
+          jsonValue
+        }
+        locationsCount: field(name: "locationsCount") {
+          jsonValue
+        }
+        children {
+          results {
+            id
+            itemName: name
+            name: field(name: "Name") {
+              jsonValue
+            }
+            streetAddress: field(name: "Street Address") {
+              jsonValue
+            }
+            city: field(name: "City") {
+              jsonValue
+            }
+            state: field(name: "State") {
+              jsonValue
+            }
+            zip: field(name: "ZIP") {
+              jsonValue
+            }
+            geo: field(name: "GEO") {
+              jsonValue
+            }
+            locationType: field(name: "Type") {
+              jsonValue
+            }
           }
         }
       }
-      dealerships : search (
-        where : {
-          AND :[
+      dealerships: search(
+        where: {
+          AND: [
             {
-              name: "_templates",
-              value: "{0909E354-25F8-4DD7-A6D1-A828DFD67709}",
+              name: "_templates"
+              value: "{0909E354-25F8-4DD7-A6D1-A828DFD67709}"
               operator: CONTAINS
-            },
+            }
             {
-              name: "_path",
-              value: "{0DE95AE4-41AB-4D01-9EB0-67441B7C2450}",
+              name: "_path"
+              value: $datasource
               operator: CONTAINS
-            },
+            }
           ]
         }
-        first : 100
-      ){
+        first: 100
+      ) {
         results {
           ... on LocationSearchItem {
             dealershipName {
