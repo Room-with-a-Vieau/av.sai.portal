@@ -57,4 +57,13 @@ describe('CommerceHeader', () => {
     const forms = document.querySelectorAll('form[action="https://www.basspro.com/shop/SearchDisplay"]');
     expect(forms.length).toBeGreaterThan(0);
   });
+
+  it('opens fishing mega menu on hover', () => {
+    render(<CommerceHeader {...mockProps} />);
+    const fishingButtons = screen.getAllByRole('button', { name: /^Fishing$/i });
+    fireEvent.mouseEnter(fishingButtons[0]);
+
+    expect(screen.getByRole('region', { name: /fishing menu/i })).toBeInTheDocument();
+    expect(screen.getByText('Rod & Reel Combos')).toBeInTheDocument();
+  });
 });

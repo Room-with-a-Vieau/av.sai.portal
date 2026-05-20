@@ -307,6 +307,12 @@ main {
   @apply static mb-0 overflow-hidden;
 }
 
+/* CommerceHeader mega menus must escape partial-design header clipping */
+.partial-editing-mode header:has(.bps-header),
+.partial-editing-mode .bps-header {
+  overflow: visible !important;
+}
+
 /* BCBS palette overrides; other named themes are defined in src/assets/styles/globals.css. */
 html[data-theme='bcbst'] {
   --color-primary: #328ac9;

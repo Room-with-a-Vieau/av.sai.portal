@@ -10,7 +10,8 @@
  */
 
 import type React from 'react';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import {
   ChevronDown,
@@ -47,14 +48,69 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
   const { params } = props;
   const navId = useId();
   const headerRef = useRef<HTMLElement>(null);
+  const navBarRef = useRef<HTMLElement>(null);
 
+  const [mounted, setMounted] = useState(false);
+  const [megaPanelTop, setMegaPanelTop] = useState(0);
   const [activeMegaId, setActiveMegaId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMegaId, setMobileMegaId] = useState<string | null>(null);
+  const megaCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const closeMega = useCallback(() => setActiveMegaId(null), []);
+
+  const cancelMegaClose = useCallback(() => {
+    if (megaCloseTimer.current) {
+      clearTimeout(megaCloseTimer.current);
+      megaCloseTimer.current = null;
+    }
+  }, []);
+
+  const scheduleMegaClose = useCallback(() => {
+    cancelMegaClose();
+    megaCloseTimer.current = setTimeout(() => {
+      setActiveMegaId(null);
+      megaCloseTimer.current = null;
+    }, 300);
+  }, [cancelMegaClose]);
+
+  const updateMegaPanelPosition = useCallback(() => {
+    const navBar = navBarRef.current;
+    if (!navBar) {
+      return;
+    }
+    setMegaPanelTop(navBar.getBoundingClientRect().bottom);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!activeMegaId) {
+      return undefined;
+    }
+    updateMegaPanelPosition();
+    window.addEventListener('resize', updateMegaPanelPosition);
+    window.addEventListener('scroll', updateMegaPanelPosition, true);
+    return () => {
+      window.removeEventListener('resize', updateMegaPanelPosition);
+      window.removeEventListener('scroll', updateMegaPanelPosition, true);
+    };
+  }, [activeMegaId, updateMegaPanelPosition]);
+
+  const openMega = useCallback(
+    (categoryId: string) => {
+      cancelMegaClose();
+      setActiveMegaId(categoryId);
+    },
+    [cancelMegaClose],
+  );
+
+  const activeCategory =
+    BASS_PRO_MAIN_NAV.find((category) => category.id === activeMegaId) ?? null;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -82,13 +138,13 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
   return (
     <header
       ref={headerRef}
-      className={cn('bps-header sticky top-0 z-[60] w-full', params?.styles)}
+      className={cn('bps-header relative z-[1] w-full', params?.styles)}
       data-component="commerce-header"
       role="banner"
     >
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:text-[#1a3d2b]"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:text-[#222]"
       >
         Skip to main content
       </a>
@@ -139,7 +195,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
         <div className="mx-auto flex max-w-[100rem] items-center gap-3 px-4 py-3 sm:px-6 lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center text-[#1a3d2b] lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center text-[#222] lg:hidden"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
             aria-controls={`${navId}-mobile`}
@@ -192,7 +248,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
               />
               <button
                 type="submit"
-                className="absolute top-0 right-0 flex h-10 w-10 items-center justify-center bg-[#1a3d2b] text-white hover:bg-[#2f5c3f]"
+                className="bps-header__search-submit absolute top-0 right-0 flex h-10 w-10 items-center justify-center rounded-r-full text-white"
                 aria-label="Search"
               >
                 <Search className="h-4 w-4" />
@@ -204,7 +260,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
             <li className="lg:hidden">
               <button
                 type="button"
-                className="flex h-10 w-10 items-center justify-center text-[#1a3d2b]"
+                className="flex h-10 w-10 items-center justify-center text-[#222]"
                 aria-label="Search"
                 onClick={() => setSearchOpen((s) => !s)}
               >
@@ -214,7 +270,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
             <li className="relative hidden sm:block">
               <button
                 type="button"
-                className="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#1a3d2b]"
+                className="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#222]"
                 aria-expanded={accountOpen}
                 aria-haspopup="true"
                 onClick={() => setAccountOpen((o) => !o)}
@@ -236,7 +292,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                     <li>
                       <a
                         href={BASS_PRO_SIGN_IN_URL}
-                        className="block px-4 py-2 font-bold text-[#1a3d2b] hover:bg-[#f5f0e1]"
+                        className="block px-4 py-2 font-bold text-[#222] hover:bg-[#f5f5f5]"
                       >
                         Sign In
                       </a>
@@ -244,7 +300,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                     <li>
                       <a
                         href={BASS_PRO_CREATE_ACCOUNT_URL}
-                        className="block px-4 py-2 font-bold text-[#1a3d2b] hover:bg-[#f5f0e1]"
+                        className="block px-4 py-2 font-bold text-[#222] hover:bg-[#f5f5f5]"
                       >
                         Create Account
                       </a>
@@ -252,7 +308,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                     <li className="my-1 border-t border-[#eee]" />
                     {BASS_PRO_ACCOUNT_LINKS.map((link) => (
                       <li key={link.href}>
-                        <a href={link.href} className="block px-4 py-2 text-[#333] hover:bg-[#f5f0e1]">
+                        <a href={link.href} className="block px-4 py-2 text-[#333] hover:bg-[#f5f5f5]">
                           {link.label}
                         </a>
                       </li>
@@ -260,7 +316,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                     <li>
                       <a
                         href={BASS_PRO_CUSTOMER_SERVICE_URL}
-                        className="block px-4 py-2 text-[#333] hover:bg-[#f5f0e1]"
+                        className="block px-4 py-2 text-[#333] hover:bg-[#f5f5f5]"
                       >
                         Customer Service
                       </a>
@@ -272,7 +328,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
             <li>
               <a
                 href={BASS_PRO_CART_URL}
-                className="relative flex items-center gap-1 px-3 py-2 text-[#1a3d2b]"
+                className="relative flex items-center gap-1 px-3 py-2 text-[#222]"
                 aria-label="Shopping cart"
               >
                 <ShoppingCart className="h-6 w-6" />
@@ -300,7 +356,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                 />
                 <button
                   type="submit"
-                  className="absolute top-0 right-0 flex h-10 w-10 items-center justify-center bg-[#1a3d2b] text-white"
+                  className="bps-header__search-submit absolute top-0 right-0 flex h-10 w-10 items-center justify-center rounded-r-full text-white"
                   aria-label="Search"
                 >
                   <Search className="h-4 w-4" />
@@ -313,53 +369,76 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
 
       {/* Desktop primary navigation */}
       <nav
+        ref={navBarRef}
         className="bps-header__nav-bar relative hidden lg:block"
         aria-label="Primary"
-        onMouseLeave={closeMega}
+        onMouseEnter={cancelMegaClose}
+        onMouseLeave={scheduleMegaClose}
       >
-        <div className="mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8">
-          <ul className="flex list-none flex-wrap items-stretch gap-0 p-0">
-            {BASS_PRO_MAIN_NAV.map((category) => (
-              <li
-                key={category.id}
-                className="bps-header__nav-item relative"
-                onMouseEnter={() => setActiveMegaId(category.id)}
-              >
-                <button
-                  type="button"
-                  className="flex h-11 items-center gap-0.5 px-3 py-2"
-                  aria-expanded={activeMegaId === category.id}
-                  aria-controls={`bps-mega-${category.id}`}
-                  onClick={() =>
-                    setActiveMegaId((id) => (id === category.id ? null : category.id))
-                  }
+        <div className="bps-header__nav-host">
+          <div className="mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8">
+            <ul className="flex list-none flex-wrap items-stretch gap-0 p-0">
+              {BASS_PRO_MAIN_NAV.map((category) => (
+                <li
+                  key={category.id}
+                  className={cn(
+                    'bps-header__nav-item relative',
+                    activeMegaId === category.id && 'bps-header__nav-item--active',
+                  )}
+                  onMouseEnter={() => openMega(category.id)}
+                  onFocus={() => openMega(category.id)}
                 >
-                  {category.label}
-                  <ChevronDown className="h-3.5 w-3.5 opacity-80" aria-hidden />
-                </button>
-                <CommerceHeaderMegaMenu
-                  category={category}
-                  isOpen={activeMegaId === category.id}
-                  onClose={closeMega}
-                />
-              </li>
-            ))}
-            {BASS_PRO_SIMPLE_NAV.map((link) => (
-              <li key={link.href} className="bps-header__nav-item">
-                <a href={link.href} className="flex h-11 items-center px-3 py-2">
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+                  <button
+                    type="button"
+                    className="flex h-11 items-center gap-0.5 px-3 py-2"
+                    aria-expanded={activeMegaId === category.id}
+                    aria-controls={`bps-mega-${category.id}`}
+                    onClick={() =>
+                      setActiveMegaId((id) => (id === category.id ? null : category.id))
+                    }
+                  >
+                    {category.label}
+                    <ChevronDown
+                      className={cn(
+                        'h-3.5 w-3.5 opacity-80 transition-transform',
+                        activeMegaId === category.id && 'rotate-180',
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                </li>
+              ))}
+              {BASS_PRO_SIMPLE_NAV.map((link) => (
+                <li key={link.href} className="bps-header__nav-item">
+                  <a href={link.href} className="flex h-11 items-center px-3 py-2">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </nav>
+
+      {mounted &&
+        activeCategory &&
+        createPortal(
+          <div
+            className="bps-mega-portal-root"
+            style={{ top: megaPanelTop }}
+            onMouseEnter={cancelMegaClose}
+            onMouseLeave={scheduleMegaClose}
+          >
+            <CommerceHeaderMegaMenu category={activeCategory} isOpen />
+          </div>,
+          document.body,
+        )}
 
       {/* Mobile navigation drawer */}
       {mobileOpen && (
         <div
           id={`${navId}-mobile`}
-          className="bps-header__mobile-drawer fixed inset-x-0 bottom-0 top-[var(--bps-mobile-top,8rem)] z-50 overflow-y-auto border-t border-[#c4b896] lg:hidden"
+          className="bps-header__mobile-drawer fixed inset-x-0 bottom-0 top-[var(--bps-mobile-top,8rem)] z-50 overflow-y-auto border-t border-[#e5e5e5] lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Main menu"
@@ -367,16 +446,16 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
           <div className="px-4 py-3">
             <a
               href={BASS_PRO_FREE_SHIPPING_URL}
-              className="mb-3 block text-center text-sm font-bold text-[#1a3d2b]"
+              className="mb-3 block text-center text-sm font-bold text-[#c41230]"
             >
               FREE Shipping on Orders $50+
             </a>
-            <ul className="space-y-0 border border-[#d9d0bc] bg-white">
+            <ul className="space-y-0 border border-[#e5e5e5] bg-white">
               {BASS_PRO_MAIN_NAV.map((category) => (
                 <li key={category.id} className="border-b border-[#eee]">
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between px-4 py-3 text-left font-semibold text-[#1a3d2b]"
+                    className="flex w-full items-center justify-between px-4 py-3 text-left font-semibold text-[#222]"
                     aria-expanded={mobileMegaId === category.id}
                     onClick={() =>
                       setMobileMegaId((id) => (id === category.id ? null : category.id))
@@ -391,16 +470,16 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                     />
                   </button>
                   {mobileMegaId === category.id && (
-                    <div className="bg-[#f5f0e1] px-4 py-3">
+                    <div className="bg-[#fafafa] px-4 py-3">
                       <a
                         href={category.shopAllHref}
-                        className="mb-3 block text-sm font-bold text-[#8b2942]"
+                        className="mb-3 block text-sm font-bold text-[#c41230]"
                       >
                         Shop All {category.label}
                       </a>
                       {category.columns.map((col) => (
                         <div key={col.title} className="mb-4">
-                          <a href={col.href ?? category.shopAllHref} className="text-sm font-bold text-[#1a3d2b]">
+                          <a href={col.href ?? category.shopAllHref} className="text-sm font-bold text-[#222]">
                             {col.title}
                           </a>
                           <ul className="mt-1 space-y-1 pl-2">
@@ -420,14 +499,14 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
               ))}
               {BASS_PRO_SIMPLE_NAV.map((link) => (
                 <li key={link.href} className="border-b border-[#eee]">
-                  <a href={link.href} className="block px-4 py-3 font-semibold text-[#1a3d2b]">
+                  <a href={link.href} className="block px-4 py-3 font-semibold text-[#222]">
                     {link.label}
                   </a>
                 </li>
               ))}
             </ul>
             <div className="mt-4 space-y-2 text-sm">
-              <a href={BASS_PRO_SIGN_IN_URL} className="block font-bold text-[#1a3d2b]">
+              <a href={BASS_PRO_SIGN_IN_URL} className="block font-bold text-[#222]">
                 Sign In
               </a>
               <a href={BASS_PRO_CUSTOMER_SERVICE_URL} className="block text-[#444]">
