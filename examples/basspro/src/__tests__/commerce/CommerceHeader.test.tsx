@@ -66,4 +66,12 @@ describe('CommerceHeader', () => {
     expect(screen.getByRole('region', { name: /fishing menu/i })).toBeInTheDocument();
     expect(screen.getByText('Rod & Reel Combos')).toBeInTheDocument();
   });
+
+  it('centers desktop nav and keeps hamburger below xl', () => {
+    render(<CommerceHeader {...mockProps} />);
+    const navList = document.querySelector('.bps-header__nav-list');
+    expect(navList).toHaveClass('justify-center');
+    expect(screen.getByRole('button', { name: /open menu/i })).toHaveClass('xl:hidden');
+    expect(document.querySelector('.bps-header__nav-bar')).toHaveClass('xl:block');
+  });
 });

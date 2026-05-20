@@ -44,6 +44,9 @@ import { CommerceHeaderMegaMenu } from './CommerceHeaderMegaMenu';
 import type { CommerceHeaderProps } from './commerce-header.props';
 import './commerce-header.css';
 
+/** Tailwind `xl` (80rem / 1280px) — room for full horizontal nav without wrapping */
+const DESKTOP_NAV_MEDIA = '(min-width: 80rem)';
+
 export const Default: React.FC<CommerceHeaderProps> = (props) => {
   const { params } = props;
   const navId = useId();
@@ -135,6 +138,22 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
     return undefined;
   }, [mobileOpen]);
 
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+    const media = window.matchMedia(DESKTOP_NAV_MEDIA);
+    const onChange = () => {
+      if (!media.matches) {
+        setActiveMegaId(null);
+        setMobileOpen(false);
+      }
+    };
+    onChange();
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+
   return (
     <header
       ref={headerRef}
@@ -161,8 +180,8 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
       </div>
 
       {/* Utility row */}
-      <div className="bps-header__utility-bar hidden lg:block">
-        <div className="mx-auto flex max-w-[100rem] items-center justify-between gap-4 px-4 py-1.5 sm:px-6 lg:px-8">
+      <div className="bps-header__utility-bar hidden xl:block">
+        <div className="mx-auto flex max-w-[100rem] items-center justify-between gap-4 px-4 py-1.5 sm:px-6 xl:px-8">
           <div className="flex items-center gap-4">
             <button
               type="button"
@@ -192,10 +211,10 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
 
       {/* Logo + search + account + cart */}
       <div className="bps-header__main-bar">
-        <div className="mx-auto flex max-w-[100rem] items-center gap-3 px-4 py-3 sm:px-6 lg:gap-6 lg:px-8">
+        <div className="mx-auto flex max-w-[100rem] items-center gap-3 px-4 py-3 sm:px-6 xl:gap-6 xl:px-8">
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center text-[#222] lg:hidden"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center text-[#222] xl:hidden"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
             aria-controls={`${navId}-mobile`}
@@ -210,7 +229,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
               alt="Bass Pro Shops"
               width={220}
               height={56}
-              className="hidden h-12 w-auto max-w-[220px] object-contain sm:h-14 lg:block"
+              className="hidden h-12 w-auto max-w-[220px] object-contain sm:h-14 xl:block"
               priority
               unoptimized
             />
@@ -219,7 +238,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
               alt="Bass Pro Shops"
               width={120}
               height={40}
-              className="h-9 w-auto object-contain lg:hidden"
+              className="h-9 w-auto object-contain xl:hidden"
               priority
               unoptimized
             />
@@ -230,8 +249,8 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
             method="get"
             role="search"
             className={cn(
-              'mx-auto hidden max-w-xl flex-1 lg:flex',
-              searchOpen && 'flex !max-w-none basis-full lg:max-w-xl',
+              'mx-auto hidden max-w-xl flex-1 xl:flex',
+              searchOpen && 'flex !max-w-none basis-full xl:max-w-xl',
             )}
           >
             <label htmlFor={`${navId}-search`} className="sr-only">
@@ -257,7 +276,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
           </form>
 
           <ul className="ml-auto flex list-none items-center gap-0 p-0">
-            <li className="lg:hidden">
+            <li className="xl:hidden">
               <button
                 type="button"
                 className="flex h-10 w-10 items-center justify-center text-[#222]"
@@ -341,7 +360,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
         </div>
 
         {searchOpen && (
-          <div className="border-t border-[#eee] px-4 pb-3 lg:hidden">
+          <div className="border-t border-[#eee] px-4 pb-3 xl:hidden">
             <form action={BASS_PRO_SEARCH_ACTION} method="get" role="search">
               <label htmlFor={`${navId}-search-mobile`} className="sr-only">
                 Search
@@ -370,14 +389,14 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
       {/* Desktop primary navigation */}
       <nav
         ref={navBarRef}
-        className="bps-header__nav-bar relative hidden lg:block"
+        className="bps-header__nav-bar relative hidden xl:block"
         aria-label="Primary"
         onMouseEnter={cancelMegaClose}
         onMouseLeave={scheduleMegaClose}
       >
         <div className="bps-header__nav-host">
-          <div className="mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8">
-            <ul className="flex list-none flex-wrap items-stretch gap-0 p-0">
+          <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 xl:px-8">
+            <ul className="bps-header__nav-list flex list-none items-stretch justify-center gap-0 p-0">
               {BASS_PRO_MAIN_NAV.map((category) => (
                 <li
                   key={category.id}
@@ -390,7 +409,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
                 >
                   <button
                     type="button"
-                    className="flex h-11 items-center gap-0.5 px-3 py-2"
+                    className="flex h-11 items-center gap-0.5 px-2 py-2 2xl:px-3"
                     aria-expanded={activeMegaId === category.id}
                     aria-controls={`bps-mega-${category.id}`}
                     onClick={() =>
@@ -410,7 +429,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
               ))}
               {BASS_PRO_SIMPLE_NAV.map((link) => (
                 <li key={link.href} className="bps-header__nav-item">
-                  <a href={link.href} className="flex h-11 items-center px-3 py-2">
+                  <a href={link.href} className="flex h-11 items-center px-2 py-2 2xl:px-3">
                     {link.label}
                   </a>
                 </li>
@@ -438,7 +457,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
       {mobileOpen && (
         <div
           id={`${navId}-mobile`}
-          className="bps-header__mobile-drawer fixed inset-x-0 bottom-0 top-[var(--bps-mobile-top,8rem)] z-50 overflow-y-auto border-t border-[#e5e5e5] lg:hidden"
+          className="bps-header__mobile-drawer fixed inset-x-0 bottom-0 top-[var(--bps-mobile-top,8rem)] z-50 overflow-y-auto border-t border-[#e5e5e5] xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Main menu"
@@ -523,7 +542,7 @@ export const Default: React.FC<CommerceHeaderProps> = (props) => {
       {accountOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/20 lg:block"
+          className="fixed inset-0 z-40 bg-black/20"
           aria-label="Close account menu"
           onClick={() => setAccountOpen(false)}
         />

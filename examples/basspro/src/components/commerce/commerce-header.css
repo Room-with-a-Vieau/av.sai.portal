@@ -61,12 +61,25 @@
   overflow: visible;
 }
 
+.bps-header__nav-list {
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
 .bps-header__nav-item > button,
 .bps-header__nav-item > a {
   color: var(--bps-text);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+@media (min-width: 96rem) {
+  .bps-header__nav-item > button,
+  .bps-header__nav-item > a {
+    font-size: 0.875rem;
+  }
 }
 
 .bps-header__nav-item > button:hover,
