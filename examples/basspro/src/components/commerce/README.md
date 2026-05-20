@@ -6,6 +6,8 @@
 
 ## SitecoreAI setup
 
+Do not add `index.ts` in this folder — the component map treats it as a duplicate `index` module. Export variants from `CommerceHeader.tsx` only.
+
 1. Run `npm run dev` or `npm run sitecore-tools:generate-map` so `CommerceHeader` registers in `.sitecore/component-map.ts`.
 2. In Sitecore, add a rendering named **CommerceHeader** pointing at this component (Content SDK pattern).
 3. Add **CommerceHeader** to your **Partial Design** in the `headless-header` placeholder (or replace existing header rendering).

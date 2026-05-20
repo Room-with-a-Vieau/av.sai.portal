@@ -264,7 +264,6 @@ import * as FAQ from 'src/components/component-library/FAQ';
 import * as ContactSection from 'src/components/component-library/ContactSection';
 import * as CLHero from 'src/components/component-library/CLHero';
 import * as CallToAction from 'src/components/component-library/CallToAction';
-import * as index from 'src/components/commerce/index';
 import * as CommerceHeaderMegaMenu from 'src/components/commerce/CommerceHeaderMegaMenu';
 import * as CommerceHeader from 'src/components/commerce/CommerceHeader';
 import * as commerceheaderprops from 'src/components/commerce/commerce-header.props';
@@ -552,7 +551,6 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ContactSection', { ...ContactSection, componentType: 'client' }],
   ['CLHero', { ...CLHero }],
   ['CallToAction', { ...CallToAction }],
-  ['index', { ...index }],
   ['CommerceHeaderMegaMenu', { ...CommerceHeaderMegaMenu, componentType: 'client' }],
   ['CommerceHeader', { ...CommerceHeader, componentType: 'client' }],
   ['commerce-header', { ...commerceheaderprops, ...commerceheaderconstants }],

@@ -6,6 +6,7 @@
 export type BassProNavLink = {
   label: string;
   href: string;
+  external?: boolean;
 };
 
 export type BassProNavColumn = {

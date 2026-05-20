@@ -33,7 +33,13 @@ export const BASS_PRO_PROMO = {
   href: `${BASS_PRO_BASE}/c/marine-sale-and-event`,
 };
 
-export const BASS_PRO_UTILITY_LINKS = [
+export type BassProUtilityLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+export const BASS_PRO_UTILITY_LINKS: BassProUtilityLink[] = [
   { label: 'Boat Sales', href: `${BASS_PRO_BASE}/shop/en/boat-center` },
   { label: 'Off Road Sales', href: `${BASS_PRO_BASE}/shop/en/off-road-center` },
   { label: 'Resorts & Restaurants', href: `${BASS_PRO_BASE}/shop/en/resorts-restaurants` },
@@ -41,7 +47,7 @@ export const BASS_PRO_UTILITY_LINKS = [
   { label: 'CLUB', href: `${BASS_PRO_BASE}/shop/en/club` },
   { label: 'Gift Cards', href: `${BASS_PRO_BASE}/shop/en/gift-cards` },
   { label: 'Help', href: BASS_PRO_CUSTOMER_SERVICE_URL },
-] as const;
+];
 
 export const BASS_PRO_ACCOUNT_LINKS = [
   { label: 'My Account', href: `${BASS_PRO_BASE}/shop/AjaxLogonForm?myAcctMain=1&catalogId=3074457345616676768&langId=-1&storeId=715838534` },
