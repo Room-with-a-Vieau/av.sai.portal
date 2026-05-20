@@ -1,0 +1,95 @@
+/**
+ * Bass Pro Shops header shell — scoped under .bps-header to avoid clashing with XM Cloud theme.
+ */
+
+.bps-header {
+  --bps-green-dark: #1a3d2b;
+  --bps-green-nav: #2f5c3f;
+  --bps-green-promo: #234833;
+  --bps-cream: #f5f0e1;
+  --bps-tan: #e8e0cc;
+  --bps-maroon: #8b2942;
+  --bps-text: #222;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--bps-text);
+}
+
+.bps-header a {
+  text-decoration: none;
+}
+
+.bps-header a:hover {
+  text-decoration: underline;
+}
+
+.bps-header__promo-bar {
+  background: var(--bps-green-promo);
+  color: #fff;
+}
+
+.bps-header__utility-bar {
+  background: var(--bps-green-dark);
+  color: #fff;
+  font-size: 0.8125rem;
+}
+
+.bps-header__utility-bar a {
+  color: #fff;
+}
+
+.bps-header__utility-bar a:hover {
+  color: #f5f0e1;
+}
+
+.bps-header__main-bar {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.bps-header__nav-bar {
+  background: var(--bps-green-nav);
+}
+
+.bps-header__nav-item > button,
+.bps-header__nav-item > a {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.bps-header__nav-item > button:hover,
+.bps-header__nav-item > a:hover {
+  background: rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+}
+
+.bps-header__search-input {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.bps-header__search-input:focus {
+  border-color: var(--bps-green-dark);
+  outline: 2px solid rgba(26, 61, 43, 0.25);
+  outline-offset: 0;
+}
+
+.bps-header__cart-badge {
+  background: var(--bps-maroon);
+  color: #fff;
+  font-size: 0.65rem;
+  line-height: 1;
+  min-width: 1.1rem;
+}
+
+.bps-header__mobile-drawer {
+  background: var(--bps-cream);
+}
+
+.bps-header__account-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}

@@ -63,6 +63,18 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/do-product-images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assetshare.basspro.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.basspro.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Optimize image sizes for responsive loading
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

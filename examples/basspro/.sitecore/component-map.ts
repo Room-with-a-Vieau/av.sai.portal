@@ -264,6 +264,12 @@ import * as FAQ from 'src/components/component-library/FAQ';
 import * as ContactSection from 'src/components/component-library/ContactSection';
 import * as CLHero from 'src/components/component-library/CLHero';
 import * as CallToAction from 'src/components/component-library/CallToAction';
+import * as index from 'src/components/commerce/index';
+import * as CommerceHeaderMegaMenu from 'src/components/commerce/CommerceHeaderMegaMenu';
+import * as CommerceHeader from 'src/components/commerce/CommerceHeader';
+import * as commerceheaderprops from 'src/components/commerce/commerce-header.props';
+import * as commerceheaderconstants from 'src/components/commerce/commerce-header.constants';
+import * as basspronavigation from 'src/components/commerce/bass-pro-navigation';
 import * as Carousel from 'src/components/carousel/Carousel';
 import * as cardspotlightdev from 'src/components/card-spotlight/card-spotlight.dev';
 import * as cardprops from 'src/components/card/card.props';
@@ -546,6 +552,11 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ContactSection', { ...ContactSection, componentType: 'client' }],
   ['CLHero', { ...CLHero }],
   ['CallToAction', { ...CallToAction }],
+  ['index', { ...index }],
+  ['CommerceHeaderMegaMenu', { ...CommerceHeaderMegaMenu, componentType: 'client' }],
+  ['CommerceHeader', { ...CommerceHeader, componentType: 'client' }],
+  ['commerce-header', { ...commerceheaderprops, ...commerceheaderconstants }],
+  ['bass-pro-navigation', { ...basspronavigation }],
   ['Carousel', { ...Carousel, componentType: 'client' }],
   ['card-spotlight', { ...cardspotlightdev }],
   ['card', { ...cardprops }],
