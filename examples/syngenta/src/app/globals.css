@@ -232,6 +232,39 @@ html[data-theme='threatlocker'] .btn.btn-secondary:hover {
   color: var(--color-primary-foreground);
 }
 
+/* syngenta.com: Inter corporate sans; green CTAs on deep blue brand */
+html[data-theme='syngenta'] {
+  --font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 600;
+}
+
+html[data-theme='syngenta'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
+  letter-spacing: -0.01em;
+}
+
+html[data-theme='syngenta'] .btn.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+}
+
+html[data-theme='syngenta'] .btn.btn-primary:hover {
+  background-color: #017a29;
+  color: var(--color-accent-foreground);
+}
+
+html[data-theme='syngenta'] .btn.btn-secondary {
+  background-color: #ffffff;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+html[data-theme='syngenta'] .btn.btn-secondary:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
 /* BUTTONS END */
 
 main {

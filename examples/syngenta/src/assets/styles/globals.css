@@ -294,12 +294,13 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | syngenta"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
  * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
  * threatlocker (threatlocker.com): navy primary (#0b223f), sky CTA accent (#3997d4), light section surfaces (#f4f4f4).
+ * syngenta (syngenta.com): deep blue primary (#010066), brand green accent (#019934), white surfaces (#ffffff).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -469,5 +470,51 @@
 }
 
 [data-theme='threatlocker'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='syngenta'] {
+  --background-image-gradient: linear-gradient(180deg, #019934 0%, #010066 100%);
+  --background-image-gradient-secondary: linear-gradient(
+    90deg,
+    #019934 0%,
+    #010066 50%,
+    #019934 100%
+  );
+  --color-background: #ffffff;
+  --color-foreground: #010066;
+  --color-card: #ffffff;
+  --color-card-foreground: #010066;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #010066;
+  --color-primary: #010066;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #00004d;
+  --color-secondary: #f4f6f8;
+  --color-secondary-foreground: #010066;
+  --color-secondary-hover: #e8ecf0;
+  --color-muted: #f4f6f8;
+  --color-muted-foreground: #4a5c6f;
+  --color-accent: #019934;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d6dee8;
+  --color-input: #d6dee8;
+  --color-ring: #019934;
+  --color-tertiary-foreground: #010066;
+  --color-tertiary-hover: #e8ecf0;
+  --color-tertiary: #f4f6f8;
+  --color-dark-foreground: #010066;
+  --color-dark-hover: #e8ecf0;
+  --color-dark: #f4f6f8;
+  --color-light: #ffffff;
+  --color-light-hover: #f4f6f8;
+  --color-light-foreground: #010066;
+  --color-overlay: rgb(1 0 102 / 0.55);
+}
+
+[data-theme='syngenta'] .bg-primary {
   color: var(--color-primary-foreground);
 }
