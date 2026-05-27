@@ -76,11 +76,17 @@ type SideBySidePanelProps = {
 const sideBySideDescriptionRevealClass =
   'max-h-0 overflow-hidden opacity-0 group-hover/panel:max-h-[24rem] group-hover/panel:opacity-100 group-focus-within/panel:max-h-[24rem] group-focus-within/panel:opacity-100';
 
+/** Sitecore text fields may expose `value` as string or number in GraphQL types. */
+function toTrimmedFieldString(value: string | number | undefined | null): string {
+  if (value == null) return '';
+  return String(value).trim();
+}
+
 const SideBySidePanel = ({ promo }: SideBySidePanelProps) => {
   const { image, heading, description, link } = promo ?? {};
-  const linkText = link?.jsonValue?.value?.text?.trim();
+  const linkText = toTrimmedFieldString(link?.jsonValue?.value?.text);
   const ctaLabel = linkText || 'Know more';
-  const headingLabel = heading?.jsonValue?.value?.trim() || 'Promo';
+  const headingLabel = toTrimmedFieldString(heading?.jsonValue?.value) || 'Promo';
 
   return (
     <article
