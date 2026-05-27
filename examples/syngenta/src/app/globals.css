@@ -232,7 +232,7 @@ html[data-theme='threatlocker'] .btn.btn-secondary:hover {
   color: var(--color-primary-foreground);
 }
 
-/* syngenta.com: Inter corporate sans; green CTAs on deep blue brand */
+/* syngenta.com: Inter corporate sans; square yellow CTAs (#FFAA00) on deep blue brand */
 html[data-theme='syngenta'] {
   --font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -244,14 +244,21 @@ html[data-theme='syngenta'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, 
   letter-spacing: -0.01em;
 }
 
-html[data-theme='syngenta'] .btn.btn-primary {
-  background-color: var(--color-accent);
-  color: var(--color-accent-foreground);
+/* Portal .btn utility (Hero ST, mega menu, etc.) */
+html[data-theme='syngenta'] .btn {
+  border-radius: var(--button-radius, 0);
 }
 
-html[data-theme='syngenta'] .btn.btn-primary:hover {
-  background-color: #017a29;
-  color: var(--color-accent-foreground);
+html[data-theme='syngenta'] .btn.btn-primary,
+html[data-theme='syngenta'] .btn.btn-outline {
+  background-color: var(--color-button);
+  color: var(--color-button-foreground);
+}
+
+html[data-theme='syngenta'] .btn.btn-primary:hover,
+html[data-theme='syngenta'] .btn.btn-outline:hover {
+  background-color: var(--color-button-hover);
+  color: var(--color-button-foreground);
 }
 
 html[data-theme='syngenta'] .btn.btn-secondary {
@@ -263,6 +270,15 @@ html[data-theme='syngenta'] .btn.btn-secondary {
 html[data-theme='syngenta'] .btn.btn-secondary:hover {
   background-color: var(--color-secondary);
   color: var(--color-primary);
+}
+
+/* Shadcn/ui Button — square corners even when className adds rounded-* */
+html[data-theme='syngenta'] :is(button, a).inline-flex.items-center.justify-center.whitespace-nowrap {
+  border-radius: var(--button-radius, 0) !important;
+}
+
+html[data-theme='syngenta'] .bps-header__search-submit {
+  border-radius: var(--button-radius, 0);
 }
 
 /* BUTTONS END */

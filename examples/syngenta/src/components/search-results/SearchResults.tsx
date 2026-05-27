@@ -539,7 +539,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 </button>
               ) : null}
             </div>
-            <Button type="button" className="h-12 shrink-0 rounded-xl px-8 font-semibold shadow-sm" onClick={runSearch}>
+            <Button type="button" className="h-12 shrink-0 px-8 font-semibold shadow-sm" onClick={runSearch}>
               Search
             </Button>
           </div>
@@ -742,7 +742,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                         type="button"
                         variant="outline"
                         size="sm"
-                        className="min-w-[5.5rem] rounded-lg"
+                        className="min-w-[5.5rem]"
                         disabled={safeResultsPage <= 1}
                         onClick={() => setResultsPage((p) => Math.max(1, p - 1))}
                       >
@@ -755,7 +755,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                         type="button"
                         variant="outline"
                         size="sm"
-                        className="min-w-[5.5rem] rounded-lg"
+                        className="min-w-[5.5rem]"
                         disabled={safeResultsPage >= resultsTotalPages}
                         onClick={() => setResultsPage((p) => Math.min(resultsTotalPages, p + 1))}
                       >
@@ -772,7 +772,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                   Try clearing filters or a phrase like &ldquo;Pressure regulators&rdquo;, &ldquo;Data loggers&rdquo;, or
                   &ldquo;IIoT&rdquo;.
                 </p>
-                <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
+                <Button type="button" variant="secondary" className="mt-5" onClick={clearFilters}>
                   Clear filters
                 </Button>
               </div>

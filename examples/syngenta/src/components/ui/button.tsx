@@ -4,21 +4,23 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-default text-sm font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 antialiased font-medium text-box-trim-both leading-5',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[length:var(--button-radius,1.5rem)] text-sm font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 antialiased font-medium text-box-trim-both leading-5',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary-hover',
+        default:
+          'bg-[var(--color-button,var(--color-primary))] text-[var(--color-button-foreground,var(--color-primary-foreground))] hover:bg-[var(--color-button-hover,var(--color-primary-hover))]',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+        outline:
+          'border border-input hover:bg-[var(--color-button,var(--color-accent))] hover:text-[var(--color-button-foreground,var(--color-accent-foreground))]',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         tertiary: 'bg-tertiary text-tertiary-foreground hover:bg-tertiary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline after:text-primary after:content-[">"]',
         topic:
-          'bg-accent hover:bg-primary-hover text-accent-foreground font-heading rounded-full px-4 py-2 text-sm font-medium transition-colors',
+          'bg-[var(--color-button,var(--color-accent))] hover:bg-[var(--color-button-hover,var(--color-primary-hover))] text-[var(--color-button-foreground,var(--color-accent-foreground))] font-heading rounded-[length:var(--button-radius,624.9375rem)] px-4 py-2 text-sm font-medium transition-colors',
         'rounded-white':
-          'rounded-full bg-white text-secondary-foreground hover:bg-gray-100 transition-all duration-300',
+          'rounded-[length:var(--button-radius,624.9375rem)] bg-white text-secondary-foreground hover:bg-gray-100 transition-all duration-300',
       },
       size: {
         default: 'px-4 py-2-5 text-sm',
