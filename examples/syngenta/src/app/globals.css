@@ -403,6 +403,23 @@ main {
   overflow: visible !important;
 }
 
+/* MultiPromo SideBySide: 20% shade on hover/focus only (no column resize / image zoom) */
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-overlay {
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel:hover .multipromo-sidebyside-overlay,
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel:focus-within .multipromo-sidebyside-overlay {
+  opacity: 0.2;
+}
+
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel img {
+  transform: none !important;
+  transition: none !important;
+}
+
 /* BCBS palette overrides; other named themes are defined in src/assets/styles/globals.css. */
 html[data-theme='bcbst'] {
   --color-primary: #328ac9;

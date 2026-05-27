@@ -5,6 +5,7 @@ import {
   Default as MultiPromoDefault,
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
+  SideBySide as MultiPromoSideBySide,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -24,6 +25,10 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
   NoDataFallback: () => <div data-testid="no-data-fallback">No data available</div>,
+}));
+
+jest.mock('lucide-react', () => ({
+  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="chevron-right" {...props} />,
 }));
 
 describe('MultiPromo', () => {
@@ -292,6 +297,37 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoSingleColumn {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('SideBySide variant', () => {
+    it('renders promo headings and one image per column', () => {
+      render(<MultiPromoSideBySide {...mockProps} />);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Product 2')).toBeInTheDocument();
+      expect(screen.getAllByRole('img')).toHaveLength(2);
+    });
+
+    it('renders shade overlay elements for hover styling', () => {
+      const { container } = render(<MultiPromoSideBySide {...mockProps} />);
+      const overlays = container.querySelectorAll('.multipromo-sidebyside-overlay');
+      expect(overlays).toHaveLength(2);
+    });
+
+    it('renders one article panel per promo child', () => {
+      render(<MultiPromoSideBySide {...mockProps} />);
+      expect(screen.getAllByRole('article')).toHaveLength(2);
+    });
+
+    it('sets data-multipromo-variant on the section', () => {
+      const { container } = render(<MultiPromoSideBySide {...mockProps} />);
+      expect(container.querySelector('[data-multipromo-variant="sidebyside"]')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoSideBySide {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });
