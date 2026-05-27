@@ -294,11 +294,12 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
  * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
+ * threatlocker (threatlocker.com): navy primary (#0b223f), sky CTA accent (#3997d4), light section surfaces (#f4f4f4).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -422,5 +423,51 @@
 }
 
 [data-theme='basspro'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='threatlocker'] {
+  --background-image-gradient: linear-gradient(135deg, #0b223f 0%, #123456 55%, #1a4a7a 100%);
+  --background-image-gradient-secondary: linear-gradient(
+    90deg,
+    #3997d4 0%,
+    #0b223f 50%,
+    #3997d4 100%
+  );
+  --color-background: #ffffff;
+  --color-foreground: #0b223f;
+  --color-card: #ffffff;
+  --color-card-foreground: #0b223f;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0b223f;
+  --color-primary: #0b223f;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #081a31;
+  --color-secondary: #f4f4f4;
+  --color-secondary-foreground: #0b223f;
+  --color-secondary-hover: #e6e6e6;
+  --color-muted: #f4f4f4;
+  --color-muted-foreground: #4b5c6f;
+  --color-accent: #3997d4;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d6dde5;
+  --color-input: #d6dde5;
+  --color-ring: #3997d4;
+  --color-tertiary-foreground: #0b223f;
+  --color-tertiary-hover: #e6e6e6;
+  --color-tertiary: #f4f4f4;
+  --color-dark-foreground: #0b223f;
+  --color-dark-hover: #e6e6e6;
+  --color-dark: #f4f4f4;
+  --color-light: #f4f4f4;
+  --color-light-hover: #e6e6e6;
+  --color-light-foreground: #0b223f;
+  --color-overlay: rgb(11 34 63 / 0.55);
+}
+
+[data-theme='threatlocker'] .bg-primary {
   color: var(--color-primary-foreground);
 }

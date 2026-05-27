@@ -4,6 +4,7 @@ import {
   Barlow_Condensed,
   Inter,
   Montserrat,
+  Nunito_Sans,
   Open_Sans,
   Roboto_Condensed,
   Source_Sans_3,
@@ -15,6 +16,15 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
   preload: true,
+  weight: ['400', '500', '600', '700'],
+});
+
+/** ThreatLocker display type — Proxima Nova substitute until licensed files are self-hosted */
+const nunitoSans = Nunito_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-proxima-nova',
+  weight: ['500', '600', '700', '800'],
+  display: 'swap',
 });
 
 /** Dwyer Omega — distinct from BCBS Inter stack */
@@ -57,6 +67,7 @@ const montserrat = Montserrat({
 
 const fontVariables = [
   inter.variable,
+  nunitoSans.variable,
   sourceSans3.variable,
   barlowCondensed.variable,
   openSans.variable,
