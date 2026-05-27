@@ -50,12 +50,12 @@ export const Default = (props: HeaderSTProps) => {
       data-class-change
     >
       <div
-        className="flex w-full min-w-0 flex-col [.partial-editing-mode_&]:flex-col-reverse"
+        className="flex w-full min-w-0 flex-col overflow-visible [.partial-editing-mode_&]:flex-col-reverse"
         role="navigation"
         aria-label="Site header"
       >
-        {/* Row 1: full-bleed background; content constrained to max width */}
-        <div className="w-full min-w-0">
+        {/* Row 1: utility bar — above nav row so portaled menus / dropdowns stack correctly */}
+        <div className="relative z-20 w-full min-w-0 overflow-visible">
           <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-4 px-4 sm:px-6 lg:gap-8 lg:px-8">
           <Link
             href="/"
@@ -69,7 +69,7 @@ export const Default = (props: HeaderSTProps) => {
           </Link>
 
           <ul className="flex min-h-[3.5rem] list-none flex-row items-center justify-end gap-0 p-0 lg:min-h-[4.5rem]">
-            <li className="hidden items-center px-2 lg:flex">
+            <li className="relative z-30 hidden items-center px-2 lg:flex">
               <DemoUserSwitcher />
             </li>
             <li className="hidden lg:block">
@@ -124,7 +124,7 @@ export const Default = (props: HeaderSTProps) => {
         {/* Row 2: full-bleed bar (e.g. dark reverse theme); nav content aligned with row 1 */}
         <div
           className={cn(
-            'hidden w-full min-w-0 border-t border-border/30 lg:block',
+            'relative z-10 hidden w-full min-w-0 border-t border-border/30 lg:block',
             isReverseTheme ? 'bg-primary' : 'bg-transparent'
           )}
           data-header-st-nav-row={isReverseTheme ? 'reverse' : undefined}

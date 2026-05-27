@@ -397,6 +397,12 @@ main {
   overflow: visible !important;
 }
 
+/* HeaderST (two-row): allow DemoUserSwitcher / Select menus above the nav row */
+.partial-editing-mode header:has([data-class-change]),
+.partial-editing-mode header:has([data-class-change]) [data-class-change] {
+  overflow: visible !important;
+}
+
 /* BCBS palette overrides; other named themes are defined in src/assets/styles/globals.css. */
 html[data-theme='bcbst'] {
   --color-primary: #328ac9;
