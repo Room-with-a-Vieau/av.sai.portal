@@ -2,12 +2,14 @@
 
 import { useToggleWithClickOutside } from '@/hooks/useToggleWithClickOutside';
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface MobileMenuWrapperProps {
   children: ReactNode;
+  iconClassName?: string;
 }
 
-export const MobileMenuWrapper = ({ children }: MobileMenuWrapperProps) => {
+export const MobileMenuWrapper = ({ children, iconClassName }: MobileMenuWrapperProps) => {
   const {
     isVisible: isMobileMenuVisible,
     setIsVisible: setIsMobileMenuVisible,
@@ -17,7 +19,10 @@ export const MobileMenuWrapper = ({ children }: MobileMenuWrapperProps) => {
   return (
     <li
       ref={ref}
-      className="lg:hidden flex justify-center items-center p-4 cursor-pointer relative"
+      className={cn(
+        'relative flex shrink-0 cursor-pointer items-center justify-center p-4 lg:hidden',
+        iconClassName
+      )}
     >
       {/* Mobile Menu Toggle Button */}
       <button

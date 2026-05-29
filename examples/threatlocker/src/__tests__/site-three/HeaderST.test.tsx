@@ -175,12 +175,21 @@ describe('HeaderST Component', () => {
     it('applies dark nav row when ReverseTheme rendering parameter is enabled', () => {
       render(<HeaderSTDefault {...headerSTPropsReverseTheme} />);
 
+      const section = document.querySelector('section[data-header-st-reverse-theme]');
+      expect(section).toBeInTheDocument();
+      expect(section).toHaveClass('bg-primary', 'text-primary-foreground');
+
       const navRow = document.querySelector('[data-header-st-nav-row="reverse"]');
       expect(navRow).toBeInTheDocument();
       expect(navRow).toHaveClass('bg-primary');
       const navList = navRow?.querySelector('ul');
       expect(navList).toBeTruthy();
       expect(navList).toHaveClass('text-primary-foreground');
+
+      const supportLinks = screen.getAllByText('Support');
+      supportLinks.forEach((link) => {
+        expect(link).toHaveClass('text-primary-foreground');
+      });
     });
 
     it('renders navigation placeholder with correct props', () => {

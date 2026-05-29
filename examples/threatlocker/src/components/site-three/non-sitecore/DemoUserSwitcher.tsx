@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
+import { cn } from '@/lib/utils';
 
 const DEMO_USERS = [
   { label: 'User 1 - Developers and Contractors', taxonomy: 'Developers and Contractors' },
@@ -17,7 +18,7 @@ const DEMO_USERS = [
   { label: 'User 3 - Large Enterprise Builders', taxonomy: 'Large Enterprise Builders' },
 ] as const;
 
-export function DemoUserSwitcher() {
+export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
   const [taxonomy, setTaxonomy] = useState('');
 
   useEffect(() => {
@@ -33,10 +34,10 @@ export function DemoUserSwitcher() {
 
   return (
     <Select value={taxonomy || undefined} onValueChange={handleValueChange}>
-      <SelectTrigger className="h-10 w-[15rem]">
+      <SelectTrigger className={cn('h-10 w-[15rem]', triggerClassName)}>
         <SelectValue placeholder="Login" />
       </SelectTrigger>
-      <SelectContent align="end">
+      <SelectContent align="end" className="z-[100]">
         {DEMO_USERS.map((user) => (
           <SelectItem key={user.taxonomy} value={user.taxonomy}>
             {user.label}

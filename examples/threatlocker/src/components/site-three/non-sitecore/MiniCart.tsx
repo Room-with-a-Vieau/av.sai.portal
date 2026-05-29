@@ -5,6 +5,7 @@ import { useToggleWithClickOutside } from '@/hooks/useToggleWithClickOutside';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 
 const DICTIONARY_KEYS = {
   GO_TO_CART_LABEL: 'Go_To_Cart',
@@ -12,7 +13,13 @@ const DICTIONARY_KEYS = {
   CART_EMPTY_LABEL: 'Cart_Empty',
 };
 
-export const MiniCart = ({ cartLink }: { cartLink: LinkField }) => {
+export const MiniCart = ({
+  cartLink,
+  triggerClassName,
+}: {
+  cartLink: LinkField;
+  triggerClassName?: string;
+}) => {
   const t = useTranslations();
   const { isVisible, setIsVisible, ref } = useToggleWithClickOutside<HTMLDivElement>(false);
 
@@ -22,7 +29,7 @@ export const MiniCart = ({ cartLink }: { cartLink: LinkField }) => {
     <div ref={ref}>
       <button
         type="button"
-        className="block p-4"
+        className={cn('block p-4', triggerClassName)}
         aria-label="Shopping cart"
         onClick={() => setIsVisible(!isVisible)}
       >

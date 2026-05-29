@@ -28,8 +28,6 @@ type HeaderSTProps = ComponentProps & {
   fields: Fields;
 };
 
-const navLinkClass = 'block p-4 font-[family-name:var(--font-body)] text-secondary-foreground font-normal';
-
 /** Sitecore checkbox / string params for rendering parameter ReverseTheme */
 function isReverseThemeParam(value: string | undefined): boolean {
   if (value == null || typeof value !== 'string') return false;
@@ -41,48 +39,65 @@ export const Default = (props: HeaderSTProps) => {
   const { fields, params } = props;
   const isReverseTheme = isReverseThemeParam(params?.ReverseTheme);
 
+  const utilityLinkClass = cn(
+    'block p-4 font-[family-name:var(--font-body)] font-normal',
+    isReverseTheme ? 'text-primary-foreground' : 'text-secondary-foreground'
+  );
+
+  const loginTriggerClass = isReverseTheme
+    ? 'border-primary-foreground/40 bg-transparent text-primary-foreground shadow-none focus:ring-primary-foreground/30 [&_svg]:text-primary-foreground'
+    : undefined;
+
   return (
     <section
       className={cn(
-        'sticky top-0 z-30 w-full min-w-0 border-b border-border/30 bg-background shadow-sm',
-        params?.styles
+        'sticky top-0 z-30 w-full min-w-0 border-b shadow-sm',
+        isReverseTheme ? 'border-primary-foreground/20' : 'border-border/30 bg-background',
+        params?.styles,
+        isReverseTheme && 'bg-primary text-primary-foreground'
       )}
       data-class-change
+      data-header-st-reverse-theme={isReverseTheme ? '' : undefined}
     >
       <div
         className="flex w-full min-w-0 flex-col [.partial-editing-mode_&]:flex-col-reverse"
         role="navigation"
         aria-label="Site header"
       >
-        {/* Row 1: full-bleed background; content constrained to max width */}
-        <div className="w-full min-w-0">
-          <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-4 px-4 sm:px-6 lg:gap-8 lg:px-8">
+        {/* Row 1: utility bar — stacks above nav row so login dropdown is not covered */}
+        <div className="relative z-20 w-full min-w-0">
+          <div className="mx-auto flex w-full max-w-[100rem] items-center gap-2 px-4 sm:px-6 lg:gap-8 lg:px-8">
           <Link
             href="/"
-            className="relative z-10 flex shrink-0 grow-0 items-center justify-center self-stretch px-1 py-2 sm:px-2 lg:px-3 lg:py-3"
+            className="relative flex shrink-0 items-center self-stretch py-2"
             prefetch={false}
           >
             <ContentSdkImage
               field={props.fields?.Logo}
-              className="h-14 w-auto max-w-[min(100%,300px)] object-contain sm:h-16 sm:max-w-[min(100%,380px)] lg:h-20 lg:max-w-[min(100%,460px)]"
+              className="h-auto max-h-10 w-auto max-w-[11rem] object-contain object-left sm:max-h-11 sm:max-w-[12rem]"
             />
           </Link>
 
-          <ul className="flex min-h-[3.5rem] list-none flex-row items-center justify-end gap-0 p-0 lg:min-h-[4.5rem]">
-            <li className="hidden items-center px-2 lg:flex">
-              <DemoUserSwitcher />
+          <ul
+            className={cn(
+              'ml-auto flex min-w-0 shrink-0 list-none flex-row items-center justify-end gap-0 p-0 lg:min-h-[4.5rem]',
+              isReverseTheme && 'text-primary-foreground'
+            )}
+          >
+            <li className="relative z-30 hidden items-center px-2 lg:flex">
+              <DemoUserSwitcher triggerClassName={loginTriggerClass} />
             </li>
             <li className="hidden lg:block">
-              <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={navLinkClass} />
+              <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={utilityLinkClass} />
             </li>
-            <li className="mr-auto lg:mr-0">
+            <li className="hidden lg:block">
               {params.showSearchBox ? (
-                <SearchBox searchLink={fields?.SearchLink} />
+                <SearchBox searchLink={fields?.SearchLink} triggerClassName={utilityLinkClass} />
               ) : (
-                <ContentSdkLink field={fields?.SearchLink} prefetch={false} className={navLinkClass} />
+                <ContentSdkLink field={fields?.SearchLink} prefetch={false} className={utilityLinkClass} />
               )}
             </li>
-            <MobileMenuWrapper>
+            <MobileMenuWrapper iconClassName={isReverseTheme ? 'text-primary-foreground' : undefined}>
               <div className="flex h-full w-full flex-col">
                 <div className="flex flex-1 items-center justify-center">
                   <ul className="flex w-full flex-col bg-background text-center">
@@ -98,21 +113,20 @@ export const Default = (props: HeaderSTProps) => {
                   <hr className="w-full border-border" />
                   <ul className="text-center">
                     <li>
-                      <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={navLinkClass} />
+                      <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={utilityLinkClass} />
                     </li>
                   </ul>
                 </div>
               </div>
             </MobileMenuWrapper>
-            <li>
+            <li className="shrink-0">
               {params.showMiniCart ? (
-                <MiniCart cartLink={fields?.CartLink} />
+                <MiniCart
+                  cartLink={fields?.CartLink}
+                  triggerClassName={isReverseTheme ? 'text-primary-foreground' : undefined}
+                />
               ) : (
-                <ContentSdkLink
-                  field={fields?.CartLink}
-                  prefetch={false}
-                  className="block p-4 text-secondary-foreground"
-                >
+                <ContentSdkLink field={fields?.CartLink} prefetch={false} className={utilityLinkClass}>
                   <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
                 </ContentSdkLink>
               )}
@@ -121,11 +135,13 @@ export const Default = (props: HeaderSTProps) => {
           </div>
         </div>
 
-        {/* Row 2: full-bleed bar (e.g. dark reverse theme); nav content aligned with row 1 */}
+        {/* Row 2: main navigation */}
         <div
           className={cn(
-            'hidden w-full min-w-0 border-t border-border/30 lg:block',
-            isReverseTheme ? 'bg-primary' : 'bg-transparent'
+            'relative z-10 hidden w-full min-w-0 border-t lg:block',
+            isReverseTheme
+              ? 'border-primary-foreground/20 bg-primary'
+              : 'border-border/30 bg-transparent'
           )}
           data-header-st-nav-row={isReverseTheme ? 'reverse' : undefined}
         >

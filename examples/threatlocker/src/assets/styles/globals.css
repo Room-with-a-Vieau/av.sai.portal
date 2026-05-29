@@ -434,6 +434,7 @@
     #0b223f 50%,
     #3997d4 100%
   );
+  --border-radius-default: 0.25rem;
   --color-background: #ffffff;
   --color-foreground: #0b223f;
   --color-card: #ffffff;

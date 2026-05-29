@@ -5,6 +5,7 @@ import { useToggleWithClickOutside } from '@/hooks/useToggleWithClickOutside';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 
 const DICTIONARY_KEYS = {
   SEARCH_GO_LABEL: 'Go',
@@ -21,7 +22,13 @@ function hasValidHref(href: string | undefined): boolean {
   return true;
 }
 
-export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
+export const SearchBox = ({
+  searchLink,
+  triggerClassName,
+}: {
+  searchLink: LinkField;
+  triggerClassName?: string;
+}) => {
   const t = useTranslations();
   const { isVisible, setIsVisible, ref } = useToggleWithClickOutside<HTMLDivElement>(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,13 +55,17 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
 
   const searchUrl = buildSearchUrl();
 
+  const defaultTriggerClass =
+    'block p-4 font-[family-name:var(--font-body)] text-secondary-foreground font-normal';
+  const triggerClass = triggerClassName ?? defaultTriggerClass;
+
   return (
     <div ref={ref}>
       {hasValidSearchLink ? (
         <ContentSdkLink
           field={searchLink}
           prefetch={false}
-          className="block p-4 font-[family-name:var(--font-body)] text-secondary-foreground font-normal"
+          className={triggerClass}
           onClick={(e) => {
             e.preventDefault();
             setIsVisible(!isVisible);
@@ -63,7 +74,7 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
       ) : (
         <button
           type="button"
-          className="block p-4 font-[family-name:var(--font-body)] text-secondary-foreground font-normal w-full text-left"
+          className={cn(triggerClass, 'w-full text-left')}
           onClick={() => setIsVisible(!isVisible)}
           aria-label={t(DICTIONARY_KEYS.SEARCH_LABEL) || 'Search'}
         >
