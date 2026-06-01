@@ -265,6 +265,23 @@ html[data-theme='threatlocker'] .btn.btn-outline:hover {
 
 /* BUTTONS END */
 
+/* MultiPromo SideBySide: 20% shade on hover/focus only (no column resize / image zoom) */
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-overlay {
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel:hover .multipromo-sidebyside-overlay,
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel:focus-within .multipromo-sidebyside-overlay {
+  opacity: 0.2;
+}
+
+[data-multipromo-variant='sidebyside'] .multipromo-sidebyside-panel img {
+  transform: none !important;
+  transition: none !important;
+}
+
 main {
   @apply text-xl;
 }

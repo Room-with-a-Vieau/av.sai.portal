@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import {
   Default as MultiPromoDefault,
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
+  SideBySide as MultiPromoSideBySide,
+  CardCarousel as MultiPromoCardCarousel,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -14,8 +16,8 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
-  Link: ({ field, children, className }: any) => (
-    <a href={field?.value?.href || '#'} className={className}>
+  Link: ({ field, children, className, onClick }: any) => (
+    <a href={field?.value?.href || '#'} className={className} onClick={onClick}>
       {children || field?.value?.text || ''}
     </a>
   ),
@@ -24,6 +26,36 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
   NoDataFallback: () => <div data-testid="no-data-fallback">No data available</div>,
+}));
+
+jest.mock('lucide-react', () => ({
+  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="chevron-right" {...props} />,
+  ArrowLeft: (props: Record<string, unknown>) => <svg data-testid="arrow-left" {...props} />,
+  ArrowRight: (props: Record<string, unknown>) => <svg data-testid="arrow-right" {...props} />,
+}));
+
+jest.mock('@/components/ui/carousel', () => ({
+  Carousel: ({ children, className }: any) => (
+    <div className={className} data-testid="multipromo-card-carousel">
+      {children}
+    </div>
+  ),
+  CarouselContent: ({ children, className }: any) => (
+    <div className={className} data-testid="carousel-content">
+      {children}
+    </div>
+  ),
+  CarouselItem: ({ children, className }: any) => (
+    <div className={className} data-testid="carousel-item">
+      {children}
+    </div>
+  ),
+  CarouselPrevious: ({ className, ...props }: any) => (
+    <button type="button" className={className} data-testid="carousel-previous" {...props} />
+  ),
+  CarouselNext: ({ className, ...props }: any) => (
+    <button type="button" className={className} data-testid="carousel-next" {...props} />
+  ),
 }));
 
 describe('MultiPromo', () => {
@@ -292,6 +324,85 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoSingleColumn {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('SideBySide variant', () => {
+    it('renders promo headings and one image per column', () => {
+      render(<MultiPromoSideBySide {...mockProps} />);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Product 2')).toBeInTheDocument();
+      expect(screen.getAllByRole('img')).toHaveLength(2);
+    });
+
+    it('renders shade overlay elements for hover styling', () => {
+      const { container } = render(<MultiPromoSideBySide {...mockProps} />);
+      const overlays = container.querySelectorAll('.multipromo-sidebyside-overlay');
+      expect(overlays).toHaveLength(2);
+    });
+
+    it('renders one article panel per promo child', () => {
+      render(<MultiPromoSideBySide {...mockProps} />);
+      expect(screen.getAllByRole('article')).toHaveLength(2);
+    });
+
+    it('sets data-multipromo-variant on the section', () => {
+      const { container } = render(<MultiPromoSideBySide {...mockProps} />);
+      expect(container.querySelector('[data-multipromo-variant="sidebyside"]')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoSideBySide {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('CardCarousel variant', () => {
+    it('renders centered title and description', () => {
+      render(<MultiPromoCardCarousel {...mockProps} />);
+      expect(screen.getByText('Featured Products')).toBeInTheDocument();
+      expect(screen.getByText('Explore our selection')).toBeInTheDocument();
+    });
+
+    it('renders all promo cards in a carousel', () => {
+      render(<MultiPromoCardCarousel {...mockProps} />);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Product 2')).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+    });
+
+    it('sets data-multipromo-variant on the section', () => {
+      const { container } = render(<MultiPromoCardCarousel {...mockProps} />);
+      expect(container.querySelector('[data-multipromo-variant="cardcarousel"]')).toBeInTheDocument();
+    });
+
+    it('marks the first card as active by default', () => {
+      render(<MultiPromoCardCarousel {...mockProps} />);
+      const articles = screen.getAllByRole('article');
+      expect(articles[0]).toHaveAttribute('aria-pressed', 'true');
+      expect(articles[1]).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('activates a card on click', () => {
+      render(<MultiPromoCardCarousel {...mockProps} />);
+      const articles = screen.getAllByRole('article');
+      fireEvent.click(articles[1]);
+      expect(articles[1]).toHaveAttribute('aria-pressed', 'true');
+      expect(articles[0]).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('renders carousel navigation buttons', () => {
+      render(<MultiPromoCardCarousel {...mockProps} />);
+      expect(screen.getByRole('button', { name: /previous promos/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /next promos/i })).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoCardCarousel {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });
