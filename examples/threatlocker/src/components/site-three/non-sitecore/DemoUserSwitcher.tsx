@@ -13,9 +13,9 @@ import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/dem
 import { cn } from '@/lib/utils';
 
 const DEMO_USERS = [
-  { label: 'User 1 - Developers and Contractors', taxonomy: 'Developers and Contractors' },
-  { label: 'User 2 - Single-Family Homebuilders', taxonomy: 'Single-Family Homebuilders' },
-  { label: 'User 3 - Large Enterprise Builders', taxonomy: 'Large Enterprise Builders' },
+  { label: 'User 1 - IT Director / IT Manager', taxonomy: 'IT Director / IT Manager' },
+  { label: 'User 2 - MSP Provider', taxonomy: 'MSP Provider' },
+  { label: 'User 3 - CISO Compliance Officer', taxonomy: 'CISO Compliance Officer' },
 ] as const;
 
 export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
