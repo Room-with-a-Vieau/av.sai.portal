@@ -90,16 +90,16 @@ export const SearchBox = ({
               ? 'opacity-100 translate-y-0 pointer-events-auto'
               : 'opacity-0 lg:translate-y-2 pointer-events-none'
           }
-          bg-background transition-all duration-300 ease-in-out
+          bg-background text-foreground transition-all duration-300 ease-in-out
         `}
       >
         <div className="pt-18 p-8 lg:pt-8">
-          <h2 className="mb-4">{t(DICTIONARY_KEYS.SEARCH_LABEL) || 'Search'}</h2>
+          <h2 className="mb-4 text-foreground">{t(DICTIONARY_KEYS.SEARCH_LABEL) || 'Search'}</h2>
           <div className="flex gap-4">
             <input
               type="text"
               placeholder={t(DICTIONARY_KEYS.SEARCH_INPUT_PLACEHOLDER) || 'Type to search...'}
-              className="w-full border-b border-border focus-visible:outline-0 focus:border-black px-3 py-2"
+              className="w-full border-b border-border bg-background text-foreground placeholder:text-muted-foreground focus-visible:outline-0 focus:border-black px-3 py-2"
               autoFocus
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
