@@ -56,13 +56,14 @@ export type SearchResultsProps = {
 
 type SortMode = 'relevance' | 'az';
 
-/** Construction-themed fallback imagery for product cards */
-const BLDR_PRODUCT_IMAGES: readonly string[] = [
-  'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+/** Cybersecurity-themed fallback imagery for capability cards */
+const TL_RESULT_IMAGES: readonly string[] = [
+  'https://images.unsplash.com/photo-1550751827-4bd374c1f58b?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1526374969488-56653f6cdc43?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1614064554769-814064e778a0?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1633265486064-086b219458ec?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1555949963-aa79e7381875?auto=format&fit=crop&w=900&q=80',
 ];
 
 function productImageForResultId(id: string): string {
@@ -70,7 +71,7 @@ function productImageForResultId(id: string): string {
   for (let i = 0; i < id.length; i++) {
     h = (h * 31 + id.charCodeAt(i)) >>> 0;
   }
-  return BLDR_PRODUCT_IMAGES[h % BLDR_PRODUCT_IMAGES.length]!;
+  return TL_RESULT_IMAGES[h % TL_RESULT_IMAGES.length]!;
 }
 
 function resolveResultCardImage(item: SearchResultItem): string {
@@ -136,7 +137,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Product family">
+        <FacetSection title="Topic area">
           <div className="flex flex-col gap-2.5">
             {categories.map((key) => (
               <label
@@ -156,7 +157,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Brand" defaultOpen={false}>
+        <FacetSection title="Focus area" defaultOpen={false}>
           <div className="flex flex-col gap-2.5">
             {brands.map((key) => (
               <label
@@ -211,24 +212,24 @@ const contentTypeIcons: Record<SearchContentType, typeof Package> = {
 function ctaLabel(item: SearchResultItem): string {
   switch (item.contentType) {
     case 'product':
-      return 'View product';
+      return 'View capability';
     case 'blog':
       return 'Read article';
     case 'service':
-      return 'View service';
+      return 'View solution';
     case 'content':
-      return 'Open content';
+      return 'Read more';
     default:
       return 'Open';
   }
 }
 
-const BLDR_CARD_PILL =
-  'border border-white/20 bg-[#292670] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
+const TL_CARD_PILL =
+  'border border-white/20 bg-[#0b223f] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
 
 function resultStatusLabel(item: SearchResultItem, isDemoUserSelected: boolean): string {
-  if (item.priceLabel) return item.priceLabel;
-  if (item.contentType === 'product') return isDemoUserSelected ? 'Request quote' : 'Login for quote';
+  if (item.contentType === 'product') return 'Platform capability';
+  if (item.isNew && isDemoUserSelected) return 'Recommended for you';
   return item.dateLabel ?? searchFacetLabels.contentType[item.contentType];
 }
 
@@ -262,11 +263,11 @@ function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDe
             </span>
           ) : null}
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className={cn('inline-flex items-center gap-1.5', BLDR_CARD_PILL)}>
+            <span className={cn('inline-flex items-center gap-1.5', TL_CARD_PILL)}>
               <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
               {searchFacetLabels.contentType[item.contentType]}
             </span>
-            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', BLDR_CARD_PILL)}>
+            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', TL_CARD_PILL)}>
               {resultStatusLabel(item, isDemoUserSelected)}
             </span>
           </div>
@@ -524,7 +525,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search products, blogs, services, and content..."
+                placeholder="Search capabilities, blogs, press releases, and news..."
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -561,19 +562,28 @@ export const SearchResults: FC<SearchResultsProps> = ({
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Builders FirstSource</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">ThreatLocker</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Builder search'
+                  'Resource search'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Faceted navigation mirrors a Builder FirstSource experience: filter by content type,
-                solution area, and brand family. Switch the demo user to see personalized rows and AI guidance.
+                Search mirrors content from{' '}
+                <a
+                  href="https://www.threatlocker.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  threatlocker.com
+                </a>
+                : platform capabilities, blogs, press releases, and keynotes. Use the Login persona to
+                personalize ranking and supplemental results.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">

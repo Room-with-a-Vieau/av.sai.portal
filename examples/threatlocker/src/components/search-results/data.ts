@@ -1,35 +1,45 @@
 /**
- * Mock search catalog for Builders FirstSource.
- * Data only - UI lives in SearchResults.tsx.
+ * Mock search catalog for ThreatLocker (threatlocker.com).
+ * Data only — UI lives in SearchResults.tsx.
  */
 
 export type DemoUserTaxonomy =
-  | 'Developers and Contractors'
-  | 'Single-Family Homebuilders'
-  | 'Large Enterprise Builders';
+  | 'IT Director / IT Manager'
+  | 'MSP Provider'
+  | 'CISO Compliance Officer';
 
 export type SearchContentType = 'product' | 'blog' | 'service' | 'content';
 
-/** Left-rail facet: Builder FirstSource area of need */
 export type SearchCategory =
-  | 'buildingMaterials'
-  | 'windowsDoorsMillwork'
-  | 'manufacturedComponents'
-  | 'digitalTools'
-  | 'builderServices'
-  | 'resources';
+  | 'capabilities'
+  | 'solutions'
+  | 'compliance'
+  | 'threatResearch'
+  | 'blogs'
+  | 'pressReleases'
+  | 'keynotesNews'
+  | 'mspOperations';
 
-/** Brand / solution family facet */
-export type SearchBrand = 'buildersFirstSource' | 'mybldr' | 'readyFrame' | 'designUltra';
+export type SearchBrand =
+  | 'zeroTrust'
+  | 'ransomware'
+  | 'compliance'
+  | 'endpointSecurity'
+  | 'networkCloud'
+  | 'mspMssp';
 
-/** Keyword buckets for curated searches */
 export type SearchBucket =
-  | 'products'
-  | 'services'
-  | 'mybldr'
-  | 'windows'
-  | 'readyFrame'
-  | 'advancedManufacturing';
+  | 'capabilities'
+  | 'zeroTrust'
+  | 'compliance'
+  | 'ransomware'
+  | 'pam'
+  | 'network'
+  | 'cloud'
+  | 'msp'
+  | 'edrMdr'
+  | 'blogs'
+  | 'press';
 
 export type SearchResultItem = {
   id: string;
@@ -47,8 +57,6 @@ export type SearchResultItem = {
   isNew?: boolean;
   demoUserTaxonomy?: DemoUserTaxonomy;
   visibleForDemoUsers?: DemoUserTaxonomy[];
-  sku?: string;
-  priceLabel?: string;
 };
 
 export type AiSearchInsight = {
@@ -60,112 +68,111 @@ export type AiSearchInsight = {
   learnMoreLabel?: string;
 };
 
-export const BLDR_BASE = 'https://www.bldr.com/';
+export const TL_BASE = 'https://www.threatlocker.com/';
 
 export const RESULTS_PAGE_SIZE = 9;
 
 export const searchFacetLabels = {
   contentType: {
-    product: 'Products',
+    product: 'Capabilities',
     blog: 'Blogs',
-    service: 'Services',
-    content: 'Content',
+    service: 'Solutions',
+    content: 'Press & news',
   },
   category: {
-    buildingMaterials: 'Building materials',
-    windowsDoorsMillwork: 'Windows, doors & millwork',
-    manufacturedComponents: 'Manufactured components',
-    digitalTools: 'Digital tools',
-    builderServices: 'Builder services',
-    resources: 'Resources & insights',
+    capabilities: 'Platform capabilities',
+    solutions: 'Solutions',
+    compliance: 'Compliance & frameworks',
+    threatResearch: 'Threat research',
+    blogs: 'Blog articles',
+    pressReleases: 'Press releases',
+    keynotesNews: 'Keynotes & in the news',
+    mspOperations: 'MSP operations',
   },
   brand: {
-    buildersFirstSource: 'Builders FirstSource',
-    mybldr: 'myBLDR',
-    readyFrame: 'READY-FRAME',
-    designUltra: 'Design Ultra',
+    zeroTrust: 'Zero Trust',
+    ransomware: 'Ransomware defense',
+    compliance: 'Compliance',
+    endpointSecurity: 'Endpoint security',
+    networkCloud: 'Network & cloud',
+    mspMssp: 'MSP / MSSP',
   },
 } as const;
 
 export const popularSearches = [
-  'myBLDR',
-  'READY-FRAME',
-  'Premium Windows',
-  'Advanced Manufacturing',
-  'Custom Builder Services',
+  'Zero Trust',
+  'Allowlisting',
+  'Ringfencing',
+  'CMMC compliance',
+  'MSP Conditional Access',
+  'Stop ransomware',
+  'FedRAMP',
+  'ZTNA',
 ];
 
 export const QUERY_BUCKET_SYNONYMS: Record<SearchBucket, readonly string[]> = {
-  products: [
+  capabilities: [
+    'capability',
+    'capabilities',
     'product',
     'products',
-    'materials',
-    'lumber',
-    'roofing',
-    'siding',
-    'decking',
-    'doors',
-    'trusses',
-    'cabinets',
-    'drywall',
-    'hardware',
-    'insulation',
-    'tools',
+    'platform',
+    'allowlisting',
+    'ringfencing',
+    'pam',
+    'patch',
+    'firewall',
+    'edr',
+    'mdr',
   ],
-  services: [
-    'service',
-    'services',
-    'delivery',
-    'pickup',
-    'support',
-    'installed',
-    'credit',
-    'drafting',
-    'remodel',
-    'multifamily',
-    'multi-family',
-    'showroom',
+  zeroTrust: ['zero trust', 'zerotrust', 'default deny', 'default-deny', 'deny by default'],
+  compliance: [
+    'compliance',
+    'cmmc',
+    'iso 27001',
+    'fedramp',
+    'nist',
+    'hipaa',
+    'soc 2',
+    'essential 8',
+    'audit',
+    'framework',
+    'dac',
   ],
-  mybldr: ['mybldr', 'portal', 'digital', 'platform', 'project', 'projects', 'schedule', 'budget', 'materials'],
-  windows: ['window', 'windows', 'door', 'doors', 'millwork', 'moulding', 'premium'],
-  readyFrame: ['ready-frame', 'readyframe', 'frame', 'framing', 'pre-cut', 'smart-bundled', 'labeled'],
-  advancedManufacturing: [
-    'advanced',
-    'manufacturing',
-    'components',
-    'truss',
-    'trusses',
-    'ewp',
-    'robotic',
-    'automation',
-    'modular',
-  ],
+  ransomware: ['ransomware', 'extortion', 'breach', 'locker'],
+  pam: ['privileged', 'privilege', 'admin', 'standing privilege', 'epm'],
+  network: ['network', 'ztna', 'vpn', 'firewall', 'lateral', 'endpoint firewall'],
+  cloud: ['cloud', 'saas', 'credentials', 'oauth', 'm365', 'azure'],
+  msp: ['msp', 'mssp', 'multi-tenant', 'partner', 'conditional access', 'cipp', 'syncro'],
+  edrMdr: ['edr', 'mdr', 'detection', 'response', 'soc', 'threat detection'],
+  blogs: ['blog', 'article', 'guide', 'how to'],
+  press: ['press', 'release', 'announcement', 'news', 'keynote', 'podcast'],
 };
 
 const QUERY_STOP_WORDS = new Set(['and', 'or', 'the', 'for', 'with', 'from', 'your', 'our', 'are', 'you']);
 
-const CONSTRUCTION_PHOTO_IDS: readonly string[] = [
-  '1503387762-592deb58ef4e',
-  '1504307651254-35680f356dfd',
-  '1486406146926-c627a92ad1ab',
-  '1600585154340-be6161a56a0c',
-  '1581094794329-c8112a89af12',
-  '1517581177682-a085bb7ffb38',
-  '1504917595217-d4dc5ebe6122',
-  '1500530855697-b586d89ba3ee',
-  '1570129477492-45c003edd2be',
-  '1560518883-ce09059eeffa',
-  '1518005020951-eccb494ad742',
-  '1583608205776-bfd35f0d9f83',
+const TL_PHOTO_IDS: readonly string[] = [
+  '1550751827-4bd374c1f58b',
+  '1563986768609-322da13575f3',
+  '1526374969488-56653f6cdc43',
+  '1614064554769-814064e778a0',
+  '1633265486064-086b219458ec',
+  '1555949963-aa79e7381875',
+  '1451187580459-43490279c0fa',
+  '1516321318523-f06f85e504b3',
+  '1504639725590-34d0984388bd',
+  '1558494949-ef010cbdcc31',
+  '1551288049-bebda4e38f71',
+  '1563013544-824ae1b704d3',
 ];
 
 function buildCatalogImageUrl(id: string): string {
-  return `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80`;
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
 }
 
 function catalogDemoImage(slot: number): string {
-  const len = CONSTRUCTION_PHOTO_IDS.length;
-  const id = CONSTRUCTION_PHOTO_IDS[((slot % len) + len) % len]!;
+  const len = TL_PHOTO_IDS.length;
+  const id = TL_PHOTO_IDS[((slot % len) + len) % len]!;
   return buildCatalogImageUrl(id);
 }
 
@@ -176,9 +183,9 @@ export function getDefaultCardImage(): string {
 export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
   const t = raw?.trim();
   if (
-    t === 'Developers and Contractors' ||
-    t === 'Single-Family Homebuilders' ||
-    t === 'Large Enterprise Builders'
+    t === 'IT Director / IT Manager' ||
+    t === 'MSP Provider' ||
+    t === 'CISO Compliance Officer'
   ) {
     return t;
   }
@@ -196,7 +203,7 @@ export function detectSearchBuckets(q: string): SearchBucket[] {
   const hits = new Set<SearchBucket>();
   for (const [bucket, synonyms] of Object.entries(QUERY_BUCKET_SYNONYMS) as [SearchBucket, readonly string[]][]) {
     for (const syn of synonyms) {
-      if (n.includes(syn) || words.some((w) => w.length > 2 && syn.startsWith(w))) {
+      if (n.includes(syn) || words.some((w) => w.length > 2 && syn.includes(w))) {
         hits.add(bucket);
         break;
       }
@@ -233,7 +240,6 @@ export function itemMatchesQuery(item: SearchResultItem, q: string): boolean {
     item.description,
     ...(item.breadcrumb ?? []),
     ...(item.matchTerms ?? []),
-    ...(item.sku ? [item.sku] : []),
   ]
     .join(' ')
     .toLowerCase();
@@ -271,103 +277,148 @@ export function relevanceScore(
 
 export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy): SearchResultItem[] {
   const code =
-    persona === 'Developers and Contractors' ? 'dc' : persona === 'Single-Family Homebuilders' ? 'sfh' : 'leb';
+    persona === 'IT Director / IT Manager'
+      ? 'it'
+      : persona === 'MSP Provider'
+        ? 'msp'
+        : 'ciso';
 
   const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    persona === 'Developers and Contractors'
+    persona === 'IT Director / IT Manager'
       ? [
           {
-            title: 'Contractor quick path: delivery, pickup, and local support',
+            title: 'Deploy Zero Trust in hours — not months',
             description:
-              'A contractor-focused view of BFS delivery and pickup services, dedicated support, and jobsite-ready material coordination.',
-            href: `${BLDR_BASE}services`,
-            contentType: 'service',
-            categories: ['builderServices'],
-            brands: ['buildersFirstSource'],
-            searchBuckets: ['services', 'products'],
-            dateLabel: 'Personalized service',
-            breadcrumb: ['Services', 'Delivery & support'],
-            matchTerms: ['contractor', 'developer', 'delivery', 'pickup', 'support'],
+              'Operational playbook for IT leaders rolling out allowlisting, ringfencing, and policy baselines across endpoints with minimal disruption.',
+            href: TL_BASE,
+            contentType: 'content',
+            categories: ['capabilities', 'solutions'],
+            brands: ['zeroTrust', 'endpointSecurity'],
+            searchBuckets: ['zeroTrust', 'capabilities'],
+            dateLabel: 'Personalized for IT leaders',
+            breadcrumb: ['Platform', 'Deployment guide'],
+            matchTerms: ['deploy', 'rollout', 'endpoint', 'operations', 'it director', 'it manager'],
             imageSrc: catalogDemoImage(0),
             isNew: true,
           },
           {
-            title: 'Products for contractors: lumber, roofing, siding, drywall, and tools',
+            title: 'Patch Management + Allowlisting: close gaps before they become breaches',
             description:
-              'A practical product index for crews sourcing core jobsite materials from local Builders FirstSource locations.',
-            href: `${BLDR_BASE}products`,
+              'Combine patch deployment with default-deny application control so unpatched and unauthorized software cannot execute.',
+            href: `${TL_BASE}platform/patch-management`,
             contentType: 'product',
-            categories: ['buildingMaterials'],
-            brands: ['buildersFirstSource'],
-            searchBuckets: ['products'],
-            priceLabel: 'Request quote',
-            dateLabel: 'Product guide',
-            breadcrumb: ['Products', 'Building materials'],
-            matchTerms: ['contractor', 'lumber', 'roofing', 'siding', 'drywall', 'tools'],
+            categories: ['capabilities'],
+            brands: ['endpointSecurity'],
+            searchBuckets: ['capabilities', 'zeroTrust'],
+            dateLabel: 'Recommended capability stack',
+            breadcrumb: ['Capabilities', 'Patch Management'],
+            matchTerms: ['patch', 'vulnerability', 'allowlisting', 'operations'],
             imageSrc: catalogDemoImage(1),
           },
+          {
+            title: 'Centralized Configuration Management for distributed teams',
+            description:
+              'Set security standards once and enforce them everywhere from a single ThreatLocker console.',
+            href: `${TL_BASE}platform/centralized-configuration-management`,
+            contentType: 'product',
+            categories: ['capabilities'],
+            brands: ['endpointSecurity', 'zeroTrust'],
+            searchBuckets: ['capabilities'],
+            dateLabel: 'IT operations',
+            breadcrumb: ['Capabilities', 'Configuration management'],
+            matchTerms: ['centralized', 'policy', 'configuration', 'console'],
+            imageSrc: catalogDemoImage(2),
+          },
         ]
-      : persona === 'Single-Family Homebuilders'
+      : persona === 'MSP Provider'
         ? [
             {
-              title: 'myBLDR for single-family builders',
+              title: 'MSP playbook: Conditional Access for client SaaS tenants',
               description:
-                'Connect front-end design and sales with material procurement through completion of each home build.',
-              href: `${BLDR_BASE}digital-tools/mybldr`,
-              contentType: 'content',
-              categories: ['digitalTools'],
-              brands: ['mybldr'],
-              searchBuckets: ['mybldr', 'services'],
-              dateLabel: 'Personalized portal',
-              breadcrumb: ['Digital Solutions', 'myBLDR'],
-              matchTerms: ['single-family', 'homebuilder', 'project management', 'selections', 'schedule'],
-              imageSrc: catalogDemoImage(2),
+                'Curated guides for restricting client access to Microsoft 365, Azure, GitHub, Syncro, CIPP, and other MSP-critical platforms by IP and identity.',
+              href: `${TL_BASE}resources/blogs`,
+              contentType: 'blog',
+              categories: ['mspOperations', 'blogs'],
+              brands: ['mspMssp', 'networkCloud'],
+              searchBuckets: ['msp', 'cloud', 'blogs'],
+              dateLabel: 'Personalized for MSPs',
+              breadcrumb: ['Resources', 'MSP guides'],
+              matchTerms: ['msp', 'conditional access', 'multi-tenant', 'client', 'saas'],
+              imageSrc: catalogDemoImage(3),
               isNew: true,
             },
             {
-              title: 'Custom Builder Services for quality products and custom solutions',
+              title: 'Managed Detection & Response (MDR) for your client portfolio',
               description:
-                'BFS Custom Builder Services supports builders who need quality products, expertise, and project-specific solutions.',
-              href: BLDR_BASE,
-              contentType: 'service',
-              categories: ['builderServices', 'windowsDoorsMillwork'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['services', 'windows'],
-              dateLabel: 'Personalized service',
-              breadcrumb: ['Services', 'Custom Builder Services'],
-              matchTerms: ['custom builder', 'single-family', 'expertise', 'premium homes'],
-              imageSrc: catalogDemoImage(3),
+                'Extend your SOC with ThreatLocker Cyber Hero experts monitoring and responding 24/7/365 on behalf of your customers.',
+              href: `${TL_BASE}platform/managed-detection-and-response-mdr`,
+              contentType: 'product',
+              categories: ['capabilities', 'mspOperations'],
+              brands: ['mspMssp', 'endpointSecurity'],
+              searchBuckets: ['edrMdr', 'msp'],
+              dateLabel: 'MSP service add-on',
+              breadcrumb: ['Capabilities', 'MDR'],
+              matchTerms: ['mdr', 'managed detection', 'soc', 'msp', 'mssp'],
+              imageSrc: catalogDemoImage(4),
+            },
+            {
+              title: 'ThreatLocker expands global MSP presence — Brisbane office opening',
+              description:
+                'Press release highlighting ThreatLocker growth and partner opportunities for MSPs scaling Zero Trust services worldwide.',
+              href: `${TL_BASE}resources/press-releases`,
+              contentType: 'content',
+              categories: ['pressReleases', 'mspOperations'],
+              brands: ['mspMssp', 'zeroTrust'],
+              searchBuckets: ['press', 'msp'],
+              dateLabel: 'Sep 15, 2025',
+              breadcrumb: ['Resources', 'Press releases'],
+              matchTerms: ['msp', 'partner', 'expansion', 'brisbane'],
+              imageSrc: catalogDemoImage(5),
             },
           ]
         : [
             {
-              title: 'Enterprise builder operations: advanced manufacturing at scale',
+              title: 'Achieve compliance with continuous endpoint validation',
               description:
-                'Innovative manufacturing facilities create components that improve jobsite efficiency across larger builder programs.',
-              href: BLDR_BASE,
+                'Map ThreatLocker controls to CMMC, ISO 27001, NIST CSF, Essential 8, and FedRAMP evidence requirements.',
+              href: `${TL_BASE}solutions/achieve-compliance`,
               contentType: 'service',
-              categories: ['manufacturedComponents', 'builderServices'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['advancedManufacturing', 'services'],
-              dateLabel: 'Personalized enterprise',
-              breadcrumb: ['Services', 'Advanced Manufacturing'],
-              matchTerms: ['enterprise', 'large builder', 'scale', 'operations', 'components'],
-              imageSrc: catalogDemoImage(4),
+              categories: ['solutions', 'compliance'],
+              brands: ['compliance', 'zeroTrust'],
+              searchBuckets: ['compliance', 'zeroTrust'],
+              dateLabel: 'Personalized for CISOs',
+              breadcrumb: ['Solutions', 'Achieve compliance'],
+              matchTerms: ['compliance', 'ciso', 'audit', 'framework', 'evidence'],
+              imageSrc: catalogDemoImage(6),
               isNew: true,
             },
             {
-              title: 'Multi-Family Services and modular construction support',
+              title: 'DAC (Defense Against Configurations): real-time configuration risk visibility',
               description:
-                'Service pathways for larger organizations coordinating multi-family, modular, and repeatable building programs.',
-              href: `${BLDR_BASE}services`,
-              contentType: 'service',
-              categories: ['builderServices', 'manufacturedComponents'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['services', 'advancedManufacturing'],
-              dateLabel: 'Personalized service',
-              breadcrumb: ['Services', 'Enterprise builders'],
-              matchTerms: ['enterprise', 'multi-family', 'modular', 'large builder'],
-              imageSrc: catalogDemoImage(5),
+                'Identify configuration gaps and compliance drift across endpoints before auditors or attackers do.',
+              href: `${TL_BASE}platform/dac-defense-against-configurations`,
+              contentType: 'product',
+              categories: ['capabilities', 'compliance'],
+              brands: ['compliance', 'endpointSecurity'],
+              searchBuckets: ['compliance', 'capabilities'],
+              dateLabel: 'Compliance capability',
+              breadcrumb: ['Capabilities', 'DAC'],
+              matchTerms: ['dac', 'configuration', 'compliance', 'governance', 'ciso'],
+              imageSrc: catalogDemoImage(7),
+            },
+            {
+              title: 'ThreatLocker achieves FedRAMP authorization',
+              description:
+                'Press release on federal-grade authorization reinforcing ThreatLocker for regulated environments and public-sector compliance programs.',
+              href: `${TL_BASE}resources/press-releases`,
+              contentType: 'content',
+              categories: ['pressReleases', 'compliance'],
+              brands: ['compliance', 'zeroTrust'],
+              searchBuckets: ['press', 'compliance'],
+              dateLabel: 'Aug 5, 2025',
+              breadcrumb: ['Resources', 'Press releases'],
+              matchTerms: ['fedramp', 'federal', 'compliance', 'authorization'],
+              imageSrc: catalogDemoImage(8),
             },
           ];
 
@@ -380,507 +431,990 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
 
 function result(partial: Omit<SearchResultItem, 'href'> & { href?: string }): SearchResultItem {
   return {
-    href: partial.href ?? BLDR_BASE,
+    href: partial.href ?? TL_BASE,
     imageSrc: partial.imageSrc ?? catalogDemoImage(6),
     ...partial,
   };
 }
 
+type CatalogSeed = Omit<SearchResultItem, 'id' | 'href' | 'imageSrc'> & {
+  id: string;
+  href?: string;
+  imageSlot?: number;
+};
+
+function fromSeed(seed: CatalogSeed): SearchResultItem {
+  return result({
+    ...seed,
+    href: seed.href ?? TL_BASE,
+    imageSrc: catalogDemoImage(seed.imageSlot ?? 6),
+  });
+}
+
+const capabilityProducts: CatalogSeed[] = [
+  {
+    id: 'cap-allowlisting',
+    title: 'Allowlisting (Application Control)',
+    description:
+      'Allows only approved applications, scripts, executables, and libraries to run; blocks unknown software and ransomware by default.',
+    href: `${TL_BASE}platform/allowlisting`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['zeroTrust', 'ransomware', 'endpointSecurity'],
+    searchBuckets: ['capabilities', 'zeroTrust', 'ransomware'],
+    breadcrumb: ['Capabilities', 'Allowlisting'],
+    matchTerms: ['allowlisting', 'application control', 'default deny', 'executable', 'script'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 0,
+  },
+  {
+    id: 'cap-ringfencing',
+    title: 'Ringfencing™',
+    description:
+      'Restricts what trusted applications can do — for example preventing Microsoft Word from launching PowerShell or accessing sensitive resources.',
+    href: `${TL_BASE}platform/ringfencing`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['zeroTrust', 'endpointSecurity'],
+    searchBuckets: ['capabilities', 'zeroTrust'],
+    breadcrumb: ['Capabilities', 'Ringfencing'],
+    matchTerms: ['ringfencing', 'ring fence', 'powershell', 'lateral movement'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 1,
+  },
+  {
+    id: 'cap-ztna',
+    title: 'Zero Trust Network Access (ZTNA)',
+    description:
+      'Controls access to internal resources and applications based on identity and device trust rather than traditional VPN access.',
+    href: `${TL_BASE}platform/zero-trust-network-access`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['zeroTrust', 'networkCloud'],
+    searchBuckets: ['network', 'zeroTrust', 'capabilities'],
+    breadcrumb: ['Capabilities', 'ZTNA'],
+    matchTerms: ['ztna', 'network access', 'vpn replacement', 'remote access'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 2,
+  },
+  {
+    id: 'cap-cloud',
+    title: 'Zero Trust Cloud Access',
+    description:
+      'Protects access to cloud services even when credentials are compromised.',
+    href: `${TL_BASE}platform/zero-trust-cloud-access`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['zeroTrust', 'networkCloud'],
+    searchBuckets: ['cloud', 'zeroTrust', 'capabilities'],
+    breadcrumb: ['Capabilities', 'Zero Trust Cloud Access'],
+    matchTerms: ['cloud access', 'saas', 'credentials', 'oauth', 'compromised'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 3,
+  },
+  {
+    id: 'cap-pam',
+    title: 'Privileged Access Management (PAM)',
+    description:
+      'Removes standing administrator rights and grants elevated privileges only when required.',
+    href: `${TL_BASE}platform/privileged-access-management`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity', 'compliance'],
+    searchBuckets: ['pam', 'capabilities', 'compliance'],
+    breadcrumb: ['Capabilities', 'PAM'],
+    matchTerms: ['pam', 'privileged access', 'admin rights', 'least privilege', 'epm'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 4,
+  },
+  {
+    id: 'cap-firewall',
+    title: 'Endpoint Firewall / Network Control',
+    description:
+      'Applies device-level firewall policies and controls network communication to contain lateral movement.',
+    href: `${TL_BASE}platform/network-control`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['networkCloud', 'endpointSecurity'],
+    searchBuckets: ['network', 'capabilities'],
+    breadcrumb: ['Capabilities', 'Network Control'],
+    matchTerms: ['firewall', 'network control', 'lateral movement', 'endpoint firewall'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 5,
+  },
+  {
+    id: 'cap-storage',
+    title: 'External Storage Device Control',
+    description: 'Manages and restricts USB drives and other removable media.',
+    href: `${TL_BASE}platform/external-storage-device-control`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity', 'ransomware'],
+    searchBuckets: ['capabilities', 'ransomware'],
+    breadcrumb: ['Capabilities', 'Storage device control'],
+    matchTerms: ['usb', 'removable media', 'external storage', 'device control'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 6,
+  },
+  {
+    id: 'cap-data-storage',
+    title: 'Data Storage Access Control',
+    description:
+      'Controls access to files, folders, and storage locations to help prevent data exfiltration.',
+    href: `${TL_BASE}platform/data-storage-access-control`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity', 'compliance'],
+    searchBuckets: ['capabilities', 'compliance'],
+    breadcrumb: ['Capabilities', 'Data storage access'],
+    matchTerms: ['data exfiltration', 'file access', 'storage control', 'dlp'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 7,
+  },
+  {
+    id: 'cap-edr',
+    title: 'Endpoint Detection & Response (EDR)',
+    description: 'Detects and isolates suspicious endpoint activity in real time.',
+    href: `${TL_BASE}platform/edr-real-time-threat-detection`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity'],
+    searchBuckets: ['edrMdr', 'capabilities'],
+    breadcrumb: ['Capabilities', 'EDR'],
+    matchTerms: ['edr', 'detection', 'response', 'isolate', 'threat detection'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 8,
+  },
+  {
+    id: 'cap-mdr',
+    title: 'Managed Detection & Response (MDR)',
+    description:
+      'Threat monitoring and response services managed by ThreatLocker Cyber Hero security experts.',
+    href: `${TL_BASE}platform/managed-detection-and-response-mdr`,
+    contentType: 'product',
+    categories: ['capabilities', 'mspOperations'],
+    brands: ['endpointSecurity', 'mspMssp'],
+    searchBuckets: ['edrMdr', 'msp', 'capabilities'],
+    breadcrumb: ['Capabilities', 'MDR'],
+    matchTerms: ['mdr', 'managed detection', 'cyber hero', '24/7', 'soc'],
+    demoUserTaxonomy: 'MSP Provider',
+    imageSlot: 9,
+  },
+  {
+    id: 'cap-config',
+    title: 'Centralized Configuration Management',
+    description:
+      'Manages security policies and configurations across endpoints from a central console.',
+    href: `${TL_BASE}platform/centralized-configuration-management`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity', 'zeroTrust'],
+    searchBuckets: ['capabilities', 'zeroTrust'],
+    breadcrumb: ['Capabilities', 'Configuration management'],
+    matchTerms: ['configuration', 'policy', 'centralized', 'baseline'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 10,
+  },
+  {
+    id: 'cap-patch',
+    title: 'Patch Management',
+    description: 'Helps deploy and manage software updates and patches across endpoints.',
+    href: `${TL_BASE}platform/patch-management`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity'],
+    searchBuckets: ['capabilities'],
+    breadcrumb: ['Capabilities', 'Patch Management'],
+    matchTerms: ['patch', 'update', 'vulnerability', 'remediation'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 11,
+  },
+  {
+    id: 'cap-web',
+    title: 'Web Content Control',
+    description: 'Controls and restricts access to websites and web content.',
+    href: `${TL_BASE}platform/web-content-control`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['endpointSecurity', 'networkCloud'],
+    searchBuckets: ['capabilities', 'cloud'],
+    breadcrumb: ['Capabilities', 'Web content control'],
+    matchTerms: ['web filter', 'browser', 'phishing', 'web content'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 0,
+  },
+  {
+    id: 'cap-testing',
+    title: 'Controlled Application Testing Environment',
+    description: 'Lets administrators test software before broadly approving it in allowlists.',
+    href: `${TL_BASE}platform/controlled-application-testing-environment`,
+    contentType: 'product',
+    categories: ['capabilities'],
+    brands: ['zeroTrust', 'endpointSecurity'],
+    searchBuckets: ['capabilities', 'zeroTrust'],
+    breadcrumb: ['Capabilities', 'Application testing'],
+    matchTerms: ['testing', 'sandbox', 'approve', 'software trust'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 1,
+  },
+];
+
+const solutionServices: CatalogSeed[] = [
+  {
+    id: 'sol-ransomware',
+    title: 'Stop ransomware',
+    description:
+      'Deny-by-default application control breaks ransomware execution paths before encryption begins.',
+    href: `${TL_BASE}solutions/stop-ransomware`,
+    contentType: 'service',
+    categories: ['solutions'],
+    brands: ['ransomware', 'zeroTrust'],
+    searchBuckets: ['ransomware', 'zeroTrust'],
+    breadcrumb: ['Solutions', 'Stop ransomware'],
+    matchTerms: ['stop ransomware', 'deny by default', 'extortion'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 2,
+  },
+  {
+    id: 'sol-compliance',
+    title: 'Achieve compliance',
+    description:
+      'Endpoints are validated continuously, evidence is logged automatically, and gaps are flagged for remediation.',
+    href: `${TL_BASE}solutions/achieve-compliance`,
+    contentType: 'service',
+    categories: ['solutions', 'compliance'],
+    brands: ['compliance', 'zeroTrust'],
+    searchBuckets: ['compliance', 'zeroTrust'],
+    breadcrumb: ['Solutions', 'Achieve compliance'],
+    matchTerms: ['compliance', 'audit', 'framework', 'evidence'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 3,
+  },
+  {
+    id: 'sol-phishing',
+    title: 'Stop token and phishing theft',
+    description:
+      'Block unauthorized sessions even when credentials or MFA tokens are stolen.',
+    href: `${TL_BASE}solutions/stop-token-and-phishing-theft`,
+    contentType: 'service',
+    categories: ['solutions'],
+    brands: ['zeroTrust', 'networkCloud'],
+    searchBuckets: ['zeroTrust', 'cloud'],
+    breadcrumb: ['Solutions', 'Phishing & token theft'],
+    matchTerms: ['phishing', 'token', 'credential theft', 'session'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 4,
+  },
+  {
+    id: 'sol-privilege',
+    title: 'Reduce admin privilege abuse',
+    description: 'Remove forgotten standing privilege and cut breach risk immediately.',
+    href: `${TL_BASE}solutions/reduce-admin-privilege-abuse`,
+    contentType: 'service',
+    categories: ['solutions'],
+    brands: ['endpointSecurity', 'compliance'],
+    searchBuckets: ['pam', 'compliance'],
+    breadcrumb: ['Solutions', 'Admin privilege abuse'],
+    matchTerms: ['admin abuse', 'privilege', 'standing access'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 5,
+  },
+  {
+    id: 'sol-exfil',
+    title: 'Stop data exfiltration',
+    description: 'Make data exfiltration structurally difficult with storage and ringfencing controls.',
+    href: `${TL_BASE}solutions/stop-data-exfiltration`,
+    contentType: 'service',
+    categories: ['solutions'],
+    brands: ['endpointSecurity', 'compliance'],
+    searchBuckets: ['capabilities', 'compliance'],
+    breadcrumb: ['Solutions', 'Data exfiltration'],
+    matchTerms: ['exfiltration', 'data loss', 'insider'],
+    demoUserTaxonomy: 'CISO Compliance Officer',
+    imageSlot: 6,
+  },
+  {
+    id: 'sol-lateral',
+    title: 'Contain lateral movement',
+    description:
+      'Stop a compromised machine from becoming an enterprise-wide incident with network and application controls.',
+    href: `${TL_BASE}solutions/contain-lateral-movement`,
+    contentType: 'service',
+    categories: ['solutions'],
+    brands: ['networkCloud', 'zeroTrust'],
+    searchBuckets: ['network', 'zeroTrust'],
+    breadcrumb: ['Solutions', 'Lateral movement'],
+    matchTerms: ['lateral movement', 'segmentation', 'contain'],
+    demoUserTaxonomy: 'IT Director / IT Manager',
+    imageSlot: 7,
+  },
+];
+
+type BlogSeed = {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  category?: SearchCategory;
+  buckets?: SearchBucket[];
+  persona?: DemoUserTaxonomy;
+  terms?: string[];
+  slot?: number;
+};
+
+const blogSeeds: BlogSeed[] = [
+  {
+    slug: 'claude-mythos-zero-trust-ai',
+    title: "The Claude Mythos Preview proves now is the time for Zero Trust",
+    description:
+      'Anthropic’s Claude Mythos highlights why Zero Trust remains the best match for AI-driven cyber threats.',
+    date: 'Jun 1, 2026',
+    buckets: ['blogs', 'zeroTrust'],
+    persona: 'CISO Compliance Officer',
+    terms: ['ai', 'claude', 'zero trust', 'agentic'],
+    slot: 0,
+  },
+  {
+    slug: 'mini-shai-hulud-supply-chain',
+    title: 'How Mini Shai-Hulud worm moved through supply chain',
+    description:
+      'Supply chain compromise impacting GitHub, Nx Console, and TanStack npm packages.',
+    date: 'May 27, 2026',
+    buckets: ['blogs', 'capabilities'],
+    persona: 'IT Director / IT Manager',
+    terms: ['supply chain', 'npm', 'github', 'worm'],
+    slot: 1,
+  },
+  {
+    slug: 'essential-8-australia',
+    title: "Essential 8: Australia's cybersecurity framework explained",
+    description:
+      'Guide to implementing the ACSC Essential 8 strategies with Zero Trust enforcement.',
+    date: 'May 25, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['essential 8', 'acsc', 'australia', 'framework'],
+    slot: 2,
+  },
+  {
+    slug: 'business-email-compromise',
+    title: 'How to protect your organization from business email compromise',
+    description: 'BEC attacks go beyond phishing — learn prevention with Zero Trust controls.',
+    date: 'May 21, 2026',
+    buckets: ['blogs', 'cloud'],
+    persona: 'CISO Compliance Officer',
+    terms: ['bec', 'email', 'phishing', 'fraud'],
+    slot: 3,
+  },
+  {
+    slug: 'github-nx-console-breach',
+    title: 'GitHub confirms compromised Nx Console extension was initial access vector',
+    description: 'Research on malicious VS Code extension leading to thousands of repository compromises.',
+    date: 'May 21, 2026',
+    category: 'threatResearch',
+    buckets: ['blogs', 'capabilities'],
+    persona: 'IT Director / IT Manager',
+    terms: ['github', 'vscode', 'extension', 'breach'],
+    slot: 4,
+  },
+  {
+    slug: 'windows-zero-days-yellowkey',
+    title: 'What YellowKey and GreenPlasma zero-days reveal about Windows security',
+    description:
+      'Physical access and trusted native components remain under-estimated attack paths.',
+    date: 'May 20, 2026',
+    category: 'threatResearch',
+    buckets: ['blogs', 'capabilities'],
+    persona: 'IT Director / IT Manager',
+    terms: ['zero-day', 'windows', 'privilege escalation'],
+    slot: 5,
+  },
+  {
+    slug: 'miniplasma-windows-zero-day',
+    title: 'MiniPlasma: Windows privilege escalation zero-day',
+    description: 'Working exploit elevates standard users to SYSTEM on patched Windows 11 systems.',
+    date: 'May 19, 2026',
+    category: 'threatResearch',
+    buckets: ['blogs', 'capabilities'],
+    persona: 'IT Director / IT Manager',
+    terms: ['miniplasma', 'windows', 'system', 'zero-day'],
+    slot: 6,
+  },
+  {
+    slug: 'implement-zero-trust-framework',
+    title: 'How to implement a Zero Trust security framework',
+    description: 'Implement Zero Trust without friction using default-deny and least privilege.',
+    date: 'May 18, 2026',
+    buckets: ['blogs', 'zeroTrust'],
+    persona: 'IT Director / IT Manager',
+    terms: ['zero trust', 'framework', 'implementation'],
+    slot: 7,
+  },
+  {
+    slug: 'prevent-cyberattacks-best-practices',
+    title: 'How to prevent cyberattacks: 10 proven cybersecurity best practices',
+    description:
+      'Zero Trust, default-deny, least privilege, and proactive threat prevention strategies.',
+    date: 'May 16, 2026',
+    buckets: ['blogs', 'zeroTrust'],
+    persona: 'CISO Compliance Officer',
+    terms: ['best practices', 'prevention', 'zero trust'],
+    slot: 8,
+  },
+  {
+    slug: 'iso-27001-guide',
+    title: 'What is ISO 27001 certification? A complete guide',
+    description: 'Risk-based ISMS guidance for global security standards and certification.',
+    date: 'May 14, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['iso 27001', 'isms', 'certification'],
+    slot: 9,
+  },
+  {
+    slug: 'five-eyes-zero-trust-ai',
+    title: 'Why the Five-Eyes Alliance sees Zero Trust as the best defense against agentic AI',
+    description: 'Allied guidance recommends Zero Trust to counter evolving AI threat models.',
+    date: 'May 8, 2026',
+    buckets: ['blogs', 'zeroTrust'],
+    persona: 'CISO Compliance Officer',
+    terms: ['five eyes', 'ai', 'agentic', 'zero trust'],
+    slot: 10,
+  },
+  {
+    slug: 'cmmc-compliance-guide',
+    title: 'What is CMMC compliance? Requirements, levels, and audit prep',
+    description: 'DoD contractor cybersecurity requirements and preparation for CMMC audits.',
+    date: 'May 4, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['cmmc', 'dod', 'contractor', 'audit'],
+    slot: 11,
+  },
+  {
+    slug: 'cybersecurity-frameworks-nist-soc2',
+    title: 'Cybersecurity frameworks explained: NIST, SOC 2, ISO 27001, HIPAA, and more',
+    description: 'Compare major frameworks and how Zero Trust supports continuous compliance.',
+    date: 'Apr 24, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['nist', 'soc 2', 'hipaa', 'frameworks'],
+    slot: 0,
+  },
+  {
+    slug: 'restrict-cipp-conditional-access',
+    title: 'Restrict CyberDrain CIPP to specific IP addresses using Conditional Access',
+    description: 'MSP guide for IP-restricting CIPP portal and API access in your tenant.',
+    date: 'Apr 22, 2026',
+    category: 'mspOperations',
+    buckets: ['blogs', 'msp', 'cloud'],
+    persona: 'MSP Provider',
+    terms: ['cipp', 'conditional access', 'msp', 'ip restriction'],
+    slot: 1,
+  },
+  {
+    slug: 'vibe-hacking-ai-cybercrime',
+    title: 'Vibe hacking: How AI-driven cybercrime outpaces EDR and signature defenses',
+    description: 'Why Zero Trust stops AI-powered attacks that evade traditional AV and EDR.',
+    date: 'Apr 21, 2026',
+    buckets: ['blogs', 'zeroTrust', 'edrMdr'],
+    persona: 'CISO Compliance Officer',
+    terms: ['vibe hacking', 'ai', 'edr', 'signature'],
+    slot: 2,
+  },
+  {
+    slug: 'nist-csf-2',
+    title: 'NIST CSF 2.0: How the framework is evolving for modern cyber risk',
+    description: 'Governance, AI security guidance, and operational use of NIST CSF 2.0.',
+    date: 'Apr 10, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['nist csf', '2.0', 'governance'],
+    slot: 3,
+  },
+  {
+    slug: 'privileged-identity-management',
+    title: 'What is privileged identity management?',
+    description: 'PIM fundamentals aligned with ThreatLocker PAM and least-privilege enforcement.',
+    date: 'Apr 9, 2026',
+    buckets: ['blogs', 'pam'],
+    persona: 'CISO Compliance Officer',
+    terms: ['pim', 'privileged identity', 'pam'],
+    slot: 4,
+  },
+  {
+    slug: 'allowlisting-vs-blocklisting',
+    title: 'Allowlisting vs. blocklisting: Which maximizes security?',
+    description: 'Policy-driven allowlisting as the foundation of Zero Trust application control.',
+    date: 'Apr 6, 2026',
+    buckets: ['blogs', 'capabilities', 'zeroTrust'],
+    persona: 'IT Director / IT Manager',
+    terms: ['allowlisting', 'blocklisting', 'default deny'],
+    slot: 5,
+  },
+  {
+    slug: 'strong-allowlisting-policies',
+    title: 'Why strong allowlisting policies are more important than ever',
+    description: 'Permit only approved applications and block everything else — including ransomware.',
+    date: 'Apr 3, 2026',
+    category: 'capabilities',
+    buckets: ['blogs', 'capabilities', 'ransomware'],
+    persona: 'IT Director / IT Manager',
+    terms: ['allowlisting', 'ransomware', 'policy'],
+    slot: 6,
+  },
+  {
+    slug: 'fedramp-zero-trust',
+    title: 'Why FedRAMP matters for Zero Trust enforcement',
+    description: 'FedRAMP Marketplace expectations for federal-grade cloud security and compliance.',
+    date: 'Mar 30, 2026',
+    category: 'compliance',
+    buckets: ['blogs', 'compliance'],
+    persona: 'CISO Compliance Officer',
+    terms: ['fedramp', 'federal', 'cloud'],
+    slot: 7,
+  },
+  {
+    slug: 'endpoint-privilege-management',
+    title: 'What is endpoint privilege management?',
+    description: 'Endpoint privilege management explained for IT and security leaders.',
+    date: 'Mar 29, 2026',
+    buckets: ['blogs', 'pam'],
+    persona: 'IT Director / IT Manager',
+    terms: ['epm', 'endpoint privilege', 'least privilege'],
+    slot: 8,
+  },
+  {
+    slug: 'restrict-m365-conditional-access',
+    title: 'Restrict Microsoft 365 access to a specific IP address using Conditional Access',
+    description: 'Step-by-step Entra ID Named Locations for M365 tenant protection.',
+    date: 'Mar 4, 2026',
+    category: 'mspOperations',
+    buckets: ['blogs', 'msp', 'cloud'],
+    persona: 'MSP Provider',
+    terms: ['microsoft 365', 'conditional access', 'entra', 'ip'],
+    slot: 9,
+  },
+  {
+    slug: 'restrict-syncro-conditional-access',
+    title: 'Restrict Syncro access to specific IP addresses using Conditional Access',
+    description: 'MSP operational security for Syncro RMM sign-ins by IP range.',
+    date: 'Mar 3, 2026',
+    category: 'mspOperations',
+    buckets: ['blogs', 'msp'],
+    persona: 'MSP Provider',
+    terms: ['syncro', 'rmm', 'conditional access', 'msp'],
+    slot: 10,
+  },
+  {
+    slug: 'restrict-threatlocker-portal-ip',
+    title: 'Restrict ThreatLocker portal access to specific IP addresses',
+    description: 'Add an extra layer of protection for your ThreatLocker admin portal.',
+    date: 'Mar 8, 2026',
+    category: 'mspOperations',
+    buckets: ['blogs', 'msp', 'zeroTrust'],
+    persona: 'MSP Provider',
+    terms: ['portal', 'ip restriction', 'admin'],
+    slot: 11,
+  },
+  {
+    slug: 'zero-trust-overcoming-challenges',
+    title: 'Zero Trust security: Overcoming common challenges',
+    description: 'Practical guidance for IT teams adopting default-deny across the enterprise.',
+    date: 'Feb 20, 2026',
+    buckets: ['blogs', 'zeroTrust'],
+    persona: 'IT Director / IT Manager',
+    terms: ['zero trust', 'adoption', 'challenges'],
+    slot: 0,
+  },
+  {
+    slug: 'secure-remote-workforce-byod',
+    title: 'Securing the remote workforce: Zero Trust for BYOD, VPN, and cloud',
+    description: 'Replace implicit trust for remote users with identity- and device-aware access.',
+    date: 'Feb 19, 2026',
+    buckets: ['blogs', 'network', 'cloud'],
+    persona: 'IT Director / IT Manager',
+    terms: ['remote', 'byod', 'vpn', 'workforce'],
+    slot: 1,
+  },
+  {
+    slug: 'oktapus-phishing-mfa-bypass',
+    title: '0ktapus phishing campaign: How attackers abuse Okta SSO to bypass MFA',
+    description: 'Credential theft campaigns targeting SSO and why Zero Trust limits blast radius.',
+    date: 'Feb 13, 2026',
+    buckets: ['blogs', 'cloud'],
+    persona: 'CISO Compliance Officer',
+    terms: ['okta', 'sso', 'mfa bypass', 'phishing'],
+    slot: 2,
+  },
+  {
+    slug: 'financial-services-zero-trust',
+    title: 'Financial services cybersecurity: Why Zero Trust is critical',
+    description: 'Ransomware and compliance pressures facing financial institutions.',
+    date: 'Apr 27, 2026',
+    buckets: ['blogs', 'compliance', 'zeroTrust'],
+    persona: 'CISO Compliance Officer',
+    terms: ['financial services', 'banking', 'compliance'],
+    slot: 3,
+  },
+  {
+    slug: 'cybercrime-economy',
+    title: 'The cybercrime economy: How it works and why it matters',
+    description: 'Malware-as-a-service and affiliate models driving scalable attacks.',
+    date: 'May 13, 2026',
+    category: 'threatResearch',
+    buckets: ['blogs'],
+    persona: 'CISO Compliance Officer',
+    terms: ['cybercrime', 'affiliate', 'economy'],
+    slot: 4,
+  },
+  {
+    slug: 'insider-threats-best-practices',
+    title: 'Best practices to prevent insider threats in cybersecurity',
+    description: 'Ringfencing, storage control, and privilege reduction for insider risk.',
+    date: 'Mar 26, 2026',
+    buckets: ['blogs', 'pam'],
+    persona: 'CISO Compliance Officer',
+    terms: ['insider threat', 'ringfencing', 'privilege'],
+    slot: 5,
+  },
+];
+
+const blogCatalog: SearchResultItem[] = blogSeeds.map((b, i) =>
+  fromSeed({
+    id: `blog-${b.slug}`,
+    title: b.title,
+    description: b.description,
+    href: `${TL_BASE}resources/blogs`,
+    contentType: 'blog',
+    categories: [b.category ?? 'blogs'],
+    brands: b.buckets?.includes('compliance')
+      ? ['compliance', 'zeroTrust']
+      : b.buckets?.includes('msp')
+        ? ['mspMssp']
+        : ['zeroTrust', 'endpointSecurity'],
+    searchBuckets: b.buckets ?? ['blogs'],
+    dateLabel: b.date,
+    breadcrumb: ['Resources', 'Blogs'],
+    matchTerms: b.terms,
+    demoUserTaxonomy: b.persona,
+    imageSlot: b.slot ?? i % 12,
+  })
+);
+
+type PressSeed = { title: string; description: string; date: string; terms?: string[]; persona?: DemoUserTaxonomy };
+
+const pressSeeds: PressSeed[] = [
+  {
+    title: 'ThreatLocker Highlights Key Cyber Threat Activity and Research from April 2026',
+    description: 'Monthly threat activity roundup from ThreatLocker research teams.',
+    date: 'May 1, 2026',
+    terms: ['threat activity', 'research', 'april'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker Hosts Orlando Hiring Event Amid Company Expansion',
+    description: 'Regional tech growth and career opportunities at ThreatLocker headquarters.',
+    date: 'Apr 6, 2026',
+    terms: ['orlando', 'hiring', 'expansion'],
+  },
+  {
+    title: 'ThreatLocker named lead sponsor for Cyber Florida CyberLaunch competition',
+    description: 'Supporting grades 6–12 cybersecurity education and talent pipeline.',
+    date: 'Apr 1, 2026',
+    terms: ['education', 'sponsor', 'cyberlaunch'],
+  },
+  {
+    title: 'ThreatLocker launches Zero Trust network and cloud access',
+    description: 'New capabilities stop credential-based cyberattacks on network and cloud resources.',
+    date: 'Mar 5, 2026',
+    terms: ['ztna', 'cloud access', 'credentials', 'launch'],
+    persona: 'IT Director / IT Manager',
+  },
+  {
+    title: 'ThreatLocker announces Zero Trust World 2026 speaker lineup',
+    description: 'Hands-on sessions and keynotes for the Zero Trust practitioner community.',
+    date: 'Feb 12, 2026',
+    terms: ['zero trust world', 'conference', 'ztw'],
+  },
+  {
+    title: 'ThreatLocker Announces Expansion to Second Orlando Headquarters',
+    description: 'Physical expansion supporting global Zero Trust platform growth.',
+    date: 'Dec 12, 2025',
+    terms: ['headquarters', 'orlando', 'expansion'],
+  },
+  {
+    title: 'ThreatLocker CEO Danny Jenkins Named to Florida Trend Florida 500 List',
+    description: 'Leadership recognition for ThreatLocker founder and CEO.',
+    date: 'Oct 28, 2025',
+    terms: ['danny jenkins', 'leadership', 'florida 500'],
+  },
+  {
+    title: 'ThreatLocker Earns TX-RAMP Level 2 Certification',
+    description: 'Texas risk authorization for state and local government cloud security.',
+    date: 'Oct 6, 2025',
+    terms: ['tx-ramp', 'texas', 'certification'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker Joins Internet Watch Foundation to Tackle CSAM',
+    description: 'Industry collaboration on child safety and abuse imagery online.',
+    date: 'Oct 2, 2025',
+    terms: ['iwf', 'partnership', 'safety'],
+  },
+  {
+    title: 'ThreatLocker Launches No-Cost Zero Trust Cybersecurity Bootcamp',
+    description: 'Free training program for practitioners adopting Zero Trust controls.',
+    date: 'Sep 17, 2025',
+    terms: ['bootcamp', 'training', 'zero trust'],
+    persona: 'IT Director / IT Manager',
+  },
+  {
+    title: 'ThreatLocker Expands Global Presence with Brisbane Office Opening',
+    description: 'APAC expansion for partners and enterprise customers.',
+    date: 'Sep 15, 2025',
+    terms: ['brisbane', 'apac', 'global'],
+    persona: 'MSP Provider',
+  },
+  {
+    title: 'ThreatLocker Unveils Advanced Anomaly Detection for Cloud Security',
+    description: 'Impossible travel insights and cloud anomaly detection capabilities.',
+    date: 'Aug 13, 2025',
+    terms: ['anomaly detection', 'cloud', 'impossible travel'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker Chosen for the 2025 Inc. 5000 List',
+    description: 'Recognition as one of America’s fastest-growing private companies.',
+    date: 'Aug 12, 2025',
+    terms: ['inc 5000', 'growth', 'award'],
+  },
+  {
+    title: 'ThreatLocker Achieves FedRAMP Authorization',
+    description: 'Federal-grade authorization for regulated and public-sector deployments.',
+    date: 'Aug 5, 2025',
+    terms: ['fedramp', 'federal', 'authorization'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker Launches DAC for Configuration Risk and Compliance Gaps',
+    description: 'Real-time visibility into misconfigurations and compliance drift.',
+    date: 'Aug 5, 2025',
+    terms: ['dac', 'configuration', 'compliance'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker CEO Danny Jenkins Featured Speaker at Black Hat USA 2025',
+    description: 'Zero Trust leadership on the Black Hat conference stage.',
+    date: 'Aug 1, 2025',
+    terms: ['black hat', 'keynote', 'las vegas'],
+  },
+  {
+    title: 'ThreatLocker Receives Double Honors at teissAwards2025',
+    description: 'Industry awards recognizing innovation in endpoint protection.',
+    date: 'Apr 28, 2025',
+    terms: ['teiss', 'award', 'endpoint'],
+  },
+  {
+    title: 'ThreatLocker Expands Global Footprint with Saudi Arabia Infrastructure',
+    description: 'Regional infrastructure investment for Middle East customers and partners.',
+    date: 'Apr 22, 2025',
+    terms: ['saudi arabia', 'infrastructure', 'global'],
+  },
+];
+
+const pressCatalog: SearchResultItem[] = pressSeeds.map((p, i) =>
+  fromSeed({
+    id: `press-${i + 1}`,
+    title: p.title,
+    description: p.description,
+    href: `${TL_BASE}resources/press-releases`,
+    contentType: 'content',
+    categories: ['pressReleases'],
+    brands: ['zeroTrust'],
+    searchBuckets: ['press'],
+    dateLabel: p.date,
+    breadcrumb: ['Resources', 'Press releases'],
+    matchTerms: p.terms,
+    demoUserTaxonomy: p.persona,
+    imageSlot: (i + 3) % 12,
+  })
+);
+
+type NewsSeed = { title: string; description: string; date: string; terms?: string[]; persona?: DemoUserTaxonomy };
+
+const newsSeeds: NewsSeed[] = [
+  {
+    title: "Britain's Cyber Skills Gap Is Now A National Security Risk",
+    description: 'Podcast conversation on workforce gaps and Zero Trust adoption in the UK.',
+    date: 'Mar 26, 2026',
+    terms: ['skills gap', 'uk', 'podcast'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: "ThreatLocker's Rob Allen on the future of zero trust security",
+    description: 'SC Media interview on Zero Trust platform direction and MSP growth.',
+    date: 'Mar 26, 2026',
+    terms: ['rob allen', 'sc media', 'zero trust'],
+    persona: 'MSP Provider',
+  },
+  {
+    title: 'Stopping Cyberattacks Before They Start: Zero Trust Approach',
+    description: 'Media coverage of proactive default-deny strategies.',
+    date: 'Mar 16, 2026',
+    terms: ['proactive', 'zero trust', 'prevention'],
+    persona: 'IT Director / IT Manager',
+  },
+  {
+    title: 'On the ground with CEO Danny Jenkins at Zero Trust World',
+    description: 'Event coverage from Zero Trust World 2026.',
+    date: 'Mar 9, 2026',
+    terms: ['zero trust world', 'danny jenkins', 'event'],
+  },
+  {
+    title: 'Cybersecurity in Asia-Pacific: Zero Trust Adoption Accelerates',
+    description: 'APAC market trends for Zero Trust endpoint and cloud controls.',
+    date: 'Mar 5, 2026',
+    terms: ['apac', 'adoption', 'asia pacific'],
+    persona: 'MSP Provider',
+  },
+  {
+    title: "ThreatLocker's Rob Allen on the dual impact of AI",
+    description: 'CyberScoop discussion on AI for defenders and attackers.',
+    date: 'Mar 4, 2026',
+    terms: ['ai', 'cyberscoop', 'rob allen'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'We Left It Vulnerable On Purpose – Rob Allen – PSW #910',
+    description: 'Security weekly podcast on intentional vulnerability research and Zero Trust.',
+    date: 'Jan 22, 2026',
+    terms: ['podcast', 'psw', 'research'],
+  },
+  {
+    title: 'CRN Deep Dive: The 2025 CRN Australia Scorecard',
+    description: 'Channel partner analysis including ThreatLocker market momentum.',
+    date: 'Dec 10, 2025',
+    terms: ['crn', 'australia', 'channel'],
+    persona: 'MSP Provider',
+  },
+  {
+    title: 'Danny Jenkins - Founder of ThreatLocker and the Zero-Trust Revolution',
+    description: 'No Password Required podcast episode on ThreatLocker founding story.',
+    date: 'Dec 3, 2025',
+    terms: ['podcast', 'founder', 'zero trust revolution'],
+  },
+  {
+    title: 'ThreatLocker to hire hundreds for tech jobs in Orlando',
+    description: 'Orlando Business Journal on regional hiring and tech ecosystem growth.',
+    date: 'Nov 17, 2025',
+    terms: ['orlando', 'jobs', 'hiring'],
+  },
+  {
+    title: 'ThreatLocker CEO Danny Jenkins on growth and customer success',
+    description: 'Executive interview on scaling Zero Trust globally.',
+    date: 'Oct 23, 2025',
+    terms: ['ceo', 'growth', 'interview'],
+  },
+  {
+    title: "ThreatLocker Exec: 'The Bad Guys Are Not Working 9 To 5'",
+    description: 'Media quote on 24/7 threat landscape and MDR value.',
+    date: 'Oct 22, 2025',
+    terms: ['mdr', '24/7', 'threats'],
+    persona: 'MSP Provider',
+  },
+  {
+    title: 'Dear Abby: Why Should I Trust a Vendor Selling Me Zero Trust?',
+    description: 'CISO Series podcast on evaluating Zero Trust vendors.',
+    date: 'Oct 21, 2025',
+    terms: ['ciso series', 'vendor', 'evaluation'],
+    persona: 'CISO Compliance Officer',
+  },
+  {
+    title: 'ThreatLocker Keynote Address at ITEXPO #TECHSUPERSHOW 2023',
+    description: 'Keynote replay on Zero Trust platform vision.',
+    date: 'Mar 10, 2023',
+    terms: ['keynote', 'itexpo', 'techsupershow'],
+    persona: 'IT Director / IT Manager',
+  },
+];
+
+const newsCatalog: SearchResultItem[] = newsSeeds.map((n, i) =>
+  fromSeed({
+    id: `news-${i + 1}`,
+    title: n.title,
+    description: n.description,
+    href: `${TL_BASE}resources/keynotes`,
+    contentType: 'content',
+    categories: ['keynotesNews'],
+    brands: ['zeroTrust'],
+    searchBuckets: ['press', 'blogs'],
+    dateLabel: n.date,
+    breadcrumb: ['Resources', 'Keynotes & podcasts'],
+    matchTerms: n.terms,
+    demoUserTaxonomy: n.persona,
+    imageSlot: (i + 6) % 12,
+  })
+);
+
+const homepageContent: SearchResultItem[] = [
+  fromSeed({
+    id: 'content-platform-overview',
+    title: "Meet the world's leading Zero Trust platform",
+    description:
+      'Allow what you need. Block everything else by default, including ransomware and rogue code.',
+    contentType: 'content',
+    categories: ['capabilities', 'solutions'],
+    brands: ['zeroTrust', 'ransomware'],
+    searchBuckets: ['zeroTrust', 'capabilities'],
+    dateLabel: 'Platform overview',
+    breadcrumb: ['Home', 'Zero Trust platform'],
+    matchTerms: ['zero trust platform', 'endpoint', 'cloud', 'network', 'ransomware'],
+    imageSlot: 8,
+  }),
+  fromSeed({
+    id: 'content-stop-exploits',
+    title: 'Stop exploits before they run',
+    description:
+      'Ironclad Zero Trust with granular control over every app, script, and process — backed by 24/7 Cyber Hero support.',
+    contentType: 'content',
+    categories: ['solutions'],
+    brands: ['zeroTrust', 'endpointSecurity'],
+    searchBuckets: ['zeroTrust', 'capabilities'],
+    dateLabel: 'Homepage',
+    breadcrumb: ['Home', 'Capabilities carousel'],
+    matchTerms: ['exploits', 'granular control', 'cyber hero'],
+    imageSlot: 9,
+  }),
+  fromSeed({
+    id: 'content-cyber-hero',
+    title: 'ThreatLocker Cyber Hero Team — elite 24/7 support',
+    description:
+      'Award-winning support with typical response within 60 seconds, based in Orlando and serving worldwide.',
+    contentType: 'content',
+    categories: ['capabilities'],
+    brands: ['mspMssp', 'endpointSecurity'],
+    searchBuckets: ['edrMdr', 'msp'],
+    dateLabel: 'Support',
+    breadcrumb: ['Company', 'Cyber Hero Team'],
+    matchTerms: ['cyber hero', 'support', '24/7', 'orlando'],
+    demoUserTaxonomy: 'MSP Provider',
+    imageSlot: 10,
+  }),
+];
+
 export const searchCatalog: SearchResultItem[] = [
-  result({
-    id: 'content-home-local-expertise',
-    title: 'Local expertise. Available nationwide.',
-    description:
-      'Builders FirstSource is the nation’s largest supplier of structural building products, value-added components, and services for professional construction markets.',
-    contentType: 'content',
-    categories: ['resources', 'builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'products'],
-    dateLabel: 'Company overview',
-    breadcrumb: ['Home', 'Who BFS serves'],
-    matchTerms: ['locations', 'states', 'team members', 'local expertise', 'nationwide'],
-    imageSrc: catalogDemoImage(7),
-  }),
-  result({
-    id: 'content-mybldr-home',
-    title: 'Say hello to myBLDR',
-    description:
-      'myBLDR connects front-end design and sales processes with material procurement all the way through build completion.',
-    href: `${BLDR_BASE}digital-tools/mybldr`,
-    contentType: 'content',
-    categories: ['digitalTools'],
-    brands: ['mybldr'],
-    searchBuckets: ['mybldr', 'services'],
-    dateLabel: 'Digital solution',
-    breadcrumb: ['Digital Solutions', 'myBLDR'],
-    matchTerms: ['myBLDR', 'homebuilders', 'project management', 'materials', 'procurement'],
-    imageSrc: catalogDemoImage(8),
-    isNew: true,
-  }),
-  result({
-    id: 'content-mybldr-projects',
-    title: 'myBLDR Projects: plans, selections, schedules, and budgets',
-    description:
-      'A central repository for managing multiple projects with document storage, homebuyer selections, schedules, budgets, and access control.',
-    href: `${BLDR_BASE}digital-tools/mybldr`,
-    contentType: 'content',
-    categories: ['digitalTools'],
-    brands: ['mybldr'],
-    searchBuckets: ['mybldr'],
-    dateLabel: 'Portal feature',
-    breadcrumb: ['myBLDR', 'Projects'],
-    matchTerms: ['projects', 'plans', 'selections', 'schedules', 'budgets', 'access control'],
-    imageSrc: catalogDemoImage(9),
-  }),
-  result({
-    id: 'content-mybldr-materials',
-    title: 'myBLDR Materials: quotes, orders, and delivery tracking',
-    description:
-      'Receive quote quantities and prices, submit purchase orders, request delivery dates, and view delivered product photos.',
-    href: `${BLDR_BASE}digital-tools/mybldr`,
-    contentType: 'content',
-    categories: ['digitalTools', 'buildingMaterials'],
-    brands: ['mybldr', 'buildersFirstSource'],
-    searchBuckets: ['mybldr', 'products'],
-    dateLabel: 'Portal feature',
-    breadcrumb: ['myBLDR', 'Materials'],
-    matchTerms: ['materials', 'quotes', 'orders', 'purchase orders', 'delivery', 'photos'],
-    imageSrc: catalogDemoImage(10),
-  }),
-  result({
-    id: 'content-mybldr-3d',
-    title: 'myBLDR advanced 3D technology',
-    description:
-      'Turn 2D plans into accurate 3D visualizations to improve design, planning, collaboration, and change-order control.',
-    href: `${BLDR_BASE}digital-tools/mybldr`,
-    contentType: 'content',
-    categories: ['digitalTools', 'resources'],
-    brands: ['mybldr'],
-    searchBuckets: ['mybldr'],
-    dateLabel: 'Digital feature',
-    breadcrumb: ['myBLDR', '3D Technology'],
-    matchTerms: ['3D', 'visualization', '2D plans', 'design', 'planning', 'change orders'],
-    imageSrc: catalogDemoImage(11),
-  }),
-
-  result({
-    id: 'product-windows',
-    title: 'Windows',
-    description:
-      'Premium windows backed by product expertise and support to help builders enhance their projects.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['windowsDoorsMillwork'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products', 'windows'],
-    priceLabel: 'Local availability',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Windows'],
-    matchTerms: ['windows', 'premium windows', 'fenestration'],
-    imageSrc: catalogDemoImage(0),
-  }),
-  result({
-    id: 'product-millwork',
-    title: 'Moulding & Millwork',
-    description:
-      'Millwork experts support straightforward and complex projects, bringing builder and homeowner vision to life.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['windowsDoorsMillwork'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products', 'windows'],
-    priceLabel: 'Contact local store',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Moulding & Millwork'],
-    matchTerms: ['moulding', 'millwork', 'trim', 'custom millwork'],
-    imageSrc: catalogDemoImage(1),
-  }),
-  result({
-    id: 'product-doors',
-    title: 'Doors',
-    description:
-      'Interior and exterior door solutions supported by window and door specialists and local product availability.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['windowsDoorsMillwork'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products', 'windows'],
-    priceLabel: 'Local availability',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Doors'],
-    matchTerms: ['doors', 'exterior doors', 'interior doors', 'door specialists'],
-    imageSrc: catalogDemoImage(2),
-  }),
-  result({
-    id: 'product-lumber',
-    title: 'Lumber',
-    description:
-      'Core structural building materials for professional builders, contractors, repair, and remodeling projects.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['buildingMaterials'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products'],
-    priceLabel: 'Request quote',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Lumber'],
-    matchTerms: ['lumber', 'framing lumber', 'structural materials'],
-    imageSrc: catalogDemoImage(3),
-  }),
-  result({
-    id: 'product-ready-frame',
-    title: 'READY-FRAME pre-cut framing packages',
-    description:
-      'Computerized pre-cut framing lumber packages arrive Smart-Bundled and labeled to increase speed, decrease labor, and reduce waste.',
-    href: BLDR_BASE,
-    contentType: 'product',
-    categories: ['manufacturedComponents', 'buildingMaterials'],
-    brands: ['readyFrame', 'buildersFirstSource'],
-    searchBuckets: ['products', 'readyFrame', 'advancedManufacturing'],
-    priceLabel: 'Request quote',
-    dateLabel: 'Featured product',
-    breadcrumb: ['Products', 'READY-FRAME'],
-    matchTerms: ['READY-FRAME', 'pre-cut', 'framing', 'smart-bundled', 'labeled', 'waste'],
-    imageSrc: catalogDemoImage(4),
-    isNew: true,
-  }),
-  result({
-    id: 'product-manufactured-components',
-    title: 'Manufactured Components',
-    description:
-      'Components from innovative manufacturing facilities help boost jobsite efficiency and consistency.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['manufacturedComponents'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products', 'advancedManufacturing'],
-    priceLabel: 'Request quote',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Manufactured Components'],
-    matchTerms: ['manufactured components', 'components', 'jobsite efficiency'],
-    imageSrc: catalogDemoImage(5),
-  }),
-  result({
-    id: 'product-trusses',
-    title: 'Trusses',
-    description:
-      'Roof and floor truss solutions that pair with design services and advanced component manufacturing.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['manufacturedComponents'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products', 'advancedManufacturing'],
-    priceLabel: 'Local availability',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Trusses'],
-    matchTerms: ['trusses', 'roof trusses', 'floor trusses', 'components'],
-    imageSrc: catalogDemoImage(6),
-  }),
-  result({
-    id: 'product-siding-exterior',
-    title: 'Siding & Exterior Building Materials',
-    description:
-      'Exterior material categories for builders coordinating envelope, curb appeal, and durability decisions.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['buildingMaterials'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products'],
-    priceLabel: 'Local availability',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Siding & Exterior Building Materials'],
-    matchTerms: ['siding', 'exterior', 'building materials'],
-    imageSrc: catalogDemoImage(7),
-  }),
-  result({
-    id: 'product-cabinets-countertops',
-    title: 'Cabinets & Countertops',
-    description:
-      'Interior finish products for builders and remodelers coordinating selections and homeowner expectations.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'product',
-    categories: ['buildingMaterials'],
-    brands: ['buildersFirstSource', 'designUltra'],
-    searchBuckets: ['products'],
-    priceLabel: 'Local availability',
-    dateLabel: 'Product category',
-    breadcrumb: ['Products', 'Cabinets & Countertops'],
-    matchTerms: ['cabinets', 'countertops', 'selections', 'interior'],
-    imageSrc: catalogDemoImage(8),
-  }),
-
-  result({
-    id: 'service-mybldr-customer-portal',
-    title: 'myBLDR Customer Portal',
-    description:
-      'Digital portal services for homebuilders to manage projects, documents, materials, schedules, budgets, and crews.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['digitalTools', 'builderServices'],
-    brands: ['mybldr'],
-    searchBuckets: ['services', 'mybldr'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'myBLDR Customer Portal'],
-    matchTerms: ['customer portal', 'myBLDR', 'projects', 'documents', 'schedule', 'budget'],
-    imageSrc: catalogDemoImage(9),
-  }),
-  result({
-    id: 'service-custom-builder',
-    title: 'Custom Builder Services',
-    description:
-      'Quality products, expertise, and custom solutions for builders whose projects demand a higher level of coordination.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices', 'windowsDoorsMillwork'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'windows'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Custom Builder Services'],
-    matchTerms: ['custom builder', 'quality products', 'expertise', 'custom solutions'],
-    imageSrc: catalogDemoImage(10),
-  }),
-  result({
-    id: 'service-truss-ewp-design',
-    title: 'Truss and EWP Design',
-    description:
-      'Design support for structural systems that helps builders coordinate engineered wood products and component packages.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['manufacturedComponents', 'builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'advancedManufacturing'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Truss and EWP Design'],
-    matchTerms: ['truss', 'EWP', 'design', 'engineered wood'],
-    imageSrc: catalogDemoImage(11),
-  }),
-  result({
-    id: 'service-installed-services',
-    title: 'Installed Services',
-    description:
-      'Construction services that help busy builders and contractors save time and resources in daily operations.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Installed Services'],
-    matchTerms: ['installed services', 'contractors', 'save time', 'operations'],
-    imageSrc: catalogDemoImage(0),
-  }),
-  result({
-    id: 'service-delivery-pickup',
-    title: 'Delivery and Pick-Up',
-    description:
-      'Local service support for coordinating jobsite material movement and helping projects finish on time.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices', 'buildingMaterials'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'products'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Delivery and Pick-Up'],
-    matchTerms: ['delivery', 'pickup', 'jobsite', 'materials'],
-    imageSrc: catalogDemoImage(1),
-  }),
-  result({
-    id: 'service-advanced-manufacturing',
-    title: 'Advanced Manufacturing',
-    description:
-      'Advanced design, manufacturing, and operations solutions combine with a nationwide distribution network.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['manufacturedComponents', 'builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'advancedManufacturing'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Advanced Manufacturing'],
-    matchTerms: ['advanced manufacturing', 'design', 'operations', 'distribution'],
-    imageSrc: catalogDemoImage(2),
-    isNew: true,
-  }),
-  result({
-    id: 'service-dedicated-support',
-    title: 'Dedicated Support',
-    description:
-      'Builders FirstSource support connects customers with sales representatives to keep jobs on time and within budget.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Dedicated Support'],
-    matchTerms: ['dedicated support', 'sales representative', 'on time', 'budget'],
-    imageSrc: catalogDemoImage(3),
-  }),
-  result({
-    id: 'service-modular-construction',
-    title: 'Modular Construction',
-    description:
-      'Service category for builders exploring more repeatable construction approaches and coordinated material programs.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices', 'manufacturedComponents'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'advancedManufacturing'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Modular Construction'],
-    matchTerms: ['modular construction', 'repeatable', 'enterprise builder'],
-    imageSrc: catalogDemoImage(4),
-  }),
-  result({
-    id: 'service-credit',
-    title: 'Credit',
-    description:
-      'Credit services listed by Builders FirstSource to support builder purchasing and project material needs.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'service',
-    categories: ['builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services'],
-    dateLabel: 'Service',
-    breadcrumb: ['Services', 'Credit'],
-    matchTerms: ['credit', 'purchasing', 'builder purchasing'],
-    imageSrc: catalogDemoImage(5),
-  }),
-
-  result({
-    id: 'blog-premium-windows',
-    title: 'Premium windows. Trusted expertise.',
-    description:
-      'Partner with the pros in premium windows to enhance builds with the service and support builders expect.',
-    href: BLDR_BASE,
-    contentType: 'blog',
-    categories: ['windowsDoorsMillwork', 'resources'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['windows', 'products'],
-    dateLabel: 'Featured story',
-    breadcrumb: ['Home', 'Premium Windows'],
-    matchTerms: ['premium windows', 'expertise', 'window specialists'],
-    imageSrc: catalogDemoImage(6),
-  }),
-  result({
-    id: 'blog-challenge-accepted',
-    title: 'Challenge accepted. Solution delivered.',
-    description:
-      'Innovative manufacturing facilities create components to boost jobsite efficiency for professional builders.',
-    href: BLDR_BASE,
-    contentType: 'blog',
-    categories: ['manufacturedComponents', 'resources'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['advancedManufacturing'],
-    dateLabel: 'Featured story',
-    breadcrumb: ['Home', 'Advanced Manufacturing'],
-    matchTerms: ['challenge accepted', 'solution delivered', 'jobsite efficiency', 'components'],
-    imageSrc: catalogDemoImage(7),
-  }),
-  result({
-    id: 'blog-cutting-edge-technology',
-    title: 'Cutting-edge technology and robotic automation',
-    description:
-      'Builders FirstSource uses robotic automation to stay ahead of the curve in component manufacturing.',
-    href: BLDR_BASE,
-    contentType: 'blog',
-    categories: ['manufacturedComponents', 'resources'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['advancedManufacturing'],
-    dateLabel: 'Video story',
-    breadcrumb: ['Home', 'Cutting-Edge Technology'],
-    matchTerms: ['robotic automation', 'technology', 'component manufacturing', 'video'],
-    imageSrc: catalogDemoImage(8),
-  }),
-  result({
-    id: 'blog-build-greener',
-    title: 'Build greener with manufactured framing components',
-    description:
-      'BFS manufactured framing components and READY-FRAME packages help reduce lumber waste compared with traditional stick framing.',
-    href: BLDR_BASE,
-    contentType: 'blog',
-    categories: ['manufacturedComponents', 'resources'],
-    brands: ['readyFrame', 'buildersFirstSource'],
-    searchBuckets: ['readyFrame', 'advancedManufacturing'],
-    dateLabel: 'Sustainability content',
-    breadcrumb: ['Home', 'Build Greener With Us'],
-    matchTerms: ['sustainability', 'trees saved', 'framing components', 'lumber reduction', 'READY-FRAME'],
-    imageSrc: catalogDemoImage(9),
-  }),
-  result({
-    id: 'blog-composite-decking',
-    title: 'Why composite decking is getting better and more popular',
-    description:
-      'Outdoor living trends and composite decking options that support remodeling and exterior design decisions.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'blog',
-    categories: ['buildingMaterials', 'resources'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products'],
-    dateLabel: 'Related article',
-    breadcrumb: ['Products', 'Related Articles'],
-    matchTerms: ['composite decking', 'decking', 'outdoor spaces', 'remodeling'],
-    imageSrc: catalogDemoImage(10),
-  }),
-  result({
-    id: 'blog-sustainable-materials',
-    title: 'Why sustainable building materials are growing in popularity',
-    description:
-      'Construction demand is increasing for eco-friendly materials that minimize impact while maintaining performance and durability.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'blog',
-    categories: ['buildingMaterials', 'resources'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products'],
-    dateLabel: 'Related article',
-    breadcrumb: ['Products', 'Related Articles'],
-    matchTerms: ['sustainable building materials', 'eco-friendly', 'durability', 'performance'],
-    imageSrc: catalogDemoImage(11),
-  }),
-  result({
-    id: 'content-driven-transform',
-    title: 'Driven to transform homebuilding',
-    description:
-      'Innovative solutions, extensive resources, and industry-leading service combine to help builders operate more efficiently.',
-    href: BLDR_BASE,
-    contentType: 'content',
-    categories: ['resources', 'builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services', 'advancedManufacturing'],
-    dateLabel: 'Homepage content',
-    breadcrumb: ['Home', 'Driven to Transform Homebuilding'],
-    matchTerms: ['innovative solutions', 'resources', 'industry-leading service', 'homebuilding'],
-    imageSrc: catalogDemoImage(0),
-  }),
-  result({
-    id: 'content-products-overview',
-    title: 'Our products: add a level to your expectations',
-    description:
-      'BFS offers thousands of products from leading brands with expert sales staff to guide selection; availability varies by location.',
-    href: `${BLDR_BASE}products`,
-    contentType: 'content',
-    categories: ['buildingMaterials'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['products'],
-    dateLabel: 'Product overview',
-    breadcrumb: ['Products', 'Overview'],
-    matchTerms: ['thousands of products', 'leading brands', 'expert sales staff', 'availability'],
-    imageSrc: catalogDemoImage(1),
-  }),
-  result({
-    id: 'content-services-overview',
-    title: 'Our services: service you can count on',
-    description:
-      'BFS construction services help busy builders and contractors save valuable time and resources with technology and innovation.',
-    href: `${BLDR_BASE}services`,
-    contentType: 'content',
-    categories: ['builderServices'],
-    brands: ['buildersFirstSource'],
-    searchBuckets: ['services'],
-    dateLabel: 'Service overview',
-    breadcrumb: ['Services', 'Overview'],
-    matchTerms: ['service you can count on', 'construction services', 'save time', 'technology', 'innovation'],
-    imageSrc: catalogDemoImage(2),
-  }),
+  ...capabilityProducts.map(fromSeed),
+  ...solutionServices.map(fromSeed),
+  ...blogCatalog,
+  ...pressCatalog,
+  ...newsCatalog,
+  ...homepageContent,
 ];
 
 export const contentTypes = Object.keys(searchFacetLabels.contentType) as SearchContentType[];
@@ -900,113 +1434,113 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const key = insightKey(buckets, user);
 
   const personaHint =
-    user === 'Developers and Contractors'
-      ? 'Prioritize local availability, delivery windows, and jobsite-ready materials.'
-      : user === 'Single-Family Homebuilders'
-        ? 'Use myBLDR, selections, schedules, and budget workflows to keep each home moving.'
-        : user === 'Large Enterprise Builders'
-          ? 'Look for scalable component manufacturing, multi-family services, and repeatable procurement programs.'
-          : 'Use facets to compare products, services, blogs, and content by need.';
+    user === 'IT Director / IT Manager'
+      ? 'Prioritize endpoint deployment, patch cadence, allowlisting baselines, and operational rollouts.'
+      : user === 'MSP Provider'
+        ? 'Surface multi-tenant Conditional Access guides, MDR services, and client-ready Zero Trust packages.'
+        : user === 'CISO Compliance Officer'
+          ? 'Emphasize CMMC, ISO 27001, FedRAMP, DAC, and continuous compliance evidence.'
+          : 'Select a demo persona in the header to personalize ranking and supplemental results.';
 
-  if (buckets.includes('mybldr')) {
+  if (buckets.includes('compliance')) {
     return {
-      id: `ai-mybldr-${key}`,
-      headline: 'AI suggestion - start with myBLDR project coordination',
+      id: `ai-compliance-${key}`,
+      headline: 'AI suggestion — map controls to your compliance framework',
       body:
-        'myBLDR is positioned as a digital homebuilding platform that connects design, sales, material procurement, and build completion.',
+        'ThreatLocker supports continuous endpoint validation with logged evidence for CMMC, ISO 27001, NIST CSF, Essential 8, and FedRAMP programs.',
       bullets: [
         personaHint,
-        'Review Projects for plans, selections, schedules, budgets, and access control',
-        'Open Materials when the goal is quotes, purchase orders, delivery dates, and fulfillment photos',
+        'Review DAC and PAM capabilities for configuration and privilege governance',
+        'Filter Press & news for FedRAMP, TX-RAMP, and authorization announcements',
       ],
-      learnMoreHref: `${BLDR_BASE}digital-tools/mybldr`,
-      learnMoreLabel: 'Explore myBLDR',
+      learnMoreHref: `${TL_BASE}solutions/achieve-compliance`,
+      learnMoreLabel: 'Explore compliance solutions',
     };
   }
 
-  if (buckets.includes('readyFrame') || buckets.includes('advancedManufacturing')) {
+  if (buckets.includes('msp')) {
     return {
-      id: `ai-manufacturing-${key}`,
-      headline: 'AI suggestion - compare componentized building options',
+      id: `ai-msp-${key}`,
+      headline: 'AI suggestion — start with MSP operational hardening',
       body:
-        'READY-FRAME and advanced manufacturing content are strong matches when the search goal is jobsite efficiency, reduced labor, and repeatable production.',
+        'ThreatLocker publishes Conditional Access playbooks for the SaaS platforms MSPs manage daily, plus MDR to extend your SOC.',
       bullets: [
         personaHint,
-        'Filter to Manufactured components for READY-FRAME, trusses, and design services',
-        'Pair product results with service results like Truss and EWP Design or Advanced Manufacturing',
+        'Search blogs for CIPP, Syncro, M365, and portal IP restriction guides',
+        'Consider MDR and centralized configuration for multi-client policy baselines',
       ],
-      learnMoreHref: BLDR_BASE,
-      learnMoreLabel: 'View advanced manufacturing content',
+      learnMoreHref: `${TL_BASE}resources/blogs`,
+      learnMoreLabel: 'Browse MSP guides',
     };
   }
 
-  if (buckets.includes('windows')) {
+  if (buckets.includes('ransomware') || buckets.includes('zeroTrust')) {
     return {
-      id: `ai-windows-${key}`,
-      headline: 'AI suggestion - combine products with specialist services',
+      id: `ai-zt-${key}`,
+      headline: 'AI suggestion — enforce default-deny across endpoints',
       body:
-        'Window, door, and millwork searches should include both product categories and service support from specialists or custom millwork teams.',
+        'Allowlisting and Ringfencing block unauthorized code execution — the fastest path to stop ransomware and rogue scripts.',
       bullets: [
         personaHint,
-        'Use Windows, Doors, and Moulding & Millwork product results for category discovery',
-        'Add Custom Builder Services or Window and Door Specialists for project support',
+        'Pair Allowlisting with Patch Management to close known vulnerability gaps',
+        'Review Stop ransomware solution content for deployment patterns',
       ],
-      learnMoreHref: `${BLDR_BASE}products`,
-      learnMoreLabel: 'Browse products',
+      learnMoreHref: `${TL_BASE}solutions/stop-ransomware`,
+      learnMoreLabel: 'Stop ransomware',
     };
   }
 
-  if (buckets.includes('services')) {
+  if (buckets.includes('network') || buckets.includes('cloud')) {
     return {
-      id: `ai-services-${key}`,
-      headline: 'AI suggestion - map the service to the build stage',
+      id: `ai-network-${key}`,
+      headline: 'AI suggestion — extend Zero Trust beyond the endpoint',
       body:
-        'BFS services span delivery, support, design, installed services, multi-family, modular construction, credit, and digital portal workflows.',
+        'ZTNA and Zero Trust Cloud Access replace implicit VPN trust with identity- and device-aware access to apps and SaaS.',
       bullets: [
         personaHint,
-        'Use Builder services for operations and support needs',
-        'Use Digital tools when the need includes project, schedule, budget, or procurement coordination',
+        'Compare ZTNA vs legacy VPN for remote workforce scenarios',
+        'Use cloud access controls when credential theft is a primary concern',
       ],
-      learnMoreHref: `${BLDR_BASE}services`,
-      learnMoreLabel: 'View services',
+      learnMoreHref: `${TL_BASE}platform/zero-trust-network-access`,
+      learnMoreLabel: 'Explore ZTNA',
     };
   }
 
-  if (buckets.includes('products')) {
+  if (buckets.includes('capabilities')) {
     return {
-      id: `ai-products-${key}`,
-      headline: 'AI suggestion - confirm local availability early',
+      id: `ai-cap-${key}`,
+      headline: 'AI suggestion — build a capability stack',
       body:
-        'BFS product availability can vary by location, so product discovery should be followed by local store or quote validation.',
+        'ThreatLocker capabilities span application control, network/cloud access, privilege, EDR/MDR, and configuration management.',
       bullets: [
         personaHint,
-        'Filter by Building materials for lumber, roofing, siding, drywall, tools, and exterior products',
-        'Filter by Windows, doors & millwork for premium window and finish categories',
+        'Filter by Platform capabilities for the full product list',
+        'Use Solutions facets to tie capabilities to outcomes like compliance or ransomware',
       ],
-      learnMoreHref: `${BLDR_BASE}products`,
-      learnMoreLabel: 'View products',
+      learnMoreHref: TL_BASE,
+      learnMoreLabel: 'Explore the platform',
     };
   }
 
   return {
     id: `ai-gen-${key}`,
-    headline: 'AI suggestion - refine by products, services, blogs, or content',
+    headline: 'AI suggestion — refine by capabilities, blogs, or press',
     body:
-      'This Builder FirstSource mock catalog combines product categories, service lines, homepage content, myBLDR details, and related article topics.',
+      'This ThreatLocker mock catalog includes platform capabilities, solution outcomes, blogs, press releases, and keynotes aligned to threatlocker.com.',
     bullets: [
-      'Try popular searches such as myBLDR, READY-FRAME, Premium Windows, or Advanced Manufacturing',
-      'Switch the demo persona to personalize result ordering and supplemental rows',
+      personaHint,
+      'Try popular searches such as Zero Trust, Allowlisting, CMMC, or MSP Conditional Access',
+      'Switch the Login persona to reorder results and surface personalized rows',
     ],
-    learnMoreHref: BLDR_BASE,
-    learnMoreLabel: 'Visit bldr.com',
+    learnMoreHref: TL_BASE,
+    learnMoreLabel: 'Visit threatlocker.com',
   };
 }
 
 export function itemMetadataLine(item: SearchResultItem): string {
   const type = searchFacetLabels.contentType[item.contentType];
-  const when = item.dateLabel ?? (item.contentType === 'product' ? 'Product category' : 'Resource');
+  const when = item.dateLabel ?? (item.contentType === 'product' ? 'Capability' : 'Resource');
   const trail = item.breadcrumb?.length ? item.breadcrumb.join(' · ') : '';
-  const sku = item.sku ? `SKU ${item.sku}` : '';
-  const bits = [type, when, sku, trail].filter(Boolean);
+  const bits = [type, when, trail].filter(Boolean);
   return bits.join(' · ');
 }
