@@ -38,19 +38,23 @@ const HERO_CONTENT_BAND_CLASS =
 /** Main headline scale (smaller than previous display sizes for shorter hero band) */
 const HERO_TITLE_CLASS = 'text-3xl md:text-4xl lg:text-5xl';
 
-/** Light text over dark hero imagery (theme token — typically white / near-white). */
-const HERO_TEXT_ON_DARK_IMAGE_CLASS = 'text-primary-foreground';
+/** Light text over dark hero imagery — explicit white so DWH / Sitecore field spans stay readable. */
+const HERO_TEXT_ON_DARK_IMAGE_CLASS = 'text-white [&_*]:text-inherit';
 
 type PageHeaderSTProps = {
   params: { [key: string]: string };
   fields: Fields;
 };
 
-/** Sitecore checkbox rendering parameters often arrive as 1 / true / yes / on (strings). */
-function isCheckboxParamEnabled(value: string | undefined): boolean {
-  if (value == null || typeof value !== 'string') return false;
-  const v = value.trim().toLowerCase();
-  return v === '1' || v === 'true' || v === 'yes' || v === 'on';
+/** Sitecore checkbox rendering parameters often arrive as 1 / true / yes / on (strings or booleans). */
+function isCheckboxParamEnabled(value: unknown): boolean {
+  if (value == null) return false;
+  if (value === true || value === 1) return true;
+  if (typeof value === 'string') {
+    const v = value.trim().toLowerCase();
+    return v === '1' || v === 'true' || v === 'yes' || v === 'on';
+  }
+  return false;
 }
 
 /**
@@ -79,12 +83,17 @@ function heroTitleOverPhotoClass(darkImage: boolean): string {
   return cn(HERO_TITLE_CLASS, darkImage && HERO_TEXT_ON_DARK_IMAGE_CLASS);
 }
 
+function heroFieldTextClass(darkImage: boolean): string | undefined {
+  return darkImage ? 'text-inherit' : undefined;
+}
+
 export const Default = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
+      {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
       <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
@@ -102,10 +111,16 @@ export const Default = (props: PageHeaderSTProps) => {
           >
             <div className="lg:max-w-3xl">
               <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Eyebrow} />
+                <ContentSdkText
+                  field={props?.fields?.Eyebrow}
+                  className={heroFieldTextClass(darkImage)}
+                />
               </h1>
               <h1 className={heroTitleOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Title} />
+                <ContentSdkText
+                  field={props?.fields?.Title}
+                  className={heroFieldTextClass(darkImage)}
+                />
               </h1>
               <div className="mt-8">
                 <ContentSdkLink
@@ -132,6 +147,7 @@ export const Right = (props: PageHeaderSTProps) => {
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
+      {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
       <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
@@ -149,10 +165,16 @@ export const Right = (props: PageHeaderSTProps) => {
         >
           <div className="lg:max-w-3xl lg:ml-auto text-right">
             <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Eyebrow} />
+              <ContentSdkText
+                field={props?.fields?.Eyebrow}
+                className={heroFieldTextClass(darkImage)}
+              />
             </h1>
             <h1 className={heroTitleOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Title} />
+              <ContentSdkText
+                field={props?.fields?.Title}
+                className={heroFieldTextClass(darkImage)}
+              />
             </h1>
             <div className="mt-8">
               <ContentSdkLink
@@ -179,6 +201,7 @@ export const Centered = (props: PageHeaderSTProps) => {
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
       data-class-change
+      {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
       <div className={HERO_BG_LAYER_CLASS}>
         <ContentSdkImage
@@ -196,10 +219,16 @@ export const Centered = (props: PageHeaderSTProps) => {
         >
           <div className="lg:max-w-3xl lg:mx-auto text-center">
             <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Eyebrow} />
+              <ContentSdkText
+                field={props?.fields?.Eyebrow}
+                className={heroFieldTextClass(darkImage)}
+              />
             </h1>
             <h1 className={heroTitleOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Title} />
+              <ContentSdkText
+                field={props?.fields?.Title}
+                className={heroFieldTextClass(darkImage)}
+              />
             </h1>
             <div className="mt-8">
               <ContentSdkLink
@@ -270,7 +299,7 @@ export const withSearch = (props: PageHeaderSTProps) => {
   return (
     <section
       className={cn(
-        'relative flex items-end border-8 border-background lg:border-16',
+        'relative flex min-h-[600px] items-end border-8 border-background lg:border-16',
         props?.params?.styles
       )}
       data-class-change
@@ -286,7 +315,7 @@ export const withSearch = (props: PageHeaderSTProps) => {
         />
       </div>
 
-      <div className="relative z-20 mx-auto w-full px-4 pb-6 pt-32 md:px-6 md:pb-8 lg:container lg:pb-10 lg:pt-40">
+      <div className="relative z-20 mx-auto w-full px-4 pb-6 md:px-6 md:pb-8 lg:container lg:pb-10">
         <HeroSearchBar searchBaseHref={searchBaseHref} className="mx-auto max-w-6xl" />
       </div>
     </section>

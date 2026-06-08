@@ -263,13 +263,17 @@ html[data-theme='threatlocker'] .btn.btn-outline:hover {
   color: var(--color-primary-foreground);
 }
 
-/* davidweekleyhomes.com: Open Sans body; Lora serif headings; clay CTAs; mild square corners */
+/* davidweekleyhomes.com: Open Sans body; Lora serif headings; orange CTAs; mild square corners */
 html[data-theme='dwh'] {
   --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-lora), 'Lora', ui-serif, Georgia, serif;
   --font-accent: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
   --font-weight-heading: 500;
   --dwh-button-radius: 0.125rem;
+}
+
+html[data-theme='dwh'] body {
+  background-color: #ffffff;
 }
 
 html[data-theme='dwh'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
@@ -288,7 +292,7 @@ html[data-theme='dwh'] [role='button'].inline-flex.items-center.justify-center {
 
 html[data-theme='dwh'] .btn.btn-primary,
 html[data-theme='dwh'] :is(button, a).inline-flex.bg-primary {
-  background-color: #c97a5a;
+  background-color: #f2894f;
   color: #ffffff;
   border-radius: var(--dwh-button-radius);
   border: none;
@@ -296,7 +300,7 @@ html[data-theme='dwh'] :is(button, a).inline-flex.bg-primary {
 
 html[data-theme='dwh'] .btn.btn-primary:hover,
 html[data-theme='dwh'] :is(button, a).inline-flex.bg-primary:hover {
-  background-color: #b36848;
+  background-color: #e07a42;
   color: #ffffff;
 }
 
@@ -343,6 +347,12 @@ html[data-theme='dwh'] section.relative .btn.btn-outline {
 
 html[data-theme='dwh'] section.relative .btn.btn-outline:hover {
   background-color: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+}
+
+/* HeroST "Dark Image" — force light headline text (Sitecore field spans can override utility classes) */
+section[data-hero-dark-image] :is(h1, h2, h3, h4, h5, h6),
+section[data-hero-dark-image] :is(h1, h2, h3, h4, h5, h6) * {
   color: #ffffff;
 }
 

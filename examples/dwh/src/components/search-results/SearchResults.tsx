@@ -1,794 +1,538 @@
 'use client';
 
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  ArrowUpRight,
-  BookOpen,
-  ChevronDown,
-  FileText,
-  Loader2,
-  Package,
-  Search,
-  Sparkles,
-  Wrench,
-  X,
-} from 'lucide-react';
+import { ChevronDown, Home, MapPin, Search, Star } from 'lucide-react';
 
 import type { ComponentProps } from '@/lib/component-props';
-import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { DWH_MARKETS } from '@/lib/dwh-markets';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
+import { HomeSearchMap } from './HomeSearchMap';
 import {
-  brands,
-  categories,
-  contentTypes,
-  getDefaultCardImage,
-  itemMatchesQuery,
-  itemMetadataLine,
-  itemVisibleForDemoUser,
-  normalizeQuery,
-  parseDemoUserTaxonomy,
-  popularSearches,
-  relevanceScore,
-  RESULTS_PAGE_SIZE,
-  searchCatalog,
-  searchFacetLabels,
-  selectAiSearchInsight,
-  supplementalResultsForDemoUserTaxonomy,
-  type SearchBrand,
-  type SearchCategory,
-  type SearchContentType,
-  type SearchResultItem,
-} from './data';
+  cityFilterOptions,
+  countListings,
+  FILTER_SHOW_ALL,
+  filterHomeCommunities,
+  formatPrice,
+  homeSearchCommunities,
+  homeSearchMapMarkers,
+  priceFilterOptions,
+  regionFilterOptions,
+  resolveMarketDisplay,
+  type HomeCommunity,
+  type HomeListing,
+  type HomeSearchTab,
+} from './home-search-data';
 
 export type SearchResultsProps = {
   className?: string;
   disableUrlSync?: boolean;
-  initialQuery?: string;
 };
 
-type SortMode = 'relevance' | 'az';
-
-/** Cybersecurity-themed fallback imagery for capability cards */
-const TL_RESULT_IMAGES: readonly string[] = [
-  'https://images.unsplash.com/photo-1550751827-4bd374c1f58b?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1526374969488-56653f6cdc43?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1614064554769-814064e778a0?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1633265486064-086b219458ec?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1555949963-aa79e7381875?auto=format&fit=crop&w=900&q=80',
-];
-
-function productImageForResultId(id: string): string {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) {
-    h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  }
-  return TL_RESULT_IMAGES[h % TL_RESULT_IMAGES.length]!;
-}
-
-function resolveResultCardImage(item: SearchResultItem): string {
-  if (item.contentType === 'product') {
-    return productImageForResultId(item.id);
-  }
-  return item.imageSrc ?? getDefaultCardImage();
-}
-
-function SearchFacetsPanel({
-  selectedTypes,
-  selectedCategories,
-  selectedBrands,
-  countsTypes,
-  countsCategories,
-  countsBrands,
-  onToggleType,
-  onToggleCategory,
-  onToggleBrand,
-  activeFilterCount,
-  clearFilters,
-}: {
-  selectedTypes: Set<SearchContentType>;
-  selectedCategories: Set<SearchCategory>;
-  selectedBrands: Set<SearchBrand>;
-  countsTypes: Record<SearchContentType, number>;
-  countsCategories: Record<SearchCategory, number>;
-  countsBrands: Record<SearchBrand, number>;
-  onToggleType: (key: SearchContentType) => void;
-  onToggleCategory: (key: SearchCategory) => void;
-  onToggleBrand: (key: SearchBrand) => void;
-  activeFilterCount: number;
-  clearFilters: () => void;
-}) {
+function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="rounded-2xl border border-border/70 bg-card/95 shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm dark:ring-white/[0.06]">
-      <div className="flex items-center justify-between border-b border-border/60 px-4 py-3.5">
-        <span className="text-sm font-semibold tracking-tight text-foreground">Refine results</span>
-        {activeFilterCount > 0 ? (
-          <Button type="button" variant="ghost" size="sm" className="h-8 text-primary" onClick={clearFilters}>
-            Clear all
-          </Button>
-        ) : null}
-      </div>
-      <div className="max-h-[min(70vh,40rem)] overflow-y-auto px-2">
-        <FacetSection title="Content type">
-          <div className="flex flex-col gap-2.5">
-            {contentTypes.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
-                <Checkbox
-                  checked={selectedTypes.has(key)}
-                  onCheckedChange={() => onToggleType(key)}
-                  className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                />
-                <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.contentType[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsTypes[key]})</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </FacetSection>
-        <FacetSection title="Topic area">
-          <div className="flex flex-col gap-2.5">
-            {categories.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
-                <Checkbox
-                  checked={selectedCategories.has(key)}
-                  onCheckedChange={() => onToggleCategory(key)}
-                  className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                />
-                <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.category[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsCategories[key]})</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </FacetSection>
-        <FacetSection title="Focus area" defaultOpen={false}>
-          <div className="flex flex-col gap-2.5">
-            {brands.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
-                <Checkbox
-                  checked={selectedBrands.has(key)}
-                  onCheckedChange={() => onToggleBrand(key)}
-                  className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                />
-                <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.brand[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsBrands[key]})</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </FacetSection>
-      </div>
+    <div className="flex items-center gap-0.5 text-[#f2894f]" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Star
+          key={index}
+          className={cn('size-4', index < Math.floor(rating) ? 'fill-current' : 'fill-none')}
+          aria-hidden
+        />
+      ))}
     </div>
   );
 }
 
-function FacetSection({
-  title,
-  children,
-  defaultOpen = true,
+function HomeListingRow({
+  community,
+  listing,
 }: {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
+  community: HomeCommunity;
+  listing: HomeListing;
 }) {
   return (
-    <Collapsible defaultOpen={defaultOpen} className="border-b border-border/60 py-3 last:border-b-0">
-      <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground outline-none [&[data-state=open]_svg]:rotate-180">
-        {title}
-        <ChevronDown className="size-4 shrink-0 text-primary transition-transform duration-200" />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="pt-1">{children}</CollapsibleContent>
-    </Collapsible>
-  );
-}
+    <article className="grid gap-4 border-t border-[#d8cfc3]/80 py-6 md:grid-cols-[9rem_minmax(0,1fr)_12rem] md:items-center">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#f7f3ed]">
+        <Image
+          src={listing.imageSrc}
+          alt={listing.name}
+          fill
+          className="object-cover"
+          sizes="144px"
+        />
+      </div>
 
-const contentTypeIcons: Record<SearchContentType, typeof Package> = {
-  product: Package,
-  blog: BookOpen,
-  service: Wrench,
-  content: FileText,
-};
-
-function ctaLabel(item: SearchResultItem): string {
-  switch (item.contentType) {
-    case 'product':
-      return 'View capability';
-    case 'blog':
-      return 'Read article';
-    case 'service':
-      return 'View solution';
-    case 'content':
-      return 'Read more';
-    default:
-      return 'Open';
-  }
-}
-
-const TL_CARD_PILL =
-  'border border-white/20 bg-[#0b223f] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
-
-function resultStatusLabel(item: SearchResultItem, isDemoUserSelected: boolean): string {
-  if (item.contentType === 'product') return 'Platform capability';
-  if (item.isNew && isDemoUserSelected) return 'Recommended for you';
-  return item.dateLabel ?? searchFacetLabels.contentType[item.contentType];
-}
-
-function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDemoUserSelected: boolean }) {
-  const img = resolveResultCardImage(item);
-  const Icon = contentTypeIcons[item.contentType];
-  const meta = itemMetadataLine(item);
-  const brandLine = item.brands.map((b) => searchFacetLabels.brand[b]).join(' · ');
-
-  return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md dark:ring-white/[0.05]">
-      <a
-        href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex flex-1 flex-col text-inherit no-underline"
-      >
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
-          <Image
-            src={img}
-            alt=""
-            fill
-            unoptimized
-            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
-          {item.isNew ? (
-            <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary-foreground shadow">
-              New
-            </span>
-          ) : null}
-          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className={cn('inline-flex items-center gap-1.5', TL_CARD_PILL)}>
-              <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
-              {searchFacetLabels.contentType[item.contentType]}
-            </span>
-            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', TL_CARD_PILL)}>
-              {resultStatusLabel(item, isDemoUserSelected)}
-            </span>
-          </div>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-[#2f2f2d]">
+          {community.name} <span className="text-[#a7a09a]">&gt;</span>
+        </p>
+        <h3 className="mt-1 text-lg font-bold text-[#2f2f2d]">{listing.name}</h3>
+        <p className="mt-1 text-sm text-[#2f2f2d]">
+          From {formatPrice(listing.priceFrom)}
+        </p>
+        <p className="text-sm text-[#a7a09a]">
+          {listing.sqFtMin.toLocaleString()} - {listing.sqFtMax.toLocaleString()} Sq. Ft.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-[#328ac9]">
+          <a href="#floor-plans" className="hover:underline">
+            View {listing.floorPlanCount} Floor Plans
+          </a>
+          <a href="#quick-move-ins" className="hover:underline">
+            View {listing.quickMoveInCount} Quick Move-ins
+          </a>
+          <a href="#share" className="hover:underline">
+            Share Community
+          </a>
         </div>
-        <div className="flex flex-1 flex-col px-4 pb-4 pt-3.5">
-          <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{meta}</p>
-          <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary">
-            {item.title}
-          </h3>
-          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-          <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-            <span className="rounded-md bg-secondary/80 px-2 py-0.5 font-medium text-secondary-foreground">
-              {brandLine}
-            </span>
-          </div>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            {ctaLabel(item)}
-            <ArrowUpRight className="size-3.5" aria-hidden />
-          </span>
-        </div>
-      </a>
+      </div>
+
+      <div className="flex flex-col items-stretch gap-3 md:items-end">
+        <button
+          type="button"
+          className="bg-[#f2894f] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#e07a42]"
+        >
+          Schedule Model Home Tour
+        </button>
+        <label className="flex items-center gap-2 text-xs text-[#2f2f2d]">
+          <Checkbox id={`compare-${listing.id}`} />
+          <span>Select to Compare</span>
+        </label>
+      </div>
     </article>
   );
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({
-  className,
-  disableUrlSync = false,
-  initialQuery = '',
-}) => {
+function CommunitySection({ community }: { community: HomeCommunity }) {
+  return (
+    <section className="border-b border-[#d8cfc3]">
+      <div className="flex flex-col gap-1 border-b border-[#d8cfc3]/70 bg-[#faf8f5] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-0">
+        <h2 className="font-serif text-2xl font-medium text-[#2f2f2d]">{community.name}</h2>
+        <p className="text-sm text-[#a7a09a]">
+          {community.city}, {community.state} | {community.region.replace(/^./, (c) => c.toUpperCase())}
+        </p>
+      </div>
+      <div className="px-0">
+        {community.listings.map((listing) => (
+          <HomeListingRow key={listing.id} community={community} listing={listing} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSync = false }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const qFromUrl = searchParams.get('q') ?? '';
 
-  const [query, setQuery] = useState(() =>
-    disableUrlSync ? normalizeQuery(initialQuery) : normalizeQuery(qFromUrl)
-  );
-  const [draft, setDraft] = useState(() => (disableUrlSync ? initialQuery : qFromUrl));
-  const [sort, setSort] = useState<SortMode>('relevance');
-  const [isSearching, setIsSearching] = useState(false);
+  const marketFromUrl = searchParams.get('market') ?? 'portland';
 
-  const [selectedTypes, setSelectedTypes] = useState<Set<SearchContentType>>(new Set());
-  const [selectedCategories, setSelectedCategories] = useState<Set<SearchCategory>>(new Set());
-  const [selectedBrands, setSelectedBrands] = useState<Set<SearchBrand>>(new Set());
-  const [resultsPage, setResultsPage] = useState(1);
-  const [demoTaxonomyRaw, setDemoTaxonomyRaw] = useState('');
-
-  useEffect(() => {
-    const readTaxonomy = () => {
-      setDemoTaxonomyRaw(typeof window !== 'undefined' ? (window.localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY) ?? '') : '');
-    };
-    readTaxonomy();
-    window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
-    return () => {
-      window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
-    };
-  }, []);
-
-  const activeDemoUserTaxonomy = useMemo(() => parseDemoUserTaxonomy(demoTaxonomyRaw), [demoTaxonomyRaw]);
-
-  const activeCatalog = useMemo(() => {
-    const merged = activeDemoUserTaxonomy
-      ? [...supplementalResultsForDemoUserTaxonomy(activeDemoUserTaxonomy), ...searchCatalog]
-      : searchCatalog;
-    return merged.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy));
-  }, [activeDemoUserTaxonomy]);
-
-  const toggle = useCallback(<T extends string>(set: Dispatch<SetStateAction<Set<T>>>, v: T) => {
-    set((prev) => {
-      const next = new Set(prev);
-      if (next.has(v)) next.delete(v);
-      else next.add(v);
-      return next;
-    });
-  }, []);
+  const [activeTab, setActiveTab] = useState<HomeSearchTab>('home-search');
+  const [zipCode, setZipCode] = useState('');
+  const [price, setPrice] = useState(FILTER_SHOW_ALL);
+  const [city, setCity] = useState(FILTER_SHOW_ALL);
+  const [region, setRegion] = useState(FILTER_SHOW_ALL);
+  const [planQuery, setPlanQuery] = useState('');
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [selectedMarketSlug, setSelectedMarketSlug] = useState(marketFromUrl);
 
   useEffect(() => {
     if (disableUrlSync) return;
-    setDraft(qFromUrl);
-    setQuery(normalizeQuery(qFromUrl));
-  }, [disableUrlSync, qFromUrl]);
+    const slug = searchParams.get('market');
+    if (slug) setSelectedMarketSlug(slug);
+  }, [disableUrlSync, searchParams]);
 
-  useEffect(() => {
-    setIsSearching(true);
-    const t = window.setTimeout(() => setIsSearching(false), 220);
-    return () => window.clearTimeout(t);
-  }, [query, selectedTypes, selectedCategories, selectedBrands, sort]);
-
-  useEffect(() => {
-    setResultsPage(1);
-  }, [query, selectedTypes, selectedCategories, selectedBrands, sort]);
-
-  const queryMatched = useMemo(
-    () => activeCatalog.filter((item) => itemMatchesQuery(item, query)),
-    [activeCatalog, query]
-  );
-
-  const countsTypes = useMemo(() => {
-    const base = queryMatched.filter((item) => {
-      if (selectedCategories.size && !item.categories.some((c) => selectedCategories.has(c))) return false;
-      if (selectedBrands.size && !item.brands.some((b) => selectedBrands.has(b))) return false;
-      return true;
-    });
-    return Object.fromEntries(
-      contentTypes.map((k) => [k, base.filter((i) => i.contentType === k).length])
-    ) as Record<SearchContentType, number>;
-  }, [queryMatched, selectedCategories, selectedBrands]);
-
-  const countsCategories = useMemo(() => {
-    const base = queryMatched.filter((item) => {
-      if (selectedTypes.size && !selectedTypes.has(item.contentType)) return false;
-      if (selectedBrands.size && !item.brands.some((b) => selectedBrands.has(b))) return false;
-      return true;
-    });
-    return Object.fromEntries(
-      categories.map((k) => [k, base.filter((i) => i.categories.includes(k)).length])
-    ) as Record<SearchCategory, number>;
-  }, [queryMatched, selectedTypes, selectedBrands]);
-
-  const countsBrands = useMemo(() => {
-    const base = queryMatched.filter((item) => {
-      if (selectedTypes.size && !selectedTypes.has(item.contentType)) return false;
-      if (selectedCategories.size && !item.categories.some((c) => selectedCategories.has(c))) return false;
-      return true;
-    });
-    return Object.fromEntries(
-      brands.map((k) => [k, base.filter((i) => i.brands.includes(k)).length])
-    ) as Record<SearchBrand, number>;
-  }, [queryMatched, selectedTypes, selectedCategories]);
-
-  const filtered = useMemo(() => {
-    const q = normalizeQuery(query);
-    let list = activeCatalog.filter((item) => itemMatchesQuery(item, q));
-
-    if (selectedTypes.size) {
-      list = list.filter((item) => selectedTypes.has(item.contentType));
-    }
-    if (selectedCategories.size) {
-      list = list.filter((item) => item.categories.some((c) => selectedCategories.has(c)));
-    }
-    if (selectedBrands.size) {
-      list = list.filter((item) => item.brands.some((b) => selectedBrands.has(b)));
-    }
-
-    const sorted = [...list];
-    if (sort === 'az') {
-      sorted.sort((a, b) => a.title.localeCompare(b.title));
-    } else {
-      sorted.sort((a, b) => {
-        const ra = relevanceScore(a, q, activeDemoUserTaxonomy);
-        const rb = relevanceScore(b, q, activeDemoUserTaxonomy);
-        if (rb !== ra) return rb - ra;
-        return a.title.localeCompare(b.title);
-      });
-    }
-    return sorted;
-  }, [activeCatalog, activeDemoUserTaxonomy, query, selectedTypes, selectedCategories, selectedBrands, sort]);
-
-  const resultsTotalPages = Math.max(1, Math.ceil(filtered.length / RESULTS_PAGE_SIZE));
-  const safeResultsPage = Math.min(resultsPage, resultsTotalPages);
-  const pagedResults = useMemo(() => {
-    const start = (safeResultsPage - 1) * RESULTS_PAGE_SIZE;
-    return filtered.slice(start, start + RESULTS_PAGE_SIZE);
-  }, [filtered, safeResultsPage]);
-
-  useEffect(() => {
-    if (resultsPage > resultsTotalPages) setResultsPage(resultsTotalPages);
-  }, [resultsPage, resultsTotalPages]);
-
-  const aiInsight = useMemo(
-    () => selectAiSearchInsight(query, activeDemoUserTaxonomy),
-    [query, activeDemoUserTaxonomy]
-  );
-
-  const activeFilterCount = selectedTypes.size + selectedCategories.size + selectedBrands.size;
-
-  const clearFilters = () => {
-    setSelectedTypes(new Set());
-    setSelectedCategories(new Set());
-    setSelectedBrands(new Set());
-  };
-
-  const syncUrl = useCallback(
-    (qRaw: string) => {
+  const syncMarketUrl = useCallback(
+    (slug: string) => {
       if (disableUrlSync) return;
-      const trimmed = qRaw.trim();
       const params = new URLSearchParams(searchParams.toString());
-      if (trimmed) params.set('q', trimmed);
-      else params.delete('q');
+      if (slug) params.set('market', slug);
+      else params.delete('market');
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
     [disableUrlSync, pathname, router, searchParams]
   );
 
-  const runSearch = useCallback(() => {
-    const trimmed = draft.trim();
-    setQuery(normalizeQuery(trimmed));
-    syncUrl(trimmed);
-  }, [draft, syncUrl]);
+  const marketDisplay = useMemo(
+    () => resolveMarketDisplay(selectedMarketSlug),
+    [selectedMarketSlug]
+  );
 
-  const applyPopular = (term: string) => {
-    setDraft(term);
-    setQuery(normalizeQuery(term));
-    syncUrl(term);
+  const filteredCommunities = useMemo(
+    () =>
+      filterHomeCommunities(homeSearchCommunities, {
+        zipCode,
+        price,
+        city,
+        region,
+        marketSlug: selectedMarketSlug,
+      }),
+    [zipCode, price, city, region, selectedMarketSlug]
+  );
+
+  const communityCount = filteredCommunities.length;
+  const listingCount = countListings(filteredCommunities);
+
+  const visibleMarkers = useMemo(() => {
+    const communityIds = new Set(filteredCommunities.map((community) => community.id));
+    return homeSearchMapMarkers.filter(
+      (marker) =>
+        marker.type === 'design-center' ||
+        (marker.communityId && communityIds.has(marker.communityId))
+    );
+  }, [filteredCommunities]);
+
+  const handleCityChange = (value: string) => {
+    setCity(value);
+    if (value !== FILTER_SHOW_ALL) {
+      setSelectedMarketSlug(value);
+      syncMarketUrl(value);
+    }
   };
 
-  const clearSearchField = () => {
-    setDraft('');
-    setQuery('');
-    syncUrl('');
+  const handleMarketSelect = (slug: string) => {
+    setSelectedMarketSlug(slug);
+    setCity(slug);
+    syncMarketUrl(slug);
   };
-
-  const facetPanelProps = {
-    selectedTypes,
-    selectedCategories,
-    selectedBrands,
-    countsTypes,
-    countsCategories,
-    countsBrands,
-    onToggleType: (key: SearchContentType) => toggle(setSelectedTypes, key),
-    onToggleCategory: (key: SearchCategory) => toggle(setSelectedCategories, key),
-    onToggleBrand: (key: SearchBrand) => toggle(setSelectedBrands, key),
-    activeFilterCount,
-    clearFilters,
-  };
-
-  const displayHeading = draft.trim() || qFromUrl.trim();
-  const personaLabel = activeDemoUserTaxonomy ?? 'All personas';
 
   return (
-    <section
-      className={cn(
-        'min-h-[60vh] bg-gradient-to-b from-background via-background to-secondary/25 pb-16 pt-6 sm:pt-8',
-        className
-      )}
-      aria-label="Search results"
-    >
-      <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm ring-1 ring-black/[0.04] backdrop-blur-md dark:bg-card/50 dark:ring-white/[0.06] sm:p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative min-w-0 flex-1">
-              <Search
-                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-primary"
-                aria-hidden
-              />
-              <input
-                type="search"
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    runSearch();
-                  }
-                }}
-                placeholder="Search capabilities, blogs, press releases, and news..."
-                className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
-                autoComplete="off"
-              />
-              {draft ? (
-                <button
-                  type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-                  aria-label="Clear search"
-                  onClick={clearSearchField}
-                >
-                  <X className="size-4" />
-                </button>
-              ) : null}
-            </div>
-            <Button type="button" className="h-12 shrink-0 rounded-xl px-8 font-semibold shadow-sm" onClick={runSearch}>
-              Search
-            </Button>
+    <section className={cn('bg-white text-[#2f2f2d]', className)} aria-label="Find a home search results">
+      <div className="border-b border-[#d8cfc3]">
+        <HomeSearchMap markers={visibleMarkers} className="h-[320px] w-full sm:h-[380px] lg:h-[420px]" />
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6 px-4 py-3 text-xs text-[#2f2f2d]">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex size-5 items-center justify-center rounded-sm bg-[#2f5f8f] text-[10px] font-bold text-white">
+              <Home className="size-3" aria-hidden />
+            </span>
+            <span>Communities</span>
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/50 pt-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Popular</span>
-            {popularSearches.map((term) => (
-              <button
-                key={term}
-                type="button"
-                onClick={() => applyPopular(term)}
-                className="rounded-full border border-border/70 bg-background px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:border-primary/35 hover:bg-primary/5 hover:text-primary"
-              >
-                {term}
-              </button>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex size-5 items-center justify-center rounded-full bg-[#dc2626] text-white">
+              ★
+            </span>
+            <span>Design Center</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <nav aria-label="Breadcrumb" className="text-xs uppercase tracking-wide text-[#a7a09a]">
+          <ol className="flex flex-wrap items-center gap-2">
+            {marketDisplay.breadcrumb.map((crumb, index) => (
+              <li key={`${crumb}-${index}`} className="flex items-center gap-2">
+                {index > 0 ? <span aria-hidden>/</span> : null}
+                <span className={index === marketDisplay.breadcrumb.length - 1 ? 'text-[#2f2f2d]' : ''}>
+                  {crumb}
+                </span>
+              </li>
             ))}
+          </ol>
+        </nav>
+
+        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <h1 className="font-serif text-4xl font-medium text-[#2f2f2d]">Find a Home</h1>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 border border-[#d8cfc3] px-4 py-2 text-sm font-medium text-[#2f2f2d] hover:bg-[#f7f3ed]"
+            >
+              About the {marketDisplay.label.split(',')[0]} Market
+              <ChevronDown className="size-4" aria-hidden />
+            </button>
+          </div>
+
+          <div className="flex flex-col items-start gap-2 sm:items-end">
+            <p className="text-xs font-bold uppercase tracking-wider text-[#a7a09a]">113 Reviews</p>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-[#2f2f2d]">4.8</span>
+              <StarRating rating={4.8} />
+            </div>
+            <button
+              type="button"
+              className="bg-[#f2894f] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
+            >
+              Read Reviews
+            </button>
           </div>
         </div>
 
-        <header className="mt-10">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">ThreatLocker</p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                {normalizeQuery(query) ? (
-                  <>
-                    Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
-                  </>
-                ) : (
-                  'Resource search'
-                )}
-              </h1>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Search mirrors content from{' '}
-                <a
-                  href="https://www.threatlocker.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline"
-                >
-                  threatlocker.com
-                </a>
-                : platform capabilities, blogs, press releases, and keynotes. Use the Login persona to
-                personalize ranking and supplemental results.
-              </p>
-            </div>
-            <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Demo persona:</span> {personaLabel}
-            </div>
-          </div>
-        </header>
-
-        <div className="mt-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10">
-          <aside className="w-full shrink-0 lg:sticky lg:top-28 lg:w-[min(100%,19rem)] xl:w-72">
-            <div className="hidden lg:block">
-              <SearchFacetsPanel {...facetPanelProps} />
-            </div>
-            <div className="lg:hidden">
-              <Collapsible defaultOpen={false}>
-                <CollapsibleTrigger className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-secondary-foreground shadow-sm">
-                  Filters
-                  {activeFilterCount > 0 ? (
-                    <Badge variant="secondary" className="rounded-full">
-                      {activeFilterCount}
-                    </Badge>
-                  ) : null}
-                  <ChevronDown className="size-4 text-primary opacity-80" />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-3">
-                  <SearchFacetsPanel {...facetPanelProps} />
-                </CollapsibleContent>
-              </Collapsible>
-            </div>
-          </aside>
-
-          <main className="min-w-0 flex-1">
-            {aiInsight ? (
-              <section
-                className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.08] via-background to-cyan-500/[0.06] p-5 shadow-sm ring-1 ring-violet-500/10"
-                aria-labelledby="ai-insight-heading"
-              >
-                <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-gradient-to-br from-violet-500/20 to-transparent blur-2xl" />
-                <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-cyan-600 text-white shadow-md">
-                    <Sparkles className="size-5" aria-hidden />
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <p id="ai-insight-heading" className="text-[11px] font-bold uppercase tracking-[0.2em] text-violet-700 dark:text-violet-300">
-                      AI suggestion
-                    </p>
-                    <h2 className="text-lg font-semibold leading-snug tracking-tight text-foreground">{aiInsight.headline}</h2>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{aiInsight.body}</p>
-                    <ul className="list-inside list-disc space-y-1 text-sm text-foreground/90 marker:text-primary">
-                      {aiInsight.bullets.map((b) => (
-                        <li key={b}>{b}</li>
-                      ))}
-                    </ul>
-                    <a
-                      href={aiInsight.learnMoreHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-                    >
-                      {aiInsight.learnMoreLabel ?? 'Learn more'}
-                      <ArrowUpRight className="size-3.5" aria-hidden />
-                    </a>
-                  </div>
-                </div>
-              </section>
-            ) : null}
-
-            <div
+        <div className="mt-8 border-b border-[#d8cfc3]">
+          <div className="flex gap-8">
+            <button
+              type="button"
+              onClick={() => setActiveTab('home-search')}
               className={cn(
-                'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between',
-                aiInsight ? 'mt-8' : 'mt-0'
+                'border-b-2 pb-3 text-xs font-bold uppercase tracking-wider',
+                activeTab === 'home-search'
+                  ? 'border-[#f2894f] text-[#2f2f2d]'
+                  : 'border-transparent text-[#a7a09a]'
               )}
             >
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                {isSearching ? <Loader2 className="size-4 shrink-0 animate-spin text-primary" aria-hidden /> : null}
-                <span>
-                  <strong className="font-semibold text-foreground">{filtered.length}</strong>{' '}
-                  {filtered.length === 1 ? 'result' : 'results'}
-                  {normalizeQuery(query) ? (
-                    <>
-                      {' '}
-                      for &ldquo;<span className="text-foreground">{displayHeading}</span>&rdquo;
-                    </>
-                  ) : (
-                    ' — search or pick a popular term'
-                  )}
+              Home Search
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('plan-lookup')}
+              className={cn(
+                'border-b-2 pb-3 text-xs font-bold uppercase tracking-wider',
+                activeTab === 'plan-lookup'
+                  ? 'border-[#f2894f] text-[#2f2f2d]'
+                  : 'border-transparent text-[#a7a09a]'
+              )}
+            >
+              Plan Lookup
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'home-search' ? (
+          <>
+            <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_1fr_auto] lg:items-end">
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
+                  Zip Code
                 </span>
-              </div>
-              <label className="flex items-center gap-2 text-sm text-secondary-foreground">
-                <span className="sr-only">Sort by</span>
-                <span className="hidden sm:inline">Sort</span>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as SortMode)}
-                  className="h-9 rounded-lg border border-border bg-background px-2 text-sm outline-none ring-primary/20 focus:ring-2"
-                >
-                  <option value="relevance">Best match</option>
-                  <option value="az">Title A–Z</option>
-                </select>
+                <div className="flex overflow-hidden border border-[#d8cfc3]">
+                  <input
+                    type="text"
+                    value={zipCode}
+                    onChange={(event) => setZipCode(event.target.value)}
+                    placeholder="Enter zip"
+                    className="h-11 min-w-0 flex-1 bg-white px-3 text-sm outline-none"
+                  />
+                  <button
+                    type="button"
+                    className="flex w-12 items-center justify-center bg-[#f2894f] text-white hover:bg-[#e07a42]"
+                    aria-label="Search by zip code"
+                  >
+                    <Search className="size-4" aria-hidden />
+                  </button>
+                </div>
               </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
+                  Price
+                </span>
+                <Select value={price} onValueChange={setPrice}>
+                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {priceFilterOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
+                  City
+                </span>
+                <Select value={city} onValueChange={handleCityChange}>
+                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {cityFilterOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
+                  Region
+                </span>
+                <Select value={region} onValueChange={setRegion}>
+                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {regionFilterOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setShowMoreFilters((open) => !open)}
+                className="h-11 bg-[#f2894f] px-5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42] lg:mb-0"
+              >
+                More Filters
+              </button>
             </div>
 
-            {activeFilterCount > 0 ? (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {[...selectedTypes].map((key) => (
-                  <Badge
-                    key={`t-${key}`}
-                    variant="secondary"
-                    className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedTypes, key)}
-                  >
-                    {searchFacetLabels.contentType[key]}
-                    <X className="size-3" aria-hidden />
-                  </Badge>
-                ))}
-                {[...selectedCategories].map((key) => (
-                  <Badge
-                    key={`c-${key}`}
-                    variant="secondary"
-                    className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedCategories, key)}
-                  >
-                    {searchFacetLabels.category[key]}
-                    <X className="size-3" aria-hidden />
-                  </Badge>
-                ))}
-                {[...selectedBrands].map((key) => (
-                  <Badge
-                    key={`b-${key}`}
-                    variant="secondary"
-                    className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedBrands, key)}
-                  >
-                    {searchFacetLabels.brand[key]}
-                    <X className="size-3" aria-hidden />
-                  </Badge>
-                ))}
+            {showMoreFilters ? (
+              <div className="mt-4 grid gap-4 border border-[#d8cfc3] bg-[#f7f3ed] p-4 sm:grid-cols-2 lg:grid-cols-4">
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium">Bedrooms</span>
+                  <Select defaultValue={FILTER_SHOW_ALL}>
+                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
+                      <SelectValue placeholder="Select your option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
+                      <SelectItem value="3">3+</SelectItem>
+                      <SelectItem value="4">4+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium">Bathrooms</span>
+                  <Select defaultValue={FILTER_SHOW_ALL}>
+                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
+                      <SelectValue placeholder="Select your option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
+                      <SelectItem value="2">2+</SelectItem>
+                      <SelectItem value="3">3+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium">Stories</span>
+                  <Select defaultValue={FILTER_SHOW_ALL}>
+                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
+                      <SelectValue placeholder="Select your option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium">Owner&apos;s Retreat</span>
+                  <Select defaultValue={FILTER_SHOW_ALL}>
+                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
+                      <SelectValue placeholder="Select your option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
+                      <SelectItem value="yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
               </div>
             ) : null}
 
-            {filtered.length > 0 ? (
-              <>
-                <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {pagedResults.map((item) => (
-                    <ResultCard key={item.id} item={item} isDemoUserSelected={Boolean(activeDemoUserTaxonomy)} />
-                  ))}
-                </div>
-                {filtered.length > RESULTS_PAGE_SIZE ? (
-                  <nav
-                    className="mt-8 flex flex-col items-stretch justify-between gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center"
-                    aria-label="Paged search results"
-                  >
-                    <p className="text-sm text-muted-foreground">
-                      Showing{' '}
-                      <span className="font-semibold tabular-nums text-foreground">
-                        {(safeResultsPage - 1) * RESULTS_PAGE_SIZE + 1}
-                      </span>
-                      –
-                      <span className="font-semibold tabular-nums text-foreground">
-                        {Math.min(safeResultsPage * RESULTS_PAGE_SIZE, filtered.length)}
-                      </span>{' '}
-                      of <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span>
-                    </p>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="min-w-[5.5rem] rounded-lg"
-                        disabled={safeResultsPage <= 1}
-                        onClick={() => setResultsPage((p) => Math.max(1, p - 1))}
-                      >
-                        Previous
-                      </Button>
-                      <span className="px-2 text-sm tabular-nums text-secondary-foreground">
-                        Page {safeResultsPage} of {resultsTotalPages}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="min-w-[5.5rem] rounded-lg"
-                        disabled={safeResultsPage >= resultsTotalPages}
-                        onClick={() => setResultsPage((p) => Math.min(resultsTotalPages, p + 1))}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </nav>
-                ) : null}
-              </>
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+              <span className="inline-flex bg-[#f2894f] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+                {communityCount} {communityCount === 1 ? 'Community' : 'Communities'}
+              </span>
+
+              <div className="flex items-center gap-2 text-sm text-[#a7a09a]">
+                <MapPin className="size-4 text-[#f2894f]" aria-hidden />
+                <span>Selected market:</span>
+                <Select value={selectedMarketSlug} onValueChange={handleMarketSelect}>
+                  <SelectTrigger className="h-9 w-[14rem] rounded-none border-[#d8cfc3] bg-white text-[#2f2f2d]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {DWH_MARKETS.map((market) => (
+                      <SelectItem key={market.slug} value={market.slug}>
+                        {market.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <p className="mt-6 max-w-4xl text-sm leading-relaxed text-[#2f2f2d]">
+              David Weekley Homes has new homes for sale in the {marketDisplay.label.split(',')[0]} area.
+              Browse communities, compare floor plans, and schedule a model home tour to experience the
+              David Weekley Difference.
+            </p>
+
+            {filteredCommunities.length > 0 ? (
+              <div className="mt-4">
+                {filteredCommunities.map((community) => (
+                  <CommunitySection key={community.id} community={community} />
+                ))}
+              </div>
             ) : (
-              <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
-                <p className="text-sm font-medium text-secondary-foreground">No matches for that combination.</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Try clearing filters or a phrase like &ldquo;Pressure regulators&rdquo;, &ldquo;Data loggers&rdquo;, or
-                  &ldquo;IIoT&rdquo;.
+              <div className="mt-10 border border-dashed border-[#d8cfc3] bg-[#f7f3ed] px-6 py-12 text-center">
+                <p className="text-sm font-medium text-[#2f2f2d]">
+                  No matching homes were found for the selected search criteria.
                 </p>
-                <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
-                  Clear filters
-                </Button>
+                <p className="mt-2 text-sm text-[#a7a09a]">
+                  Try modifying your filter selections to view more homes.
+                </p>
               </div>
             )}
-          </main>
-        </div>
+
+            <p className="mt-8 text-xs leading-relaxed text-[#a7a09a]">
+              Figures reflecting size, square footage, and other dimensions are estimates; actual
+              construction may vary. Prices, plans, dimensions, features, and availability of homes or
+              communities are subject to change without notice or obligation.
+            </p>
+          </>
+        ) : (
+          <div className="mt-8 max-w-xl">
+            <label className="block">
+              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
+                Plan Name or Number
+              </span>
+              <div className="flex overflow-hidden border border-[#d8cfc3]">
+                <input
+                  type="search"
+                  value={planQuery}
+                  onChange={(event) => setPlanQuery(event.target.value)}
+                  placeholder="Search plans"
+                  className="h-11 min-w-0 flex-1 bg-white px-3 text-sm outline-none"
+                />
+                <button
+                  type="button"
+                  className="bg-[#f2894f] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
+                >
+                  Search
+                </button>
+              </div>
+            </label>
+            <p className="mt-4 text-sm text-[#a7a09a]">
+              {listingCount} floor plans available in the selected market.
+            </p>
+          </div>
+        )}
+
+        <section className="mt-12 border-t border-[#d8cfc3] pt-10 text-center">
+          <h2 className="font-serif text-2xl text-[#2f2f2d]">
+            We&apos;re here to help you find your new home
+          </h2>
+          <button
+            type="button"
+            className="mt-4 bg-[#f2894f] px-8 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
+          >
+            Contact Us
+          </button>
+        </section>
       </div>
     </section>
   );

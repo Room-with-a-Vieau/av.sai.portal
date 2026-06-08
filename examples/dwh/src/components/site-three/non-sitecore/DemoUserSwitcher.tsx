@@ -9,14 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { DWH_BUYER_PERSONAS } from '@/lib/dwh-buyer-personas';
 import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
-
-const DEMO_USERS = [
-  { label: 'User 1 - IT Director / IT Manager', taxonomy: 'IT Director / IT Manager' },
-  { label: 'User 2 - MSP Provider', taxonomy: 'MSP Provider' },
-  { label: 'User 3 - CISO Compliance Officer', taxonomy: 'CISO Compliance Officer' },
-] as const;
 
 export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
   const [taxonomy, setTaxonomy] = useState('');
@@ -38,9 +33,9 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
         <SelectValue placeholder="Login" />
       </SelectTrigger>
       <SelectContent align="end" className="z-[100]">
-        {DEMO_USERS.map((user) => (
-          <SelectItem key={user.taxonomy} value={user.taxonomy}>
-            {user.label}
+        {DWH_BUYER_PERSONAS.map((persona) => (
+          <SelectItem key={persona.taxonomy} value={persona.taxonomy}>
+            {persona.label}
           </SelectItem>
         ))}
       </SelectContent>

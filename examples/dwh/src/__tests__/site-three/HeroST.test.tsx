@@ -107,9 +107,11 @@ describe('HeroST', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '1' }} />
       );
+      const section = container.querySelector('section');
       const headings = container.querySelectorAll('h1');
-      expect(headings[0]).toHaveClass('text-primary-foreground');
-      expect(headings[1]).toHaveClass('text-primary-foreground');
+      expect(section).toHaveAttribute('data-hero-dark-image');
+      expect(headings[0]).toHaveClass('text-white');
+      expect(headings[1]).toHaveClass('text-white');
     });
 
     it('recognizes Dark Image checkbox under alternate param key spellings', () => {
@@ -117,17 +119,19 @@ describe('HeroST', () => {
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, 'Dark Image': 'true' }} />
       );
       const headings = container.querySelectorAll('h1');
-      expect(headings[0]).toHaveClass('text-primary-foreground');
-      expect(headings[1]).toHaveClass('text-primary-foreground');
+      expect(headings[0]).toHaveClass('text-white');
+      expect(headings[1]).toHaveClass('text-white');
     });
 
     it('does not force light text when Dark Image is off', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '0' }} />
       );
+      const section = container.querySelector('section');
       const headings = container.querySelectorAll('h1');
-      expect(headings[0]).not.toHaveClass('text-primary-foreground');
-      expect(headings[1]).not.toHaveClass('text-primary-foreground');
+      expect(section).not.toHaveAttribute('data-hero-dark-image');
+      expect(headings[0]).not.toHaveClass('text-white');
+      expect(headings[1]).not.toHaveClass('text-white');
     });
   });
 
