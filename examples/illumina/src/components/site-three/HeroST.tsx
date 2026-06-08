@@ -31,6 +31,10 @@ interface Fields {
 const HERO_BG_IMAGE_CLASS = 'h-full w-full object-cover object-center';
 const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
 
+/** Hardcoded Illumina homepage hero video (withVideo variant). */
+const HERO_VIDEO_SRC =
+  'https://www.illumina.com/content/dam/us/en/assembled-assets/homepage/targeting-homepage/june-2026/stratamap-spatial-homepage-banner.mp4';
+
 /** Responsive hero content column / split row height band */
 const HERO_CONTENT_BAND_CLASS =
   'min-h-[400px] max-h-[600px] md:min-h-[500px] md:max-h-[600px] lg:min-h-[600px] lg:max-h-[800px]';
@@ -137,6 +141,56 @@ export const Default = (props: PageHeaderSTProps) => {
             </div>
           </div>
         </div>
+    </section>
+  );
+};
+
+/** Full-bleed hero with hardcoded background video instead of Image1. */
+export const withVideo = (props: PageHeaderSTProps) => {
+  return (
+    <section
+      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      data-class-change
+      data-hero-dark-image
+    >
+      <div className={HERO_BG_LAYER_CLASS}>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={HERO_BG_IMAGE_CLASS}
+          aria-hidden="true"
+        >
+          <source src={HERO_VIDEO_SRC} type="video/mp4" />
+        </video>
+      </div>
+      <div className="relative z-20 mx-auto w-full lg:container lg:flex">
+        <div
+          className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+        >
+          <div className="lg:max-w-3xl">
+            <h1 className={heroEyebrowOverPhotoClass(true)}>
+              <ContentSdkText field={props?.fields?.Eyebrow} className={heroFieldTextClass(true)} />
+            </h1>
+            <h1 className={heroTitleOverPhotoClass(true)}>
+              <ContentSdkText field={props?.fields?.Title} className={heroFieldTextClass(true)} />
+            </h1>
+            <div className="mt-8">
+              <ContentSdkLink
+                field={props?.fields?.Link1}
+                prefetch={false}
+                className="btn btn-primary mr-4"
+              />
+              <ContentSdkLink
+                field={props?.fields?.Link2}
+                prefetch={false}
+                className="btn btn-secondary"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

@@ -294,13 +294,14 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | dwh"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | dwh | illumina"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
  * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
  * threatlocker (threatlocker.com): navy primary (#0b223f), sky CTA accent (#3997d4), light section surfaces (#f4f4f4).
  * dwh (davidweekleyhomes.com): white page (#ffffff), warm white surfaces (#f7f3ed), greige (#d8cfc3), stone gray (#a7a09a), orange CTAs (#f2894f), sage (#a6b49a), charcoal (#2f2f2d).
+ * illumina (illumina.com): white page (#ffffff), dark gray body (#444648), brand blue (#4E60EE), white pill primary CTAs with blue label text.
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -519,5 +520,52 @@
 }
 
 [data-theme='dwh'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='illumina'] {
+  --border-radius-default: 624.9375rem;
+  --background-image-gradient: linear-gradient(180deg, #4e60ee 0%, #444648 100%);
+  --background-image-gradient-secondary: linear-gradient(
+    90deg,
+    #4e60ee 0%,
+    #444648 50%,
+    #4e60ee 100%
+  );
+  --color-background: #ffffff;
+  --color-foreground: #444648;
+  --color-card: #ffffff;
+  --color-card-foreground: #444648;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #444648;
+  --color-primary: #4e60ee;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #3f4fd4;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #444648;
+  --color-secondary-hover: #ebebeb;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #6b6e70;
+  --color-accent: #4e60ee;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d4d4d4;
+  --color-input: #d4d4d4;
+  --color-ring: #4e60ee;
+  --color-tertiary-foreground: #444648;
+  --color-tertiary-hover: #ebebeb;
+  --color-tertiary: #f5f5f5;
+  --color-dark-foreground: #ffffff;
+  --color-dark-hover: #3a3c3e;
+  --color-dark: #444648;
+  --color-light: #ffffff;
+  --color-light-hover: #f5f5f5;
+  --color-light-foreground: #444648;
+  --color-overlay: rgb(68 70 72 / 0.55);
+}
+
+[data-theme='illumina'] .bg-primary {
   color: var(--color-primary-foreground);
 }

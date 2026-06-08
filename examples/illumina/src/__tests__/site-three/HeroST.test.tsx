@@ -8,6 +8,7 @@ import {
   SplitScreen as HeroSTSplitScreen,
   Stacked as HeroSTStacked,
   withSearch as HeroSTWithSearch,
+  withVideo as HeroSTWithVideo,
 } from '@/components/site-three/HeroST';
 
 jest.mock('@/components/site-three/HeroSearchBar', () => ({
@@ -253,6 +254,47 @@ describe('HeroST', () => {
 
     it('applies custom styles in withSearch variant', () => {
       const { container } = render(<HeroSTWithSearch {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
+    });
+  });
+
+  describe('withVideo variant', () => {
+    it('renders eyebrow, title, and call-to-action links', () => {
+      render(<HeroSTWithVideo {...mockProps} />);
+
+      expect(screen.getByText('New Collection')).toBeInTheDocument();
+      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Shop Now')).toBeInTheDocument();
+      expect(screen.getByText('Learn More')).toBeInTheDocument();
+    });
+
+    it('renders a background video instead of Image1', () => {
+      const { container } = render(<HeroSTWithVideo {...mockProps} />);
+      const video = container.querySelector('video');
+
+      expect(video).toBeInTheDocument();
+      expect(video).toHaveAttribute('autoplay');
+      expect(video).toHaveAttribute('loop');
+      expect(video).toHaveAttribute('playsinline');
+      expect(container.querySelector('source')?.getAttribute('src')).toContain(
+        'stratamap-spatial-homepage-banner.mp4'
+      );
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
+
+    it('uses light text styling for video backgrounds', () => {
+      const { container } = render(<HeroSTWithVideo {...mockProps} />);
+      const section = container.querySelector('section');
+      const headings = container.querySelectorAll('h1');
+
+      expect(section).toHaveAttribute('data-hero-dark-image');
+      expect(headings[0]).toHaveClass('text-white');
+      expect(headings[1]).toHaveClass('text-white');
+    });
+
+    it('applies custom styles in withVideo variant', () => {
+      const { container } = render(<HeroSTWithVideo {...mockProps} />);
       const section = container.querySelector('section');
       expect(section).toHaveClass('test-styles');
     });
