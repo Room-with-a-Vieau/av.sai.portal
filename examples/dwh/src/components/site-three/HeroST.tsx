@@ -9,6 +9,7 @@ import {
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
+import { HeroSearchBar } from '@/components/site-three/HeroSearchBar';
 
 interface Fields {
   Eyebrow: Field<string>;
@@ -257,6 +258,36 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
             className={`absolute inset-0 ${HERO_BG_IMAGE_CLASS}`}
           />
         </div>
+      </div>
+    </section>
+  );
+};
+
+/** Hero with market search bar overlaid at the bottom (davidweekleyhomes.com homepage pattern). */
+export const withSearch = (props: PageHeaderSTProps) => {
+  const searchBaseHref = props?.fields?.Link1?.value?.href;
+
+  return (
+    <section
+      className={cn(
+        'relative flex items-end border-8 border-background lg:border-16',
+        props?.params?.styles
+      )}
+      data-class-change
+    >
+      <div className={HERO_BG_LAYER_CLASS}>
+        <ContentSdkImage
+          field={props?.fields?.Image1}
+          width={1920}
+          height={1080}
+          priority={true}
+          fetchPriority="high"
+          className={HERO_BG_IMAGE_CLASS}
+        />
+      </div>
+
+      <div className="relative z-20 mx-auto w-full px-4 pb-6 pt-32 md:px-6 md:pb-8 lg:container lg:pb-10 lg:pt-40">
+        <HeroSearchBar searchBaseHref={searchBaseHref} className="mx-auto max-w-6xl" />
       </div>
     </section>
   );

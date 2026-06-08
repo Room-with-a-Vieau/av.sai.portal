@@ -7,7 +7,16 @@ import {
   Centered as HeroSTCentered,
   SplitScreen as HeroSTSplitScreen,
   Stacked as HeroSTStacked,
+  withSearch as HeroSTWithSearch,
 } from '@/components/site-three/HeroST';
+
+jest.mock('@/components/site-three/HeroSearchBar', () => ({
+  HeroSearchBar: () => (
+    <div data-testid="hero-search-bar">
+      Find Your New <span>Dream Home</span>
+    </div>
+  ),
+}));
 
 // Mock useContainerOffsets hook
 jest.mock('@/hooks/useContainerOffsets', () => ({
@@ -226,6 +235,22 @@ describe('HeroST', () => {
       };
       render(<HeroSTSplitScreen {...propsWithoutTitle} />);
       expect(screen.getByText('New Collection')).toBeInTheDocument();
+    });
+  });
+
+  describe('withSearch variant', () => {
+    it('renders background image and search bar', () => {
+      render(<HeroSTWithSearch {...mockProps} />);
+
+      expect(screen.getByTestId('hero-search-bar')).toBeInTheDocument();
+      expect(screen.getByText('Dream Home')).toBeInTheDocument();
+      expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
+    });
+
+    it('applies custom styles in withSearch variant', () => {
+      const { container } = render(<HeroSTWithSearch {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
     });
   });
 
