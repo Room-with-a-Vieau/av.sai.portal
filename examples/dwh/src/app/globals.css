@@ -263,6 +263,89 @@ html[data-theme='threatlocker'] .btn.btn-outline:hover {
   color: var(--color-primary-foreground);
 }
 
+/* davidweekleyhomes.com: Open Sans body; Lora serif headings; clay CTAs; mild square corners */
+html[data-theme='dwh'] {
+  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-lora), 'Lora', ui-serif, Georgia, serif;
+  --font-accent: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 500;
+  --dwh-button-radius: 0.125rem;
+}
+
+html[data-theme='dwh'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
+  letter-spacing: 0.01em;
+}
+
+/* Mild square radius — all native buttons, legacy .btn, shadcn Button, link CTAs */
+html[data-theme='dwh'] button,
+html[data-theme='dwh'] .btn,
+html[data-theme='dwh'] .btn.btn-sharp,
+html[data-theme='dwh'] a.btn,
+html[data-theme='dwh'] a.inline-flex.items-center.justify-center,
+html[data-theme='dwh'] [role='button'].inline-flex.items-center.justify-center {
+  border-radius: var(--dwh-button-radius);
+}
+
+html[data-theme='dwh'] .btn.btn-primary,
+html[data-theme='dwh'] :is(button, a).inline-flex.bg-primary {
+  background-color: #c97a5a;
+  color: #ffffff;
+  border-radius: var(--dwh-button-radius);
+  border: none;
+}
+
+html[data-theme='dwh'] .btn.btn-primary:hover,
+html[data-theme='dwh'] :is(button, a).inline-flex.bg-primary:hover {
+  background-color: #b36848;
+  color: #ffffff;
+}
+
+html[data-theme='dwh'] .btn.btn-secondary {
+  background-color: #f7f3ed;
+  color: #2f2f2d;
+  border: 1px solid #d8cfc3;
+  border-radius: var(--dwh-button-radius);
+}
+
+html[data-theme='dwh'] .btn.btn-secondary:hover {
+  background-color: #d8cfc3;
+  color: #2f2f2d;
+}
+
+html[data-theme='dwh'] .btn.btn-outline {
+  background-color: transparent;
+  color: #2f2f2d;
+  border: 1px solid #d8cfc3;
+  border-radius: var(--dwh-button-radius);
+}
+
+html[data-theme='dwh'] .btn.btn-outline:hover {
+  background-color: #d8cfc3;
+  color: #2f2f2d;
+}
+
+html[data-theme='dwh'] section.relative .btn.btn-secondary {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: transparent;
+}
+
+html[data-theme='dwh'] section.relative .btn.btn-secondary:hover {
+  background-color: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+}
+
+html[data-theme='dwh'] section.relative .btn.btn-outline {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: transparent;
+}
+
+html[data-theme='dwh'] section.relative .btn.btn-outline:hover {
+  background-color: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+}
+
 /* BUTTONS END */
 
 /* MultiPromo SideBySide: 20% shade on hover/focus only (no column resize / image zoom) */

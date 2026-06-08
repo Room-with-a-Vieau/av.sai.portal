@@ -3,6 +3,7 @@ import './globals.css';
 import {
   Barlow_Condensed,
   Inter,
+  Lora,
   Montserrat,
   Nunito_Sans,
   Open_Sans,
@@ -57,6 +58,14 @@ const robotoCondensed = Roboto_Condensed({
   display: 'swap',
 });
 
+/** David Weekley Homes — Lora serif headings, Open Sans body (davidweekleyhomes.com) */
+const lora = Lora({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-lora',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
 /** Bass Pro Shops — Montserrat display / promo type, Open Sans body (basspro.com) */
 const montserrat = Montserrat({
   subsets: ['latin', 'latin-ext'],
@@ -72,6 +81,7 @@ const fontVariables = [
   barlowCondensed.variable,
   openSans.variable,
   robotoCondensed.variable,
+  lora.variable,
   montserrat.variable,
 ].join(' ');
 
