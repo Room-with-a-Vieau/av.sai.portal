@@ -90,6 +90,31 @@ export const defaultPromoProps: PromoProps = {
 /**
  * Props for CenteredCard variant
  */
+export const splitImageRightPromoProps: PromoProps = {
+  params: {
+    RenderingIdentifier: 'promo-split-image-right',
+    styles: 'split-image-right-style',
+  },
+  fields: {
+    PromoIcon: mockPromoData.defaultIcon,
+    PromoText: {
+      value: '<h2>Join 4,000+ startups growing with Untitled</h2>',
+    },
+    PromoLink: {
+      value: {
+        href: '/get-started',
+        text: 'Get started',
+        linktype: 'internal',
+      },
+    },
+    PromoText2: {
+      value:
+        '<ul><li>30-day free trial</li><li>Personalized onboarding</li><li>Access to all features</li></ul>',
+    },
+    PromoText3: mockPromoData.emptyText,
+  },
+};
+
 export const centeredCardPromoProps: PromoProps = {
   params: {
     RenderingIdentifier: 'promo-centered',

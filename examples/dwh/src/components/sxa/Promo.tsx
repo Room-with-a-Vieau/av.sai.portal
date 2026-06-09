@@ -8,6 +8,7 @@ import {
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface Fields {
   PromoIcon: ImageField;
@@ -100,6 +101,51 @@ export const CenteredCard = (props: PromoProps): JSX.Element => {
           >
             <ContentSdkLink field={props.fields.PromoLink} />
           </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+/** 50/50 split: title + rich text + CTA left, full-bleed image right (stacks on mobile). */
+export const SplitImageRight = (props: PromoProps): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  if (props.fields) {
+    return (
+      <div
+        data-class-change
+        className={cn(
+          'component promo w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm',
+          props.params.styles
+        )}
+        id={id ? id : undefined}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-stretch">
+          <div className="flex min-w-0 flex-col justify-center gap-6 overflow-hidden p-6 md:p-10 lg:p-12">
+            <ContentSdkRichText
+              tag="h2"
+              className="max-w-full break-words font-heading text-3xl font-bold leading-tight tracking-tight text-foreground md:text-4xl [overflow-wrap:anywhere] [&_*]:max-w-full [&_*]:break-words [&_h2]:m-0"
+              field={props.fields.PromoText}
+            />
+            <ContentSdkRichText
+              tag="div"
+              className="content-sdk-rich-text max-w-full break-words text-base leading-relaxed text-muted-foreground [overflow-wrap:anywhere] [&_*]:max-w-full [&_li]:mb-3 [&_p]:mb-0 [&_ul]:list-none [&_ul]:space-y-3 [&_ul]:p-0"
+              field={props.fields.PromoText2}
+            />
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Button variant="default" className="font-semibold" asChild>
+                <ContentSdkLink field={props.fields.PromoLink} />
+              </Button>
+            </div>
+          </div>
+          <div className="relative min-h-[16rem] min-w-0 overflow-hidden lg:min-h-[24rem]">
+            <ContentSdkImage
+              field={props.fields.PromoIcon}
+              className="h-full min-h-[16rem] w-full object-cover lg:min-h-[24rem]"
+            />
+          </div>
         </div>
       </div>
     );

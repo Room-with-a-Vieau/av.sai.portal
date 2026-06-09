@@ -5,10 +5,11 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Default as PromoDefault, CenteredCard } from 'components/sxa/Promo';
+import { Default as PromoDefault, CenteredCard, SplitImageRight } from 'components/sxa/Promo';
 import {
   defaultPromoProps,
   centeredCardPromoProps,
+  splitImageRightPromoProps,
   minimalPromoProps,
   emptyPromoProps,
   emptyTextFieldsProps,
@@ -234,6 +235,37 @@ describe('Promo Component - CenteredCard Variant', () => {
   });
 });
 
+describe('Promo Component - SplitImageRight Variant', () => {
+  it('should render split layout with title, rich text, link, and image', () => {
+    const { container } = render(<SplitImageRight {...splitImageRightPromoProps} />);
+
+    const promo = container.querySelector('.component.promo');
+    expect(promo).toBeInTheDocument();
+    expect(promo).toHaveClass('split-image-right-style');
+    expect(promo).toHaveClass('rounded-2xl');
+    expect(promo?.id).toBe('promo-split-image-right');
+
+    expect(container.querySelector('h2')).toBeInTheDocument();
+    expect(container.querySelector('ul')).toBeInTheDocument();
+    expect(container.querySelector('img')).toBeInTheDocument();
+    expect(container.querySelector('a')).toHaveAttribute('href', '/get-started');
+    expect(container.querySelector('button')).toBeInTheDocument();
+  });
+
+  it('should use a responsive two-column grid on large screens', () => {
+    const { container } = render(<SplitImageRight {...splitImageRightPromoProps} />);
+
+    const row = container.querySelector('.lg\\:grid-cols-2');
+    expect(row).toBeInTheDocument();
+  });
+
+  it('should render default component when fields are null', () => {
+    const { container } = render(<SplitImageRight {...emptyPromoProps} />);
+
+    expect(container.querySelector('.is-empty-hint')).toBeInTheDocument();
+  });
+});
+
 describe('Promo Component - Accessibility', () => {
   it('should have proper semantic structure (Default)', () => {
     const { container } = render(<PromoDefault {...defaultPromoProps} />);
@@ -252,6 +284,14 @@ describe('Promo Component - Accessibility', () => {
 
   it('should have proper semantic structure (CenteredCard)', () => {
     const { container } = render(<CenteredCard {...centeredCardPromoProps} />);
+
+    expect(container.querySelector('h2')).toBeInTheDocument();
+    expect(container.querySelector('img')).toBeInTheDocument();
+    expect(container.querySelector('a')).toBeInTheDocument();
+  });
+
+  it('should have proper semantic structure (SplitImageRight)', () => {
+    const { container } = render(<SplitImageRight {...splitImageRightPromoProps} />);
 
     expect(container.querySelector('h2')).toBeInTheDocument();
     expect(container.querySelector('img')).toBeInTheDocument();
