@@ -117,7 +117,7 @@ export const SplitImageRight = (props: PromoProps): JSX.Element => {
       <div
         data-class-change
         className={cn(
-          'component promo w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm',
+          'component promo w-full overflow-hidden border border-border bg-card shadow-sm',
           props.params.styles
         )}
         id={id ? id : undefined}

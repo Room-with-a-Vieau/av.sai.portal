@@ -242,7 +242,7 @@ describe('Promo Component - SplitImageRight Variant', () => {
     const promo = container.querySelector('.component.promo');
     expect(promo).toBeInTheDocument();
     expect(promo).toHaveClass('split-image-right-style');
-    expect(promo).toHaveClass('rounded-2xl');
+    expect(promo).not.toHaveClass('rounded-2xl');
     expect(promo?.id).toBe('promo-split-image-right');
 
     expect(container.querySelector('h2')).toBeInTheDocument();
