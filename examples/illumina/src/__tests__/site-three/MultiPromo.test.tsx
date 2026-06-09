@@ -7,6 +7,7 @@ import {
   SingleColumn as MultiPromoSingleColumn,
   SideBySide as MultiPromoSideBySide,
   CardCarousel as MultiPromoCardCarousel,
+  Card1 as MultiPromoCard1,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -403,6 +404,52 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoCardCarousel {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('Card1 variant', () => {
+    it('renders heading, description, and link for each promo', () => {
+      render(<MultiPromoCard1 {...mockProps} />);
+
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Product 2')).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+      expect(screen.getByText('View Product 1')).toBeInTheDocument();
+      expect(screen.getByText('View Product 2')).toBeInTheDocument();
+    });
+
+    it('renders top promo image and hardcoded decorative image per card', () => {
+      const { container } = render(<MultiPromoCard1 {...mockProps} />);
+
+      const images = container.querySelectorAll('img');
+      expect(images).toHaveLength(4);
+      expect(images[0]).toHaveAttribute('src', '/images/product1.jpg');
+      expect(images[1]).toHaveAttribute('src', '/images/card1-decorative.png');
+      expect(images[2]).toHaveAttribute('src', '/images/product2.jpg');
+      expect(images[3]).toHaveAttribute('src', '/images/card1-decorative.png');
+    });
+
+    it('sets data-multipromo-variant on the section', () => {
+      const { container } = render(<MultiPromoCard1 {...mockProps} />);
+      expect(container.querySelector('[data-multipromo-variant="card1"]')).toBeInTheDocument();
+    });
+
+    it('renders one article card per promo child', () => {
+      render(<MultiPromoCard1 {...mockProps} />);
+      expect(screen.getAllByRole('article')).toHaveLength(2);
+    });
+
+    it('applies custom styles from params', () => {
+      const { container } = render(<MultiPromoCard1 {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoCard1 {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });

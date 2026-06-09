@@ -76,6 +76,9 @@ const parentBasedGridItemClasses =
 
 const SIDE_BY_SIDE_MIN_HEIGHT = 'min-h-[22rem] md:min-h-[26rem] lg:min-h-[32rem]';
 
+/** Hardcoded decorative graphic for Card1 bottom-right (Illumina homepage promo). */
+const CARD1_DECORATIVE_IMAGE_SRC = '/images/card1-decorative.png';
+
 type SideBySidePanelProps = {
   promo: SimplePromoFields;
 };
@@ -144,6 +147,64 @@ const SideBySidePanel = ({ promo }: SideBySidePanelProps) => {
           )}
           <ChevronRight className="size-4 shrink-0" aria-hidden />
         </span>
+      </div>
+    </article>
+  );
+};
+
+type Card1PanelProps = {
+  promo: SimplePromoFields;
+};
+
+const Card1Panel = ({ promo }: Card1PanelProps) => {
+  const { image, heading, description, link } = promo ?? {};
+  const headingLabel = toTrimmedFieldString(heading?.jsonValue?.value) || 'Promo';
+
+  return (
+    <article
+      className="overflow-hidden bg-background shadow-sm"
+      aria-label={headingLabel}
+    >
+      <div className="relative aspect-[21/9] w-full bg-muted">
+        {image?.jsonValue?.value?.src ? (
+          <ContentSdkImage
+            field={image.jsonValue}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-muted" aria-hidden />
+        )}
+      </div>
+
+      <div className="grid gap-8 bg-secondary px-6 py-10 md:px-10 md:py-12 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-12 lg:px-14 lg:py-14">
+        <div className="flex flex-col justify-center">
+          {heading?.jsonValue && (
+            <h3 className="font-heading text-2xl font-semibold leading-tight text-foreground md:text-3xl lg:text-4xl">
+              <ContentSdkText field={heading.jsonValue} />
+            </h3>
+          )}
+          {description?.jsonValue && (
+            <p className="mt-4 max-w-prose text-base leading-relaxed text-foreground md:text-lg">
+              <ContentSdkText field={description.jsonValue} />
+            </p>
+          )}
+          {link?.jsonValue && (
+            <ContentSdkLink
+              field={link.jsonValue}
+              className="btn btn-primary mt-8 w-fit border border-[#4E60EE]"
+            />
+          )}
+        </div>
+
+        <div className="flex items-center justify-center lg:justify-end">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={CARD1_DECORATIVE_IMAGE_SRC}
+            alt=""
+            aria-hidden="true"
+            className="h-auto w-full max-w-md object-contain lg:max-w-none"
+          />
+        </div>
       </div>
     </article>
   );
@@ -458,6 +519,41 @@ export const CardCarousel = (props: MultiPromoProps) => {
               </div>
             </Carousel>
           ) : null}
+        </div>
+      </section>
+    );
+  }
+
+  return <NoDataFallback componentName="MultiPromo" />;
+};
+
+/**
+ * Illumina-style promo card: hero image on top, text + CTA on the bottom-left,
+ * decorative graphic on the bottom-right.
+ */
+export const Card1 = (props: MultiPromoProps) => {
+  const datasource = useMemo(
+    () => props.fields?.data?.datasource,
+    [props.fields?.data?.datasource]
+  );
+  const promos = useMemo(
+    () => datasource?.children?.results?.filter(Boolean) ?? [],
+    [datasource?.children?.results]
+  );
+
+  if (props.fields) {
+    return (
+      <section
+        className={cn('relative w-full', props.params?.styles)}
+        data-class-change
+        data-multipromo-variant="card1"
+      >
+        <div className="container mx-auto px-4 py-16 md:py-20">
+          <div className="flex flex-col gap-10 md:gap-14">
+            {promos.map((promo, index) => (
+              <Card1Panel key={promo.id ?? index} promo={promo} />
+            ))}
+          </div>
         </div>
       </section>
     );
