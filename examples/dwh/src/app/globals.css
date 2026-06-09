@@ -350,10 +350,16 @@ html[data-theme='dwh'] section.relative .btn.btn-outline:hover {
   color: #ffffff;
 }
 
-/* HeroST "Dark Image" — force light headline text (Sitecore field spans can override utility classes) */
+/* HeroST "Dark Image" — force light headline text (Sitecore field spans / RTE can override utilities) */
 section[data-hero-dark-image] :is(h1, h2, h3, h4, h5, h6),
-section[data-hero-dark-image] :is(h1, h2, h3, h4, h5, h6) * {
-  color: #ffffff;
+section[data-hero-dark-image] :is(h1, h2, h3, h4, h5, h6) *,
+section.hero-st-dark-image :is(h1, h2, h3, h4, h5, h6),
+section.hero-st-dark-image :is(h1, h2, h3, h4, h5, h6) *,
+section.relative.dark-image :is(h1, h2, h3, h4, h5, h6),
+section.relative.dark-image :is(h1, h2, h3, h4, h5, h6) *,
+section.relative.darkimage :is(h1, h2, h3, h4, h5, h6),
+section.relative.darkimage :is(h1, h2, h3, h4, h5, h6) * {
+  color: #ffffff !important;
 }
 
 /* BUTTONS END */

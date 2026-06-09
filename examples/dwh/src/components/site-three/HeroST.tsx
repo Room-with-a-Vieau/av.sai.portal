@@ -46,31 +46,61 @@ type PageHeaderSTProps = {
   fields: Fields;
 };
 
+const HERO_DARK_IMAGE_PARAM_KEY = 'darkimage';
+
+/** Normalize Sitecore param keys (spaces, underscores, encoded spaces). */
+function normalizeHeroParamKey(key: string): string {
+  return key.replace(/_x0020_/gi, ' ').replace(/[\s_-]/g, '').toLowerCase();
+}
+
 /** Sitecore checkbox rendering parameters often arrive as 1 / true / yes / on (strings or booleans). */
 function isCheckboxParamEnabled(value: unknown): boolean {
   if (value == null) return false;
   if (value === true || value === 1) return true;
   if (typeof value === 'string') {
     const v = value.trim().toLowerCase();
-    return v === '1' || v === 'true' || v === 'yes' || v === 'on';
+    if (!v || v === '0' || v === 'false' || v === 'no' || v === 'off') return false;
+    return v === '1' || v === 'true' || v === 'yes' || v === 'on' || v === 'checked';
   }
   return false;
 }
 
+/** Sitecore Styles parameter may add a `dark-image` (or similar) utility class to params.styles. */
+function stylesIncludeDarkImage(styles: string | undefined): boolean {
+  if (!styles?.trim()) return false;
+  const normalized = styles.toLowerCase().replace(/[\s_-]/g, '');
+  return normalized.includes(HERO_DARK_IMAGE_PARAM_KEY);
+}
+
 /**
- * Rendering parameter "Dark Image" (checkbox). Matches keys regardless of spacing/casing
- * (e.g. DarkImage, Dark Image, darkImage).
+ * Rendering parameter "Dark Image" (checkbox) or Styles class. Matches keys regardless of
+ * spacing/casing (e.g. DarkImage, Dark Image, Dark_x0020_Image).
  */
 function isDarkImageHero(params: PageHeaderSTProps['params'] | undefined): boolean {
   if (!params) return false;
+
+  if (stylesIncludeDarkImage(params.styles)) {
+    return true;
+  }
+
   for (const [key, value] of Object.entries(params)) {
-    const normalized = key.replace(/[\s_-]/g, '').toLowerCase();
-    if (normalized === 'darkimage' && isCheckboxParamEnabled(value)) {
+    if (normalizeHeroParamKey(key) === HERO_DARK_IMAGE_PARAM_KEY && isCheckboxParamEnabled(value)) {
       return true;
     }
   }
+
   return false;
 }
+
+function heroSectionClassName(darkImage: boolean, styles?: string): string {
+  return cn(
+    'relative flex items-center border-8 lg:border-16 border-background',
+    darkImage && 'hero-st-dark-image',
+    styles
+  );
+}
+
+const HERO_DARK_IMAGE_CONTENT_STYLE = { color: '#ffffff' } as const;
 
 function heroEyebrowOverPhotoClass(darkImage: boolean): string {
   return cn(
@@ -84,14 +114,14 @@ function heroTitleOverPhotoClass(darkImage: boolean): string {
 }
 
 function heroFieldTextClass(darkImage: boolean): string | undefined {
-  return darkImage ? 'text-inherit' : undefined;
+  return darkImage ? 'text-inherit !text-white' : undefined;
 }
 
 export const Default = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={heroSectionClassName(darkImage, props?.params?.styles)}
       data-class-change
       {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
@@ -109,7 +139,10 @@ export const Default = (props: PageHeaderSTProps) => {
           <div
             className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
           >
-            <div className="lg:max-w-3xl">
+            <div
+              className="lg:max-w-3xl"
+              style={darkImage ? HERO_DARK_IMAGE_CONTENT_STYLE : undefined}
+            >
               <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
                 <ContentSdkText
                   field={props?.fields?.Eyebrow}
@@ -145,7 +178,7 @@ export const Right = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={heroSectionClassName(darkImage, props?.params?.styles)}
       data-class-change
       {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
@@ -163,7 +196,10 @@ export const Right = (props: PageHeaderSTProps) => {
         <div
           className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
-          <div className="lg:max-w-3xl lg:ml-auto text-right">
+          <div
+            className="lg:max-w-3xl lg:ml-auto text-right"
+            style={darkImage ? HERO_DARK_IMAGE_CONTENT_STYLE : undefined}
+          >
             <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
               <ContentSdkText
                 field={props?.fields?.Eyebrow}
@@ -199,7 +235,7 @@ export const Centered = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={heroSectionClassName(darkImage, props?.params?.styles)}
       data-class-change
       {...(darkImage ? { 'data-hero-dark-image': '' } : {})}
     >
@@ -217,7 +253,10 @@ export const Centered = (props: PageHeaderSTProps) => {
         <div
           className={`lg:relative lg:left-1/6 flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
-          <div className="lg:max-w-3xl lg:mx-auto text-center">
+          <div
+            className="lg:max-w-3xl lg:mx-auto text-center"
+            style={darkImage ? HERO_DARK_IMAGE_CONTENT_STYLE : undefined}
+          >
             <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
               <ContentSdkText
                 field={props?.fields?.Eyebrow}

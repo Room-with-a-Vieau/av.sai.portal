@@ -123,6 +123,23 @@ describe('HeroST', () => {
       expect(headings[1]).toHaveClass('text-white');
     });
 
+    it('recognizes Dark Image from Sitecore encoded param keys and styles class', () => {
+      const { container: encodedKey } = render(
+        <HeroSTDefault
+          {...mockProps}
+          params={{ ...mockProps.params, Dark_x0020_Image: '1' }}
+        />
+      );
+      expect(encodedKey.querySelector('section')).toHaveAttribute('data-hero-dark-image');
+
+      const { container: stylesClass } = render(
+        <HeroSTDefault {...mockProps} params={{ styles: 'dark-image' }} />
+      );
+      const section = stylesClass.querySelector('section');
+      expect(section).toHaveAttribute('data-hero-dark-image');
+      expect(section).toHaveClass('hero-st-dark-image');
+    });
+
     it('does not force light text when Dark Image is off', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '0' }} />
