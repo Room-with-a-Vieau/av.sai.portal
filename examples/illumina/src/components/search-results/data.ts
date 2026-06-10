@@ -3,10 +3,11 @@
  * Data only — UI lives in SearchResults.tsx.
  */
 
-import type { DemoUserTaxonomy } from '@/lib/dwh-buyer-personas';
+import type { DemoUserTaxonomy } from '@/lib/demo-user-personas';
+import { parseDemoUserTaxonomy } from '@/lib/demo-user-personas';
 
 export type { DemoUserTaxonomy };
-export { parseDemoUserTaxonomy } from '@/lib/dwh-buyer-personas';
+export { parseDemoUserTaxonomy };
 
 export type SearchContentType = 'product' | 'blog' | 'service' | 'content';
 
@@ -264,157 +265,9 @@ export function relevanceScore(
 }
 
 export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy): SearchResultItem[] {
-  const code =
-    persona === 'First-time homebuyers'
-      ? 'first-time'
-      : persona === 'Move-up Families'
-        ? 'move-up'
-        : 'empty-nesters';
-
-  const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    persona === 'First-time homebuyers'
-      ? [
-          {
-            title: 'Homebuying made simple for first-time buyers',
-            description:
-              'Step-by-step guidance on financing, design choices, and what to expect from contract through closing.',
-            href: 'https://www.davidweekleyhomes.com/',
-            contentType: 'content',
-            categories: ['solutions', 'blogs'],
-            brands: ['zeroTrust', 'endpointSecurity'],
-            searchBuckets: ['blogs', 'capabilities'],
-            dateLabel: 'Personalized for first-time buyers',
-            breadcrumb: ['Homebuying Help', 'Buying'],
-            matchTerms: ['first-time', 'financing', 'mortgage', 'buying', 'new home'],
-            imageSrc: catalogDemoImage(0),
-            isNew: true,
-          },
-          {
-            title: 'Financial calculators and pre-approval resources',
-            description:
-              'Estimate monthly payments and explore financing options before you tour model homes.',
-            href: 'https://www.davidweekleyhomes.com/',
-            contentType: 'service',
-            categories: ['solutions'],
-            brands: ['compliance'],
-            searchBuckets: ['capabilities'],
-            dateLabel: 'Financing tools',
-            breadcrumb: ['Homebuying Help', 'Financing'],
-            matchTerms: ['calculator', 'payment', 'loan', 'budget', 'afford'],
-            imageSrc: catalogDemoImage(1),
-          },
-          {
-            title: 'Quick move-in homes ready now',
-            description:
-              'Browse move-in ready homes across David Weekley markets when you want a shorter path to closing.',
-            href: 'https://www.davidweekleyhomes.com/',
-            contentType: 'product',
-            categories: ['capabilities'],
-            brands: ['endpointSecurity'],
-            searchBuckets: ['capabilities'],
-            dateLabel: 'Available now',
-            breadcrumb: ['Find a Home', 'Quick Move In'],
-            matchTerms: ['quick move', 'inventory', 'available', 'ready'],
-            imageSrc: catalogDemoImage(2),
-          },
-        ]
-      : persona === 'Move-up Families'
-        ? [
-            {
-              title: 'More space, better design — communities for growing families',
-              description:
-                'Explore floor plans with flexible living areas, bonus rooms, and outdoor spaces built for everyday life.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'content',
-              categories: ['solutions', 'blogs'],
-              brands: ['zeroTrust', 'networkCloud'],
-              searchBuckets: ['blogs', 'zeroTrust'],
-              dateLabel: 'Personalized for move-up families',
-              breadcrumb: ['Find a Home', 'Communities'],
-              matchTerms: ['move-up', 'family', 'floor plan', 'community', 'upgrade'],
-              imageSrc: catalogDemoImage(3),
-              isNew: true,
-            },
-            {
-              title: 'Design Center inspiration for your next home',
-              description:
-                'Personalize finishes, fixtures, and details with David Weekley design consultants.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'service',
-              categories: ['solutions'],
-              brands: ['mspMssp'],
-              searchBuckets: ['capabilities'],
-              dateLabel: 'Designing your home',
-              breadcrumb: ['Homebuying Help', 'Designing'],
-              matchTerms: ['design center', 'options', 'finishes', 'personalize'],
-              imageSrc: catalogDemoImage(4),
-            },
-            {
-              title: 'EnergySaver homes for long-term comfort',
-              description:
-                'Learn how EnergySaver features support efficiency and lower utility costs in your new home.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'product',
-              categories: ['capabilities'],
-              brands: ['endpointSecurity', 'zeroTrust'],
-              searchBuckets: ['capabilities', 'zeroTrust'],
-              dateLabel: 'EnergySaver',
-              breadcrumb: ['The David Weekley Difference', 'EnergySaver'],
-              matchTerms: ['energy', 'efficiency', 'utilities', 'comfort'],
-              imageSrc: catalogDemoImage(5),
-            },
-          ]
-        : [
-            {
-              title: 'Right-sized living for your next chapter',
-              description:
-                'Discover single-story and low-maintenance plans designed for comfort, accessibility, and ease.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'service',
-              categories: ['solutions', 'compliance'],
-              brands: ['compliance', 'zeroTrust'],
-              searchBuckets: ['compliance', 'zeroTrust'],
-              dateLabel: 'Personalized for empty nesters',
-              breadcrumb: ['Find a Home', 'Floor plans'],
-              matchTerms: ['empty nester', 'downsize', 'single story', 'maintenance'],
-              imageSrc: catalogDemoImage(6),
-              isNew: true,
-            },
-            {
-              title: 'Schedule a personal model home tour',
-              description:
-                'Walk through finished spaces and experience the David Weekley difference with a guided tour.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'content',
-              categories: ['capabilities', 'compliance'],
-              brands: ['compliance', 'endpointSecurity'],
-              searchBuckets: ['compliance', 'capabilities'],
-              dateLabel: 'Visit a model',
-              breadcrumb: ['Contact', 'Schedule tour'],
-              matchTerms: ['tour', 'model home', 'visit', 'appointment'],
-              imageSrc: catalogDemoImage(7),
-            },
-            {
-              title: 'Maintaining your David Weekley home',
-              description:
-                'Helpful resources for caring for your home after move-in, from warranty support to seasonal upkeep.',
-              href: 'https://www.davidweekleyhomes.com/',
-              contentType: 'content',
-              categories: ['pressReleases', 'compliance'],
-              brands: ['compliance', 'zeroTrust'],
-              searchBuckets: ['press', 'compliance'],
-              dateLabel: 'Homeownership support',
-              breadcrumb: ['Homebuying Help', 'Maintaining'],
-              matchTerms: ['warranty', 'maintain', 'homeowner', 'support'],
-              imageSrc: catalogDemoImage(8),
-            },
-          ];
-
-  return rows.map((row, i) => ({
-    ...row,
-    id: `demo-sup-${code}-${i + 1}`,
-    demoUserTaxonomy: persona,
-  }));
+  // Illumina persona supplemental rows — expand when search personalization content is added.
+  void persona;
+  return [];
 }
 
 function result(partial: Omit<SearchResultItem, 'href'> & { href?: string }): SearchResultItem {
@@ -452,7 +305,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust', 'ransomware'],
     breadcrumb: ['Capabilities', 'Allowlisting'],
     matchTerms: ['allowlisting', 'application control', 'default deny', 'executable', 'script'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 0,
   },
   {
@@ -467,7 +319,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Ringfencing'],
     matchTerms: ['ringfencing', 'ring fence', 'powershell', 'lateral movement'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 1,
   },
   {
@@ -482,7 +333,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['network', 'zeroTrust', 'capabilities'],
     breadcrumb: ['Capabilities', 'ZTNA'],
     matchTerms: ['ztna', 'network access', 'vpn replacement', 'remote access'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 2,
   },
   {
@@ -497,7 +347,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['cloud', 'zeroTrust', 'capabilities'],
     breadcrumb: ['Capabilities', 'Zero Trust Cloud Access'],
     matchTerms: ['cloud access', 'saas', 'credentials', 'oauth', 'compromised'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 3,
   },
   {
@@ -512,7 +361,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['pam', 'capabilities', 'compliance'],
     breadcrumb: ['Capabilities', 'PAM'],
     matchTerms: ['pam', 'privileged access', 'admin rights', 'least privilege', 'epm'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 4,
   },
   {
@@ -527,7 +375,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['network', 'capabilities'],
     breadcrumb: ['Capabilities', 'Network Control'],
     matchTerms: ['firewall', 'network control', 'lateral movement', 'endpoint firewall'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 5,
   },
   {
@@ -541,7 +388,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'ransomware'],
     breadcrumb: ['Capabilities', 'Storage device control'],
     matchTerms: ['usb', 'removable media', 'external storage', 'device control'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 6,
   },
   {
@@ -556,7 +402,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'compliance'],
     breadcrumb: ['Capabilities', 'Data storage access'],
     matchTerms: ['data exfiltration', 'file access', 'storage control', 'dlp'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 7,
   },
   {
@@ -570,7 +415,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['edrMdr', 'capabilities'],
     breadcrumb: ['Capabilities', 'EDR'],
     matchTerms: ['edr', 'detection', 'response', 'isolate', 'threat detection'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 8,
   },
   {
@@ -585,7 +429,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['edrMdr', 'msp', 'capabilities'],
     breadcrumb: ['Capabilities', 'MDR'],
     matchTerms: ['mdr', 'managed detection', 'cyber hero', '24/7', 'soc'],
-    demoUserTaxonomy: 'First-time homebuyers',
     imageSlot: 9,
   },
   {
@@ -600,7 +443,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Configuration management'],
     matchTerms: ['configuration', 'policy', 'centralized', 'baseline'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 10,
   },
   {
@@ -614,7 +456,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities'],
     breadcrumb: ['Capabilities', 'Patch Management'],
     matchTerms: ['patch', 'update', 'vulnerability', 'remediation'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 11,
   },
   {
@@ -628,7 +469,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'cloud'],
     breadcrumb: ['Capabilities', 'Web content control'],
     matchTerms: ['web filter', 'browser', 'phishing', 'web content'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 0,
   },
   {
@@ -642,7 +482,6 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Application testing'],
     matchTerms: ['testing', 'sandbox', 'approve', 'software trust'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 1,
   },
 ];
@@ -660,7 +499,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['ransomware', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Stop ransomware'],
     matchTerms: ['stop ransomware', 'deny by default', 'extortion'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 2,
   },
   {
@@ -675,7 +513,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['compliance', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Achieve compliance'],
     matchTerms: ['compliance', 'audit', 'framework', 'evidence'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 3,
   },
   {
@@ -690,7 +527,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['zeroTrust', 'cloud'],
     breadcrumb: ['Solutions', 'Phishing & token theft'],
     matchTerms: ['phishing', 'token', 'credential theft', 'session'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 4,
   },
   {
@@ -704,7 +540,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['pam', 'compliance'],
     breadcrumb: ['Solutions', 'Admin privilege abuse'],
     matchTerms: ['admin abuse', 'privilege', 'standing access'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 5,
   },
   {
@@ -718,7 +553,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'compliance'],
     breadcrumb: ['Solutions', 'Data exfiltration'],
     matchTerms: ['exfiltration', 'data loss', 'insider'],
-    demoUserTaxonomy: 'Empty Nesters',
     imageSlot: 6,
   },
   {
@@ -733,7 +567,6 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['network', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Lateral movement'],
     matchTerms: ['lateral movement', 'segmentation', 'contain'],
-    demoUserTaxonomy: 'Move-up Families',
     imageSlot: 7,
   },
 ];
@@ -745,7 +578,7 @@ type BlogSeed = {
   date: string;
   category?: SearchCategory;
   buckets?: SearchBucket[];
-  persona?: DemoUserTaxonomy;
+  persona?: string;
   terms?: string[];
   slot?: number;
 };
@@ -1090,12 +923,12 @@ const blogCatalog: SearchResultItem[] = blogSeeds.map((b, i) =>
     dateLabel: b.date,
     breadcrumb: ['Resources', 'Blogs'],
     matchTerms: b.terms,
-    demoUserTaxonomy: b.persona,
+    demoUserTaxonomy: parseDemoUserTaxonomy(b.persona) ?? undefined,
     imageSlot: b.slot ?? i % 12,
   })
 );
 
-type PressSeed = { title: string; description: string; date: string; terms?: string[]; persona?: DemoUserTaxonomy };
+type PressSeed = { title: string; description: string; date: string; terms?: string[]; persona?: string };
 
 const pressSeeds: PressSeed[] = [
   {
@@ -1229,12 +1062,12 @@ const pressCatalog: SearchResultItem[] = pressSeeds.map((p, i) =>
     dateLabel: p.date,
     breadcrumb: ['Resources', 'Press releases'],
     matchTerms: p.terms,
-    demoUserTaxonomy: p.persona,
+    demoUserTaxonomy: parseDemoUserTaxonomy(p.persona) ?? undefined,
     imageSlot: (i + 3) % 12,
   })
 );
 
-type NewsSeed = { title: string; description: string; date: string; terms?: string[]; persona?: DemoUserTaxonomy };
+type NewsSeed = { title: string; description: string; date: string; terms?: string[]; persona?: string };
 
 const newsSeeds: NewsSeed[] = [
   {
@@ -1345,7 +1178,7 @@ const newsCatalog: SearchResultItem[] = newsSeeds.map((n, i) =>
     dateLabel: n.date,
     breadcrumb: ['Resources', 'Keynotes & podcasts'],
     matchTerms: n.terms,
-    demoUserTaxonomy: n.persona,
+    demoUserTaxonomy: parseDemoUserTaxonomy(n.persona) ?? undefined,
     imageSlot: (i + 6) % 12,
   })
 );
@@ -1391,7 +1224,6 @@ const homepageContent: SearchResultItem[] = [
     dateLabel: 'Support',
     breadcrumb: ['Company', 'Cyber Hero Team'],
     matchTerms: ['cyber hero', 'support', '24/7', 'orlando'],
-    demoUserTaxonomy: 'First-time homebuyers',
     imageSlot: 10,
   }),
 ];
@@ -1421,14 +1253,9 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const buckets = detectSearchBuckets(n);
   const key = insightKey(buckets, user);
 
-  const personaHint =
-    user === 'First-time homebuyers'
-      ? 'Highlight financing tools, buying guides, and quick move-in options for first-time buyers.'
-      : user === 'Move-up Families'
-        ? 'Surface larger floor plans, design options, and family-friendly communities.'
-        : user === 'Empty Nesters'
-          ? 'Emphasize right-sized plans, model home tours, and low-maintenance living.'
-          : 'Select a buyer persona in the Login menu to personalize ranking and supplemental results.';
+  const personaHint = user
+    ? `Prioritize content relevant to ${user}.`
+    : 'Select a user persona in the Login menu to personalize ranking and supplemental results.';
 
   if (buckets.includes('compliance')) {
     return {

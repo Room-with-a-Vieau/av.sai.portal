@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import { createComponentProps } from '@/__tests__/test-utils/testHelpers';
 import { mockPageEditing } from '@/__tests__/test-utils/mockPage';
@@ -32,18 +32,6 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       locale: 'en',
     },
   })),
-  Text: ({
-    field,
-    tag: Tag = 'span',
-    className,
-  }: {
-    field?: { value?: string };
-    tag?: React.ElementType;
-    className?: string;
-  }) => {
-    if (!field?.value?.trim()) return null;
-    return React.createElement(Tag, { className }, field.value);
-  },
   RichText: ({ field, className }: { field?: { value?: string }; className?: string }) => {
     if (!field?.value?.trim()) return null;
     return React.createElement('div', {
@@ -56,8 +44,6 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 import { Default as HtmlSnippetBlock } from '@/components/html-snippet-block/HtmlSnippetBlock';
 
 const baseFields = {
-  title: { value: 'Orders', editable: false },
-  subtitle: { value: 'Recent activity', editable: false },
   body: {
     value: '<p>Demo <strong>HTML</strong> body.</p>',
     editable: false,
@@ -65,22 +51,26 @@ const baseFields = {
 };
 
 describe('HtmlSnippetBlock', () => {
-  it('renders title, subtitle, and HTML body from flat fields', () => {
+  it('renders HTML body from flat fields', () => {
     render(<HtmlSnippetBlock {...htmlSnippetBlockProps({ fields: baseFields })} />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Orders');
-    expect(screen.getByText('Recent activity')).toBeInTheDocument();
     const body = document.querySelector('.html-snippet-block__body');
     expect(body?.innerHTML).toContain('Demo');
     expect(body?.innerHTML).toContain('<strong>HTML</strong>');
   });
 
-  it('renders empty article when no field values and not editing', () => {
-    const { container } = render(<HtmlSnippetBlock {...htmlSnippetBlockProps({ fields: {} })} />);
+  it('centers the snippet container', () => {
+    const { container } = render(<HtmlSnippetBlock {...htmlSnippetBlockProps({ fields: baseFields })} />);
 
     const article = container.querySelector('[data-component="html-snippet-block"]');
-    expect(article).toBeInTheDocument();
-    expect(article?.querySelector('h1')).toBeNull();
+    expect(article).toHaveClass('mx-auto');
+    expect(article).toHaveClass('max-w-[100rem]');
+  });
+
+  it('renders nothing when no field values and not editing', () => {
+    const { container } = render(<HtmlSnippetBlock {...htmlSnippetBlockProps({ fields: {} })} />);
+
+    expect(container.querySelector('[data-component="html-snippet-block"]')).toBeNull();
   });
 });
 
@@ -114,13 +104,11 @@ describe('HtmlSnippetBlock (editing)', () => {
     sdk.useSitecore.mockReturnValue(defaultPage);
   });
 
-  it('still renders shell when values are empty in editing mode', () => {
+  it('still renders shell when body is empty in editing mode', () => {
     render(
       <HtmlSnippetBlock
         {...htmlSnippetBlockProps({
           fields: {
-            title: { value: '', editable: true },
-            subtitle: { value: '', editable: true },
             body: { value: '', editable: true },
           } as HtmlSnippetBlockFields,
         })}

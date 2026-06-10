@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DWH_BUYER_PERSONAS } from '@/lib/dwh-buyer-personas';
+import { DEMO_USER_PERSONAS } from '@/lib/demo-user-personas';
 import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
 
@@ -29,11 +29,11 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
 
   return (
     <Select value={taxonomy || undefined} onValueChange={handleValueChange}>
-      <SelectTrigger className={cn('h-10 w-[15rem]', triggerClassName)}>
+      <SelectTrigger className={cn('h-10 w-[min(100%,22rem)] min-w-[16rem]', triggerClassName)}>
         <SelectValue placeholder="Login" />
       </SelectTrigger>
       <SelectContent align="end" className="z-[100]">
-        {DWH_BUYER_PERSONAS.map((persona) => (
+        {DEMO_USER_PERSONAS.map((persona) => (
           <SelectItem key={persona.taxonomy} value={persona.taxonomy}>
             {persona.label}
           </SelectItem>

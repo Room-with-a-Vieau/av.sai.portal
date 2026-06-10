@@ -2,537 +2,679 @@
 
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChevronDown, Home, MapPin, Search, Star } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BookOpen,
+  ChevronDown,
+  ExternalLink,
+  FileText,
+  Loader2,
+  Search,
+  Sparkles,
+  UserCircle2,
+  Wrench,
+  X,
+} from 'lucide-react';
 
 import type { ComponentProps } from '@/lib/component-props';
-import { DWH_MARKETS } from '@/lib/dwh-markets';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
+import type { DemoUserTaxonomy } from '@/lib/demo-user-personas';
+import { parseDemoUserTaxonomy } from '@/lib/demo-user-personas';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
-import { HomeSearchMap } from './HomeSearchMap';
 import {
-  cityFilterOptions,
-  countListings,
-  FILTER_SHOW_ALL,
-  filterHomeCommunities,
-  formatPrice,
-  homeSearchCommunities,
-  homeSearchMapMarkers,
-  priceFilterOptions,
-  regionFilterOptions,
-  resolveMarketDisplay,
-  type HomeCommunity,
-  type HomeListing,
-  type HomeSearchTab,
-} from './home-search-data';
+  categoryFilterLabels,
+  categoryFilters,
+  categoryFilterToParam,
+  itemMatchesQuery,
+  itemVisibleForDemoUser,
+  normalizeQuery,
+  parseCategoryFilter,
+  popularSearches,
+  relevanceScore,
+  RESULTS_PAGE_SIZE,
+  searchCatalog,
+  searchTools,
+  selectAiSearchInsight,
+  selectFeaturedAnswer,
+  suggestedQuestions,
+  supplementalResultsForDemoUserTaxonomy,
+  type SearchCategoryFilter,
+  type SearchResultItem,
+} from './illumina-search-data';
 
 export type SearchResultsProps = {
   className?: string;
   disableUrlSync?: boolean;
+  initialQuery?: string;
 };
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5 text-[#f2894f]" aria-label={`${rating} out of 5 stars`}>
-      {Array.from({ length: 5 }).map((_, index) => (
-        <Star
-          key={index}
-          className={cn('size-4', index < Math.floor(rating) ? 'fill-current' : 'fill-none')}
-          aria-hidden
-        />
-      ))}
-    </div>
-  );
+type SortMode = 'relevance' | 'az';
+
+function categoryIcon(category: SearchResultItem['category']) {
+  if (category === 'manuals') return FileText;
+  if (category === 'techSupport') return Wrench;
+  if (category === 'learn' || category === 'training' || category === 'publications') return BookOpen;
+  return FileText;
 }
 
-function HomeListingRow({
-  community,
-  listing,
-}: {
-  community: HomeCommunity;
-  listing: HomeListing;
-}) {
+function ResultRow({ item }: { item: SearchResultItem }) {
+  const Icon = categoryIcon(item.category);
+  const meta = [
+    categoryFilterLabels[item.category],
+    item.documentType,
+    item.dateLabel,
+    item.breadcrumb?.join(' › '),
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
-    <article className="grid gap-4 border-t border-[#d8cfc3]/80 py-6 md:grid-cols-[9rem_minmax(0,1fr)_12rem] md:items-center">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#f7f3ed]">
-        <Image
-          src={listing.imageSrc}
-          alt={listing.name}
-          fill
-          className="object-cover"
-          sizes="144px"
-        />
-      </div>
-
-      <div className="min-w-0">
-        <p className="text-sm font-semibold text-[#2f2f2d]">
-          {community.name} <span className="text-[#a7a09a]">&gt;</span>
-        </p>
-        <h3 className="mt-1 text-lg font-bold text-[#2f2f2d]">{listing.name}</h3>
-        <p className="mt-1 text-sm text-[#2f2f2d]">
-          From {formatPrice(listing.priceFrom)}
-        </p>
-        <p className="text-sm text-[#a7a09a]">
-          {listing.sqFtMin.toLocaleString()} - {listing.sqFtMax.toLocaleString()} Sq. Ft.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-[#328ac9]">
-          <a href="#floor-plans" className="hover:underline">
-            View {listing.floorPlanCount} Floor Plans
-          </a>
-          <a href="#quick-move-ins" className="hover:underline">
-            View {listing.quickMoveInCount} Quick Move-ins
-          </a>
-          <a href="#share" className="hover:underline">
-            Share Community
-          </a>
+    <article className="group border-b border-border/70 py-6 last:border-b-0">
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block text-inherit no-underline"
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge
+            variant="secondary"
+            className="rounded-full bg-secondary/80 text-[11px] font-semibold uppercase tracking-wide text-foreground"
+          >
+            {categoryFilterLabels[item.category]}
+          </Badge>
+          {item.isNew ? (
+            <Badge className="rounded-full bg-[#4E60EE] text-[10px] font-bold uppercase text-white hover:bg-[#4E60EE]">
+              New
+            </Badge>
+          ) : null}
+          {item.demoUserTaxonomy ? (
+            <Badge variant="outline" className="rounded-full border-[#4E60EE]/30 text-[10px] text-[#4E60EE]">
+              For {item.demoUserTaxonomy}
+            </Badge>
+          ) : null}
         </div>
-      </div>
-
-      <div className="flex flex-col items-stretch gap-3 md:items-end">
-        <button
-          type="button"
-          className="bg-[#f2894f] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#e07a42]"
-        >
-          Schedule Model Home Tour
-        </button>
-        <label className="flex items-center gap-2 text-xs text-[#2f2f2d]">
-          <Checkbox id={`compare-${listing.id}`} />
-          <span>Select to Compare</span>
-        </label>
-      </div>
+        <h3 className="mt-2 text-lg font-semibold leading-snug text-foreground transition-colors group-hover:text-[#4E60EE]">
+          {item.title}
+        </h3>
+        {meta ? (
+          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Icon className="size-3.5 shrink-0 text-[#4E60EE]" aria-hidden />
+            {meta}
+          </p>
+        ) : null}
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-foreground/85">{item.description}</p>
+        <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#4E60EE]">
+          View resource
+          <ArrowUpRight className="size-3.5" aria-hidden />
+        </span>
+      </a>
     </article>
   );
 }
 
-function CommunitySection({ community }: { community: HomeCommunity }) {
+function CategorySidebar({
+  activeCategory,
+  categoryCounts,
+  onCategoryChange,
+}: {
+  activeCategory: SearchCategoryFilter;
+  categoryCounts: Record<SearchCategoryFilter, number>;
+  onCategoryChange: (category: SearchCategoryFilter) => void;
+}) {
   return (
-    <section className="border-b border-[#d8cfc3]">
-      <div className="flex flex-col gap-1 border-b border-[#d8cfc3]/70 bg-[#faf8f5] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-0">
-        <h2 className="font-serif text-2xl font-medium text-[#2f2f2d]">{community.name}</h2>
-        <p className="text-sm text-[#a7a09a]">
-          {community.city}, {community.state} | {community.region.replace(/^./, (c) => c.toUpperCase())}
-        </p>
+    <div className="rounded-2xl border border-border/80 bg-card shadow-sm">
+      <div className="border-b border-border/60 px-4 py-3">
+        <h2 className="text-sm font-semibold text-foreground">Filter by category</h2>
       </div>
-      <div className="px-0">
-        {community.listings.map((listing) => (
-          <HomeListingRow key={listing.id} community={community} listing={listing} />
-        ))}
+      <ul className="p-2">
+        {categoryFilters.map((category) => {
+          const active = activeCategory === category;
+          return (
+            <li key={category}>
+              <button
+                type="button"
+                onClick={() => onCategoryChange(category)}
+                className={cn(
+                  'flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition-colors',
+                  active
+                    ? 'bg-[#4E60EE]/10 font-semibold text-[#4E60EE]'
+                    : 'text-foreground/90 hover:bg-secondary/80'
+                )}
+              >
+                <span>{categoryFilterLabels[category]}</span>
+                <span className="text-xs tabular-nums text-muted-foreground">({categoryCounts[category]})</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="border-t border-border/60 px-4 py-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">More search tools</h3>
+        <ul className="mt-3 space-y-2">
+          {searchTools.map((tool) => (
+            <li key={tool.href}>
+              <a
+                href={tool.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-start gap-1.5 text-sm font-medium text-[#4E60EE] hover:underline"
+              >
+                {tool.label}
+                <ExternalLink className="mt-0.5 size-3 shrink-0 opacity-70" aria-hidden />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-    </section>
+    </div>
   );
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSync = false }) => {
+export const SearchResults: FC<SearchResultsProps> = ({
+  className,
+  disableUrlSync = false,
+  initialQuery = '',
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const marketFromUrl = searchParams.get('market') ?? 'portland';
+  const qFromUrl = searchParams.get('q') ?? '';
+  const filterFromUrl = parseCategoryFilter(searchParams.get('filter'));
+  const pageFromUrl = Math.max(1, Number.parseInt(searchParams.get('p') ?? '1', 10) || 1);
 
-  const [activeTab, setActiveTab] = useState<HomeSearchTab>('home-search');
-  const [zipCode, setZipCode] = useState('');
-  const [price, setPrice] = useState(FILTER_SHOW_ALL);
-  const [city, setCity] = useState(FILTER_SHOW_ALL);
-  const [region, setRegion] = useState(FILTER_SHOW_ALL);
-  const [planQuery, setPlanQuery] = useState('');
-  const [showMoreFilters, setShowMoreFilters] = useState(false);
-  const [selectedMarketSlug, setSelectedMarketSlug] = useState(marketFromUrl);
+  const [query, setQuery] = useState(() =>
+    disableUrlSync ? normalizeQuery(initialQuery) : normalizeQuery(qFromUrl)
+  );
+  const [draft, setDraft] = useState(() => (disableUrlSync ? initialQuery : qFromUrl));
+  const [activeCategory, setActiveCategory] = useState<SearchCategoryFilter>(filterFromUrl);
+  const [resultsPage, setResultsPage] = useState(pageFromUrl);
+  const [sort, setSort] = useState<SortMode>('relevance');
+  const [isSearching, setIsSearching] = useState(false);
+  const [demoTaxonomyRaw, setDemoTaxonomyRaw] = useState('');
+
+  useEffect(() => {
+    const readTaxonomy = () => {
+      setDemoTaxonomyRaw(
+        typeof window !== 'undefined' ? (window.localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY) ?? '') : ''
+      );
+    };
+    readTaxonomy();
+    window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
+    return () => window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
+  }, []);
+
+  const activeDemoUserTaxonomy = useMemo(
+    () => parseDemoUserTaxonomy(demoTaxonomyRaw),
+    [demoTaxonomyRaw]
+  );
+
+  const activeCatalog = useMemo(() => {
+    if (!activeDemoUserTaxonomy) return searchCatalog;
+    return [...supplementalResultsForDemoUserTaxonomy(activeDemoUserTaxonomy), ...searchCatalog];
+  }, [activeDemoUserTaxonomy]);
 
   useEffect(() => {
     if (disableUrlSync) return;
-    const slug = searchParams.get('market');
-    if (slug) setSelectedMarketSlug(slug);
-  }, [disableUrlSync, searchParams]);
+    setDraft(qFromUrl);
+    setQuery(normalizeQuery(qFromUrl));
+    setActiveCategory(filterFromUrl);
+    setResultsPage(pageFromUrl);
+  }, [disableUrlSync, filterFromUrl, pageFromUrl, qFromUrl]);
 
-  const syncMarketUrl = useCallback(
-    (slug: string) => {
+  useEffect(() => {
+    setIsSearching(true);
+    const t = window.setTimeout(() => setIsSearching(false), 180);
+    return () => window.clearTimeout(t);
+  }, [query, activeCategory, sort, activeDemoUserTaxonomy]);
+
+  useEffect(() => {
+    setResultsPage(1);
+  }, [query, activeCategory, sort, activeDemoUserTaxonomy]);
+
+  const syncUrl = useCallback(
+    (next: { q?: string; filter?: SearchCategoryFilter; page?: number }) => {
       if (disableUrlSync) return;
       const params = new URLSearchParams(searchParams.toString());
-      if (slug) params.set('market', slug);
-      else params.delete('market');
+      const qRaw = next.q ?? draft;
+      const trimmed = qRaw.trim();
+      if (trimmed) params.set('q', trimmed);
+      else params.delete('q');
+
+      const filter = next.filter ?? activeCategory;
+      const filterParam = categoryFilterToParam(filter);
+      if (filterParam) params.set('filter', filterParam);
+      else params.delete('filter');
+
+      const page = next.page ?? resultsPage;
+      if (page > 1) params.set('p', String(page));
+      else params.delete('p');
+
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
-    [disableUrlSync, pathname, router, searchParams]
+    [activeCategory, disableUrlSync, draft, pathname, resultsPage, router, searchParams]
   );
 
-  const marketDisplay = useMemo(
-    () => resolveMarketDisplay(selectedMarketSlug),
-    [selectedMarketSlug]
+  const runSearch = useCallback(
+    (term?: string) => {
+      const trimmed = (term ?? draft).trim();
+      setDraft(trimmed);
+      setQuery(normalizeQuery(trimmed));
+      setResultsPage(1);
+      syncUrl({ q: trimmed, page: 1 });
+    },
+    [draft, syncUrl]
   );
 
-  const filteredCommunities = useMemo(
+  const queryMatched = useMemo(
     () =>
-      filterHomeCommunities(homeSearchCommunities, {
-        zipCode,
-        price,
-        city,
-        region,
-        marketSlug: selectedMarketSlug,
-      }),
-    [zipCode, price, city, region, selectedMarketSlug]
+      activeCatalog.filter(
+        (item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy) && itemMatchesQuery(item, query)
+      ),
+    [activeCatalog, activeDemoUserTaxonomy, query]
   );
 
-  const communityCount = filteredCommunities.length;
-  const listingCount = countListings(filteredCommunities);
-
-  const visibleMarkers = useMemo(() => {
-    const communityIds = new Set(filteredCommunities.map((community) => community.id));
-    return homeSearchMapMarkers.filter(
-      (marker) =>
-        marker.type === 'design-center' ||
-        (marker.communityId && communityIds.has(marker.communityId))
-    );
-  }, [filteredCommunities]);
-
-  const handleCityChange = (value: string) => {
-    setCity(value);
-    if (value !== FILTER_SHOW_ALL) {
-      setSelectedMarketSlug(value);
-      syncMarketUrl(value);
+  const categoryCounts = useMemo(() => {
+    const counts = Object.fromEntries(categoryFilters.map((c) => [c, 0])) as Record<
+      SearchCategoryFilter,
+      number
+    >;
+    counts.all = queryMatched.length;
+    for (const item of queryMatched) {
+      counts[item.category] += 1;
     }
+    return counts;
+  }, [queryMatched]);
+
+  const filtered = useMemo(() => {
+    let list = queryMatched;
+    if (activeCategory !== 'all') {
+      list = list.filter((item) => item.category === activeCategory);
+    }
+    const sorted = [...list];
+    if (sort === 'az') {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else {
+      sorted.sort((a, b) => {
+        const ra = relevanceScore(a, query, activeDemoUserTaxonomy);
+        const rb = relevanceScore(b, query, activeDemoUserTaxonomy);
+        if (rb !== ra) return rb - ra;
+        return a.title.localeCompare(b.title);
+      });
+    }
+    return sorted;
+  }, [activeCategory, activeDemoUserTaxonomy, query, queryMatched, sort]);
+
+  const resultsTotalPages = Math.max(1, Math.ceil(filtered.length / RESULTS_PAGE_SIZE));
+  const safeResultsPage = Math.min(resultsPage, resultsTotalPages);
+  const pagedResults = useMemo(() => {
+    const start = (safeResultsPage - 1) * RESULTS_PAGE_SIZE;
+    return filtered.slice(start, start + RESULTS_PAGE_SIZE);
+  }, [filtered, safeResultsPage]);
+
+  useEffect(() => {
+    if (resultsPage > resultsTotalPages) setResultsPage(resultsTotalPages);
+  }, [resultsPage, resultsTotalPages]);
+
+  const featured = useMemo(
+    () => selectFeaturedAnswer(query, activeDemoUserTaxonomy),
+    [activeDemoUserTaxonomy, query]
+  );
+  const aiInsight = useMemo(
+    () => selectAiSearchInsight(query, activeDemoUserTaxonomy),
+    [activeDemoUserTaxonomy, query]
+  );
+
+  const displayHeading = draft.trim() || qFromUrl.trim();
+
+  const handleCategoryChange = (category: SearchCategoryFilter) => {
+    setActiveCategory(category);
+    setResultsPage(1);
+    syncUrl({ filter: category, page: 1 });
   };
 
-  const handleMarketSelect = (slug: string) => {
-    setSelectedMarketSlug(slug);
-    setCity(slug);
-    syncMarketUrl(slug);
+  const handlePageChange = (page: number) => {
+    setResultsPage(page);
+    syncUrl({ page });
   };
 
   return (
-    <section className={cn('bg-white text-[#2f2f2d]', className)} aria-label="Find a home search results">
-      <div className="border-b border-[#d8cfc3]">
-        <HomeSearchMap markers={visibleMarkers} className="h-[320px] w-full sm:h-[380px] lg:h-[420px]" />
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6 px-4 py-3 text-xs text-[#2f2f2d]">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex size-5 items-center justify-center rounded-sm bg-[#2f5f8f] text-[10px] font-bold text-white">
-              <Home className="size-3" aria-hidden />
-            </span>
-            <span>Communities</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex size-5 items-center justify-center rounded-full bg-[#dc2626] text-white">
-              ★
-            </span>
-            <span>Design Center</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-        <nav aria-label="Breadcrumb" className="text-xs uppercase tracking-wide text-[#a7a09a]">
-          <ol className="flex flex-wrap items-center gap-2">
-            {marketDisplay.breadcrumb.map((crumb, index) => (
-              <li key={`${crumb}-${index}`} className="flex items-center gap-2">
-                {index > 0 ? <span aria-hidden>/</span> : null}
-                <span className={index === marketDisplay.breadcrumb.length - 1 ? 'text-[#2f2f2d]' : ''}>
-                  {crumb}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <h1 className="font-serif text-4xl font-medium text-[#2f2f2d]">Find a Home</h1>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 border border-[#d8cfc3] px-4 py-2 text-sm font-medium text-[#2f2f2d] hover:bg-[#f7f3ed]"
-            >
-              About the {marketDisplay.label.split(',')[0]} Market
-              <ChevronDown className="size-4" aria-hidden />
-            </button>
-          </div>
-
-          <div className="flex flex-col items-start gap-2 sm:items-end">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#a7a09a]">113 Reviews</p>
-            <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-[#2f2f2d]">4.8</span>
-              <StarRating rating={4.8} />
+    <section className={cn('min-h-[60vh] bg-background pb-16 pt-6 sm:pt-8', className)} aria-label="Site search">
+      <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8">
+        {/* Search bar */}
+        <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4 sm:p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative min-w-0 flex-1">
+              <Search
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#4E60EE]"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    runSearch();
+                  }
+                }}
+                placeholder="Search products, learn, support, manuals…"
+                className="h-12 w-full rounded-full border border-border bg-background pl-10 pr-10 text-sm text-foreground shadow-sm outline-none ring-[#4E60EE]/20 placeholder:text-muted-foreground focus:border-[#4E60EE] focus:ring-2 focus:ring-[#4E60EE]/20"
+                autoComplete="off"
+              />
+              {draft ? (
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  aria-label="Clear search"
+                  onClick={() => {
+                    setDraft('');
+                    setQuery('');
+                    setResultsPage(1);
+                    syncUrl({ q: '', page: 1 });
+                  }}
+                >
+                  <X className="size-4" />
+                </button>
+              ) : null}
             </div>
-            <button
+            <Button
               type="button"
-              className="bg-[#f2894f] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
+              className="h-12 shrink-0 rounded-full border border-[#4E60EE] bg-white px-8 font-semibold text-[#4E60EE] hover:bg-[#f5f5f5]"
+              onClick={() => runSearch()}
             >
-              Read Reviews
-            </button>
+              Search
+            </Button>
           </div>
-        </div>
 
-        <div className="mt-8 border-b border-[#d8cfc3]">
-          <div className="flex gap-8">
-            <button
-              type="button"
-              onClick={() => setActiveTab('home-search')}
-              className={cn(
-                'border-b-2 pb-3 text-xs font-bold uppercase tracking-wider',
-                activeTab === 'home-search'
-                  ? 'border-[#f2894f] text-[#2f2f2d]'
-                  : 'border-transparent text-[#a7a09a]'
-              )}
-            >
-              Home Search
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('plan-lookup')}
-              className={cn(
-                'border-b-2 pb-3 text-xs font-bold uppercase tracking-wider',
-                activeTab === 'plan-lookup'
-                  ? 'border-[#f2894f] text-[#2f2f2d]'
-                  : 'border-transparent text-[#a7a09a]'
-              )}
-            >
-              Plan Lookup
-            </button>
-          </div>
-        </div>
-
-        {activeTab === 'home-search' ? (
-          <>
-            <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_1fr_auto] lg:items-end">
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
-                  Zip Code
-                </span>
-                <div className="flex overflow-hidden border border-[#d8cfc3]">
-                  <input
-                    type="text"
-                    value={zipCode}
-                    onChange={(event) => setZipCode(event.target.value)}
-                    placeholder="Enter zip"
-                    className="h-11 min-w-0 flex-1 bg-white px-3 text-sm outline-none"
-                  />
-                  <button
-                    type="button"
-                    className="flex w-12 items-center justify-center bg-[#f2894f] text-white hover:bg-[#e07a42]"
-                    aria-label="Search by zip code"
-                  >
-                    <Search className="size-4" aria-hidden />
-                  </button>
-                </div>
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
-                  Price
-                </span>
-                <Select value={price} onValueChange={setPrice}>
-                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {priceFilterOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
-                  City
-                </span>
-                <Select value={city} onValueChange={handleCityChange}>
-                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-72">
-                    {cityFilterOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
-                  Region
-                </span>
-                <Select value={region} onValueChange={setRegion}>
-                  <SelectTrigger className="h-11 rounded-none border-[#d8cfc3] bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {regionFilterOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </label>
-
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/40 pt-4">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Popular</span>
+            {popularSearches.map((term) => (
               <button
+                key={term}
                 type="button"
-                onClick={() => setShowMoreFilters((open) => !open)}
-                className="h-11 bg-[#f2894f] px-5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42] lg:mb-0"
+                onClick={() => runSearch(term)}
+                className="rounded-full border border-border/80 bg-background px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-[#4E60EE]/40 hover:text-[#4E60EE]"
               >
-                More Filters
+                {term}
               </button>
-            </div>
+            ))}
+          </div>
+        </div>
 
-            {showMoreFilters ? (
-              <div className="mt-4 grid gap-4 border border-[#d8cfc3] bg-[#f7f3ed] p-4 sm:grid-cols-2 lg:grid-cols-4">
-                <label className="block text-sm">
-                  <span className="mb-1 block font-medium">Bedrooms</span>
-                  <Select defaultValue={FILTER_SHOW_ALL}>
-                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
-                      <SelectValue placeholder="Select your option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
-                      <SelectItem value="3">3+</SelectItem>
-                      <SelectItem value="4">4+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </label>
-                <label className="block text-sm">
-                  <span className="mb-1 block font-medium">Bathrooms</span>
-                  <Select defaultValue={FILTER_SHOW_ALL}>
-                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
-                      <SelectValue placeholder="Select your option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
-                      <SelectItem value="2">2+</SelectItem>
-                      <SelectItem value="3">3+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </label>
-                <label className="block text-sm">
-                  <span className="mb-1 block font-medium">Stories</span>
-                  <Select defaultValue={FILTER_SHOW_ALL}>
-                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
-                      <SelectValue placeholder="Select your option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </label>
-                <label className="block text-sm">
-                  <span className="mb-1 block font-medium">Owner&apos;s Retreat</span>
-                  <Select defaultValue={FILTER_SHOW_ALL}>
-                    <SelectTrigger className="h-10 rounded-none border-[#d8cfc3] bg-white">
-                      <SelectValue placeholder="Select your option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={FILTER_SHOW_ALL}>Show All</SelectItem>
-                      <SelectItem value="yes">Yes</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </label>
-              </div>
+        {/* Persona banner */}
+        {activeDemoUserTaxonomy ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl border border-[#4E60EE]/20 bg-[#4E60EE]/5 px-4 py-3 text-sm text-foreground">
+            <UserCircle2 className="size-4 shrink-0 text-[#4E60EE]" aria-hidden />
+            <span>
+              Results personalized for{' '}
+              <strong className="font-semibold text-[#4E60EE]">{activeDemoUserTaxonomy}</strong>.
+            </span>
+            <span className="text-muted-foreground">Change persona via the header Login menu.</span>
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-muted-foreground">
+            Select a persona in the header <strong className="font-medium text-foreground">Login</strong> menu to
+            personalize ranking and supplemental results.
+          </p>
+        )}
+
+        {/* Suggested questions */}
+        <div className="mt-6">
+          <h2 className="text-sm font-semibold text-foreground">Suggested questions</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {suggestedQuestions.map((question) => (
+              <button
+                key={question}
+                type="button"
+                onClick={() => runSearch(question.replace(/\?$/, ''))}
+                className="rounded-full border border-border bg-card px-4 py-2 text-left text-xs font-medium text-foreground shadow-sm transition-colors hover:border-[#4E60EE]/40 hover:bg-[#4E60EE]/5 hover:text-[#4E60EE]"
+              >
+                {question}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <header className="mt-10">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            {normalizeQuery(query) ? (
+              <>
+                Results for <span className="text-[#4E60EE]">&ldquo;{displayHeading}&rdquo;</span>
+              </>
+            ) : (
+              'Search Illumina.com'
+            )}
+          </h1>
+          {activeCategory !== 'all' ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Filtered by <strong className="text-foreground">{categoryFilterLabels[activeCategory]}</strong>
+            </p>
+          ) : null}
+        </header>
+
+        {/* Mobile category pills */}
+        <div className="mt-6 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+          {categoryFilters.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => handleCategoryChange(category)}
+              className={cn(
+                'shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                activeCategory === category
+                  ? 'border-[#4E60EE] bg-[#4E60EE]/10 text-[#4E60EE]'
+                  : 'border-border bg-card text-foreground'
+              )}
+            >
+              {categoryFilterLabels[category]} ({categoryCounts[category]})
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12">
+          <aside className="hidden w-full shrink-0 lg:block lg:w-[min(100%,18rem)] xl:w-72">
+            <div className="sticky top-28">
+              <CategorySidebar
+                activeCategory={activeCategory}
+                categoryCounts={categoryCounts}
+                onCategoryChange={handleCategoryChange}
+              />
+            </div>
+          </aside>
+
+          <main className="min-w-0 flex-1">
+            {/* AI / Q&A answer */}
+            {featured ? (
+              <section
+                className="relative overflow-hidden rounded-2xl border border-[#4E60EE]/25 bg-gradient-to-br from-[#4E60EE]/8 via-background to-secondary/40 p-5 shadow-sm"
+                aria-labelledby="search-qa-heading"
+              >
+                <div className="absolute right-0 top-0 size-40 rounded-full bg-[#4E60EE]/10 blur-3xl" />
+                <div className="relative flex items-start gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#4E60EE]/15 text-[#4E60EE]">
+                    <Sparkles className="size-5" aria-hidden />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <p id="search-qa-heading" className="text-xs font-bold uppercase tracking-wider text-[#4E60EE]">
+                      AI answer
+                    </p>
+                    <h2 className="text-lg font-semibold leading-snug text-foreground">{featured.question}</h2>
+                    <p className="text-sm leading-relaxed text-foreground/85">{featured.displayAnswer}</p>
+                    <a
+                      href={featured.learnMoreHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#4E60EE] hover:underline"
+                    >
+                      {featured.learnMoreLabel ?? 'Learn more'}
+                      <ArrowUpRight className="size-3.5" aria-hidden />
+                    </a>
+                  </div>
+                </div>
+              </section>
             ) : null}
 
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-              <span className="inline-flex bg-[#f2894f] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
-                {communityCount} {communityCount === 1 ? 'Community' : 'Communities'}
-              </span>
+            {aiInsight ? (
+              <section
+                className={cn(
+                  'rounded-2xl border border-border/80 bg-card p-5 shadow-sm',
+                  featured ? 'mt-4' : ''
+                )}
+                aria-labelledby="search-ai-insight-heading"
+              >
+                <p id="search-ai-insight-heading" className="text-xs font-bold uppercase tracking-wider text-[#4E60EE]">
+                  AI search insight
+                </p>
+                <h2 className="mt-2 text-base font-semibold text-foreground">{aiInsight.headline}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/85">{aiInsight.body}</p>
+                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-foreground/80">
+                  {aiInsight.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+                <a
+                  href={aiInsight.learnMoreHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#4E60EE] hover:underline"
+                >
+                  {aiInsight.learnMoreLabel ?? 'Learn more'}
+                  <ArrowUpRight className="size-3.5" aria-hidden />
+                </a>
+              </section>
+            ) : null}
 
-              <div className="flex items-center gap-2 text-sm text-[#a7a09a]">
-                <MapPin className="size-4 text-[#f2894f]" aria-hidden />
-                <span>Selected market:</span>
-                <Select value={selectedMarketSlug} onValueChange={handleMarketSelect}>
-                  <SelectTrigger className="h-9 w-[14rem] rounded-none border-[#d8cfc3] bg-white text-[#2f2f2d]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-72">
-                    {DWH_MARKETS.map((market) => (
-                      <SelectItem key={market.slug} value={market.slug}>
-                        {market.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div
+              className={cn(
+                'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between',
+                featured || aiInsight ? 'mt-8' : 'mt-0'
+              )}
+            >
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                {isSearching ? <Loader2 className="size-4 shrink-0 animate-spin text-[#4E60EE]" aria-hidden /> : null}
+                <span>
+                  <strong className="font-semibold text-foreground">{filtered.length}</strong>{' '}
+                  {filtered.length === 1 ? 'result' : 'results'}
+                </span>
               </div>
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <span className="hidden sm:inline">Sort</span>
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortMode)}
+                  className="h-9 rounded-full border border-border bg-background px-3 text-sm outline-none focus:border-[#4E60EE] focus:ring-2 focus:ring-[#4E60EE]/20"
+                >
+                  <option value="relevance">Best match</option>
+                  <option value="az">Title A–Z</option>
+                </select>
+              </label>
             </div>
 
-            <p className="mt-6 max-w-4xl text-sm leading-relaxed text-[#2f2f2d]">
-              David Weekley Homes has new homes for sale in the {marketDisplay.label.split(',')[0]} area.
-              Browse communities, compare floor plans, and schedule a model home tour to experience the
-              David Weekley Difference.
-            </p>
+            {filtered.length > 0 ? (
+              <>
+                <div className="mt-4 rounded-2xl border border-border/70 bg-card px-4 sm:px-6">
+                  {pagedResults.map((item) => (
+                    <ResultRow key={item.id} item={item} />
+                  ))}
+                </div>
 
-            {filteredCommunities.length > 0 ? (
-              <div className="mt-4">
-                {filteredCommunities.map((community) => (
-                  <CommunitySection key={community.id} community={community} />
-                ))}
-              </div>
+                {filtered.length > RESULTS_PAGE_SIZE ? (
+                  <nav
+                    className="mt-8 flex flex-col items-stretch justify-between gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center"
+                    aria-label="Paged search results"
+                  >
+                    <p className="text-sm text-muted-foreground">
+                      Showing{' '}
+                      <span className="font-semibold tabular-nums text-foreground">
+                        {(safeResultsPage - 1) * RESULTS_PAGE_SIZE + 1}
+                      </span>
+                      –
+                      <span className="font-semibold tabular-nums text-foreground">
+                        {Math.min(safeResultsPage * RESULTS_PAGE_SIZE, filtered.length)}
+                      </span>{' '}
+                      of <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span>
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full"
+                        disabled={safeResultsPage <= 1}
+                        onClick={() => handlePageChange(Math.max(1, safeResultsPage - 1))}
+                      >
+                        Previous
+                      </Button>
+                      <span className="px-2 text-sm tabular-nums text-foreground">
+                        Page {safeResultsPage} of {resultsTotalPages}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full"
+                        disabled={safeResultsPage >= resultsTotalPages}
+                        onClick={() => handlePageChange(Math.min(resultsTotalPages, safeResultsPage + 1))}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </nav>
+                ) : null}
+              </>
             ) : (
-              <div className="mt-10 border border-dashed border-[#d8cfc3] bg-[#f7f3ed] px-6 py-12 text-center">
-                <p className="text-sm font-medium text-[#2f2f2d]">
-                  No matching homes were found for the selected search criteria.
+              <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/20 px-6 py-12 text-center">
+                <p className="text-sm font-medium text-foreground">No matches for that combination.</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Try a broader phrase like &ldquo;spatial discovery&rdquo; or switch category to All.
                 </p>
-                <p className="mt-2 text-sm text-[#a7a09a]">
-                  Try modifying your filter selections to view more homes.
-                </p>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="mt-5 rounded-full"
+                  onClick={() => handleCategoryChange('all')}
+                >
+                  Show all categories
+                </Button>
               </div>
             )}
 
-            <p className="mt-8 text-xs leading-relaxed text-[#a7a09a]">
-              Figures reflecting size, square footage, and other dimensions are estimates; actual
-              construction may vary. Prices, plans, dimensions, features, and availability of homes or
-              communities are subject to change without notice or obligation.
-            </p>
-          </>
-        ) : (
-          <div className="mt-8 max-w-xl">
-            <label className="block">
-              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#2f2f2d]">
-                Plan Name or Number
-              </span>
-              <div className="flex overflow-hidden border border-[#d8cfc3]">
-                <input
-                  type="search"
-                  value={planQuery}
-                  onChange={(event) => setPlanQuery(event.target.value)}
-                  placeholder="Search plans"
-                  className="h-11 min-w-0 flex-1 bg-white px-3 text-sm outline-none"
-                />
-                <button
-                  type="button"
-                  className="bg-[#f2894f] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
-                >
-                  Search
-                </button>
-              </div>
-            </label>
-            <p className="mt-4 text-sm text-[#a7a09a]">
-              {listingCount} floor plans available in the selected market.
-            </p>
-          </div>
-        )}
-
-        <section className="mt-12 border-t border-[#d8cfc3] pt-10 text-center">
-          <h2 className="font-serif text-2xl text-[#2f2f2d]">
-            We&apos;re here to help you find your new home
-          </h2>
-          <button
-            type="button"
-            className="mt-4 bg-[#f2894f] px-8 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#e07a42]"
-          >
-            Contact Us
-          </button>
-        </section>
+            <div className="mt-10 lg:hidden">
+              <Collapsible defaultOpen={false}>
+                <CollapsibleTrigger className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground">
+                  More search tools
+                  <ChevronDown className="size-4 text-[#4E60EE]" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pt-3">
+                  <ul className="space-y-2 rounded-2xl border border-border bg-card p-4">
+                    {searchTools.map((tool) => (
+                      <li key={tool.href}>
+                        <Link
+                          href={tool.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium text-[#4E60EE] hover:underline"
+                        >
+                          {tool.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          </main>
+        </div>
       </div>
     </section>
   );
