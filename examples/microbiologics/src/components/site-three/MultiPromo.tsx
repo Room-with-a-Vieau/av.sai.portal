@@ -171,8 +171,8 @@ const CardCarouselPanel = ({ promo, isActive, onActivate }: CardCarouselPanelPro
           : 'border-border bg-card text-foreground hover:border-primary/25'
       )}
       tabIndex={0}
-      aria-label={headingLabel}
-      aria-pressed={isActive}
+      aria-label={isActive ? `${headingLabel} (selected)` : headingLabel}
+      aria-current={isActive ? 'true' : undefined}
       onMouseEnter={onActivate}
       onFocus={onActivate}
       onClick={onActivate}

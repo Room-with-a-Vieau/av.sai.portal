@@ -9,7 +9,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY, DEMO_USER_OPTIONS } from '@/lib/demo-taxonomy';
+import {
+  DEMO_TAXONOMY_CHANGE_EVENT,
+  DEMO_TAXONOMY_STORAGE_KEY,
+  DEMO_USER_OPTIONS,
+  TAXONOMY_TO_PROFILE_KEY,
+  dispatchProfileChange,
+} from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
 
 export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
@@ -24,6 +30,10 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
     setTaxonomy(value);
     window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, value);
     window.dispatchEvent(new CustomEvent(DEMO_TAXONOMY_CHANGE_EVENT, { detail: { taxonomy: value } }));
+    const profileKey = TAXONOMY_TO_PROFILE_KEY[value as keyof typeof TAXONOMY_TO_PROFILE_KEY];
+    if (profileKey) {
+      dispatchProfileChange(profileKey, value as (typeof DEMO_USER_OPTIONS)[number]['taxonomy']);
+    }
   };
 
   return (

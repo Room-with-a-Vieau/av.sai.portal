@@ -19,7 +19,6 @@ import {
   Menu,
   Search,
   ShoppingCart,
-  User,
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
