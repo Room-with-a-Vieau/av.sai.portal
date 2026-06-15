@@ -7,6 +7,7 @@ import {
   Centered as HeroSTCentered,
   SplitScreen as HeroSTSplitScreen,
   Stacked as HeroSTStacked,
+  WithVideoSplit as HeroSTWithVideoSplit,
 } from '@/components/site-three/HeroST';
 
 // Mock useContainerOffsets hook
@@ -226,6 +227,46 @@ describe('HeroST', () => {
       };
       render(<HeroSTSplitScreen {...propsWithoutTitle} />);
       expect(screen.getByText('New Collection')).toBeInTheDocument();
+    });
+  });
+
+  describe('WithVideoSplit variant', () => {
+    it('renders title from Title field', () => {
+      render(<HeroSTWithVideoSplit {...mockProps} />);
+      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+    });
+
+    it('renders eyebrow from Eyebrow field', () => {
+      render(<HeroSTWithVideoSplit {...mockProps} />);
+      expect(screen.getByText('New Collection')).toBeInTheDocument();
+    });
+
+    it('renders looping hero video', () => {
+      render(<HeroSTWithVideoSplit {...mockProps} />);
+      const video = document.querySelector('video') as HTMLVideoElement;
+      expect(video).toBeInTheDocument();
+      expect(video.autoplay).toBe(true);
+      expect(video.loop).toBe(true);
+      expect(video.muted).toBe(true);
+      expect(video).toHaveAttribute('playsinline');
+    });
+
+    it('renders hardcoded focus area cards', () => {
+      render(<HeroSTWithVideoSplit {...mockProps} />);
+      expect(screen.getByText('Microbiology')).toBeInTheDocument();
+      expect(screen.getByText('Molecular Diagnostics')).toBeInTheDocument();
+      expect(screen.getByText('Virology')).toBeInTheDocument();
+    });
+
+    it('applies primary background on content panel', () => {
+      const { container } = render(<HeroSTWithVideoSplit {...mockProps} />);
+      expect(container.querySelector('.bg-primary')).toBeInTheDocument();
+    });
+
+    it('applies custom styles', () => {
+      const { container } = render(<HeroSTWithVideoSplit {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
     });
   });
 

@@ -37,6 +37,89 @@ const HERO_CONTENT_BAND_CLASS =
 /** Main headline scale (smaller than previous display sizes for shorter hero band) */
 const HERO_TITLE_CLASS = 'text-3xl md:text-4xl lg:text-5xl';
 
+/** Looping hero video for WithVideoSplit (Microbiologics homepage). */
+const HERO_VIDEO_SPLIT_SRC =
+  'https://mrfbasech.sitecoresandbox.cloud/api/public/content/8c0a176cff5244e38a1532274aff3648?v=6030d7ad';
+
+const HERO_FOCUS_AREAS = [
+  {
+    title: 'Microbiology',
+    description:
+      'Leaders in microbiological reference materials and anti-infective drug testing services',
+    iconBgClass: 'bg-[#273692]',
+    iconFgClass: 'text-white',
+    icon: (
+      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden="true">
+        <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="2" />
+        <path
+          d="M24 8v6M24 34v6M8 24h6M34 24h6M12.7 12.7l4.2 4.2M31.1 31.1l4.2 4.2M12.7 35.3l4.2-4.2M31.1 16.9l4.2-4.2"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: 'Molecular Diagnostics',
+    description:
+      'Bringing precision to infectious disease and oncology molecular diagnostics',
+    iconBgClass: 'bg-[#6DCCE1]',
+    iconFgClass: 'text-white',
+    icon: (
+      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden="true">
+        <path
+          d="M14 8c0 8 4 12 10 12s10-4 10-12M14 40c0-8 4-12 10-12s10 4 10 12"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M18 14l6 20M30 14l-6 20"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: 'Virology',
+    description:
+      'Go-to collaborators for BSL-2 & BSL-3 high-titer viral stocks and antiviral assay services',
+    iconBgClass: 'bg-white',
+    iconFgClass: 'text-[#10112D]',
+    icon: (
+      <svg viewBox="0 0 48 48" fill="none" className="h-10 w-10" aria-hidden="true">
+        <circle cx="24" cy="24" r="10" stroke="currentColor" strokeWidth="2" />
+        <path
+          d="M24 6v4M24 38v4M6 24h4M38 24h4M10.3 10.3l2.8 2.8M34.9 34.9l2.8 2.8M10.3 37.7l2.8-2.8M34.9 13.1l2.8-2.8"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+] as const;
+
+function HeroVideoSplitDecorativeOverlay() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 overflow-hidden"
+      aria-hidden="true"
+    >
+      <div className="absolute -bottom-6 -left-6 flex -rotate-[28deg] flex-col gap-2.5">
+        <div className="h-3 w-28 rounded-full bg-[#6DCCE1] opacity-95 sm:w-36" />
+        <div className="ml-6 h-3 w-32 rounded-full bg-[#4754A2] opacity-95 sm:w-44" />
+        <div className="ml-2 h-3 w-24 rounded-full bg-white opacity-90 sm:w-32" />
+        <div className="ml-10 h-3 w-36 rounded-full bg-[#273692] opacity-95 sm:w-48" />
+        <div className="ml-4 h-3 w-20 rounded-full bg-[#E6E7E8] opacity-90 sm:w-28" />
+      </div>
+    </div>
+  );
+}
+
 /** Light text over dark hero imagery (theme token — typically white / near-white). */
 const HERO_TEXT_ON_DARK_IMAGE_CLASS = 'text-primary-foreground';
 
@@ -307,6 +390,70 @@ export const Stacked = (props: PageHeaderSTProps) => {
             height={1080}
             className={`absolute inset-0 z-10 ${HERO_BG_IMAGE_CLASS}`}
           />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/**
+ * Microbiologics-style split hero: looping video (left) and navy content panel (right).
+ * Title and Eyebrow are CMS fields; focus-area cards are hardcoded for now.
+ */
+export const WithVideoSplit = (props: PageHeaderSTProps) => {
+  return (
+    <section
+      className={cn(
+        'relative overflow-hidden border-8 border-background lg:border-16',
+        props?.params?.styles
+      )}
+      data-class-change
+      data-hero-variant="with-video-split"
+    >
+      <div className={cn('flex flex-col lg:flex-row', HERO_CONTENT_BAND_CLASS)}>
+        <div className="relative aspect-4/3 min-h-[18rem] w-full bg-muted lg:aspect-auto lg:min-h-0 lg:w-1/2">
+          <video
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-hidden="true"
+            preload="auto"
+          >
+            <source src={HERO_VIDEO_SPLIT_SRC} type="video/mp4" />
+          </video>
+          <HeroVideoSplitDecorativeOverlay />
+        </div>
+
+        <div className="flex w-full flex-col justify-center bg-primary px-6 py-10 text-primary-foreground lg:w-1/2 lg:px-12 lg:py-14 xl:px-16">
+          <ContentSdkText
+            field={props?.fields?.Title}
+            tag="h1"
+            className={cn(HERO_TITLE_CLASS, 'font-bold leading-tight')}
+          />
+          <div className="mt-4 h-1 w-14 bg-primary-foreground" aria-hidden="true" />
+          <p className="mt-4 text-lg font-bold md:text-xl">
+            <ContentSdkText field={props?.fields?.Eyebrow} />
+          </p>
+
+          <ul className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-6">
+            {HERO_FOCUS_AREAS.map((area) => (
+              <li key={area.title} className="flex flex-col items-center text-center sm:items-start sm:text-left">
+                <div
+                  className={cn(
+                    'mb-4 flex h-20 w-20 shrink-0 items-center justify-center rounded-full',
+                    area.iconBgClass,
+                    area.iconFgClass
+                  )}
+                >
+                  {area.icon}
+                </div>
+                <h2 className="text-sm font-bold uppercase tracking-wide">{area.title}</h2>
+                <p className="mt-2 text-sm leading-snug text-primary-foreground/90">{area.description}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

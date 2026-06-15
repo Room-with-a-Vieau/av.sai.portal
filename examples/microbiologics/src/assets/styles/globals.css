@@ -294,12 +294,13 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | microbiologics"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
  * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
  * threatlocker (threatlocker.com): navy primary (#0b223f), sky CTA accent (#3997d4), light section surfaces (#f4f4f4).
+ * microbiologics (microbiologics.com): hero navy (#10112d), brand blue CTAs (#273792), teal highlights (#6dcce1), virology blue (#006ba2).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -470,5 +471,52 @@
 }
 
 [data-theme='threatlocker'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='microbiologics'] {
+  --background-image-gradient: linear-gradient(135deg, #10112d 0%, #273692 55%, #6dcce1 100%);
+  --background-image-gradient-secondary: linear-gradient(
+    90deg,
+    #6dcce1 0%,
+    #273792 50%,
+    #10112d 100%
+  );
+  --border-radius-default: 0.25rem;
+  --color-background: #ffffff;
+  --color-foreground: #222426;
+  --color-card: #ffffff;
+  --color-card-foreground: #222426;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #222426;
+  --color-primary: #10112d;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #0a0c22;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #222426;
+  --color-secondary-hover: #e6e7e8;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #5c5f66;
+  --color-accent: #273792;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e6e7e8;
+  --color-input: #e6e7e8;
+  --color-ring: #6dcce1;
+  --color-tertiary-foreground: #222426;
+  --color-tertiary-hover: #e6e7e8;
+  --color-tertiary: #f5f5f5;
+  --color-dark-foreground: #222426;
+  --color-dark-hover: #e6e7e8;
+  --color-dark: #f5f5f5;
+  --color-light: #f5f5f5;
+  --color-light-hover: #e6e7e8;
+  --color-light-foreground: #222426;
+  --color-overlay: rgb(16 17 45 / 0.55);
+}
+
+[data-theme='microbiologics'] .bg-primary {
   color: var(--color-primary-foreground);
 }
