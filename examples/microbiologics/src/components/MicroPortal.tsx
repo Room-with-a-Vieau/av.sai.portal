@@ -434,12 +434,11 @@ export function MicroPortalProfileProvider({
   );
 }
 
-function useActiveProfileKey(): ProfileKey {
+function useActiveProfileKey(): ProfileKey | null {
   const ctx = useContext(MicroPortalProfileContext);
-  const [profileKey, setProfileKey] = useState<ProfileKey>(() => {
-    if (typeof window === 'undefined') return 'laboratory-procurement-manager';
-    const fromStorage = taxonomyToProfileKey(localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY));
-    return fromStorage ?? 'laboratory-procurement-manager';
+  const [profileKey, setProfileKey] = useState<ProfileKey | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return taxonomyToProfileKey(localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY));
   });
 
   useEffect(() => {
@@ -450,7 +449,11 @@ function useActiveProfileKey(): ProfileKey {
 
   useEffect(() => {
     const onProfileChange = (event: Event) => {
-      const detail = (event as CustomEvent<{ profileKey?: string }>).detail;
+      const detail = (event as CustomEvent<{ profileKey?: string | null }>).detail;
+      if (detail?.profileKey === null) {
+        setProfileKey(null);
+        return;
+      }
       if (detail?.profileKey && isMicroPortalProfileKey(detail.profileKey)) {
         setProfileKey(detail.profileKey);
       }
@@ -458,6 +461,10 @@ function useActiveProfileKey(): ProfileKey {
 
     const onTaxonomyChange = (event: Event) => {
       const taxonomy = (event as CustomEvent<{ taxonomy?: string }>).detail?.taxonomy;
+      if (!taxonomy?.trim()) {
+        setProfileKey(null);
+        return;
+      }
       const key = taxonomyToProfileKey(taxonomy);
       if (key) setProfileKey(key);
     };
@@ -466,7 +473,7 @@ function useActiveProfileKey(): ProfileKey {
     window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, onTaxonomyChange);
 
     const stored = taxonomyToProfileKey(localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY));
-    if (stored) setProfileKey(stored);
+    setProfileKey(stored);
 
     return () => {
       window.removeEventListener(PROFILE_CHANGE_EVENT, onProfileChange);
@@ -550,8 +557,39 @@ function documentPreviewContent(product: Product, docType: DocumentType) {
 // MicroPortal
 // ---------------------------------------------------------------------------
 
+function MicroPortalSignInPrompt({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'micro-portal flex min-h-[320px] flex-col items-center justify-center rounded-lg border border-dashed border-[#00788A]/40 bg-slate-50 px-6 py-16 text-center',
+        className
+      )}
+      data-component="micro-portal"
+    >
+      <p className="text-lg font-semibold text-[#1a1a1a]">B2B Portal</p>
+      <p className="mt-2 max-w-md text-sm text-slate-600">
+        Sign in using the header login menu and select a demo persona to load your NetSuite account
+        context — pricing, catalog, and document access.
+      </p>
+    </div>
+  );
+}
+
 function MicroPortalInner({ className }: { className?: string }) {
   const profileKey = useActiveProfileKey();
+  if (!profileKey) {
+    return <MicroPortalSignInPrompt className={className} />;
+  }
+  return <MicroPortalAuthenticated profileKey={profileKey} className={className} />;
+}
+
+function MicroPortalAuthenticated({
+  profileKey,
+  className,
+}: {
+  profileKey: ProfileKey;
+  className?: string;
+}) {
   const profile = USER_PROFILES[profileKey];
 
   const [contextBannerVisible, setContextBannerVisible] = useState(false);

@@ -3,18 +3,17 @@
 /**
  * SearchResults — Microbiologics product & document search (SitecoreAI demo).
  *
- * Mirrors microbiologics.com search: left "Narrow By" facets, list results with
- * catalog number, format badge, and "Log in to see price" for anonymous users.
- *
- * Persona integration: reads HeaderST demo user from localStorage and listens for
- * `demo-taxonomy-change` / `profile-change` events (same as MicroPortal).
+ * Mirrors microbiologics.com search with auth-scoped access:
+ * - Anonymous: find by catalog #, download COA, "Log in to see price", SDS/IFU locked
+ * - Authenticated (HeaderST persona): contract pricing + SDS/IFU download & inline preview
  */
 
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChevronDown, Loader2, Search, X } from 'lucide-react';
+import { ChevronDown, Download, Eye, Loader2, Lock, Search, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 import type { ComponentProps } from '@/lib/component-props';
 import {
@@ -27,10 +26,22 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
 import {
+  canAccessDocument,
+  DEMO_CATALOG_NUMBERS,
+  documentPreviewContent,
+  documentRequiresLogin,
   MB_BASE,
+  productHasAttachedDocuments,
   antibioticResistantOptions,
   biosafetyLevels,
   documentCategories,
@@ -59,6 +70,7 @@ import {
   type DemoUserTaxonomy,
   type DocumentCategory,
   type DocumentLanguage,
+  type DocumentType,
   type IndustryType,
   type InstrumentKit,
   type MolecularSyndromic,
@@ -356,6 +368,92 @@ function SearchFacetsPanel({
   );
 }
 
+function DocumentAccessPanel({
+  item,
+  user,
+  onDownload,
+  onPreview,
+}: {
+  item: SearchResultItem;
+  user: DemoUserTaxonomy | null;
+  onDownload: (item: SearchResultItem, docType: DocumentType) => void;
+  onPreview: (item: SearchResultItem, docType: DocumentType) => void;
+}) {
+  if (!productHasAttachedDocuments(item) || !item.documents) return null;
+
+  const rows: { type: DocumentType; available: boolean }[] = [
+    { type: 'COA', available: item.documents.coa },
+    { type: 'SDS', available: item.documents.sds },
+    { type: 'IFU', available: item.documents.ifu },
+  ].filter((r) => r.available);
+
+  if (!rows.length) return null;
+
+  return (
+    <div className="mt-3 rounded-md border border-border/60 bg-slate-50/80 px-3 py-2.5">
+      <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+        Documents
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {rows.map(({ type }) => {
+          const allowed = canAccessDocument(item, type, user);
+          const needsLogin = documentRequiresLogin(type) && !user;
+
+          if (allowed) {
+            return (
+              <div key={type} className="flex items-center gap-1">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="h-8 gap-1.5 border-[#00788A]/30 text-xs"
+                  onClick={() => onDownload(item, type)}
+                >
+                  <Download className="h-3.5 w-3.5" aria-hidden />
+                  {type}
+                </Button>
+                {(type === 'SDS' || type === 'IFU') && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 gap-1 px-2 text-xs text-[#00788A]"
+                    onClick={() => onPreview(item, type)}
+                  >
+                    <Eye className="h-3.5 w-3.5" aria-hidden />
+                    Preview
+                  </Button>
+                )}
+              </div>
+            );
+          }
+
+          if (needsLogin) {
+            return (
+              <span
+                key={type}
+                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-dashed border-border bg-muted/50 px-2.5 text-xs text-muted-foreground"
+                title="Sign in to access this document"
+              >
+                <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {type}
+                <span className="hidden sm:inline">— Sign in</span>
+              </span>
+            );
+          }
+
+          return null;
+        })}
+      </div>
+      {!user ? (
+        <p className="mt-2 text-xs text-muted-foreground">
+          COA available without login. Sign in via the header for SDS, IFU, and contract pricing.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function PriceLine({
   item,
   user,
@@ -402,9 +500,13 @@ function PriceLine({
 function ResultRow({
   item,
   user,
+  onDownload,
+  onPreview,
 }: {
   item: SearchResultItem;
   user: DemoUserTaxonomy | null;
+  onDownload: (item: SearchResultItem, docType: DocumentType) => void;
+  onPreview: (item: SearchResultItem, docType: DocumentType) => void;
 }) {
   const img = item.imageSrc ?? getDefaultCardImage();
   const formatLabel = searchFacetLabels.productFormat[item.productFormat];
@@ -442,6 +544,12 @@ function ResultRow({
         </a>
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
         <PriceLine item={item} user={user} />
+        <DocumentAccessPanel
+          item={item}
+          user={user}
+          onDownload={onDownload}
+          onPreview={onPreview}
+        />
       </div>
     </article>
   );
@@ -528,6 +636,32 @@ export const SearchResults: FC<SearchResultsProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [facets, setFacets] = useState<FacetSelections>(emptyFacets);
   const [resultsPage, setResultsPage] = useState(1);
+  const [previewDoc, setPreviewDoc] = useState<{
+    item: SearchResultItem;
+    docType: DocumentType;
+  } | null>(null);
+
+  const handleDocumentDownload = useCallback((item: SearchResultItem, docType: DocumentType) => {
+    if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
+      toast.message('Sign in required', {
+        description: `${docType} is available to authenticated users from your organization.`,
+      });
+      return;
+    }
+    toast.success(`${docType} download started`, {
+      description: `Catalog #${item.catalogNumber} — simulated file delivery`,
+    });
+  }, [activeDemoUserTaxonomy]);
+
+  const handleDocumentPreview = useCallback((item: SearchResultItem, docType: DocumentType) => {
+    if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
+      toast.message('Sign in required', {
+        description: `Inline preview for ${docType} requires authentication.`,
+      });
+      return;
+    }
+    setPreviewDoc({ item, docType });
+  }, [activeDemoUserTaxonomy]);
 
   const makeToggle = useCallback(
     (key: keyof FacetSelections) => (v: never) =>
@@ -730,15 +864,36 @@ export const SearchResults: FC<SearchResultsProps> = ({
               >
                 microbiologics.com
               </a>{' '}
-              — reference materials, molecular controls, panels, and regulatory documents. Use the
-              header login to resolve contract pricing from NetSuite.
+              — reference materials with auth-scoped documents: COA is public; SDS and IFU require
+              header login. Contract pricing resolves from NetSuite when signed in.
             </p>
+            <div className="mt-3 rounded-md border border-border/50 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              <span className="font-semibold text-foreground">Demo catalog numbers: </span>
+              {DEMO_CATALOG_NUMBERS.map((d, i) => (
+                <span key={d.catalogNumber}>
+                  {i > 0 ? ' · ' : ''}
+                  <button
+                    type="button"
+                    className="font-mono text-[#00788A] hover:underline"
+                    onClick={() => applyPopular(d.catalogNumber)}
+                  >
+                    {d.catalogNumber}
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
           <div className="rounded-md border border-dashed border-[#00788A]/30 bg-[#00788A]/5 px-3 py-2 text-xs text-muted-foreground">
             <span className="font-semibold text-foreground">Signed in as:</span> {personaLabel}
             {!activeDemoUserTaxonomy ? (
-              <span className="mt-0.5 block text-[#00788A]">Prices hidden until login</span>
-            ) : null}
+              <span className="mt-0.5 block text-[#00788A]">
+                COA only · Sign in for SDS, IFU, and pricing
+              </span>
+            ) : (
+              <span className="mt-0.5 block text-emerald-700">
+                Full document access · Contract pricing active
+              </span>
+            )}
           </div>
         </header>
 
@@ -807,7 +962,13 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <>
                 <div>
                   {pagedResults.map((item) => (
-                    <ResultRow key={item.id} item={item} user={activeDemoUserTaxonomy} />
+                    <ResultRow
+                      key={item.id}
+                      item={item}
+                      user={activeDemoUserTaxonomy}
+                      onDownload={handleDocumentDownload}
+                      onPreview={handleDocumentPreview}
+                    />
                   ))}
                 </div>
                 {filtered.length > RESULTS_PAGE_SIZE ? (
@@ -850,7 +1011,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <div className="py-12 text-center">
                 <p className="text-sm font-medium text-secondary-foreground">No matches found.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try &ldquo;E. coli&rdquo;, &ldquo;KWIK-STIK&rdquo;, or &ldquo;USP &lt;61&gt;&rdquo;.
+                  Try catalog numbers such as 0681E7, 0659E7, or SK-0ASP61.
                 </p>
                 <Button type="button" variant="secondary" className="mt-4" onClick={clearFilters}>
                   Clear filters
@@ -860,6 +1021,33 @@ export const SearchResults: FC<SearchResultsProps> = ({
           </main>
         </div>
       </div>
+
+      <Dialog open={Boolean(previewDoc)} onOpenChange={() => setPreviewDoc(null)}>
+        <DialogContent className="max-w-2xl">
+          {previewDoc ? (
+            <>
+              <DialogHeader>
+                <DialogTitle>{previewDoc.docType} Preview</DialogTitle>
+                <DialogDescription>{previewDoc.item.title}</DialogDescription>
+              </DialogHeader>
+              {(() => {
+                const content = documentPreviewContent(previewDoc.item, previewDoc.docType);
+                return (
+                  <div className="space-y-3 rounded-md border border-border bg-muted/30 p-4 text-sm">
+                    <p className="font-semibold">{content.title}</p>
+                    <p>Catalog #: {content.catalogNumber}</p>
+                    <p>Lot: {content.lotNumber}</p>
+                    <p className="text-muted-foreground">{content.summary}</p>
+                    <p className="border-t border-border pt-3 text-xs text-muted-foreground">
+                      {content.approvedBy}
+                    </p>
+                  </div>
+                );
+              })()}
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

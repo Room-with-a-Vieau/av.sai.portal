@@ -66,6 +66,15 @@ export type TestMethod =
   | 'environmentalMonitoring'
   | 'waterTesting';
 
+export type DocumentType = 'COA' | 'SDS' | 'IFU';
+
+/** Per-product document availability (COA public; SDS/IFU require authentication). */
+export type ProductDocuments = {
+  coa: boolean;
+  sds: boolean;
+  ifu: boolean;
+};
+
 export type SearchResultItem = {
   id: string;
   title: string;
@@ -88,11 +97,23 @@ export type SearchResultItem = {
   distributorPrice: number | null;
   imageSrc?: string;
   isDocument?: boolean;
+  /** Attached COA / SDS / IFU for catalog products (not standalone document rows). */
+  documents?: ProductDocuments;
   matchTerms?: string[];
   demoUserTaxonomy?: DemoUserTaxonomy;
   /** Hidden from all demo personas (e.g. OEM-only SKUs) */
   restricted?: 'oem' | 'emea-distributor-hidden' | 'direct-only-promo';
 };
+
+/** Demo catalog numbers — search these to showcase document access tiers. */
+export const DEMO_CATALOG_NUMBERS = [
+  { catalogNumber: '0681E7', label: 'E. coli ATCC 8739 — COA, SDS, IFU' },
+  { catalogNumber: '0659E7', label: 'S. aureus ATCC 6538 — COA & SDS (no IFU)' },
+  { catalogNumber: '0733E7', label: 'P. aeruginosa ATCC 9027 — full documents' },
+  { catalogNumber: '0443E7', label: 'C. albicans ATCC 10231 — full documents' },
+  { catalogNumber: '0371E7', label: 'Salmonella ATCC 14028 — full documents' },
+  { catalogNumber: 'SK-0ASP61', label: 'USP <61> Select Pack — panel COA/SDS/IFU' },
+] as const;
 
 export type PriceDisplay =
   | { kind: 'login' }
@@ -187,15 +208,18 @@ export const searchFacetLabels = {
 } as const;
 
 export const popularSearches = [
+  '0681E7',
+  '0659E7',
+  '0733E7',
+  'SK-0ASP61',
+  '0443E7',
+  '0371E7',
   'E. coli',
-  'ATCC 8739',
   'USP <61>',
-  'KWIK-STIK',
-  'Pseudomonas aeruginosa',
-  'SARS-CoV-2',
-  'Candida albicans',
-  'Salmonella',
 ];
+
+const DOC_ALL: ProductDocuments = { coa: true, sds: true, ifu: true };
+const DOC_NO_IFU: ProductDocuments = { coa: true, sds: true, ifu: false };
 
 export const biosafetyLevels = Object.keys(searchFacetLabels.biosafetyLevel) as BiosafetyLevel[];
 export const productFormats = Object.keys(searchFacetLabels.productFormat) as ProductFormat[];
@@ -244,6 +268,49 @@ export function itemVisibleForDemoUser(
   if (item.restricted === 'emea-distributor-hidden' && user === 'Distributor Rep') return false;
   if (item.restricted === 'direct-only-promo' && user === 'Distributor Rep') return false;
   return true;
+}
+
+export function isAuthenticatedDemoUser(user: DemoUserTaxonomy | null): user is DemoUserTaxonomy {
+  return user != null;
+}
+
+export function productHasAttachedDocuments(item: SearchResultItem): boolean {
+  if (item.isDocument || !item.documents) return false;
+  const { coa, sds, ifu } = item.documents;
+  return coa || sds || ifu;
+}
+
+/** COA is public; SDS and IFU require HeaderST login (any demo persona). */
+export function canAccessDocument(
+  item: SearchResultItem,
+  docType: DocumentType,
+  user: DemoUserTaxonomy | null
+): boolean {
+  if (!item.documents) return false;
+  if (docType === 'COA') return item.documents.coa;
+  if (!isAuthenticatedDemoUser(user)) return false;
+  if (docType === 'SDS') return item.documents.sds;
+  if (docType === 'IFU') return item.documents.ifu;
+  return false;
+}
+
+export function documentRequiresLogin(docType: DocumentType): boolean {
+  return docType === 'SDS' || docType === 'IFU';
+}
+
+export function documentPreviewContent(item: SearchResultItem, docType: DocumentType) {
+  return {
+    title: `${docType} — ${item.title}`,
+    catalogNumber: item.catalogNumber,
+    lotNumber: `LOT-${item.catalogNumber}-A${String(item.catalogNumber.length).padStart(3, '0')}`,
+    summary:
+      docType === 'COA'
+        ? 'Identity confirmed. Viability within specification. No contamination detected.'
+        : docType === 'SDS'
+          ? 'Hazard classification: Biosafety Level 2 organism. Standard PPE required for handling.'
+          : 'Storage: 2–8°C. Rehydration and inoculation procedures per package insert.',
+    approvedBy: 'Microbiologics Quality Systems — Released for distribution',
+  };
 }
 
 export function resolvePriceDisplay(
@@ -359,6 +426,7 @@ export function supplementalResultsForDemoUserTaxonomy(
             distributorPrice: 338,
             imageSrc: MB_IMG.ezAccu,
             matchTerms: ['panel', 'usp 61', 'procurement', 'compendial'],
+            documents: DOC_ALL,
           },
         ]
       : persona === 'Distributor Rep'
@@ -382,6 +450,7 @@ export function supplementalResultsForDemoUserTaxonomy(
               distributorPrice: 88.5,
               imageSrc: MB_IMG.epower,
               matchTerms: ['distributor', 'stocking', 's aureus'],
+              documents: DOC_NO_IFU,
             },
           ]
         : persona === 'Regulatory Professional'
@@ -429,7 +498,8 @@ export function supplementalResultsForDemoUserTaxonomy(
                 goldPrice: 106.25,
                 distributorPrice: 88.5,
                 imageSrc: MB_IMG.epower,
-                matchTerms: ['e coli', 'atcc 8739', 'scientist', 'enumeration'],
+                matchTerms: ['e coli', 'atcc 8739', 'scientist', 'enumeration', '0681e7'],
+                documents: DOC_ALL,
               },
             ];
 
@@ -469,7 +539,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 106.25,
     distributorPrice: 88.5,
     imageSrc: MB_IMG.epower,
-    matchTerms: ['e coli', 'ecoli', '8739', 'gram negative'],
+    matchTerms: ['e coli', 'ecoli', '8739', 'gram negative', '0681e7'],
+    documents: DOC_ALL,
     demoUserTaxonomy: 'Scientist',
   }),
   seed({
@@ -491,7 +562,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 106.25,
     distributorPrice: 88.5,
     imageSrc: MB_IMG.epower,
-    matchTerms: ['staph', '6538', 'aureus'],
+    matchTerms: ['staph', '6538', 'aureus', '0659e7'],
+    documents: DOC_NO_IFU,
     demoUserTaxonomy: 'Laboratory Procurement Manager',
   }),
   seed({
@@ -513,7 +585,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 110.5,
     distributorPrice: 92,
     imageSrc: MB_IMG.epower,
-    matchTerms: ['pseudomonas', '9027'],
+    matchTerms: ['pseudomonas', '9027', '0733e7'],
+    documents: DOC_ALL,
   }),
   seed({
     id: 'p-0443e7',
@@ -534,7 +607,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 114.75,
     distributorPrice: 95.5,
     imageSrc: MB_IMG.ezCfu,
-    matchTerms: ['candida', 'yeast', '10231'],
+    matchTerms: ['candida', 'yeast', '10231', '0443e7'],
+    documents: DOC_ALL,
   }),
   seed({
     id: 'p-0371e7',
@@ -555,7 +629,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 106.25,
     distributorPrice: 88.5,
     imageSrc: MB_IMG.epower,
-    matchTerms: ['salmonella', '14028', 'food safety'],
+    matchTerms: ['salmonella', '14028', 'food safety', '0371e7'],
+    documents: DOC_ALL,
   }),
   seed({
     id: 'p-hm10wr',
@@ -576,7 +651,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 208.25,
     distributorPrice: 174,
     imageSrc: MB_IMG.helix,
-    matchTerms: ['sars-cov-2', 'covid', 'molecular', 'rt-pcr'],
+    matchTerms: ['sars-cov-2', 'covid', 'molecular', 'rt-pcr', 'hm-10wr'],
+    documents: DOC_ALL,
     restricted: 'emea-distributor-hidden',
   }),
   seed({
@@ -598,7 +674,8 @@ export const searchCatalog: SearchResultItem[] = [
     goldPrice: 403.75,
     distributorPrice: 338,
     imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['panel', 'usp 61', 'select pack'],
+    matchTerms: ['panel', 'usp 61', 'select pack', 'sk-0asp61', 'sk0asp61'],
+    documents: DOC_ALL,
     demoUserTaxonomy: 'Laboratory Procurement Manager',
   }),
   seed({

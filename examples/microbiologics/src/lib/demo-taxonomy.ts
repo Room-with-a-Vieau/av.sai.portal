@@ -4,6 +4,12 @@ export const DEMO_TAXONOMY_CHANGE_EVENT = 'demo-taxonomy-change';
 /** Dispatched by HeaderST when the login persona changes — consumed by MicroPortal. */
 export const PROFILE_CHANGE_EVENT = 'profile-change';
 
+/** Select value when the user is not signed in (HeaderST dropdown). */
+export const DEMO_AUTH_LOGIN_VALUE = '__demo-login__';
+
+/** Select value to sign out and return to unauthenticated mode. */
+export const DEMO_AUTH_LOGOUT_VALUE = '__demo-logout__';
+
 export const DEMO_USER_TAXONOMIES = [
   'Laboratory Procurement Manager',
   'Distributor Rep',
@@ -71,7 +77,22 @@ export function dispatchProfileChange(profileKey: MicroPortalProfileKey, taxonom
   if (typeof window === 'undefined') return;
   window.dispatchEvent(
     new CustomEvent(PROFILE_CHANGE_EVENT, {
-      detail: { profileKey, taxonomy },
+      detail: { profileKey, taxonomy, authenticated: true },
+    })
+  );
+}
+
+/** Clears demo auth — SearchResults, MicroPortal, and other listeners return to anonymous mode. */
+export function dispatchDemoLogout() {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent(DEMO_TAXONOMY_CHANGE_EVENT, {
+      detail: { taxonomy: '', authenticated: false },
+    })
+  );
+  window.dispatchEvent(
+    new CustomEvent(PROFILE_CHANGE_EVENT, {
+      detail: { profileKey: null, taxonomy: null, authenticated: false },
     })
   );
 }
