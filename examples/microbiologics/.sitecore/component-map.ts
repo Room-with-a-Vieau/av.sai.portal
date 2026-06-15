@@ -118,6 +118,10 @@ import * as ProductListingCarddev from 'src/components/product-listing/ProductLi
 import * as ProductListing from 'src/components/product-listing/ProductListing';
 import * as productlistingprops from 'src/components/product-listing/product-listing.props';
 import * as productlistingdictionary from 'src/components/product-listing/product-listing.dictionary';
+import * as ProductCarousel from 'src/components/product-carousel/ProductCarousel';
+import * as productcarouseltypes from 'src/components/product-carousel/product-carousel.types';
+import * as productcarouselprops from 'src/components/product-carousel/product-carousel.props';
+import * as productcarouselfields from 'src/components/product-carousel/product-carousel.fields';
 import * as PortalPageDetail from 'src/components/portal-page-detail/PortalPageDetail';
 import * as portalpagedetailprops from 'src/components/portal-page-detail/portal-page-detail.props';
 import * as PortalHubViewclient from 'src/components/portal-hub/PortalHubView.client';
@@ -413,6 +417,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ProductListingCard', { ...ProductListingCarddev }],
   ['ProductListing', { ...ProductListing, componentType: 'client' }],
   ['product-listing', { ...productlistingprops, ...productlistingdictionary }],
+  ['ProductCarousel', { ...ProductCarousel, componentType: 'client' }],
+  ['product-carousel', { ...productcarouseltypes, ...productcarouselprops, ...productcarouselfields }],
   ['PortalPageDetail', { ...PortalPageDetail, componentType: 'client' }],
   ['portal-page-detail', { ...portalpagedetailprops }],
   ['PortalHubView', { ...PortalHubViewclient }],

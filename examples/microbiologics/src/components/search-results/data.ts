@@ -3,10 +3,11 @@
  * Data only — UI lives in SearchResults.tsx.
  */
 
-export type DemoUserTaxonomy =
-  | 'IT Director / IT Manager'
-  | 'MSP Provider'
-  | 'CISO Compliance Officer';
+import type { DemoUserTaxonomy } from '@/lib/demo-taxonomy';
+import { parseDemoUserTaxonomy } from '@/lib/demo-taxonomy';
+
+export type { DemoUserTaxonomy };
+export { parseDemoUserTaxonomy };
 
 export type SearchContentType = 'product' | 'blog' | 'service' | 'content';
 
@@ -180,18 +181,6 @@ export function getDefaultCardImage(): string {
   return catalogDemoImage(0);
 }
 
-export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
-  const t = raw?.trim();
-  if (
-    t === 'IT Director / IT Manager' ||
-    t === 'MSP Provider' ||
-    t === 'CISO Compliance Officer'
-  ) {
-    return t;
-  }
-  return null;
-}
-
 export function normalizeQuery(q: string): string {
   return q.toLowerCase().trim().replace(/\s+/g, ' ');
 }
@@ -277,14 +266,16 @@ export function relevanceScore(
 
 export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy): SearchResultItem[] {
   const code =
-    persona === 'IT Director / IT Manager'
-      ? 'it'
-      : persona === 'MSP Provider'
-        ? 'msp'
-        : 'ciso';
+    persona === 'Laboratory Procurement Manager'
+      ? 'procurement'
+      : persona === 'Distributor Rep'
+        ? 'distributor'
+        : persona === 'Regulatory Professional'
+          ? 'regulatory'
+          : 'scientist';
 
   const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    persona === 'IT Director / IT Manager'
+    persona === 'Laboratory Procurement Manager'
       ? [
           {
             title: 'Deploy Zero Trust in hours — not months',
@@ -295,9 +286,9 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
             categories: ['capabilities', 'solutions'],
             brands: ['zeroTrust', 'endpointSecurity'],
             searchBuckets: ['zeroTrust', 'capabilities'],
-            dateLabel: 'Personalized for IT leaders',
+            dateLabel: 'Personalized for procurement leaders',
             breadcrumb: ['Platform', 'Deployment guide'],
-            matchTerms: ['deploy', 'rollout', 'endpoint', 'operations', 'it director', 'it manager'],
+            matchTerms: ['deploy', 'rollout', 'endpoint', 'operations', 'procurement', 'ordering'],
             imageSrc: catalogDemoImage(0),
             isNew: true,
           },
@@ -324,13 +315,13 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
             categories: ['capabilities'],
             brands: ['endpointSecurity', 'zeroTrust'],
             searchBuckets: ['capabilities'],
-            dateLabel: 'IT operations',
+            dateLabel: 'Lab operations',
             breadcrumb: ['Capabilities', 'Configuration management'],
             matchTerms: ['centralized', 'policy', 'configuration', 'console'],
             imageSrc: catalogDemoImage(2),
           },
         ]
-      : persona === 'MSP Provider'
+      : persona === 'Distributor Rep'
         ? [
             {
               title: 'MSP playbook: Conditional Access for client SaaS tenants',
@@ -341,9 +332,9 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
               categories: ['mspOperations', 'blogs'],
               brands: ['mspMssp', 'networkCloud'],
               searchBuckets: ['msp', 'cloud', 'blogs'],
-              dateLabel: 'Personalized for MSPs',
-              breadcrumb: ['Resources', 'MSP guides'],
-              matchTerms: ['msp', 'conditional access', 'multi-tenant', 'client', 'saas'],
+              dateLabel: 'Personalized for distributor reps',
+              breadcrumb: ['Resources', 'Partner guides'],
+              matchTerms: ['distributor', 'partner', 'multi-tenant', 'client', 'saas'],
               imageSrc: catalogDemoImage(3),
               isNew: true,
             },
@@ -356,9 +347,9 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
               categories: ['capabilities', 'mspOperations'],
               brands: ['mspMssp', 'endpointSecurity'],
               searchBuckets: ['edrMdr', 'msp'],
-              dateLabel: 'MSP service add-on',
+              dateLabel: 'Partner service add-on',
               breadcrumb: ['Capabilities', 'MDR'],
-              matchTerms: ['mdr', 'managed detection', 'soc', 'msp', 'mssp'],
+              matchTerms: ['mdr', 'managed detection', 'soc', 'distributor', 'partner'],
               imageSrc: catalogDemoImage(4),
             },
             {
@@ -372,55 +363,101 @@ export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy
               searchBuckets: ['press', 'msp'],
               dateLabel: 'Sep 15, 2025',
               breadcrumb: ['Resources', 'Press releases'],
-              matchTerms: ['msp', 'partner', 'expansion', 'brisbane'],
+              matchTerms: ['distributor', 'partner', 'expansion', 'brisbane'],
               imageSrc: catalogDemoImage(5),
             },
           ]
-        : [
-            {
-              title: 'Achieve compliance with continuous endpoint validation',
-              description:
-                'Map ThreatLocker controls to CMMC, ISO 27001, NIST CSF, Essential 8, and FedRAMP evidence requirements.',
-              href: `${TL_BASE}solutions/achieve-compliance`,
-              contentType: 'service',
-              categories: ['solutions', 'compliance'],
-              brands: ['compliance', 'zeroTrust'],
-              searchBuckets: ['compliance', 'zeroTrust'],
-              dateLabel: 'Personalized for CISOs',
-              breadcrumb: ['Solutions', 'Achieve compliance'],
-              matchTerms: ['compliance', 'ciso', 'audit', 'framework', 'evidence'],
-              imageSrc: catalogDemoImage(6),
-              isNew: true,
-            },
-            {
-              title: 'DAC (Defense Against Configurations): real-time configuration risk visibility',
-              description:
-                'Identify configuration gaps and compliance drift across endpoints before auditors or attackers do.',
-              href: `${TL_BASE}platform/dac-defense-against-configurations`,
-              contentType: 'product',
-              categories: ['capabilities', 'compliance'],
-              brands: ['compliance', 'endpointSecurity'],
-              searchBuckets: ['compliance', 'capabilities'],
-              dateLabel: 'Compliance capability',
-              breadcrumb: ['Capabilities', 'DAC'],
-              matchTerms: ['dac', 'configuration', 'compliance', 'governance', 'ciso'],
-              imageSrc: catalogDemoImage(7),
-            },
-            {
-              title: 'ThreatLocker achieves FedRAMP authorization',
-              description:
-                'Press release on federal-grade authorization reinforcing ThreatLocker for regulated environments and public-sector compliance programs.',
-              href: `${TL_BASE}resources/press-releases`,
-              contentType: 'content',
-              categories: ['pressReleases', 'compliance'],
-              brands: ['compliance', 'zeroTrust'],
-              searchBuckets: ['press', 'compliance'],
-              dateLabel: 'Aug 5, 2025',
-              breadcrumb: ['Resources', 'Press releases'],
-              matchTerms: ['fedramp', 'federal', 'compliance', 'authorization'],
-              imageSrc: catalogDemoImage(8),
-            },
-          ];
+        : persona === 'Regulatory Professional'
+          ? [
+              {
+                title: 'Achieve compliance with continuous endpoint validation',
+                description:
+                  'Map ThreatLocker controls to CMMC, ISO 27001, NIST CSF, Essential 8, and FedRAMP evidence requirements.',
+                href: `${TL_BASE}solutions/achieve-compliance`,
+                contentType: 'service',
+                categories: ['solutions', 'compliance'],
+                brands: ['compliance', 'zeroTrust'],
+                searchBuckets: ['compliance', 'zeroTrust'],
+                dateLabel: 'Personalized for regulatory professionals',
+                breadcrumb: ['Solutions', 'Achieve compliance'],
+                matchTerms: ['compliance', 'regulatory', 'audit', 'framework', 'evidence'],
+                imageSrc: catalogDemoImage(6),
+                isNew: true,
+              },
+              {
+                title: 'DAC (Defense Against Configurations): real-time configuration risk visibility',
+                description:
+                  'Identify configuration gaps and compliance drift across endpoints before auditors or attackers do.',
+                href: `${TL_BASE}platform/dac-defense-against-configurations`,
+                contentType: 'product',
+                categories: ['capabilities', 'compliance'],
+                brands: ['compliance', 'endpointSecurity'],
+                searchBuckets: ['compliance', 'capabilities'],
+                dateLabel: 'Compliance capability',
+                breadcrumb: ['Capabilities', 'DAC'],
+                matchTerms: ['dac', 'configuration', 'compliance', 'governance', 'regulatory'],
+                imageSrc: catalogDemoImage(7),
+              },
+              {
+                title: 'ThreatLocker achieves FedRAMP authorization',
+                description:
+                  'Press release on federal-grade authorization reinforcing ThreatLocker for regulated environments and public-sector compliance programs.',
+                href: `${TL_BASE}resources/press-releases`,
+                contentType: 'content',
+                categories: ['pressReleases', 'compliance'],
+                brands: ['compliance', 'zeroTrust'],
+                searchBuckets: ['press', 'compliance'],
+                dateLabel: 'Aug 5, 2025',
+                breadcrumb: ['Resources', 'Press releases'],
+                matchTerms: ['fedramp', 'federal', 'compliance', 'authorization'],
+                imageSrc: catalogDemoImage(8),
+              },
+            ]
+          : [
+              {
+                title: 'KWIK-STIK™ reference strains for culture-based QC',
+                description:
+                  'All-in-one qualitative controls with lyophilized organism pellets, rehydration fluid, and inoculating swab for reliable microbiology workflows.',
+                href: TL_BASE,
+                contentType: 'product',
+                categories: ['capabilities'],
+                brands: ['endpointSecurity'],
+                searchBuckets: ['capabilities'],
+                dateLabel: 'Personalized for scientists',
+                breadcrumb: ['Products', 'Microbiology controls'],
+                matchTerms: ['kwik-stik', 'reference strain', 'microbiology', 'qc', 'scientist'],
+                imageSrc: catalogDemoImage(0),
+                isNew: true,
+              },
+              {
+                title: 'Helix Elite™ molecular reference standards',
+                description:
+                  'External third-party molecular controls for assay validation, instrument QC, and IVD development programs.',
+                href: TL_BASE,
+                contentType: 'product',
+                categories: ['capabilities', 'solutions'],
+                brands: ['zeroTrust'],
+                searchBuckets: ['capabilities'],
+                dateLabel: 'Molecular diagnostics',
+                breadcrumb: ['Products', 'Molecular controls'],
+                matchTerms: ['helix elite', 'molecular', 'assay', 'ivd', 'scientist'],
+                imageSrc: catalogDemoImage(1),
+              },
+              {
+                title: 'Growth Requirements guide for KWIK-STIK and LYFO DISK',
+                description:
+                  'Technical publication covering organism growth requirements to streamline lab setup and maintenance of QC strains.',
+                href: TL_BASE,
+                contentType: 'blog',
+                categories: ['blogs'],
+                brands: ['compliance'],
+                searchBuckets: ['blogs'],
+                dateLabel: 'Support Hub publication',
+                breadcrumb: ['Support Hub', 'Scientific publications'],
+                matchTerms: ['growth promotion', 'publication', 'microbiology', 'scientist', 'technical'],
+                imageSrc: catalogDemoImage(2),
+              },
+            ];
 
   return rows.map((row, i) => ({
     ...row,
@@ -464,7 +501,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust', 'ransomware'],
     breadcrumb: ['Capabilities', 'Allowlisting'],
     matchTerms: ['allowlisting', 'application control', 'default deny', 'executable', 'script'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 0,
   },
   {
@@ -479,7 +516,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Ringfencing'],
     matchTerms: ['ringfencing', 'ring fence', 'powershell', 'lateral movement'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 1,
   },
   {
@@ -494,7 +531,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['network', 'zeroTrust', 'capabilities'],
     breadcrumb: ['Capabilities', 'ZTNA'],
     matchTerms: ['ztna', 'network access', 'vpn replacement', 'remote access'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 2,
   },
   {
@@ -509,7 +546,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['cloud', 'zeroTrust', 'capabilities'],
     breadcrumb: ['Capabilities', 'Zero Trust Cloud Access'],
     matchTerms: ['cloud access', 'saas', 'credentials', 'oauth', 'compromised'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 3,
   },
   {
@@ -524,7 +561,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['pam', 'capabilities', 'compliance'],
     breadcrumb: ['Capabilities', 'PAM'],
     matchTerms: ['pam', 'privileged access', 'admin rights', 'least privilege', 'epm'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 4,
   },
   {
@@ -539,7 +576,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['network', 'capabilities'],
     breadcrumb: ['Capabilities', 'Network Control'],
     matchTerms: ['firewall', 'network control', 'lateral movement', 'endpoint firewall'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 5,
   },
   {
@@ -553,7 +590,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'ransomware'],
     breadcrumb: ['Capabilities', 'Storage device control'],
     matchTerms: ['usb', 'removable media', 'external storage', 'device control'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 6,
   },
   {
@@ -568,7 +605,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'compliance'],
     breadcrumb: ['Capabilities', 'Data storage access'],
     matchTerms: ['data exfiltration', 'file access', 'storage control', 'dlp'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 7,
   },
   {
@@ -582,7 +619,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['edrMdr', 'capabilities'],
     breadcrumb: ['Capabilities', 'EDR'],
     matchTerms: ['edr', 'detection', 'response', 'isolate', 'threat detection'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 8,
   },
   {
@@ -597,7 +634,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['edrMdr', 'msp', 'capabilities'],
     breadcrumb: ['Capabilities', 'MDR'],
     matchTerms: ['mdr', 'managed detection', 'cyber hero', '24/7', 'soc'],
-    demoUserTaxonomy: 'MSP Provider',
+    demoUserTaxonomy: 'Distributor Rep',
     imageSlot: 9,
   },
   {
@@ -612,7 +649,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Configuration management'],
     matchTerms: ['configuration', 'policy', 'centralized', 'baseline'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 10,
   },
   {
@@ -626,7 +663,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities'],
     breadcrumb: ['Capabilities', 'Patch Management'],
     matchTerms: ['patch', 'update', 'vulnerability', 'remediation'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 11,
   },
   {
@@ -640,7 +677,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'cloud'],
     breadcrumb: ['Capabilities', 'Web content control'],
     matchTerms: ['web filter', 'browser', 'phishing', 'web content'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 0,
   },
   {
@@ -654,7 +691,7 @@ const capabilityProducts: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'zeroTrust'],
     breadcrumb: ['Capabilities', 'Application testing'],
     matchTerms: ['testing', 'sandbox', 'approve', 'software trust'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 1,
   },
 ];
@@ -672,7 +709,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['ransomware', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Stop ransomware'],
     matchTerms: ['stop ransomware', 'deny by default', 'extortion'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 2,
   },
   {
@@ -687,7 +724,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['compliance', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Achieve compliance'],
     matchTerms: ['compliance', 'audit', 'framework', 'evidence'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 3,
   },
   {
@@ -702,7 +739,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['zeroTrust', 'cloud'],
     breadcrumb: ['Solutions', 'Phishing & token theft'],
     matchTerms: ['phishing', 'token', 'credential theft', 'session'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 4,
   },
   {
@@ -716,7 +753,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['pam', 'compliance'],
     breadcrumb: ['Solutions', 'Admin privilege abuse'],
     matchTerms: ['admin abuse', 'privilege', 'standing access'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 5,
   },
   {
@@ -730,7 +767,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['capabilities', 'compliance'],
     breadcrumb: ['Solutions', 'Data exfiltration'],
     matchTerms: ['exfiltration', 'data loss', 'insider'],
-    demoUserTaxonomy: 'CISO Compliance Officer',
+    demoUserTaxonomy: 'Regulatory Professional',
     imageSlot: 6,
   },
   {
@@ -745,7 +782,7 @@ const solutionServices: CatalogSeed[] = [
     searchBuckets: ['network', 'zeroTrust'],
     breadcrumb: ['Solutions', 'Lateral movement'],
     matchTerms: ['lateral movement', 'segmentation', 'contain'],
-    demoUserTaxonomy: 'IT Director / IT Manager',
+    demoUserTaxonomy: 'Laboratory Procurement Manager',
     imageSlot: 7,
   },
 ];
@@ -770,7 +807,7 @@ const blogSeeds: BlogSeed[] = [
       'Anthropic’s Claude Mythos highlights why Zero Trust remains the best match for AI-driven cyber threats.',
     date: 'Jun 1, 2026',
     buckets: ['blogs', 'zeroTrust'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['ai', 'claude', 'zero trust', 'agentic'],
     slot: 0,
   },
@@ -781,7 +818,7 @@ const blogSeeds: BlogSeed[] = [
       'Supply chain compromise impacting GitHub, Nx Console, and TanStack npm packages.',
     date: 'May 27, 2026',
     buckets: ['blogs', 'capabilities'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['supply chain', 'npm', 'github', 'worm'],
     slot: 1,
   },
@@ -793,7 +830,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 25, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['essential 8', 'acsc', 'australia', 'framework'],
     slot: 2,
   },
@@ -803,7 +840,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'BEC attacks go beyond phishing — learn prevention with Zero Trust controls.',
     date: 'May 21, 2026',
     buckets: ['blogs', 'cloud'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['bec', 'email', 'phishing', 'fraud'],
     slot: 3,
   },
@@ -814,7 +851,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 21, 2026',
     category: 'threatResearch',
     buckets: ['blogs', 'capabilities'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['github', 'vscode', 'extension', 'breach'],
     slot: 4,
   },
@@ -826,7 +863,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 20, 2026',
     category: 'threatResearch',
     buckets: ['blogs', 'capabilities'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['zero-day', 'windows', 'privilege escalation'],
     slot: 5,
   },
@@ -837,7 +874,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 19, 2026',
     category: 'threatResearch',
     buckets: ['blogs', 'capabilities'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['miniplasma', 'windows', 'system', 'zero-day'],
     slot: 6,
   },
@@ -847,7 +884,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Implement Zero Trust without friction using default-deny and least privilege.',
     date: 'May 18, 2026',
     buckets: ['blogs', 'zeroTrust'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['zero trust', 'framework', 'implementation'],
     slot: 7,
   },
@@ -858,7 +895,7 @@ const blogSeeds: BlogSeed[] = [
       'Zero Trust, default-deny, least privilege, and proactive threat prevention strategies.',
     date: 'May 16, 2026',
     buckets: ['blogs', 'zeroTrust'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['best practices', 'prevention', 'zero trust'],
     slot: 8,
   },
@@ -869,7 +906,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 14, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['iso 27001', 'isms', 'certification'],
     slot: 9,
   },
@@ -879,7 +916,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Allied guidance recommends Zero Trust to counter evolving AI threat models.',
     date: 'May 8, 2026',
     buckets: ['blogs', 'zeroTrust'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['five eyes', 'ai', 'agentic', 'zero trust'],
     slot: 10,
   },
@@ -890,7 +927,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 4, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['cmmc', 'dod', 'contractor', 'audit'],
     slot: 11,
   },
@@ -901,7 +938,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Apr 24, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['nist', 'soc 2', 'hipaa', 'frameworks'],
     slot: 0,
   },
@@ -912,7 +949,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Apr 22, 2026',
     category: 'mspOperations',
     buckets: ['blogs', 'msp', 'cloud'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
     terms: ['cipp', 'conditional access', 'msp', 'ip restriction'],
     slot: 1,
   },
@@ -922,7 +959,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Why Zero Trust stops AI-powered attacks that evade traditional AV and EDR.',
     date: 'Apr 21, 2026',
     buckets: ['blogs', 'zeroTrust', 'edrMdr'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['vibe hacking', 'ai', 'edr', 'signature'],
     slot: 2,
   },
@@ -933,7 +970,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Apr 10, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['nist csf', '2.0', 'governance'],
     slot: 3,
   },
@@ -943,7 +980,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'PIM fundamentals aligned with ThreatLocker PAM and least-privilege enforcement.',
     date: 'Apr 9, 2026',
     buckets: ['blogs', 'pam'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['pim', 'privileged identity', 'pam'],
     slot: 4,
   },
@@ -953,7 +990,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Policy-driven allowlisting as the foundation of Zero Trust application control.',
     date: 'Apr 6, 2026',
     buckets: ['blogs', 'capabilities', 'zeroTrust'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['allowlisting', 'blocklisting', 'default deny'],
     slot: 5,
   },
@@ -964,7 +1001,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Apr 3, 2026',
     category: 'capabilities',
     buckets: ['blogs', 'capabilities', 'ransomware'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['allowlisting', 'ransomware', 'policy'],
     slot: 6,
   },
@@ -975,7 +1012,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Mar 30, 2026',
     category: 'compliance',
     buckets: ['blogs', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['fedramp', 'federal', 'cloud'],
     slot: 7,
   },
@@ -985,7 +1022,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Endpoint privilege management explained for IT and security leaders.',
     date: 'Mar 29, 2026',
     buckets: ['blogs', 'pam'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['epm', 'endpoint privilege', 'least privilege'],
     slot: 8,
   },
@@ -996,7 +1033,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Mar 4, 2026',
     category: 'mspOperations',
     buckets: ['blogs', 'msp', 'cloud'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
     terms: ['microsoft 365', 'conditional access', 'entra', 'ip'],
     slot: 9,
   },
@@ -1007,7 +1044,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Mar 3, 2026',
     category: 'mspOperations',
     buckets: ['blogs', 'msp'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
     terms: ['syncro', 'rmm', 'conditional access', 'msp'],
     slot: 10,
   },
@@ -1018,7 +1055,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'Mar 8, 2026',
     category: 'mspOperations',
     buckets: ['blogs', 'msp', 'zeroTrust'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
     terms: ['portal', 'ip restriction', 'admin'],
     slot: 11,
   },
@@ -1028,7 +1065,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Practical guidance for IT teams adopting default-deny across the enterprise.',
     date: 'Feb 20, 2026',
     buckets: ['blogs', 'zeroTrust'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['zero trust', 'adoption', 'challenges'],
     slot: 0,
   },
@@ -1038,7 +1075,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Replace implicit trust for remote users with identity- and device-aware access.',
     date: 'Feb 19, 2026',
     buckets: ['blogs', 'network', 'cloud'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
     terms: ['remote', 'byod', 'vpn', 'workforce'],
     slot: 1,
   },
@@ -1048,7 +1085,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Credential theft campaigns targeting SSO and why Zero Trust limits blast radius.',
     date: 'Feb 13, 2026',
     buckets: ['blogs', 'cloud'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['okta', 'sso', 'mfa bypass', 'phishing'],
     slot: 2,
   },
@@ -1058,7 +1095,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Ransomware and compliance pressures facing financial institutions.',
     date: 'Apr 27, 2026',
     buckets: ['blogs', 'compliance', 'zeroTrust'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['financial services', 'banking', 'compliance'],
     slot: 3,
   },
@@ -1069,7 +1106,7 @@ const blogSeeds: BlogSeed[] = [
     date: 'May 13, 2026',
     category: 'threatResearch',
     buckets: ['blogs'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['cybercrime', 'affiliate', 'economy'],
     slot: 4,
   },
@@ -1079,7 +1116,7 @@ const blogSeeds: BlogSeed[] = [
     description: 'Ringfencing, storage control, and privilege reduction for insider risk.',
     date: 'Mar 26, 2026',
     buckets: ['blogs', 'pam'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
     terms: ['insider threat', 'ringfencing', 'privilege'],
     slot: 5,
   },
@@ -1115,7 +1152,7 @@ const pressSeeds: PressSeed[] = [
     description: 'Monthly threat activity roundup from ThreatLocker research teams.',
     date: 'May 1, 2026',
     terms: ['threat activity', 'research', 'april'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker Hosts Orlando Hiring Event Amid Company Expansion',
@@ -1134,7 +1171,7 @@ const pressSeeds: PressSeed[] = [
     description: 'New capabilities stop credential-based cyberattacks on network and cloud resources.',
     date: 'Mar 5, 2026',
     terms: ['ztna', 'cloud access', 'credentials', 'launch'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
   },
   {
     title: 'ThreatLocker announces Zero Trust World 2026 speaker lineup',
@@ -1159,7 +1196,7 @@ const pressSeeds: PressSeed[] = [
     description: 'Texas risk authorization for state and local government cloud security.',
     date: 'Oct 6, 2025',
     terms: ['tx-ramp', 'texas', 'certification'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker Joins Internet Watch Foundation to Tackle CSAM',
@@ -1172,21 +1209,21 @@ const pressSeeds: PressSeed[] = [
     description: 'Free training program for practitioners adopting Zero Trust controls.',
     date: 'Sep 17, 2025',
     terms: ['bootcamp', 'training', 'zero trust'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
   },
   {
     title: 'ThreatLocker Expands Global Presence with Brisbane Office Opening',
     description: 'APAC expansion for partners and enterprise customers.',
     date: 'Sep 15, 2025',
     terms: ['brisbane', 'apac', 'global'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
   },
   {
     title: 'ThreatLocker Unveils Advanced Anomaly Detection for Cloud Security',
     description: 'Impossible travel insights and cloud anomaly detection capabilities.',
     date: 'Aug 13, 2025',
     terms: ['anomaly detection', 'cloud', 'impossible travel'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker Chosen for the 2025 Inc. 5000 List',
@@ -1199,14 +1236,14 @@ const pressSeeds: PressSeed[] = [
     description: 'Federal-grade authorization for regulated and public-sector deployments.',
     date: 'Aug 5, 2025',
     terms: ['fedramp', 'federal', 'authorization'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker Launches DAC for Configuration Risk and Compliance Gaps',
     description: 'Real-time visibility into misconfigurations and compliance drift.',
     date: 'Aug 5, 2025',
     terms: ['dac', 'configuration', 'compliance'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker CEO Danny Jenkins Featured Speaker at Black Hat USA 2025',
@@ -1254,21 +1291,21 @@ const newsSeeds: NewsSeed[] = [
     description: 'Podcast conversation on workforce gaps and Zero Trust adoption in the UK.',
     date: 'Mar 26, 2026',
     terms: ['skills gap', 'uk', 'podcast'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: "ThreatLocker's Rob Allen on the future of zero trust security",
     description: 'SC Media interview on Zero Trust platform direction and MSP growth.',
     date: 'Mar 26, 2026',
     terms: ['rob allen', 'sc media', 'zero trust'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
   },
   {
     title: 'Stopping Cyberattacks Before They Start: Zero Trust Approach',
     description: 'Media coverage of proactive default-deny strategies.',
     date: 'Mar 16, 2026',
     terms: ['proactive', 'zero trust', 'prevention'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
   },
   {
     title: 'On the ground with CEO Danny Jenkins at Zero Trust World',
@@ -1281,14 +1318,14 @@ const newsSeeds: NewsSeed[] = [
     description: 'APAC market trends for Zero Trust endpoint and cloud controls.',
     date: 'Mar 5, 2026',
     terms: ['apac', 'adoption', 'asia pacific'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
   },
   {
     title: "ThreatLocker's Rob Allen on the dual impact of AI",
     description: 'CyberScoop discussion on AI for defenders and attackers.',
     date: 'Mar 4, 2026',
     terms: ['ai', 'cyberscoop', 'rob allen'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'We Left It Vulnerable On Purpose – Rob Allen – PSW #910',
@@ -1301,7 +1338,7 @@ const newsSeeds: NewsSeed[] = [
     description: 'Channel partner analysis including ThreatLocker market momentum.',
     date: 'Dec 10, 2025',
     terms: ['crn', 'australia', 'channel'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
   },
   {
     title: 'Danny Jenkins - Founder of ThreatLocker and the Zero-Trust Revolution',
@@ -1326,21 +1363,21 @@ const newsSeeds: NewsSeed[] = [
     description: 'Media quote on 24/7 threat landscape and MDR value.',
     date: 'Oct 22, 2025',
     terms: ['mdr', '24/7', 'threats'],
-    persona: 'MSP Provider',
+    persona: 'Distributor Rep',
   },
   {
     title: 'Dear Abby: Why Should I Trust a Vendor Selling Me Zero Trust?',
     description: 'CISO Series podcast on evaluating Zero Trust vendors.',
     date: 'Oct 21, 2025',
     terms: ['ciso series', 'vendor', 'evaluation'],
-    persona: 'CISO Compliance Officer',
+    persona: 'Regulatory Professional',
   },
   {
     title: 'ThreatLocker Keynote Address at ITEXPO #TECHSUPERSHOW 2023',
     description: 'Keynote replay on Zero Trust platform vision.',
     date: 'Mar 10, 2023',
     terms: ['keynote', 'itexpo', 'techsupershow'],
-    persona: 'IT Director / IT Manager',
+    persona: 'Laboratory Procurement Manager',
   },
 ];
 
@@ -1403,7 +1440,7 @@ const homepageContent: SearchResultItem[] = [
     dateLabel: 'Support',
     breadcrumb: ['Company', 'Cyber Hero Team'],
     matchTerms: ['cyber hero', 'support', '24/7', 'orlando'],
-    demoUserTaxonomy: 'MSP Provider',
+    demoUserTaxonomy: 'Distributor Rep',
     imageSlot: 10,
   }),
 ];
@@ -1434,13 +1471,15 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const key = insightKey(buckets, user);
 
   const personaHint =
-    user === 'IT Director / IT Manager'
-      ? 'Prioritize endpoint deployment, patch cadence, allowlisting baselines, and operational rollouts.'
-      : user === 'MSP Provider'
-        ? 'Surface multi-tenant Conditional Access guides, MDR services, and client-ready Zero Trust packages.'
-        : user === 'CISO Compliance Officer'
-          ? 'Emphasize CMMC, ISO 27001, FedRAMP, DAC, and continuous compliance evidence.'
-          : 'Select a demo persona in the header to personalize ranking and supplemental results.';
+    user === 'Laboratory Procurement Manager'
+      ? 'Prioritize catalog ordering, SKUs, pricing, and test-ready QC product formats.'
+      : user === 'Distributor Rep'
+        ? 'Surface distributor programs, locate-a-distributor resources, and partner ordering tools.'
+        : user === 'Regulatory Professional'
+          ? 'Emphasize COA, pharmacopeia compliance, ISO 17025 CRM, and quality system documentation.'
+          : user === 'Scientist'
+            ? 'Highlight reference strains, growth promotion testing, assay validation, and technical publications.'
+            : 'Select a demo persona in the header to personalize ranking and supplemental results.';
 
   if (buckets.includes('compliance')) {
     return {

@@ -9,14 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
+import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY, DEMO_USER_OPTIONS } from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
-
-const DEMO_USERS = [
-  { label: 'User 1 - IT Director / IT Manager', taxonomy: 'IT Director / IT Manager' },
-  { label: 'User 2 - MSP Provider', taxonomy: 'MSP Provider' },
-  { label: 'User 3 - CISO Compliance Officer', taxonomy: 'CISO Compliance Officer' },
-] as const;
 
 export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
   const [taxonomy, setTaxonomy] = useState('');
@@ -34,11 +28,11 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
 
   return (
     <Select value={taxonomy || undefined} onValueChange={handleValueChange}>
-      <SelectTrigger className={cn('h-10 w-[15rem]', triggerClassName)}>
+      <SelectTrigger className={cn('h-10 min-w-[15rem] max-w-[22rem]', triggerClassName)}>
         <SelectValue placeholder="Login" />
       </SelectTrigger>
       <SelectContent align="end" className="z-[100]">
-        {DEMO_USERS.map((user) => (
+        {DEMO_USER_OPTIONS.map((user) => (
           <SelectItem key={user.taxonomy} value={user.taxonomy}>
             {user.label}
           </SelectItem>
