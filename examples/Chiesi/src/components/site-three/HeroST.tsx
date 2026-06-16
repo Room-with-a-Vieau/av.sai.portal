@@ -7,12 +7,14 @@ import {
   ImageField,
   Field,
   LinkField,
+  useSitecore,
 } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
 
 interface Fields {
   Eyebrow: Field<string>;
   Title: Field<string>;
+  Callout?: Field<string>;
   Image1: ImageField;
   Image2: ImageField;
   Link1: LinkField;
@@ -120,6 +122,29 @@ function HeroVideoSplitDecorativeOverlay() {
   );
 }
 
+/**
+ * Chiesi hero accents — white top-left wedge + primary (magenta) bottom-right wedge.
+ * Decorative only (no carousel controls on HeroST).
+ */
+function HeroChiesiCornerAccents() {
+  return (
+    <>
+      <div
+        className="herost-corner-accent herost-corner-accent-tl pointer-events-none absolute left-0 top-0 z-[15] h-16 w-16 bg-background sm:h-20 sm:w-20 lg:h-24 lg:w-24"
+        style={{ clipPath: 'polygon(0 0, 100% 0, 0 100%)' }}
+        aria-hidden="true"
+      />
+      <div
+        className="herost-corner-accent herost-corner-accent-br pointer-events-none absolute bottom-0 right-0 z-[15] h-[42%] w-[48%] min-h-[8rem] min-w-[9rem] max-h-[16rem] max-w-[22rem] bg-primary sm:h-[40%] sm:w-[44%] md:max-h-[18rem] md:max-w-[20rem] lg:h-[38%] lg:w-[40%]"
+        style={{ clipPath: 'polygon(72% 100%, 100% 100%, 100% 62%)' }}
+        aria-hidden="true"
+      />
+    </>
+  );
+}
+
+const HERO_PHOTO_SECTION_CLASS = 'relative flex items-center overflow-hidden border-8 lg:border-16 border-background';
+
 /** Light text over dark hero imagery (theme token — typically white / near-white). */
 const HERO_TEXT_ON_DARK_IMAGE_CLASS = 'text-primary-foreground';
 
@@ -150,11 +175,72 @@ function isDarkImageHero(params: PageHeaderSTProps['params'] | undefined): boole
   return false;
 }
 
-function heroEyebrowOverPhotoClass(darkImage: boolean): string {
-  return cn(
-    'text-xl lg:text-3xl pb-4',
-    darkImage ? HERO_TEXT_ON_DARK_IMAGE_CLASS : 'text-primary'
-  );
+const CALLOUT_FIELD_KEYS = ['Callout', 'callout'] as const;
+const TITLE_FIELD_KEYS = ['Title', 'title'] as const;
+
+function hasLayoutData(
+  fields: unknown
+): fields is { data: { datasource?: Record<string, unknown> } } {
+  if (typeof fields !== 'object' || fields === null || !('data' in fields)) return false;
+  const data = (fields as { data: unknown }).data;
+  return typeof data === 'object' && data !== null;
+}
+
+function unwrapTextField(cell: unknown): Field<string> | undefined {
+  if (cell == null) return undefined;
+  if (typeof cell === 'object' && 'jsonValue' in cell && cell.jsonValue !== undefined) {
+    return cell.jsonValue as Field<string>;
+  }
+  if (typeof cell === 'object' && 'value' in cell) {
+    return cell as Field<string>;
+  }
+  return undefined;
+}
+
+function pickTextField(
+  keys: readonly string[],
+  ...bags: Array<Record<string, unknown> | undefined>
+): Field<string> | undefined {
+  for (const bag of bags) {
+    if (!bag) continue;
+    for (const key of keys) {
+      const field = unwrapTextField(bag[key]);
+      if (field !== undefined) {
+        return field;
+      }
+    }
+  }
+  return undefined;
+}
+
+function hasTextFieldValue(field?: Field<string>): boolean {
+  return String(field?.value ?? '').trim().length > 0;
+}
+
+/** Layout service and GraphQL may use different casings or nest fields under data.datasource. */
+function resolveHeroSTFields(rawFields: PageHeaderSTProps['fields'] | undefined): Fields {
+  if (!rawFields) {
+    return {} as Fields;
+  }
+
+  const flat = { ...(rawFields as Record<string, unknown>) };
+  delete flat.data;
+  const datasource = hasLayoutData(rawFields)
+    ? ((rawFields.data.datasource ?? {}) as Record<string, unknown>)
+    : {};
+
+  const resolved = { ...rawFields } as Fields;
+  const title = pickTextField(TITLE_FIELD_KEYS, flat, datasource);
+  const callout = pickTextField(CALLOUT_FIELD_KEYS, flat, datasource);
+
+  if (title !== undefined) {
+    resolved.Title = title;
+  }
+  if (callout !== undefined) {
+    resolved.Callout = callout;
+  }
+
+  return resolved;
 }
 
 function heroTitleOverPhotoClass(darkImage: boolean): string {
@@ -164,11 +250,109 @@ function heroTitleOverPhotoClass(darkImage: boolean): string {
   );
 }
 
+function splitTitleForAccent(text: string): { lead: string; accent: string } | null {
+  const trimmed = text.trim();
+  const lastSpace = trimmed.lastIndexOf(' ');
+  if (lastSpace <= 0) return null;
+  return {
+    lead: trimmed.slice(0, lastSpace),
+    accent: trimmed.slice(lastSpace + 1),
+  };
+}
+
+type HeroStylizedTitleProps = {
+  field?: Field<string>;
+  darkImage: boolean;
+  className?: string;
+};
+
+/** Chiesi-style title: light sans-serif lead + script accent on the last word. */
+function HeroStylizedTitle({ field, darkImage, className }: HeroStylizedTitleProps) {
+  const { page } = useSitecore();
+  const isEditing = page.mode.isEditing;
+  const titleClass = cn('herost-stylized-title leading-none', heroTitleOverPhotoClass(darkImage), className);
+  const parts = field?.value ? splitTitleForAccent(String(field.value)) : null;
+
+  if (isEditing || !parts) {
+    return (field?.value || isEditing) ? (
+      <ContentSdkText field={field} tag="h1" className={titleClass} />
+    ) : null;
+  }
+
+  return (
+    <h1 className={titleClass}>
+      <span className="herost-title-lead text-3xl font-light md:text-4xl lg:text-5xl">{parts.lead} </span>
+      <span className="herost-title-accent text-5xl font-semibold md:text-6xl lg:text-7xl">{parts.accent}</span>
+    </h1>
+  );
+}
+
+type HeroCalloutProps = {
+  field?: Field<string>;
+  darkImage: boolean;
+  className?: string;
+};
+
+function HeroCallout({ field, darkImage, className }: HeroCalloutProps) {
+  const { page } = useSitecore();
+  const isEditing = page.mode.isEditing;
+
+  if (!hasTextFieldValue(field) && !isEditing) return null;
+
+  return (
+    <p
+      className={cn(
+        'herost-callout mt-4 max-w-xl text-base leading-relaxed md:text-lg',
+        darkImage ? 'text-primary-foreground' : 'text-black',
+        className
+      )}
+    >
+      <ContentSdkText field={field} tag="span" className="whitespace-pre-line" />
+    </p>
+  );
+}
+
+type HeroPhotoCopyBlockProps = {
+  fields: Fields;
+  darkImage: boolean;
+  align?: 'left' | 'right' | 'center';
+};
+
+function HeroPhotoCopyBlock({ fields, darkImage, align = 'left' }: HeroPhotoCopyBlockProps) {
+  const alignClass =
+    align === 'right' ? 'text-right' : align === 'center' ? 'text-center mx-auto' : 'text-left';
+
+  return (
+    <div className={cn('lg:max-w-3xl', align === 'right' && 'lg:ml-auto', alignClass)}>
+      <HeroStylizedTitle field={fields?.Title} darkImage={darkImage} />
+      <HeroCallout
+        field={fields?.Callout}
+        darkImage={darkImage}
+        className={align === 'center' ? 'mx-auto' : undefined}
+      />
+      <div
+        className={cn(
+          'mt-8',
+          align === 'center' && 'flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-0'
+        )}
+      >
+        <ContentSdkLink
+          field={fields?.Link1}
+          prefetch={false}
+          className={cn('btn btn-primary', align !== 'center' && 'mr-4')}
+        />
+        <ContentSdkLink field={fields?.Link2} prefetch={false} className="btn btn-secondary" />
+      </div>
+    </div>
+  );
+}
+
 export const Default = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
+  const fields = resolveHeroSTFields(props.fields);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={`${HERO_PHOTO_SECTION_CLASS} ${props?.params?.styles || ''}`}
       data-class-change
     >
       <div className={HERO_BG_LAYER_CLASS}>
@@ -181,41 +365,24 @@ export const Default = (props: PageHeaderSTProps) => {
           className={HERO_BG_IMAGE_CLASS}
         />
       </div>
-        <div className="relative z-20 mx-auto w-full lg:container lg:flex">
-          <div
-            className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
-          >
-            <div className="lg:max-w-3xl">
-              <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Eyebrow} />
-              </h1>
-              <h1 className={heroTitleOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Title} />
-              </h1>
-              <div className="mt-8">
-                <ContentSdkLink
-                  field={props?.fields?.Link1}
-                  prefetch={false}
-                  className="btn btn-primary mr-4"
-                />
-                <ContentSdkLink
-                  field={props?.fields?.Link2}
-                  prefetch={false}
-                  className="btn btn-secondary"
-                />
-              </div>
-            </div>
-          </div>
+      <HeroChiesiCornerAccents />
+      <div className="relative z-20 mx-auto w-full lg:container lg:flex">
+        <div
+          className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+        >
+          <HeroPhotoCopyBlock fields={fields} darkImage={darkImage} />
         </div>
+      </div>
     </section>
   );
 };
 
 export const Right = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
+  const fields = resolveHeroSTFields(props.fields);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={`${HERO_PHOTO_SECTION_CLASS} ${props?.params?.styles || ''}`}
       data-class-change
     >
       <div className={HERO_BG_LAYER_CLASS}>
@@ -228,30 +395,12 @@ export const Right = (props: PageHeaderSTProps) => {
           className={HERO_BG_IMAGE_CLASS}
         />
       </div>
+      <HeroChiesiCornerAccents />
       <div className="relative z-20 mx-auto w-full lg:container lg:flex lg:flex-row-reverse">
         <div
           className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
-          <div className="lg:max-w-3xl lg:ml-auto text-right">
-            <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Eyebrow} />
-            </h1>
-            <h1 className={heroTitleOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Title} />
-            </h1>
-            <div className="mt-8">
-              <ContentSdkLink
-                field={props?.fields?.Link1}
-                prefetch={false}
-                className="btn btn-primary mr-4"
-              />
-              <ContentSdkLink
-                field={props?.fields?.Link2}
-                prefetch={false}
-                className="btn btn-secondary"
-              />
-            </div>
-          </div>
+          <HeroPhotoCopyBlock fields={fields} darkImage={darkImage} align="right" />
         </div>
       </div>
     </section>
@@ -260,9 +409,10 @@ export const Right = (props: PageHeaderSTProps) => {
 
 export const Centered = (props: PageHeaderSTProps) => {
   const darkImage = isDarkImageHero(props.params);
+  const fields = resolveHeroSTFields(props.fields);
   return (
     <section
-      className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      className={`${HERO_PHOTO_SECTION_CLASS} ${props?.params?.styles || ''}`}
       data-class-change
     >
       <div className={HERO_BG_LAYER_CLASS}>
@@ -275,29 +425,13 @@ export const Centered = (props: PageHeaderSTProps) => {
           className={HERO_BG_IMAGE_CLASS}
         />
       </div>
+      <HeroChiesiCornerAccents />
       <div className="relative z-20 mx-auto w-full lg:container lg:flex">
         <div
           className={`lg:relative lg:left-1/6 flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
         >
-          <div className="lg:max-w-3xl lg:mx-auto text-center">
-            <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Eyebrow} />
-            </h1>
-            <h1 className={heroTitleOverPhotoClass(darkImage)}>
-              <ContentSdkText field={props?.fields?.Title} />
-            </h1>
-            <div className="mt-8">
-              <ContentSdkLink
-                field={props?.fields?.Link1}
-                prefetch={false}
-                className="btn btn-primary mr-4"
-              />
-              <ContentSdkLink
-                field={props?.fields?.Link2}
-                prefetch={false}
-                className="btn btn-secondary"
-              />
-            </div>
+          <div className="lg:max-w-3xl lg:mx-auto">
+            <HeroPhotoCopyBlock fields={fields} darkImage={darkImage} align="center" />
           </div>
         </div>
       </div>

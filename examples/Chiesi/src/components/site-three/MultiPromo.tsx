@@ -1,18 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
 } from '@sitecore-content-sdk/nextjs';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from '@/components/ui/carousel';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
@@ -75,6 +76,14 @@ const parentBasedGridItemClasses =
   '[.multipromo-centered_&]:items-center [.bg-gradient_&]:text-white items-start';
 
 const SIDE_BY_SIDE_MIN_HEIGHT = 'min-h-[22rem] md:min-h-[26rem] lg:min-h-[32rem]';
+
+/** Chiesi CardSplit — muted teal-blue panel (chiesirarediseases.com community promos). */
+const CARD_SPLIT_BLUE = '#6099b4';
+const CARD_SPLIT_PANEL_CLIP = 'polygon(0 0, 100% 0, 74% 100%, 0 100%)';
+const CARD_SPLIT_PANEL_SURFACE_CLASS =
+  'multipromo-cardsplit-panel flex w-[78%] max-w-[20rem] flex-col justify-center px-8 pt-8 pb-28 text-white sm:max-w-[26rem] md:w-[48%] md:max-w-[32rem] md:px-10 md:pt-10 md:pb-32 lg:w-[44%] lg:max-w-[36rem] lg:px-12 lg:pt-12 lg:pb-32';
+const CARD_SPLIT_PANEL_CLASS = cn('absolute inset-y-0 left-0 z-10', CARD_SPLIT_PANEL_SURFACE_CLASS);
+const CARD_SPLIT_MIN_HEIGHT = SIDE_BY_SIDE_MIN_HEIGHT;
 
 type SideBySidePanelProps = {
   promo: SimplePromoFields;
@@ -218,6 +227,129 @@ const CardCarouselPanel = ({ promo, isActive, onActivate }: CardCarouselPanelPro
         </span>
       </div>
     </article>
+  );
+};
+
+type CardSplitSlideProps = {
+  promo: SimplePromoFields;
+  eyebrow?: IGQLTextField;
+};
+
+const CardSplitSlide = ({ promo, eyebrow }: CardSplitSlideProps) => {
+  const { image, heading, description, link } = promo ?? {};
+  const linkText = toTrimmedFieldString(link?.jsonValue?.value?.text);
+  const ctaLabel = linkText || 'Learn more';
+
+  return (
+    <div className={cn('relative w-full overflow-hidden', CARD_SPLIT_MIN_HEIGHT)}>
+      {image?.jsonValue?.value?.src ? (
+        <ContentSdkImage
+          field={image.jsonValue}
+          className="absolute inset-0 z-0 h-full w-full object-cover object-center"
+        />
+      ) : (
+        <div className="absolute inset-0 z-0 bg-muted" aria-hidden />
+      )}
+
+      <div
+        className={CARD_SPLIT_PANEL_CLASS}
+        style={{
+          backgroundColor: CARD_SPLIT_BLUE,
+          clipPath: CARD_SPLIT_PANEL_CLIP,
+        }}
+      >
+        <div className="max-w-md pr-4 md:pr-6">
+          {eyebrow?.jsonValue && (
+            <p className="text-sm font-normal md:text-base">
+              <ContentSdkText field={eyebrow.jsonValue} />
+            </p>
+          )}
+          {heading?.jsonValue && (
+            <h3 className="mt-3 font-heading text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
+              <ContentSdkText field={heading.jsonValue} />
+            </h3>
+          )}
+          {description?.jsonValue && (
+            <p className="mt-4 text-sm leading-relaxed md:text-base">
+              <ContentSdkText field={description.jsonValue} />
+            </p>
+          )}
+          <span className="multipromo-cardsplit-cta mt-6 inline-flex items-center gap-2 text-sm font-bold">
+            {link?.jsonValue?.value?.href ? (
+              <ContentSdkLink
+                field={link.jsonValue}
+                className="text-inherit no-underline hover:underline"
+              />
+            ) : (
+              <span>{ctaLabel}</span>
+            )}
+            <ChevronRight className="size-4 shrink-0 text-primary" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type CardSplitNavigationProps = {
+  promoCount: number;
+  activeIndex: number;
+  onPrevious: () => void;
+  onNext: () => void;
+  onSelect: (index: number) => void;
+};
+
+const CardSplitNavigation = ({
+  promoCount,
+  activeIndex,
+  onPrevious,
+  onNext,
+  onSelect,
+}: CardSplitNavigationProps) => {
+  if (promoCount <= 1) return null;
+
+  return (
+    <div
+      className="pointer-events-none absolute bottom-4 left-8 z-20 flex flex-col gap-3 md:bottom-5 md:left-10 lg:bottom-6 lg:left-12"
+      aria-label="Promo carousel navigation"
+    >
+      <div className="pointer-events-auto flex gap-3">
+        <button
+          type="button"
+          onClick={onPrevious}
+          className="flex size-10 items-center justify-center rounded-full border border-white text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+          aria-label="Previous promo"
+        >
+          <ArrowLeft className="size-4" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
+          className="flex size-10 items-center justify-center rounded-full border border-white text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+          aria-label="Next promo"
+        >
+          <ArrowRight className="size-4" aria-hidden />
+        </button>
+      </div>
+      <div className="pointer-events-auto flex gap-2" role="tablist" aria-label="Promo slides">
+        {Array.from({ length: promoCount }, (_, index) => (
+          <button
+            key={index}
+            type="button"
+            role="tab"
+            aria-selected={activeIndex === index}
+            aria-label={`Go to promo ${index + 1}`}
+            onClick={() => onSelect(index)}
+            className={cn(
+              'size-2.5 shrink-0 rounded-full border transition-colors',
+              activeIndex === index
+                ? 'border-white bg-white'
+                : 'border-white/80 bg-transparent hover:bg-white/20'
+            )}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -459,6 +591,106 @@ export const CardCarousel = (props: MultiPromoProps) => {
             </Carousel>
           ) : null}
         </div>
+      </section>
+    );
+  }
+
+  return <NoDataFallback componentName="MultiPromo" />;
+};
+
+/**
+ * CardSplit: diagonal teal-blue panel over a full-bleed image with carousel navigation.
+ * Eyebrow uses datasource title; heading and description come from each promo child.
+ */
+export const CardSplit = (props: MultiPromoProps) => {
+  const datasource = useMemo(
+    () => props.fields?.data?.datasource,
+    [props.fields?.data?.datasource]
+  );
+  const promos = useMemo(
+    () => datasource?.children?.results?.filter(Boolean) ?? [],
+    [datasource?.children?.results]
+  );
+  const promoCount = promos.length;
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!carouselApi || promoCount === 0) return;
+
+    const onSelect = () => {
+      const snap = carouselApi.selectedScrollSnap();
+      setActiveIndex(((snap % promoCount) + promoCount) % promoCount);
+    };
+
+    onSelect();
+    carouselApi.on('select', onSelect);
+    carouselApi.on('reInit', onSelect);
+
+    return () => {
+      carouselApi.off('select', onSelect);
+      carouselApi.off('reInit', onSelect);
+    };
+  }, [carouselApi, promoCount]);
+
+  if (props.fields) {
+    return (
+      <section
+        className={cn('relative w-full overflow-hidden', props.params?.styles)}
+        data-class-change
+        data-multipromo-variant="cardsplit"
+      >
+        {promos.length > 0 ? (
+          <>
+            <Carousel
+              setApi={setCarouselApi}
+              opts={{
+                align: 'start',
+                loop: promos.length > 1,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-0">
+                {promos.map((promo, index) => (
+                  <CarouselItem key={promo.id ?? index} className="basis-full pl-0">
+                    <CardSplitSlide promo={promo} eyebrow={datasource?.title} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+
+            <CardSplitNavigation
+              promoCount={promoCount}
+              activeIndex={activeIndex}
+              onPrevious={() => carouselApi?.scrollPrev()}
+              onNext={() => carouselApi?.scrollNext()}
+              onSelect={(index) => carouselApi?.scrollTo(index)}
+            />
+          </>
+        ) : (
+          <div className={cn('relative', CARD_SPLIT_MIN_HEIGHT)}>
+            {(datasource?.title?.jsonValue || datasource?.description?.jsonValue) && (
+              <div
+                className={cn('relative h-full', CARD_SPLIT_PANEL_SURFACE_CLASS)}
+                style={{
+                  backgroundColor: CARD_SPLIT_BLUE,
+                  clipPath: CARD_SPLIT_PANEL_CLIP,
+                }}
+              >
+                {datasource?.title?.jsonValue && (
+                  <p className="text-sm md:text-base">
+                    <ContentSdkText field={datasource.title.jsonValue} />
+                  </p>
+                )}
+                {datasource?.description?.jsonValue && (
+                  <p className="mt-4 text-sm md:text-base">
+                    <ContentSdkText field={datasource.description.jsonValue} />
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </section>
     );
   }

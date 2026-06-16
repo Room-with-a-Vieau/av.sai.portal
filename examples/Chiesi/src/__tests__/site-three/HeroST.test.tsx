@@ -31,6 +31,13 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       {children || field?.value?.text || ''}
     </a>
   ),
+  useSitecore: () => ({
+    page: {
+      mode: {
+        isEditing: false,
+      },
+    },
+  }),
 }));
 
 describe('HeroST', () => {
@@ -43,7 +50,10 @@ describe('HeroST', () => {
         value: 'New Collection',
       },
       Title: {
-        value: 'Premium Audio Experience',
+        value: 'We are Rare',
+      },
+      Callout: {
+        value: 'A family-owned Certified B Corporation committed to rare diseases',
       },
       Image1: {
         value: {
@@ -73,14 +83,61 @@ describe('HeroST', () => {
   };
 
   describe('Default variant', () => {
-    it('renders hero with eyebrow text', () => {
+    it('renders stylized title with script accent on the last word', () => {
+      const { container } = render(<HeroSTDefault {...mockProps} />);
+      expect(screen.getByText('We are')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
+      expect(container.querySelector('.herost-title-accent')).toHaveTextContent('Rare');
+    });
+
+    it('renders callout text below the title', () => {
       render(<HeroSTDefault {...mockProps} />);
-      expect(screen.getByText('New Collection')).toBeInTheDocument();
+      expect(
+        screen.getByText('A family-owned Certified B Corporation committed to rare diseases')
+      ).toBeInTheDocument();
+    });
+
+    it('renders callout from lowercase field key', () => {
+      const propsWithLowercaseCallout: any = {
+        ...mockProps,
+        fields: {
+          ...mockProps.fields,
+          Callout: undefined,
+          callout: {
+            value: 'Lowercase callout field value',
+          },
+        },
+      };
+      render(<HeroSTDefault {...propsWithLowercaseCallout} />);
+      expect(screen.getByText('Lowercase callout field value')).toBeInTheDocument();
+    });
+
+    it('renders callout from GraphQL datasource jsonValue', () => {
+      const propsWithDatasourceCallout: any = {
+        ...mockProps,
+        fields: {
+          Title: mockProps.fields.Title,
+          Image1: mockProps.fields.Image1,
+          Link1: mockProps.fields.Link1,
+          Link2: mockProps.fields.Link2,
+          data: {
+            datasource: {
+              callout: {
+                jsonValue: {
+                  value: 'Callout from datasource jsonValue',
+                },
+              },
+            },
+          },
+        },
+      };
+      render(<HeroSTDefault {...propsWithDatasourceCallout} />);
+      expect(screen.getByText('Callout from datasource jsonValue')).toBeInTheDocument();
     });
 
     it('renders hero with title', () => {
       render(<HeroSTDefault {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
 
     it('renders background image', () => {
@@ -95,40 +152,36 @@ describe('HeroST', () => {
       expect(screen.getByText('Learn More')).toBeInTheDocument();
     });
 
-    it('applies light text on eyebrow and title when Dark Image param is enabled', () => {
+    it('applies light text on title when Dark Image param is enabled', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '1' }} />
       );
-      const headings = container.querySelectorAll('h1');
-      expect(headings[0]).toHaveClass('text-primary-foreground');
-      expect(headings[1]).toHaveClass('text-primary-foreground');
+      const heading = container.querySelector('.herost-stylized-title');
+      expect(heading).toHaveClass('text-primary-foreground');
     });
 
     it('recognizes Dark Image checkbox under alternate param key spellings', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, 'Dark Image': 'true' }} />
       );
-      const headings = container.querySelectorAll('h1');
-      expect(headings[0]).toHaveClass('text-primary-foreground');
-      expect(headings[1]).toHaveClass('text-primary-foreground');
+      const heading = container.querySelector('.herost-stylized-title');
+      expect(heading).toHaveClass('text-primary-foreground');
     });
 
     it('does not force light text when Dark Image is off', () => {
       const { container } = render(
         <HeroSTDefault {...mockProps} params={{ ...mockProps.params, DarkImage: '0' }} />
       );
-      const headings = container.querySelectorAll('h1');
-      expect(headings[0]).not.toHaveClass('text-primary-foreground');
-      expect(headings[1]).not.toHaveClass('text-primary-foreground');
-      expect(headings[0]).toHaveClass('text-primary');
-      expect(headings[1]).toHaveClass('text-primary');
+      const heading = container.querySelector('.herost-stylized-title');
+      expect(heading).not.toHaveClass('text-primary-foreground');
+      expect(heading).toHaveClass('text-primary');
     });
   });
 
   describe('Centered variant', () => {
     it('renders hero with title', () => {
       render(<HeroSTCentered {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
 
     it('renders call-to-action links', () => {
@@ -136,9 +189,11 @@ describe('HeroST', () => {
       expect(screen.getByText('Shop Now')).toBeInTheDocument();
     });
 
-    it('renders eyebrow text in centered variant', () => {
+    it('renders callout text in centered variant', () => {
       render(<HeroSTCentered {...mockProps} />);
-      expect(screen.getByText('New Collection')).toBeInTheDocument();
+      expect(
+        screen.getByText('A family-owned Certified B Corporation committed to rare diseases')
+      ).toBeInTheDocument();
     });
 
     it('applies custom styles in centered variant', () => {
@@ -151,12 +206,14 @@ describe('HeroST', () => {
   describe('Right variant', () => {
     it('renders hero with title in right variant', () => {
       render(<HeroSTRight {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
 
-    it('renders eyebrow text in right variant', () => {
+    it('renders callout text in right variant', () => {
       render(<HeroSTRight {...mockProps} />);
-      expect(screen.getByText('New Collection')).toBeInTheDocument();
+      expect(
+        screen.getByText('A family-owned Certified B Corporation committed to rare diseases')
+      ).toBeInTheDocument();
     });
 
     it('renders call-to-action links in right variant', () => {
@@ -177,23 +234,23 @@ describe('HeroST', () => {
       expect(section).toHaveClass('test-styles');
     });
 
-    it('handles missing eyebrow in right variant', () => {
-      const propsWithoutEyebrow: any = {
+    it('handles missing callout in right variant', () => {
+      const propsWithoutCallout: any = {
         ...mockProps,
         fields: {
           ...mockProps.fields,
-          Eyebrow: undefined,
+          Callout: undefined,
         },
       };
-      render(<HeroSTRight {...propsWithoutEyebrow} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      render(<HeroSTRight {...propsWithoutCallout} />);
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
   });
 
   describe('SplitScreen variant', () => {
     it('renders hero with title in split screen variant', () => {
       render(<HeroSTSplitScreen {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('We are Rare')).toBeInTheDocument();
     });
 
     it('renders eyebrow text in split screen variant', () => {
@@ -235,7 +292,7 @@ describe('HeroST', () => {
   describe('WithVideoSplit variant', () => {
     it('renders title from Title field', () => {
       render(<HeroSTWithVideoSplit {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('We are Rare')).toBeInTheDocument();
     });
 
     it('renders eyebrow from Eyebrow field', () => {
@@ -275,7 +332,7 @@ describe('HeroST', () => {
   describe('Stacked variant', () => {
     it('renders hero with title in stacked variant', () => {
       render(<HeroSTStacked {...mockProps} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('We are Rare')).toBeInTheDocument();
     });
 
     it('renders eyebrow text in stacked variant', () => {
@@ -311,7 +368,7 @@ describe('HeroST', () => {
         },
       };
       render(<HeroSTStacked {...propsWithoutImage2} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('We are Rare')).toBeInTheDocument();
     });
 
     it('applies custom styles in stacked variant', () => {
@@ -343,7 +400,7 @@ describe('HeroST', () => {
         },
       };
       render(<HeroSTDefault {...propsWithoutLinks} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
 
     it('handles missing images in default variant', () => {
@@ -355,7 +412,7 @@ describe('HeroST', () => {
         },
       };
       render(<HeroSTDefault {...propsWithoutImages} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
     });
 
     it('renders without params styles', () => {
@@ -364,7 +421,13 @@ describe('HeroST', () => {
         params: {},
       };
       render(<HeroSTDefault {...propsWithoutStyles} />);
-      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('Rare')).toBeInTheDocument();
+    });
+
+    it('renders Chiesi corner accents on photo heroes', () => {
+      const { container } = render(<HeroSTDefault {...mockProps} />);
+      expect(container.querySelector('.herost-corner-accent-tl')).toBeInTheDocument();
+      expect(container.querySelector('.herost-corner-accent-br')).toBeInTheDocument();
     });
   });
 });

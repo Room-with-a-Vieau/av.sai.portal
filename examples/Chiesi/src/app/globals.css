@@ -350,6 +350,43 @@ html[data-theme='chiesi'] section[data-class-change] :is(h1, h2).text-primary {
   color: var(--color-primary);
 }
 
+/* HeroST stylized title — primary lead + script accent (chiesirarediseases.com) */
+html[data-theme='chiesi'] .herost-stylized-title {
+  color: var(--color-primary);
+}
+
+html[data-theme='chiesi'] .herost-stylized-title .herost-title-lead,
+html[data-theme='chiesi'] .herost-stylized-title .herost-title-accent {
+  color: var(--color-primary);
+}
+
+html[data-theme='chiesi'] .herost-stylized-title .herost-title-accent {
+  font-family: var(--font-accent);
+  font-weight: 700;
+}
+
+html[data-theme='chiesi'] .herost-callout {
+  color: #000000;
+}
+
+html[data-theme='chiesi'] .herost-callout :where(span, p, a) {
+  color: inherit;
+}
+
+.herost-stylized-title .herost-title-accent {
+  font-family: var(--font-accent);
+}
+
+/* MultiPromo CardSplit — white type on teal panel (overrides theme heading colors). */
+[data-multipromo-variant='cardsplit'] .multipromo-cardsplit-panel :where(h1, h2, h3, h4, h5, h6, p) {
+  color: #ffffff;
+}
+
+[data-multipromo-variant='cardsplit'] .multipromo-cardsplit-panel .multipromo-cardsplit-cta,
+[data-multipromo-variant='cardsplit'] .multipromo-cardsplit-panel .multipromo-cardsplit-cta a {
+  color: #ffffff;
+}
+
 html[data-theme='chiesi'] .btn {
   border-radius: 0;
   font-family: var(--font-body);
