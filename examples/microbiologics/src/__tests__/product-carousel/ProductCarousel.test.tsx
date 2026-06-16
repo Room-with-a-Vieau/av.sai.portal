@@ -7,23 +7,24 @@ jest.mock('lucide-react', () => ({
   ChevronRight: () => <span data-testid="chevron-right">→</span>,
 }));
 
-jest.mock('embla-carousel-react', () => ({
-  __esModule: true,
-  default: () => [
-    (node: HTMLElement) => node,
-    {
-      scrollNext: jest.fn(),
-      scrollPrev: jest.fn(),
-      scrollTo: jest.fn(),
-      canScrollNext: () => true,
-      canScrollPrev: () => false,
-      selectedScrollSnap: () => 0,
-      scrollSnapList: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-      on: jest.fn(),
-      off: jest.fn(),
-    },
-  ],
-}));
+/** Stable API reference — a new object each render caused useEffect loops and OOM. */
+jest.mock('embla-carousel-react', () => {
+  const api = {
+    scrollNext: jest.fn(),
+    scrollPrev: jest.fn(),
+    scrollTo: jest.fn(),
+    canScrollNext: () => true,
+    canScrollPrev: () => false,
+    selectedScrollSnap: () => 0,
+    scrollSnapList: () => [0, 1, 2],
+    on: jest.fn(),
+    off: jest.fn(),
+  };
+  return {
+    __esModule: true,
+    default: jest.fn(() => [(node: HTMLElement | null) => node, api]),
+  };
+});
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -33,9 +34,16 @@ jest.mock('next/image', () => ({
   ),
 }));
 
+const baseProps = {
+  params: {},
+  fields: {},
+  rendering: { componentName: 'ProductCarousel', uid: 'test' },
+  page: { layout: { sitecore: { route: { name: 'Test' } } } },
+} as const;
+
 describe('ProductCarousel', () => {
   it('renders default microbiology products from bundled JSON', () => {
-    render(<ProductCarouselDefault params={{}} fields={{}} />);
+    render(<ProductCarouselDefault {...baseProps} />);
 
     expect(screen.getByRole('heading', { name: /Microbiology Control Products/i })).toBeInTheDocument();
     expect(screen.getByText('KWIK-STIK™')).toBeInTheDocument();
@@ -43,7 +51,7 @@ describe('ProductCarousel', () => {
   });
 
   it('renders carousel navigation controls', () => {
-    render(<ProductCarouselDefault params={{}} fields={{}} />);
+    render(<ProductCarouselDefault {...baseProps} />);
 
     expect(screen.getAllByLabelText('Previous products').length).toBeGreaterThan(0);
     expect(screen.getAllByLabelText('Next products').length).toBeGreaterThan(0);
@@ -53,7 +61,7 @@ describe('ProductCarousel', () => {
   it('uses jsonDatasource field when provided', () => {
     render(
       <ProductCarouselDefault
-        params={{}}
+        {...baseProps}
         fields={{
           jsonDatasource: {
             value: JSON.stringify({
