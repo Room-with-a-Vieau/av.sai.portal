@@ -1,0 +1,165 @@
+{
+  "title": "Microbiology Control Products",
+  "products": [
+    {
+      "id": "kwik-stik",
+      "title": "KWIK-STIK™",
+      "description": "For qualitative culture-based QC testing. An all-in-one device containing a lyophilized organism pellet, rehydration fluid and inoculating swab.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559102&c=915960&h=IWVsNQYJLUCgUIMUR8dGYvsQLsq5QF3sNgDfqIVttKsI4Zq1",
+      "imageAlt": "Kwik-Stik kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/KWIK-STIK-2-Pack,KWIK-STIK-6-Pack"
+    },
+    {
+      "id": "ez-accu-shot",
+      "title": "EZ-Accu Shot™",
+      "description": "For culture media GPT. Quantitated instant dissolving organism pellets delivering 10-100 CFU with no prep and 8-hour stability. 10 tests per setup, 50 tests per kit.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559114&c=915960&h=59gHk93oYg47bGqMEoMTVdZTag0u9J3Pw6fs19-3LNXt3QtX",
+      "imageAlt": "EZ-Accu Shot kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-Accu-Shot"
+    },
+    {
+      "id": "epower",
+      "title": "Epower™",
+      "description": "For QC of enumeration methods. Quantitated strains in CFU concentrations ranging from 10^2 to 10^8. Packaged in a glass vial containing 10 lyophilized organism pellets.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=8001677&c=915960&h=rbNAdz717f0tM9lw8fC-AgawoVd_wesW_Ght6grImROf5r2q",
+      "imageAlt": "Epower item",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Epower"
+    },
+    {
+      "id": "helix-elite",
+      "title": "Helix Elite™",
+      "description": "For QC of molecular instruments and assays. External, third-party molecular reference standards available in inactivated and synthetic nucleic acid ready-to-use formats.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559121&c=915960&h=LEj9riu2aEhK3mjfOP1DiL7TkU4hdmqMUI0sZEifiWNCEKJG",
+      "imageAlt": "Helix Elite kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Helix-Elite-Inactivated-Standard,Helix-Elite-Synthetic-Standard"
+    },
+    {
+      "id": "uv-biotag",
+      "title": "UV-BioTAG™",
+      "description": "Qualitative organisms containing green fluorescent protein (GFP) markers. Fluoresces under UV light to distinguish QC strains from other possible contaminants.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11633406&c=915960&h=SEEzM2u_rEHEXLeyNsLagEnSK2IZdLDSZFMyMmGo0peecBjS",
+      "imageAlt": "UV-BioTAG product",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/UV-BioTAG-Swab,UV-BioTAG-Vial,UV-BioTAG-Kit"
+    },
+    {
+      "id": "ez-pec",
+      "title": "EZ-PEC™",
+      "description": "For Antimicrobial Effectiveness and Preservative Efficacy Testing. Delivers a final concentration of 1.0 x 10^5 to 1.0 x 10^6 CFU per ml of the product being tested.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11633407&c=915960&h=bE_a50VUE-Ro3zwvhG30Kebt4d3Wrl_eMt1_EMyWNFA_eUbs",
+      "imageAlt": "EZ-PEC kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-PEC"
+    },
+    {
+      "id": "ez-accu-shot-select",
+      "title": "EZ-Accu Shot™ Select",
+      "description": "Multi-strain kits for GPT. Includes all compendial test strains quantitated to deliver 10-100 CFU per 0.1 ml. Instant dissolve pellets, no prep and 8-hour stability.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559123&c=915960&h=GiNmDg960n-qOWy_jyVO6WtP6PMaXLFIS5T_xAHAl8PEij1O",
+      "imageAlt": "EZ-Accu Shot Select kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-Accu-Shot-Select"
+    },
+    {
+      "id": "kwik-stik-plus",
+      "title": "KWIK-STIK™ Plus",
+      "description": "Two passage qualitative reference strains. An all-in-one device containing a lyophilized organism pellet, rehydration fluid and inoculating swab.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559102&c=915960&h=IWVsNQYJLUCgUIMUR8dGYvsQLsq5QF3sNgDfqIVttKsI4Zq1",
+      "imageAlt": "KWIK-STIK Plus kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/KWIK-STIK-Plus"
+    },
+    {
+      "id": "epower-crm",
+      "title": "Epower™ CRM",
+      "description": "For ISO 17025 accredited labs. Quantitated organisms as Certified Reference Material. Available in CFU concentrations ranging from 10^2 to 10^7 per pellet.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=8001677&c=915960&h=rbNAdz717f0tM9lw8fC-AgawoVd_wesW_Ght6grImROf5r2q",
+      "imageAlt": "Epower CRM",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Epower-CRM"
+    },
+    {
+      "id": "lab-elite-crm",
+      "title": "Lab-Elite™ CRM",
+      "description": "Certified Reference Material for ISO 17025 accredited labs. Device contains a qualitative lyophilized organism pellet, rehydration fluid and inoculating swab.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559102&c=915960&h=IWVsNQYJLUCgUIMUR8dGYvsQLsq5QF3sNgDfqIVttKsI4Zq1",
+      "imageAlt": "Lab-Elite CRM",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Lab-Elite-CRM"
+    },
+    {
+      "id": "ez-cfu-one-step",
+      "title": "EZ-CFU™ One Step",
+      "description": "For GPT of culture media. Quantitated organisms delivering 10-100 CFU following a quick warming step. 19 tests per setup, 190 tests per kit.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559123&c=915960&h=GiNmDg960n-qOWy_jyVO6WtP6PMaXLFIS5T_xAHAl8PEij1O",
+      "imageAlt": "EZ-CFU One Step kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-CFU-One-Step"
+    },
+    {
+      "id": "ez-cfu",
+      "title": "EZ-CFU™",
+      "description": "For culture media GPT. Quantitated organisms delivering 10-100 CFU per 0.1 ml following a 1:10 dilution step. 90 tests per setup, 900+ tests per kit.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559123&c=915960&h=GiNmDg960n-qOWy_jyVO6WtP6PMaXLFIS5T_xAHAl8PEij1O",
+      "imageAlt": "EZ-CFU kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-CFU"
+    },
+    {
+      "id": "ez-accu-shot-starved-cells",
+      "title": "EZ-Accu Shot™ Starved Cells",
+      "description": "For GPT of R2A Agar. Organisms are starved prior to lyophilization and quantitated to deliver 50-200 CFU/ml when rehydrated in 10 ml.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559124&c=915960&h=6uYzHtKBCFaB3TGZYHByKLZv06JBJJCWJdWZ5IC5h0rux6aW",
+      "imageAlt": "EZ-Accu Shot Starved Cells",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-Accu-Shot-Starved-Cells"
+    },
+    {
+      "id": "enumerated-mycoplasma",
+      "title": "Enumerated Mycoplasma",
+      "description": "For GPT with USP 63. Quantitated mycoplasma at 10^4 CFU/ml. Its ready-to-plate format eliminates 48 hours to 4 weeks of wait time prior to plating.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11559124&c=915960&h=6uYzHtKBCFaB3TGZYHByKLZv06JBJJCWJdWZ5IC5h0rux6aW",
+      "imageAlt": "Enumerated Mycoplasma kits",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Enumerated-Mycoplasma"
+    },
+    {
+      "id": "lyfo-disk",
+      "title": "LYFO DISK™",
+      "description": "For qualitative culture-based QC testing. Packaged in a glass vial containing 6 qualitative lyophilized organism pellets.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11839465&c=915960&h=Gf7iq6W50xYvodvmKx2xl7Z4G-xc50h3uqM_wwciGYnVpx4n",
+      "imageAlt": "LYFO DISK vial",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/LYFO-DISK"
+    },
+    {
+      "id": "ez-spore",
+      "title": "EZ-SPORE™",
+      "description": "For QC of food spoilage detection methods. Quantitated spore-forming organisms at 10^4 CFU per pellet. Packaged in a glass vial containing 10 organism pellets.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11895095&c=915960&h=oHyn8nkSQKCSa09FNLlr8s_fvlBTqHREEe9YyWuGjSl2I3-Y",
+      "imageAlt": "EZ-SPORE kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/EZ-SPORE"
+    },
+    {
+      "id": "qc-sets-panels",
+      "title": "QC Sets and Panels",
+      "description": "For QC of IVD instruments and assays. Each item contains recommended QC strains for IVD platform or test method in a simple easy-to-use format.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11633408&c=915960&h=yDEhAqUAxyjOmJl0Rt8zDBGPnqawlZvzhJwHEWBGYQga7k8a",
+      "imageAlt": "QC Sets and Panels kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/QC-Sets-and-Panels-KWIK-STIK,QC-Sets-and-Panels-KWIK-STIK-2-Pack,QC-Sets-and-Panels-Helix-Elite"
+    },
+    {
+      "id": "tri-valent-swabs",
+      "title": "Tri-Valent™ Swabs",
+      "description": "For use with DNA Probe Detection Kits. Positive control swabs include whole stabilized cells of T. vaginalis, G. vaginalis, and C. albicans.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11633408&c=915960&h=yDEhAqUAxyjOmJl0Rt8zDBGPnqawlZvzhJwHEWBGYQga7k8a",
+      "imageAlt": "Tri-Valent Swabs",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Tri-Valent-Swabs"
+    },
+    {
+      "id": "fungal-serology",
+      "title": "Fungal Serology",
+      "description": "For patient culture testing. Easy-to-use Serodiagnostic Control immunodiffusion Reagents and Exoantigen Identification of Systemic Fungal Pathogens.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11633408&c=915960&h=yDEhAqUAxyjOmJl0Rt8zDBGPnqawlZvzhJwHEWBGYQga7k8a",
+      "imageAlt": "Fungal serology testing kit",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Fungal-Serology"
+    },
+    {
+      "id": "microbiology-slides",
+      "title": "Microbiology Slides",
+      "description": "For QC of microscopy. Box of ten slides containing droplets of an air-dried, fixed and preserved organism, or a smear containing a designated organism population.",
+      "imageSrc": "https://www.microbiologics.com/core/media/media.nl?id=11839332&c=915960&h=Ocx_2_HxeKWyWF-EQFFXYlMKyhmS16PPBW5RRPPgWQiOcxM5",
+      "imageAlt": "Microbiology slides",
+      "href": "https://www.microbiologics.com/item-type/Product/product-format/Microbiology-Slide"
+    }
+  ]
+}
