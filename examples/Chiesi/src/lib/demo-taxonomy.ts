@@ -11,50 +11,54 @@ export const DEMO_AUTH_LOGIN_VALUE = '__demo-login__';
 export const DEMO_AUTH_LOGOUT_VALUE = '__demo-logout__';
 
 export const DEMO_USER_TAXONOMIES = [
-  'Laboratory Procurement Manager',
-  'Distributor Rep',
-  'Regulatory Professional',
-  'Scientist',
+  'Healthcare Professional',
+  'Patient Advocate',
+  'Caregiver',
+  'Rare disease Patient',
 ] as const;
 
 export type DemoUserTaxonomy = (typeof DEMO_USER_TAXONOMIES)[number];
 
 export const MICRO_PORTAL_PROFILE_KEYS = [
-  'laboratory-procurement-manager',
-  'distributor-rep',
-  'regulatory-professional',
-  'scientist',
+  'healthcare-professional',
+  'patient-advocate',
+  'caregiver',
+  'rare-disease-patient',
 ] as const;
 
 export type MicroPortalProfileKey = (typeof MICRO_PORTAL_PROFILE_KEYS)[number];
 
 export const TAXONOMY_TO_PROFILE_KEY: Record<DemoUserTaxonomy, MicroPortalProfileKey> = {
-  'Laboratory Procurement Manager': 'laboratory-procurement-manager',
-  'Distributor Rep': 'distributor-rep',
-  'Regulatory Professional': 'regulatory-professional',
-  Scientist: 'scientist',
+  'Healthcare Professional': 'healthcare-professional',
+  'Patient Advocate': 'patient-advocate',
+  Caregiver: 'caregiver',
+  'Rare disease Patient': 'rare-disease-patient',
 };
 
 export const PROFILE_KEY_TO_TAXONOMY: Record<MicroPortalProfileKey, DemoUserTaxonomy> = {
-  'laboratory-procurement-manager': 'Laboratory Procurement Manager',
-  'distributor-rep': 'Distributor Rep',
-  'regulatory-professional': 'Regulatory Professional',
-  scientist: 'Scientist',
+  'healthcare-professional': 'Healthcare Professional',
+  'patient-advocate': 'Patient Advocate',
+  caregiver: 'Caregiver',
+  'rare-disease-patient': 'Rare disease Patient',
 };
 
-export const DEMO_USER_OPTIONS: { label: string; taxonomy: DemoUserTaxonomy; profileKey: MicroPortalProfileKey }[] = [
+export const DEMO_USER_OPTIONS: {
+  label: string;
+  taxonomy: DemoUserTaxonomy;
+  profileKey: MicroPortalProfileKey;
+}[] = [
   {
-    label: 'Laboratory Procurement Manager',
-    taxonomy: 'Laboratory Procurement Manager',
-    profileKey: 'laboratory-procurement-manager',
+    label: 'Healthcare Professional',
+    taxonomy: 'Healthcare Professional',
+    profileKey: 'healthcare-professional',
   },
-  { label: 'Distributor Rep', taxonomy: 'Distributor Rep', profileKey: 'distributor-rep' },
+  { label: 'Patient Advocate', taxonomy: 'Patient Advocate', profileKey: 'patient-advocate' },
+  { label: 'Caregiver', taxonomy: 'Caregiver', profileKey: 'caregiver' },
   {
-    label: 'Regulatory Professional',
-    taxonomy: 'Regulatory Professional',
-    profileKey: 'regulatory-professional',
+    label: 'Rare disease Patient',
+    taxonomy: 'Rare disease Patient',
+    profileKey: 'rare-disease-patient',
   },
-  { label: 'Scientist', taxonomy: 'Scientist', profileKey: 'scientist' },
 ];
 
 export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {

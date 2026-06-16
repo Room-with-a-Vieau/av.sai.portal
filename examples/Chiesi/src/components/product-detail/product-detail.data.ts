@@ -6,8 +6,7 @@ import {
   canAccessDocument,
   documentPreviewContent,
   documentRequiresLogin,
-  formatPrice,
-  isAuthenticatedDemoUser,
+  searchCatalogForLegacyBridge,
   type SearchResultItem,
 } from '@/components/search-results/data';
 
@@ -18,53 +17,23 @@ export type ProductPriceDisplay =
 
 /** Map NetSuite record to the SearchResultItem shape used by shared document helpers. */
 export function toDocumentSearchItem(product: NetSuiteProductRecord): SearchResultItem {
-  return {
-    id: product.catalogNumber,
-    title: product.productName,
+  return searchCatalogForLegacyBridge({
     catalogNumber: product.catalogNumber,
-    description: product.shortDescription,
-    href: '#',
-    productFormat: 'epower',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: [],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: [],
-    taxonomy: 'bacteria',
-    testMethods: [],
-    listPrice: product.pricing.listPriceUsd,
-    goldPrice: product.pricing.goldPriceUsd,
-    distributorPrice: product.pricing.distributorPriceEur,
+    productName: product.productName,
+    shortDescription: product.shortDescription,
     documents: product.documents,
-  };
+  });
 }
 
 export function resolveProductPriceDisplay(
-  product: NetSuiteProductRecord,
+  _product: NetSuiteProductRecord,
   user: DemoUserTaxonomy | null,
 ): ProductPriceDisplay {
-  if (!isAuthenticatedDemoUser(user)) return { kind: 'login' };
-  if (user === 'Regulatory Professional') return { kind: 'hidden' };
+  if (!user) return { kind: 'login' };
+  if (user === 'Patient Advocate') return { kind: 'hidden' };
+  if (user === 'Caregiver') return { kind: 'hidden' };
 
-  if (user === 'Distributor Rep') {
-    const amount = product.pricing.distributorPriceEur;
-    if (amount == null) return { kind: 'hidden' };
-    return { kind: 'price', amount, currency: 'EUR' };
-  }
-
-  const contract = product.pricing.goldPriceUsd ?? product.pricing.listPriceUsd;
-  if (contract == null) return { kind: 'hidden' };
-
-  return {
-    kind: 'price',
-    amount: contract,
-    currency: 'USD',
-    listAmount:
-      product.pricing.goldPriceUsd != null && product.pricing.listPriceUsd != null
-        ? product.pricing.listPriceUsd
-        : undefined,
-  };
+  return { kind: 'hidden' };
 }
 
 export {
@@ -73,7 +42,7 @@ export {
   documentRequiresLogin,
   formatPrice,
   type DocumentType,
-};
+} from '@/components/search-results/data';
 
 export function productHasDocuments(product: NetSuiteProductRecord): boolean {
   const { coa, sds, ifu } = product.documents;

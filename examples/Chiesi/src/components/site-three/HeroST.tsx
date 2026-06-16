@@ -223,7 +223,7 @@ function resolveHeroSTFields(rawFields: PageHeaderSTProps['fields'] | undefined)
     return {} as Fields;
   }
 
-  const flat = { ...(rawFields as Record<string, unknown>) };
+  const flat = { ...(rawFields as unknown as Record<string, unknown>) };
   delete flat.data;
   const datasource = hasLayoutData(rawFields)
     ? ((rawFields.data.datasource ?? {}) as Record<string, unknown>)

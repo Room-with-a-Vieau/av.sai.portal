@@ -1,6 +1,6 @@
 /**
- * Mock search catalog for Microbiologics (microbiologics.com search experience).
- * Facet dimensions mirror the live "Narrow By" filters on the product search page.
+ * Mock search catalog for Chiesi Global Rare Diseases (chiesirarediseases.com).
+ * Persona-aware results for HCPs, advocates, caregivers, and patients.
  */
 
 import type { DemoUserTaxonomy } from '@/lib/demo-taxonomy';
@@ -9,251 +9,181 @@ import { parseDemoUserTaxonomy } from '@/lib/demo-taxonomy';
 export type { DemoUserTaxonomy };
 export { parseDemoUserTaxonomy };
 
-export const MB_BASE = 'https://www.microbiologics.com/';
-export const RESULTS_PAGE_SIZE = 20;
+export const CHIESI_BASE = 'https://chiesirarediseases.com/';
+export const RESULTS_PAGE_SIZE = 12;
 
-export type BiosafetyLevel = 'bsl1' | 'bsl2' | 'bsl2p' | 'notApplicable';
-export type ProductFormat =
-  | 'kwikStik2Pack'
-  | 'kwikStik6Pack'
-  | 'lyfoDisk'
-  | 'ezCfuOneStep'
-  | 'ezAccuShot'
-  | 'ezAccuShotSelect'
-  | 'epower'
-  | 'helixElite'
-  | 'enumeratedMycoplasma'
-  | 'microbiologySlide'
-  | 'selectPack'
-  | 'hydratingFluid'
-  | 'document';
-export type DocumentLanguage = 'english' | 'german' | 'french' | 'spanish';
-export type DocumentCategory = 'promotional' | 'qualitySystems' | 'sds' | 'technicalPublications';
-export type AntibioticResistant = 'yes' | 'no';
-export type IndustryType =
-  | 'clinical'
-  | 'pharmaceutical'
-  | 'foodSafety'
-  | 'environmental'
-  | 'education'
-  | 'personalCare'
-  | 'cannabis';
-export type InstrumentKit = 'respiratoryPanel' | 'bloodCultureId' | 'giParasite' | 'customPanel';
-export type MolecularSyndromic = 'yes' | 'no';
-export type StandardGuideline =
-  | 'aoac'
-  | 'clsi'
-  | 'eucast'
-  | 'epa'
-  | 'fdaBam'
-  | 'iso11133'
-  | 'usp61'
-  | 'usp62'
-  | 'usp51';
-export type TaxonomyGroup =
-  | 'bacteria'
-  | 'fungi'
-  | 'viruses'
-  | 'mycoplasma'
-  | 'parasites'
-  | 'molecular'
-  | 'panel';
-export type TestMethod =
-  | 'gpt'
-  | 'aet'
-  | 'molecularQc'
-  | 'compendial'
-  | 'environmentalMonitoring'
-  | 'waterTesting';
+export type ContentType =
+  | 'product'
+  | 'diseaseInformation'
+  | 'treatmentGuide'
+  | 'clinicalResource'
+  | 'patientSupport'
+  | 'advocacyResource'
+  | 'newsEvent'
+  | 'faq';
 
-export type DocumentType = 'COA' | 'SDS' | 'IFU';
+export type TherapeuticArea =
+  | 'epidermolysisBullosa'
+  | 'alpha1AntitrypsinDeficiency'
+  | 'alphaMannosidosis'
+  | 'cysticFibrosis'
+  | 'primaryCiliaryDyskinesia'
+  | 'bronchiolitisObliterans'
+  | 'neonatalRareDisease'
+  | 'generalRareDisease';
 
-/** Per-product document availability (COA public; SDS/IFU require authentication). */
-export type ProductDocuments = {
-  coa: boolean;
-  sds: boolean;
-  ifu: boolean;
+export type AudienceTag =
+  | 'healthcareProfessional'
+  | 'patientAdvocate'
+  | 'caregiver'
+  | 'rareDiseasePatient'
+  | 'generalPublic';
+
+export type ResourceFormat =
+  | 'webPage'
+  | 'pdf'
+  | 'video'
+  | 'webinar'
+  | 'infographic'
+  | 'patientBrochure'
+  | 'clinicalPublication';
+
+export type ContentLanguage = 'english' | 'italian' | 'french' | 'german' | 'spanish';
+
+export type AccessTier = 'public' | 'authenticated' | 'hcpOnly';
+
+export type DocumentType = 'Patient Leaflet' | 'Prescribing Info' | 'SmPC' | 'Clinical Brief';
+
+export type ContentDocuments = {
+  patientLeaflet: boolean;
+  prescribingInfo: boolean;
+  smpc: boolean;
+  clinicalBrief: boolean;
 };
 
 export type SearchResultItem = {
   id: string;
   title: string;
   description: string;
-  catalogNumber: string;
+  /** Extended summary shown in expanded result cards */
+  summary: string;
+  contentId: string;
   href: string;
-  productFormat: ProductFormat;
-  biosafetyLevel: BiosafetyLevel;
-  documentLanguage?: DocumentLanguage;
-  documentCategory?: DocumentCategory;
-  antibioticResistant: AntibioticResistant;
-  industryTypes: IndustryType[];
-  instrumentKits: InstrumentKit[];
-  molecularSyndromic: MolecularSyndromic;
-  standards: StandardGuideline[];
-  taxonomy: TaxonomyGroup;
-  testMethods: TestMethod[];
-  listPrice: number | null;
-  goldPrice: number | null;
-  distributorPrice: number | null;
+  contentType: ContentType;
+  therapeuticArea: TherapeuticArea;
+  audienceTags: AudienceTag[];
+  resourceFormat: ResourceFormat;
+  language: ContentLanguage;
+  accessTier: AccessTier;
+  keyHighlights: string[];
+  lastUpdated: string;
+  readTimeMinutes?: number;
   imageSrc?: string;
   isDocument?: boolean;
-  /** Attached COA / SDS / IFU for catalog products (not standalone document rows). */
-  documents?: ProductDocuments;
+  documents?: ContentDocuments;
   matchTerms?: string[];
+  /** Primary persona boost when signed in */
   demoUserTaxonomy?: DemoUserTaxonomy;
-  /** Hidden from all demo personas (e.g. OEM-only SKUs) */
-  restricted?: 'oem' | 'emea-distributor-hidden' | 'direct-only-promo';
+  /** Hidden or limited by persona rules */
+  restricted?: 'hcpInternal' | 'advocateBriefing' | 'patientPortalOnly';
 };
 
-/** Demo catalog numbers — search these to showcase document access tiers. */
-export const DEMO_CATALOG_NUMBERS = [
-  { catalogNumber: '0681E7', label: 'E. coli ATCC 8739 — COA, SDS, IFU' },
-  { catalogNumber: '0659E7', label: 'S. aureus ATCC 6538 — COA & SDS (no IFU)' },
-  { catalogNumber: '0733E7', label: 'P. aeruginosa ATCC 9027 — full documents' },
-  { catalogNumber: '0443E7', label: 'C. albicans ATCC 10231 — full documents' },
-  { catalogNumber: '0371E7', label: 'Salmonella ATCC 14028 — full documents' },
-  { catalogNumber: 'SK-0ASP61', label: 'USP <61> Select Pack — panel COA/SDS/IFU' },
+/** Demo content IDs — search these to showcase persona-specific access. */
+export const DEMO_CONTENT_IDS = [
+  { contentId: 'FILSUVEZ-HCP-PI', label: 'Filsuvez Prescribing Information (HCP)' },
+  { contentId: 'EB-PATIENT-GUIDE', label: 'Living with EB — Patient & Caregiver Guide' },
+  { contentId: 'AATD-CLINICAL-BRIEF', label: 'Alpha-1 Deficiency — Clinical Overview' },
+  { contentId: 'CHIESI-SUPPORT-2025', label: 'Chiesi Care Rare Support Program' },
+  { contentId: 'ADVOCACY-POLICY-BRIEF', label: 'Rare Disease Policy Brief (Advocates)' },
+  { contentId: 'LAMZEDE-HCP-SMPC', label: 'Lamzede SmPC — HCP Document' },
 ] as const;
 
-export type PriceDisplay =
-  | { kind: 'login' }
-  | { kind: 'hidden' }
-  | { kind: 'price'; amount: number; currency: 'USD' | 'EUR'; listAmount?: number };
+export type AccessDisplay =
+  | { kind: 'public' }
+  | { kind: 'signIn' }
+  | { kind: 'hcpOnly' }
+  | { kind: 'personalized'; label: string };
 
 export const searchFacetLabels = {
-  biosafetyLevel: {
-    bsl1: 'BSL-1',
-    bsl2: 'BSL-2',
-    bsl2p: 'BSL-2 Enhanced',
-    notApplicable: 'Not applicable',
+  contentType: {
+    product: 'Product',
+    diseaseInformation: 'Disease Information',
+    treatmentGuide: 'Treatment Guide',
+    clinicalResource: 'Clinical Resource',
+    patientSupport: 'Patient Support',
+    advocacyResource: 'Advocacy & Policy',
+    newsEvent: 'News & Events',
+    faq: 'FAQ',
   },
-  productFormat: {
-    kwikStik2Pack: 'KWIK-STIK™ 2 Pack',
-    kwikStik6Pack: 'KWIK-STIK™ 6 Pack',
-    lyfoDisk: 'LYFO DISK™',
-    ezCfuOneStep: 'EZ-CFU™ One Step',
-    ezAccuShot: 'EZ-Accu Shot™',
-    ezAccuShotSelect: 'EZ-Accu Shot™ Select',
-    epower: 'Epower™',
-    helixElite: 'Helix Elite™',
-    enumeratedMycoplasma: 'Enumerated Mycoplasma',
-    microbiologySlide: 'Microbiology Slide',
-    selectPack: 'Select Pack',
-    hydratingFluid: 'Hydrating Fluid',
-    document: 'Document / IFU',
+  therapeuticArea: {
+    epidermolysisBullosa: 'Epidermolysis Bullosa (EB)',
+    alpha1AntitrypsinDeficiency: 'Alpha-1 Antitrypsin Deficiency',
+    alphaMannosidosis: 'Alpha-Mannosidosis',
+    cysticFibrosis: 'Cystic Fibrosis',
+    primaryCiliaryDyskinesia: 'Primary Ciliary Dyskinesia',
+    bronchiolitisObliterans: 'Bronchiolitis Obliterans Syndrome',
+    neonatalRareDisease: 'Neonatal Rare Disease',
+    generalRareDisease: 'General Rare Disease',
   },
-  documentLanguage: {
+  audienceTag: {
+    healthcareProfessional: 'Healthcare Professional',
+    patientAdvocate: 'Patient Advocate',
+    caregiver: 'Caregiver',
+    rareDiseasePatient: 'Rare Disease Patient',
+    generalPublic: 'General Public',
+  },
+  resourceFormat: {
+    webPage: 'Web Page',
+    pdf: 'PDF Download',
+    video: 'Video',
+    webinar: 'Webinar / Recording',
+    infographic: 'Infographic',
+    patientBrochure: 'Patient Brochure',
+    clinicalPublication: 'Clinical Publication',
+  },
+  contentLanguage: {
     english: 'English',
-    german: 'German',
+    italian: 'Italian',
     french: 'French',
+    german: 'German',
     spanish: 'Spanish',
   },
-  documentCategory: {
-    promotional: 'Promotional Literature',
-    qualitySystems: 'Quality Systems',
-    sds: 'Safety Data Sheets',
-    technicalPublications: 'Technical Publications',
-  },
-  antibioticResistant: {
-    yes: 'Antibiotic/Drug Resistant',
-    no: 'Standard strain',
-  },
-  industryType: {
-    clinical: 'Clinical',
-    pharmaceutical: 'Pharmaceutical',
-    foodSafety: 'Food Safety',
-    environmental: 'Environmental',
-    education: 'Education',
-    personalCare: 'Personal Care',
-    cannabis: 'Cannabis',
-  },
-  instrumentKit: {
-    respiratoryPanel: 'Respiratory Control Panel',
-    bloodCultureId: 'Blood Culture Identification',
-    giParasite: 'GI Parasite QC',
-    customPanel: 'Custom / Syndromic Panel',
-  },
-  molecularSyndromic: {
-    yes: 'Molecular Syndromic Testing',
-    no: 'Not syndromic',
-  },
-  standardGuideline: {
-    aoac: 'AOAC Official Methods of Analysis (OMA)',
-    clsi: 'Clinical Laboratory Standards Institute (CLSI)',
-    eucast: 'European Committee on Antimicrobial Susceptibility Testing (EUCAST)',
-    epa: 'Environmental Protection Agency (EPA)',
-    fdaBam: 'FDA Bacteriological Analytical Manual (BAM)',
-    iso11133: 'ISO 11133',
-    usp61: 'USP <61>',
-    usp62: 'USP <62>',
-    usp51: 'USP <51>',
-  },
-  taxonomy: {
-    bacteria: 'Bacteria',
-    fungi: 'Fungi',
-    viruses: 'Viruses',
-    mycoplasma: 'Mycoplasma',
-    parasites: 'Parasites',
-    molecular: 'Molecular',
-    panel: 'Multi-organism panel',
-  },
-  testMethod: {
-    gpt: 'Growth Promotion Testing',
-    aet: 'Antimicrobial Effectiveness Testing',
-    molecularQc: 'Molecular Diagnostics QC',
-    compendial: 'Compendial Testing',
-    environmentalMonitoring: 'Environmental Monitoring',
-    waterTesting: 'Water Testing',
+  accessTier: {
+    public: 'Public — no sign-in',
+    authenticated: 'Signed-in members',
+    hcpOnly: 'Healthcare professionals only',
   },
 } as const;
 
 export const popularSearches = [
-  '0681E7',
-  '0659E7',
-  '0733E7',
-  'SK-0ASP61',
-  '0443E7',
-  '0371E7',
-  'E. coli',
-  'USP <61>',
+  'Filsuvez',
+  'epidermolysis bullosa',
+  'alpha-1',
+  'patient support',
+  'caregiver guide',
+  'clinical trial',
+  'Lamzede',
+  'rare disease advocacy',
 ];
 
-const DOC_ALL: ProductDocuments = { coa: true, sds: true, ifu: true };
-const DOC_NO_IFU: ProductDocuments = { coa: true, sds: true, ifu: false };
+export const contentTypes = Object.keys(searchFacetLabels.contentType) as ContentType[];
+export const therapeuticAreas = Object.keys(searchFacetLabels.therapeuticArea) as TherapeuticArea[];
+export const audienceTags = Object.keys(searchFacetLabels.audienceTag) as AudienceTag[];
+export const resourceFormats = Object.keys(searchFacetLabels.resourceFormat) as ResourceFormat[];
+export const contentLanguages = Object.keys(searchFacetLabels.contentLanguage) as ContentLanguage[];
+export const accessTiers = Object.keys(searchFacetLabels.accessTier) as AccessTier[];
 
-export const biosafetyLevels = Object.keys(searchFacetLabels.biosafetyLevel) as BiosafetyLevel[];
-export const productFormats = Object.keys(searchFacetLabels.productFormat) as ProductFormat[];
-export const documentLanguages = Object.keys(searchFacetLabels.documentLanguage) as DocumentLanguage[];
-export const documentCategories = Object.keys(searchFacetLabels.documentCategory) as DocumentCategory[];
-export const antibioticResistantOptions = Object.keys(
-  searchFacetLabels.antibioticResistant
-) as AntibioticResistant[];
-export const industryTypes = Object.keys(searchFacetLabels.industryType) as IndustryType[];
-export const instrumentKits = Object.keys(searchFacetLabels.instrumentKit) as InstrumentKit[];
-export const molecularSyndromicOptions = Object.keys(
-  searchFacetLabels.molecularSyndromic
-) as MolecularSyndromic[];
-export const standardGuidelines = Object.keys(searchFacetLabels.standardGuideline) as StandardGuideline[];
-export const taxonomyGroups = Object.keys(searchFacetLabels.taxonomy) as TaxonomyGroup[];
-export const testMethods = Object.keys(searchFacetLabels.testMethod) as TestMethod[];
-
-const MB_IMG = {
-  kwikStik:
-    'https://www.microbiologics.com/core/media/media.nl?id=11559102&c=915960&h=IWVsNQYJLUCgUIMUR8dGYvsQLsq5QF3sNgDfqIVttKsI4Zq1',
-  ezAccu:
-    'https://www.microbiologics.com/core/media/media.nl?id=11559114&c=915960&h=59gHk93oYg47bGqMEoMTVdZTag0u9J3Pw6fs19-3LNXt3QtX',
-  epower:
-    'https://www.microbiologics.com/core/media/media.nl?id=8001677&c=915960&h=rbNAdz717f0tM9lw8fC-AgawoVd_wesW_Ght6grImROf5r2q',
-  helix:
-    'https://www.microbiologics.com/core/media/media.nl?id=11559121&c=915960&h=LEj9riu2aEhK3mjfOP1DiL7TkU4hdmqMUI0sZEifiWNCEKJG',
-  lyfo:
-    'https://www.microbiologics.com/core/media/media.nl?id=11839465&c=915960&h=Gf7iq6W50xYvodvmKx2xl7Z4G-xc50h3uqM_wwciGYnVpx4n',
-  ezCfu:
-    'https://www.microbiologics.com/core/media/media.nl?id=11559123&c=915960&h=GiNmDg960n-qOWy_jyVO6WtP6PMaXLFIS5T_xAHAl8PEij1O',
+const CHIESI_IMG = {
+  hero: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
+  patient: 'https://images.unsplash.com/photo-1584515933487-779824d29309?w=400&h=300&fit=crop',
+  research: 'https://images.unsplash.com/photo-1532187863486-abf9db5811ce?w=400&h=300&fit=crop',
+  advocacy: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop',
+  product: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop',
+  caregiver: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
 };
 
 export function getDefaultCardImage(): string {
-  return MB_IMG.kwikStik;
+  return CHIESI_IMG.hero;
 }
 
 export function normalizeQuery(q: string): string {
@@ -264,9 +194,15 @@ export function itemVisibleForDemoUser(
   item: SearchResultItem,
   user: DemoUserTaxonomy | null
 ): boolean {
-  if (item.restricted === 'oem') return false;
-  if (item.restricted === 'emea-distributor-hidden' && user === 'Distributor Rep') return false;
-  if (item.restricted === 'direct-only-promo' && user === 'Distributor Rep') return false;
+  if (item.restricted === 'hcpInternal' && user !== 'Healthcare Professional') return false;
+  if (item.restricted === 'advocateBriefing' && user !== 'Patient Advocate') return false;
+  if (
+    item.restricted === 'patientPortalOnly' &&
+    user !== 'Rare disease Patient' &&
+    user !== 'Caregiver'
+  ) {
+    return false;
+  }
   return true;
 }
 
@@ -276,78 +212,100 @@ export function isAuthenticatedDemoUser(user: DemoUserTaxonomy | null): user is 
 
 export function productHasAttachedDocuments(item: SearchResultItem): boolean {
   if (item.isDocument || !item.documents) return false;
-  const { coa, sds, ifu } = item.documents;
-  return coa || sds || ifu;
+  const { patientLeaflet, prescribingInfo, smpc, clinicalBrief } = item.documents;
+  return patientLeaflet || prescribingInfo || smpc || clinicalBrief;
 }
 
-/** COA is public; SDS and IFU require HeaderST login (any demo persona). */
 export function canAccessDocument(
   item: SearchResultItem,
   docType: DocumentType,
   user: DemoUserTaxonomy | null
 ): boolean {
   if (!item.documents) return false;
-  if (docType === 'COA') return item.documents.coa;
+
+  if (docType === 'Patient Leaflet') return item.documents.patientLeaflet;
+
   if (!isAuthenticatedDemoUser(user)) return false;
-  if (docType === 'SDS') return item.documents.sds;
-  if (docType === 'IFU') return item.documents.ifu;
+
+  if (docType === 'Clinical Brief') {
+    return (
+      item.documents.clinicalBrief &&
+      (user === 'Healthcare Professional' || user === 'Patient Advocate')
+    );
+  }
+
+  if (docType === 'Prescribing Info' || docType === 'SmPC') {
+    return (
+      (docType === 'Prescribing Info' ? item.documents.prescribingInfo : item.documents.smpc) &&
+      user === 'Healthcare Professional'
+    );
+  }
+
   return false;
 }
 
 export function documentRequiresLogin(docType: DocumentType): boolean {
-  return docType === 'SDS' || docType === 'IFU';
+  return docType !== 'Patient Leaflet';
+}
+
+export function documentRequiresHcp(docType: DocumentType): boolean {
+  return docType === 'Prescribing Info' || docType === 'SmPC';
 }
 
 export function documentPreviewContent(item: SearchResultItem, docType: DocumentType) {
   return {
     title: `${docType} — ${item.title}`,
-    catalogNumber: item.catalogNumber,
-    lotNumber: `LOT-${item.catalogNumber}-A${String(item.catalogNumber.length).padStart(3, '0')}`,
+    contentId: item.contentId,
+    version: `v${item.lastUpdated.replace(/-/g, '.')}`,
     summary:
-      docType === 'COA'
-        ? 'Identity confirmed. Viability within specification. No contamination detected.'
-        : docType === 'SDS'
-          ? 'Hazard classification: Biosafety Level 2 organism. Standard PPE required for handling.'
-          : 'Storage: 2–8°C. Rehydration and inoculation procedures per package insert.',
-    approvedBy: 'Microbiologics Quality Systems — Released for distribution',
+      docType === 'Patient Leaflet'
+        ? 'Plain-language overview of treatment benefits, administration steps, and when to contact your care team.'
+        : docType === 'Prescribing Info'
+          ? 'Full prescribing information including indications, dosing, contraindications, warnings, and clinical pharmacology.'
+          : docType === 'SmPC'
+            ? 'Summary of Product Characteristics for EU markets — authorized indication, posology, and safety profile.'
+            : 'Clinical brief summarizing trial endpoints, patient populations studied, and practical treatment considerations.',
+    approvedBy: 'Chiesi Global Rare Diseases — Medical Information Services',
   };
 }
 
-export function resolvePriceDisplay(
+export function resolveAccessDisplay(
   item: SearchResultItem,
   user: DemoUserTaxonomy | null
-): PriceDisplay {
-  if (!user) return { kind: 'login' };
-  if (user === 'Regulatory Professional') return { kind: 'hidden' };
-  if (item.isDocument || item.listPrice == null) return { kind: 'hidden' };
-
-  if (user === 'Distributor Rep') {
-    if (item.distributorPrice == null) return { kind: 'hidden' };
-    return {
-      kind: 'price',
-      amount: item.distributorPrice,
-      currency: 'EUR',
-      listAmount: undefined,
-    };
+): AccessDisplay {
+  if (item.accessTier === 'public') return { kind: 'public' };
+  if (!user) {
+    if (item.accessTier === 'hcpOnly') return { kind: 'hcpOnly' };
+    return { kind: 'signIn' };
   }
-
-  const contract = item.goldPrice ?? item.listPrice;
-  return {
-    kind: 'price',
-    amount: contract,
-    currency: 'USD',
-    listAmount: item.goldPrice != null && item.listPrice != null ? item.listPrice : undefined,
-  };
+  if (item.accessTier === 'hcpOnly' && user !== 'Healthcare Professional') {
+    return { kind: 'hcpOnly' };
+  }
+  if (item.demoUserTaxonomy === user) {
+    return { kind: 'personalized', label: `Recommended for ${user}` };
+  }
+  return { kind: 'public' };
 }
 
-export function formatPrice(amount: number, currency: 'USD' | 'EUR'): string {
-  return new Intl.NumberFormat(currency === 'EUR' ? 'de-DE' : 'en-US', {
-    style: 'currency',
-    currency,
-  }).format(amount);
+export function personaSearchHint(user: DemoUserTaxonomy | null): string {
+  if (!user) {
+    return 'Public resources available · Sign in for personalized rare disease content and secure documents';
+  }
+  switch (user) {
+    case 'Healthcare Professional':
+      return 'Clinical resources, prescribing information, and trial data prioritized for your profile';
+    case 'Patient Advocate':
+      return 'Policy briefs, community programs, and advocacy toolkits prioritized for your profile';
+    case 'Caregiver':
+      return 'Practical care guides, administration support, and financial assistance prioritized for your profile';
+    case 'Rare disease Patient':
+      return 'Patient-friendly disease information, support programs, and treatment guides prioritized for your profile';
+    default:
+      return '';
+  }
 }
 
-const QUERY_STOP = new Set(['and', 'or', 'the', 'for', 'with', 'from', 'atcc']);
+const QUERY_STOP = new Set(['and', 'or', 'the', 'for', 'with', 'from', 'about']);
 
 export function itemMatchesQuery(item: SearchResultItem, q: string): boolean {
   const n = normalizeQuery(q);
@@ -355,9 +313,11 @@ export function itemMatchesQuery(item: SearchResultItem, q: string): boolean {
   const hay = [
     item.title,
     item.description,
-    item.catalogNumber,
-    searchFacetLabels.productFormat[item.productFormat],
-    searchFacetLabels.taxonomy[item.taxonomy],
+    item.summary,
+    item.contentId,
+    searchFacetLabels.contentType[item.contentType],
+    searchFacetLabels.therapeuticArea[item.therapeuticArea],
+    ...(item.keyHighlights ?? []),
     ...(item.matchTerms ?? []),
   ]
     .join(' ')
@@ -373,133 +333,193 @@ export function relevanceScore(
   activeDemoUserTaxonomy: DemoUserTaxonomy | null
 ): number {
   const n = normalizeQuery(q);
-  if (!n) return 0;
-  const words = n.split(' ').filter(Boolean);
-  const title = item.title.toLowerCase();
-  const desc = item.description.toLowerCase();
-  const cat = item.catalogNumber.toLowerCase();
-  const extra = (item.matchTerms ?? []).join(' ').toLowerCase();
   let score = 0;
-  for (const w of words) {
-    if (title.includes(w)) score += 6;
-    if (cat.includes(w)) score += 8;
-    if (desc.includes(w)) score += 2;
-    if (extra.includes(w)) score += 3;
+
+  if (n) {
+    const words = n.split(' ').filter(Boolean);
+    const title = item.title.toLowerCase();
+    const desc = item.description.toLowerCase();
+    const summary = item.summary.toLowerCase();
+    const cid = item.contentId.toLowerCase();
+    const extra = (item.matchTerms ?? []).join(' ').toLowerCase();
+    for (const w of words) {
+      if (title.includes(w)) score += 8;
+      if (cid.includes(w)) score += 10;
+      if (desc.includes(w)) score += 4;
+      if (summary.includes(w)) score += 3;
+      if (extra.includes(w)) score += 5;
+    }
   }
-  if (activeDemoUserTaxonomy && item.demoUserTaxonomy === activeDemoUserTaxonomy) score += 20;
-  if (item.isDocument) score -= 2;
+
+  if (activeDemoUserTaxonomy) {
+    if (item.demoUserTaxonomy === activeDemoUserTaxonomy) score += 25;
+    if (item.audienceTags.includes(audienceTagForPersona(activeDemoUserTaxonomy))) score += 12;
+  }
+
+  if (item.isDocument) score -= 1;
   return score;
 }
+
+function audienceTagForPersona(persona: DemoUserTaxonomy): AudienceTag {
+  switch (persona) {
+    case 'Healthcare Professional':
+      return 'healthcareProfessional';
+    case 'Patient Advocate':
+      return 'patientAdvocate';
+    case 'Caregiver':
+      return 'caregiver';
+    case 'Rare disease Patient':
+      return 'rareDiseasePatient';
+    default:
+      return 'generalPublic';
+  }
+}
+
+const DOC_HCP_FULL: ContentDocuments = {
+  patientLeaflet: true,
+  prescribingInfo: true,
+  smpc: true,
+  clinicalBrief: true,
+};
+
+const DOC_PATIENT: ContentDocuments = {
+  patientLeaflet: true,
+  prescribingInfo: false,
+  smpc: false,
+  clinicalBrief: false,
+};
+
+const DOC_CLINICAL: ContentDocuments = {
+  patientLeaflet: true,
+  prescribingInfo: false,
+  smpc: false,
+  clinicalBrief: true,
+};
 
 export function supplementalResultsForDemoUserTaxonomy(
   persona: DemoUserTaxonomy
 ): SearchResultItem[] {
   const code =
-    persona === 'Laboratory Procurement Manager'
-      ? 'proc'
-      : persona === 'Distributor Rep'
-        ? 'dist'
-        : persona === 'Regulatory Professional'
-          ? 'reg'
-          : 'sci';
+    persona === 'Healthcare Professional'
+      ? 'hcp'
+      : persona === 'Patient Advocate'
+        ? 'adv'
+        : persona === 'Caregiver'
+          ? 'cg'
+          : 'pt';
 
   const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    persona === 'Laboratory Procurement Manager'
+    persona === 'Healthcare Professional'
       ? [
           {
-            title: 'EZ-Accu Shot™ Select Pack — USP <61> Full Panel (Recommended)',
+            title: 'Filsuvez® (birch triterpenes) — Prescribing Information',
             description:
-              'Multi-strain compendial panel with quantitated pellets for streamlined growth promotion testing.',
-            catalogNumber: 'SK-0ASP61',
-            href: `${MB_BASE}search?q=SK-0ASP61`,
-            productFormat: 'ezAccuShotSelect',
-            biosafetyLevel: 'bsl2',
-            antibioticResistant: 'no',
-            industryTypes: ['pharmaceutical', 'clinical'],
-            instrumentKits: [],
-            molecularSyndromic: 'no',
-            standards: ['usp61', 'usp62'],
-            taxonomy: 'panel',
-            testMethods: ['gpt', 'compendial'],
-            listPrice: 475,
-            goldPrice: 403.75,
-            distributorPrice: 338,
-            imageSrc: MB_IMG.ezAccu,
-            matchTerms: ['panel', 'usp 61', 'procurement', 'compendial'],
-            documents: DOC_ALL,
+              'Authorized indication, dosing, wound application technique, and safety monitoring for epidermolysis bullosa.',
+            summary:
+              'Complete HCP prescribing information for Filsuvez gel including mechanism of action (birch triterpenes), approved EB indication, application frequency, contraindications, and pooled safety data from clinical development.',
+            contentId: 'FILSUVEZ-HCP-PI',
+            href: `${CHIESI_BASE}products/filsuvez`,
+            contentType: 'clinicalResource',
+            therapeuticArea: 'epidermolysisBullosa',
+            audienceTags: ['healthcareProfessional'],
+            resourceFormat: 'pdf',
+            language: 'english',
+            accessTier: 'hcpOnly',
+            keyHighlights: [
+              'EB-specific wound management protocol',
+              'Application steps for fragile skin',
+              'Drug interaction checklist',
+            ],
+            lastUpdated: '2025-11-15',
+            readTimeMinutes: 18,
+            imageSrc: CHIESI_IMG.product,
+            documents: DOC_HCP_FULL,
+            matchTerms: ['filsuvez', 'prescribing', 'birch triterpenes', 'hcp', 'pi'],
           },
         ]
-      : persona === 'Distributor Rep'
+      : persona === 'Patient Advocate'
         ? [
             {
-              title: 'Epower™ Staphylococcus aureus ATCC 6538 — Tier 1 stocking SKU',
-              description: 'High-volume distributor SKU for EMEA hospital and pharma QC programs.',
-              catalogNumber: '0659E7',
-              href: `${MB_BASE}search?q=0659E7`,
-              productFormat: 'ezCfuOneStep',
-              biosafetyLevel: 'bsl2',
-              antibioticResistant: 'no',
-              industryTypes: ['pharmaceutical', 'clinical'],
-              instrumentKits: [],
-              molecularSyndromic: 'no',
-              standards: ['usp51'],
-              taxonomy: 'bacteria',
-              testMethods: ['aet', 'compendial'],
-              listPrice: 125,
-              goldPrice: 106.25,
-              distributorPrice: 88.5,
-              imageSrc: MB_IMG.epower,
-              matchTerms: ['distributor', 'stocking', 's aureus'],
-              documents: DOC_NO_IFU,
+              title: 'Rare Disease Policy Brief — Access & Reimbursement 2025',
+              description:
+                'Advocacy toolkit covering orphan drug access, payer engagement, and community coalition building.',
+              summary:
+                'Prepared for patient advocacy leaders: EU and US policy landscape for ultra-rare therapies, template letters for legislators, payer meeting preparation guides, and coalition-building frameworks used by EB and AATD communities.',
+              contentId: 'ADVOCACY-POLICY-BRIEF',
+              href: `${CHIESI_BASE}community/advocacy`,
+              contentType: 'advocacyResource',
+              therapeuticArea: 'generalRareDisease',
+              audienceTags: ['patientAdvocate'],
+              resourceFormat: 'pdf',
+              language: 'english',
+              accessTier: 'authenticated',
+              keyHighlights: [
+                'Orphan drug access talking points',
+                'Legislative engagement templates',
+                'Coalition event planning checklist',
+              ],
+              lastUpdated: '2025-09-01',
+              readTimeMinutes: 22,
+              imageSrc: CHIESI_IMG.advocacy,
+              documents: { patientLeaflet: false, prescribingInfo: false, smpc: false, clinicalBrief: true },
+              matchTerms: ['advocacy', 'policy', 'reimbursement', 'access', 'advocate'],
+              restricted: 'advocateBriefing',
             },
           ]
-        : persona === 'Regulatory Professional'
+        : persona === 'Caregiver'
           ? [
               {
-                title: '8247 Respiratory Control Panel (22 Targets) IFU',
-                description: 'Instructions for Use — molecular syndromic respiratory control panel.',
-                catalogNumber: '8247-IFU',
-                href: `${MB_BASE}search?q=8247`,
-                productFormat: 'document',
-                biosafetyLevel: 'notApplicable',
-                documentLanguage: 'english',
-                documentCategory: 'technicalPublications',
-                antibioticResistant: 'no',
-                industryTypes: ['clinical', 'pharmaceutical'],
-                instrumentKits: ['respiratoryPanel'],
-                molecularSyndromic: 'yes',
-                standards: ['clsi'],
-                taxonomy: 'molecular',
-                testMethods: ['molecularQc'],
-                listPrice: null,
-                goldPrice: null,
-                distributorPrice: null,
-                isDocument: true,
-                matchTerms: ['ifu', 'respiratory', 'regulatory', 'document'],
+                title: 'Caregiver Guide — Daily Wound Care & Treatment Routines for EB',
+                description:
+                  'Step-by-step practical guide for family caregivers managing epidermolysis bullosa at home.',
+                summary:
+                  'Written for parents and family caregivers: morning skin assessment routines, painless dressing changes, Filsuvez application tips from nurse educators, school communication templates, respite care resources, and emergency contact workflows.',
+                contentId: 'EB-CAREGIVER-DAILY',
+                href: `${CHIESI_BASE}support/caregivers`,
+                contentType: 'treatmentGuide',
+                therapeuticArea: 'epidermolysisBullosa',
+                audienceTags: ['caregiver', 'rareDiseasePatient'],
+                resourceFormat: 'patientBrochure',
+                language: 'english',
+                accessTier: 'authenticated',
+                keyHighlights: [
+                  'Dressing change photo guide',
+                  'School nurse communication letter',
+                  'Burn-out prevention resources',
+                ],
+                lastUpdated: '2025-08-20',
+                readTimeMinutes: 15,
+                imageSrc: CHIESI_IMG.caregiver,
+                documents: DOC_PATIENT,
+                matchTerms: ['caregiver', 'wound care', 'daily routine', 'eb', 'family'],
               },
             ]
           : [
               {
-                title: 'Epower™ Escherichia coli ATCC 8739',
+                title: 'Your Rare Disease Journey — Patient Starter Kit',
                 description:
-                  'Quantitated E. coli reference strain for USP <61> growth promotion and water testing workflows.',
-                catalogNumber: '0681E7',
-                href: `${MB_BASE}search?q=0681E7`,
-                productFormat: 'ezCfuOneStep',
-                biosafetyLevel: 'bsl2',
-                antibioticResistant: 'no',
-                industryTypes: ['pharmaceutical', 'clinical', 'environmental'],
-                instrumentKits: [],
-                molecularSyndromic: 'no',
-                standards: ['usp61'],
-                taxonomy: 'bacteria',
-                testMethods: ['gpt', 'waterTesting', 'compendial'],
-                listPrice: 125,
-                goldPrice: 106.25,
-                distributorPrice: 88.5,
-                imageSrc: MB_IMG.epower,
-                matchTerms: ['e coli', 'atcc 8739', 'scientist', 'enumeration', '0681e7'],
-                documents: DOC_ALL,
+                  'Personalized onboarding for newly diagnosed rare disease patients and their families.',
+                summary:
+                  'A welcoming first step: understanding your diagnosis, questions to ask at your next appointment, connecting with Chiesi Care Rare support, finding peer communities, and navigating insurance — written in plain language without medical jargon.',
+                contentId: 'PATIENT-STARTER-KIT',
+                href: `${CHIESI_BASE}support/patients`,
+                contentType: 'patientSupport',
+                therapeuticArea: 'generalRareDisease',
+                audienceTags: ['rareDiseasePatient', 'caregiver'],
+                resourceFormat: 'webPage',
+                language: 'english',
+                accessTier: 'authenticated',
+                keyHighlights: [
+                  'Diagnosis glossary in plain language',
+                  'Appointment question checklist',
+                  'Peer community directory',
+                ],
+                lastUpdated: '2025-10-01',
+                readTimeMinutes: 10,
+                imageSrc: CHIESI_IMG.patient,
+                documents: DOC_PATIENT,
+                matchTerms: ['patient', 'journey', 'starter', 'newly diagnosed', 'support'],
+                restricted: 'patientPortalOnly',
               },
             ];
 
@@ -510,9 +530,7 @@ export function supplementalResultsForDemoUserTaxonomy(
   }));
 }
 
-function seed(
-  partial: Omit<SearchResultItem, 'id'> & { id: string }
-): SearchResultItem {
+function seed(partial: Omit<SearchResultItem, 'id'> & { id: string }): SearchResultItem {
   return {
     imageSrc: partial.imageSrc ?? getDefaultCardImage(),
     ...partial,
@@ -521,500 +539,591 @@ function seed(
 
 export const searchCatalog: SearchResultItem[] = [
   seed({
-    id: 'p-0681e7',
-    title: 'Escherichia coli derived from ATCC® 8739™',
-    description: 'Epower™ quantitated strain for compendial QC and water testing.',
-    catalogNumber: '0681E7',
-    href: `${MB_BASE}search?q=0681E7`,
-    productFormat: 'ezCfuOneStep',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical', 'environmental'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61', 'epa'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt', 'waterTesting', 'compendial'],
-    listPrice: 125,
-    goldPrice: 106.25,
-    distributorPrice: 88.5,
-    imageSrc: MB_IMG.epower,
-    matchTerms: ['e coli', 'ecoli', '8739', 'gram negative', '0681e7'],
-    documents: DOC_ALL,
-    demoUserTaxonomy: 'Scientist',
+    id: 'p-filsuvez',
+    title: 'Filsuvez® (birch triterpenes) — Epidermolysis Bullosa Treatment',
+    description:
+      'Topical gel indicated for wound management in patients with dystrophic and junctional EB.',
+    summary:
+      'Filsuvez is a birch triterpenes-containing topical gel approved for partial-thickness wounds associated with dystrophic and junctional epidermolysis bullosa in patients six months and older. Explore mechanism of action, clinical evidence, application videos, and access programs.',
+    contentId: 'FILSUVEZ-001',
+    href: `${CHIESI_BASE}products/filsuvez`,
+    contentType: 'product',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['healthcareProfessional', 'rareDiseasePatient', 'caregiver', 'generalPublic'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Approved EB indication', 'Topical gel formulation', 'Patient support available'],
+    lastUpdated: '2025-12-01',
+    readTimeMinutes: 8,
+    imageSrc: CHIESI_IMG.product,
+    documents: DOC_HCP_FULL,
+    matchTerms: ['filsuvez', 'birch triterpenes', 'eb', 'epidermolysis bullosa', 'wound gel'],
+    demoUserTaxonomy: 'Healthcare Professional',
   }),
   seed({
-    id: 'p-0659e7',
-    title: 'Staphylococcus aureus derived from ATCC® 6538™',
-    description: 'Epower™ strain for antimicrobial effectiveness and preservative efficacy testing.',
-    catalogNumber: '0659E7',
-    href: `${MB_BASE}search?q=0659E7`,
-    productFormat: 'ezCfuOneStep',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'personalCare'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp51'],
-    taxonomy: 'bacteria',
-    testMethods: ['aet', 'compendial'],
-    listPrice: 125,
-    goldPrice: 106.25,
-    distributorPrice: 88.5,
-    imageSrc: MB_IMG.epower,
-    matchTerms: ['staph', '6538', 'aureus', '0659e7'],
-    documents: DOC_NO_IFU,
-    demoUserTaxonomy: 'Laboratory Procurement Manager',
+    id: 'p-lamzede',
+    title: 'Lamzede® (velmanase alfa) — Alpha-Mannosidosis Enzyme Replacement',
+    description:
+      'Enzyme replacement therapy for non-neurological manifestations of alpha-mannosidosis.',
+    summary:
+      'Lamzede (velmanase alfa) is a recombinant human alpha-mannosidase indicated for treating non-neurological manifestations in mild to moderate alpha-mannosidosis. Review dosing by body weight, infusion guidance, and long-term outcomes data.',
+    contentId: 'LAMZEDE-001',
+    href: `${CHIESI_BASE}products/lamzede`,
+    contentType: 'product',
+    therapeuticArea: 'alphaMannosidosis',
+    audienceTags: ['healthcareProfessional', 'caregiver', 'rareDiseasePatient'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['ERT for alpha-mannosidosis', 'Weight-based dosing', 'Home infusion support'],
+    lastUpdated: '2025-11-20',
+    readTimeMinutes: 10,
+    imageSrc: CHIESI_IMG.product,
+    documents: DOC_HCP_FULL,
+    matchTerms: ['lamzede', 'velmanase alfa', 'alpha-mannosidosis', 'ert', 'enzyme replacement'],
+    demoUserTaxonomy: 'Healthcare Professional',
   }),
   seed({
-    id: 'p-0733e7',
-    title: 'Pseudomonas aeruginosa derived from ATCC® 9027™',
-    description: 'Compendial QC strain for pharmaceutical and environmental monitoring.',
-    catalogNumber: '0733E7',
-    href: `${MB_BASE}search?q=0733E7`,
-    productFormat: 'ezCfuOneStep',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp62'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt', 'environmentalMonitoring'],
-    listPrice: 130,
-    goldPrice: 110.5,
-    distributorPrice: 92,
-    imageSrc: MB_IMG.epower,
-    matchTerms: ['pseudomonas', '9027', '0733e7'],
-    documents: DOC_ALL,
+    id: 'd-eb-overview',
+    title: 'Understanding Epidermolysis Bullosa (EB) — Disease Overview',
+    description:
+      'Comprehensive guide to EB subtypes, symptoms, diagnosis pathway, and multidisciplinary care.',
+    summary:
+      'Epidermolysis bullosa comprises a group of rare genetic disorders causing fragile skin and mucous membranes. This overview explains dystrophic, junctional, and simplex subtypes; genetic testing pathways; wound care principles; and the role of specialized EB centers.',
+    contentId: 'EB-OVERVIEW',
+    href: `${CHIESI_BASE}diseases/epidermolysis-bullosa`,
+    contentType: 'diseaseInformation',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['generalPublic', 'rareDiseasePatient', 'caregiver', 'healthcareProfessional'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['EB subtypes explained', 'Genetic testing guide', 'Multidisciplinary care team'],
+    lastUpdated: '2025-10-15',
+    readTimeMinutes: 12,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['eb', 'epidermolysis bullosa', 'blistering', 'fragile skin', 'dystrophic'],
+    demoUserTaxonomy: 'Rare disease Patient',
   }),
   seed({
-    id: 'p-0443e7',
-    title: 'Candida albicans derived from ATCC® 10231™',
-    description: 'Yeast reference strain for fungal QC and environmental monitoring.',
-    catalogNumber: '0443E7',
-    href: `${MB_BASE}search?q=0443E7`,
-    productFormat: 'ezCfuOneStep',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical', 'foodSafety'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'fungi',
-    testMethods: ['gpt', 'environmentalMonitoring'],
-    listPrice: 135,
-    goldPrice: 114.75,
-    distributorPrice: 95.5,
-    imageSrc: MB_IMG.ezCfu,
-    matchTerms: ['candida', 'yeast', '10231', '0443e7'],
-    documents: DOC_ALL,
+    id: 'd-aatd-overview',
+    title: 'Alpha-1 Antitrypsin Deficiency (AATD) — Clinical Overview',
+    description:
+      'Pathophysiology, diagnosis criteria, and management of alpha-1 antitrypsin deficiency.',
+    summary:
+      'Alpha-1 antitrypsin deficiency is an inherited disorder that can cause lung disease and liver disease. Learn about SERPINA1 mutations, serum AAT thresholds, spirometry monitoring, augmentation therapy eligibility, and referral to specialist centers.',
+    contentId: 'AATD-CLINICAL-BRIEF',
+    href: `${CHIESI_BASE}diseases/alpha-1`,
+    contentType: 'clinicalResource',
+    therapeuticArea: 'alpha1AntitrypsinDeficiency',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'clinicalPublication',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: ['Diagnostic algorithm', 'Augmentation therapy criteria', 'Liver involvement screening'],
+    lastUpdated: '2025-09-28',
+    readTimeMinutes: 16,
+    imageSrc: CHIESI_IMG.research,
+    documents: DOC_CLINICAL,
+    matchTerms: ['alpha-1', 'aatd', 'antitrypsin', 'copd', 'serpina1', 'augmentation'],
+    demoUserTaxonomy: 'Healthcare Professional',
   }),
   seed({
-    id: 'p-0371e7',
-    title: 'Salmonella enterica derived from ATCC® 14028™',
-    description: 'Food safety and pharmaceutical compendial reference material.',
-    catalogNumber: '0371E7',
-    href: `${MB_BASE}search?q=0371E7`,
-    productFormat: 'ezCfuOneStep',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['foodSafety', 'pharmaceutical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp62', 'fdaBam'],
-    taxonomy: 'bacteria',
-    testMethods: ['compendial', 'gpt'],
-    listPrice: 125,
-    goldPrice: 106.25,
-    distributorPrice: 88.5,
-    imageSrc: MB_IMG.epower,
-    matchTerms: ['salmonella', '14028', 'food safety', '0371e7'],
-    documents: DOC_ALL,
+    id: 'tg-eb-patient',
+    title: 'Living with EB — Patient & Caregiver Treatment Guide',
+    description:
+      'Plain-language guide to daily skin care, pain management, nutrition, and treatment options.',
+    summary:
+      'Designed for patients and families: understanding your EB type, building a daily skin care routine, nutrition for wound healing, pain and itch management strategies, when to call your care team, and overview of available treatments including topical therapies.',
+    contentId: 'EB-PATIENT-GUIDE',
+    href: `${CHIESI_BASE}support/eb-patient-guide`,
+    contentType: 'treatmentGuide',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['rareDiseasePatient', 'caregiver'],
+    resourceFormat: 'patientBrochure',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Daily skin care checklist', 'Pain management tips', 'Nutrition guidance'],
+    lastUpdated: '2025-08-05',
+    readTimeMinutes: 14,
+    imageSrc: CHIESI_IMG.caregiver,
+    documents: DOC_PATIENT,
+    matchTerms: ['living with eb', 'patient guide', 'caregiver', 'daily care', 'treatment options'],
+    demoUserTaxonomy: 'Caregiver',
   }),
   seed({
-    id: 'p-hm10wr',
-    title: 'SARS-CoV-2 (inactivated) Molecular Diagnostics Control',
-    description: 'Heliyon™ wrapped molecular control for RT-PCR verification programs.',
-    catalogNumber: 'HM-10WR',
-    href: `${MB_BASE}search?q=HM-10WR`,
-    productFormat: 'helixElite',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical', 'pharmaceutical'],
-    instrumentKits: ['respiratoryPanel'],
-    molecularSyndromic: 'yes',
-    standards: ['clsi'],
-    taxonomy: 'molecular',
-    testMethods: ['molecularQc'],
-    listPrice: 245,
-    goldPrice: 208.25,
-    distributorPrice: 174,
-    imageSrc: MB_IMG.helix,
-    matchTerms: ['sars-cov-2', 'covid', 'molecular', 'rt-pcr', 'hm-10wr'],
-    documents: DOC_ALL,
-    restricted: 'emea-distributor-hidden',
+    id: 'ps-chiesi-care',
+    title: 'Chiesi Care Rare — Patient Support Program',
+    description:
+      'Financial assistance, nurse support lines, and treatment access navigation for eligible patients.',
+    summary:
+      'Chiesi Care Rare provides personalized support for patients prescribed Chiesi rare disease therapies: benefit verification, co-pay assistance for eligible patients, nurse educator callbacks, shipment coordination, and connection to independent charitable foundations.',
+    contentId: 'CHIESI-SUPPORT-2025',
+    href: `${CHIESI_BASE}support/chiesi-care-rare`,
+    contentType: 'patientSupport',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['rareDiseasePatient', 'caregiver'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Co-pay assistance', 'Nurse support line', 'Benefit verification'],
+    lastUpdated: '2025-11-01',
+    readTimeMinutes: 6,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['chiesi care', 'patient support', 'financial assistance', 'copay', 'nurse line'],
+    demoUserTaxonomy: 'Rare disease Patient',
   }),
   seed({
-    id: 'p-sk0asp61',
-    title: 'EZ-Accu Shot™ Select Pack — USP <61> Panel',
-    description: 'Multi-organism compendial panel — E. coli, S. aureus, P. aeruginosa, Salmonella, C. albicans.',
-    catalogNumber: 'SK-0ASP61',
-    href: `${MB_BASE}search?q=SK-0ASP61`,
-    productFormat: 'selectPack',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61', 'usp62'],
-    taxonomy: 'panel',
-    testMethods: ['gpt', 'compendial'],
-    listPrice: 475,
-    goldPrice: 403.75,
-    distributorPrice: 338,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['panel', 'usp 61', 'select pack', 'sk-0asp61', 'sk0asp61'],
-    documents: DOC_ALL,
-    demoUserTaxonomy: 'Laboratory Procurement Manager',
+    id: 'adv-coalition',
+    title: 'Building Rare Disease Coalitions — Advocate Playbook',
+    description:
+      'Framework for launching and sustaining patient advocacy coalitions across therapeutic areas.',
+    summary:
+      'A practical playbook for patient advocates: forming steering committees, engaging clinicians and researchers, planning awareness months, drafting policy positions, measuring coalition impact, and sustaining volunteer engagement over multi-year campaigns.',
+    contentId: 'ADVOCACY-COALITION',
+    href: `${CHIESI_BASE}community/coalition-playbook`,
+    contentType: 'advocacyResource',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['patientAdvocate'],
+    resourceFormat: 'pdf',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: ['Steering committee templates', 'Awareness month toolkit', 'Impact metrics'],
+    lastUpdated: '2025-07-12',
+    readTimeMinutes: 20,
+    imageSrc: CHIESI_IMG.advocacy,
+    matchTerms: ['advocacy', 'coalition', 'awareness', 'policy', 'advocate playbook'],
+    demoUserTaxonomy: 'Patient Advocate',
   }),
   seed({
-    id: 'p-0511p',
-    title: 'Acetobacter aceti derived from ATCC® 15973™',
-    description: 'KWIK-STIK™ 2 Pack qualitative reference strain.',
-    catalogNumber: '0511P',
-    href: `${MB_BASE}search?q=0511P`,
-    productFormat: 'kwikStik2Pack',
-    biosafetyLevel: 'bsl1',
-    antibioticResistant: 'no',
-    industryTypes: ['education', 'foodSafety'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['aoac'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: 98,
-    goldPrice: 83.3,
-    distributorPrice: 69.5,
-    imageSrc: MB_IMG.kwikStik,
-    matchTerms: ['acetobacter', 'kwik-stik', '15973'],
+    id: 'cr-filsuvez-trial',
+    title: 'Filsuvez Phase III EASE Trial — Clinical Results Summary',
+    description:
+      'Primary and secondary endpoints from the EASE study in dystrophic epidermolysis bullosa.',
+    summary:
+      'Summary of the EASE Phase III randomized trial: patient population, wound target selection, primary endpoint (complete wound closure), key secondary endpoints, adverse event profile, and clinical implications for dermatologists and EB centers.',
+    contentId: 'FILSUVEZ-EASE-TRIAL',
+    href: `${CHIESI_BASE}clinical/filsuvez-ease`,
+    contentType: 'clinicalResource',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'clinicalPublication',
+    language: 'english',
+    accessTier: 'hcpOnly',
+    keyHighlights: ['Phase III EASE data', 'Wound closure endpoints', 'Safety profile summary'],
+    lastUpdated: '2025-06-18',
+    readTimeMinutes: 25,
+    imageSrc: CHIESI_IMG.research,
+    documents: DOC_CLINICAL,
+    matchTerms: ['ease trial', 'clinical trial', 'phase 3', 'filsuvez', 'wound closure'],
+    demoUserTaxonomy: 'Healthcare Professional',
+    restricted: 'hcpInternal',
   }),
   seed({
-    id: 'p-0511k',
-    title: 'Acetobacter aceti derived from ATCC® 15973™',
-    description: 'KWIK-STIK™ 6 Pack qualitative reference strain.',
-    catalogNumber: '0511K',
-    href: `${MB_BASE}search?q=0511K`,
-    productFormat: 'kwikStik6Pack',
-    biosafetyLevel: 'bsl1',
-    antibioticResistant: 'no',
-    industryTypes: ['education', 'foodSafety'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['aoac'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: 245,
-    goldPrice: 208.25,
-    distributorPrice: 174,
-    imageSrc: MB_IMG.kwikStik,
-    matchTerms: ['acetobacter', 'kwik-stik 6 pack'],
-  }),
-  seed({
-    id: 'p-0511l',
-    title: 'Acetobacter aceti derived from ATCC® 15973™',
-    description: 'LYFO DISK™ qualitative lyophilized pellets in glass vial.',
-    catalogNumber: '0511L',
-    href: `${MB_BASE}search?q=0511L`,
-    productFormat: 'lyfoDisk',
-    biosafetyLevel: 'bsl1',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['iso11133'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: 112,
-    goldPrice: 95.2,
-    distributorPrice: 79.5,
-    imageSrc: MB_IMG.lyfo,
-    matchTerms: ['lyfo disk', 'acetobacter'],
-  }),
-  seed({
-    id: 'p-0357p',
-    title: 'Acinetobacter baumannii derived from ATCC® 19606™',
-    description: 'KWIK-STIK™ 2 Pack — antibiotic-resistant strain option for advanced QC programs.',
-    catalogNumber: '0357P',
-    href: `${MB_BASE}search?q=0357P`,
-    productFormat: 'kwikStik2Pack',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'yes',
-    industryTypes: ['clinical', 'pharmaceutical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['clsi', 'eucast'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt', 'compendial'],
-    listPrice: 118,
-    goldPrice: 100.3,
-    distributorPrice: 84,
-    imageSrc: MB_IMG.kwikStik,
-    matchTerms: ['acinetobacter', 'drug resistant', '19606'],
-  }),
-  seed({
-    id: 'p-01156me4',
-    title: 'Acholeplasma laidlawii derived from NCTC 10116',
-    description: 'Enumerated Mycoplasma for USP <63> growth promotion testing.',
-    catalogNumber: '01156ME4',
-    href: `${MB_BASE}search?q=01156ME4`,
-    productFormat: 'enumeratedMycoplasma',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp62'],
-    taxonomy: 'mycoplasma',
-    testMethods: ['gpt', 'compendial'],
-    listPrice: 385,
-    goldPrice: 327.25,
-    distributorPrice: 274,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['mycoplasma', 'acholeplasma', 'usp 63'],
-  }),
-  seed({
-    id: 'p-sl40-10',
-    title: 'Acid Fast Control Slide',
-    description: 'Microbiology slide control for acid-fast staining QC.',
-    catalogNumber: 'SL40-10',
-    href: `${MB_BASE}search?q=SL40-10`,
-    productFormat: 'microbiologySlide',
-    biosafetyLevel: 'bsl1',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical', 'education'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['clsi'],
-    taxonomy: 'bacteria',
-    testMethods: ['compendial'],
-    listPrice: 165,
-    goldPrice: 140.25,
-    distributorPrice: 117.5,
-    imageSrc: MB_IMG.kwikStik,
-    matchTerms: ['acid fast', 'slide', 'staining'],
-  }),
-  seed({
-    id: 'p-hf0611',
-    title: '1.2 ml Hydrating Fluid for EZ-Accu Shot',
-    description: 'Rehydration fluid for EZ-Accu Shot™ quantitative pellets.',
-    catalogNumber: 'HF0611',
-    href: `${MB_BASE}search?q=HF0611`,
-    productFormat: 'hydratingFluid',
-    biosafetyLevel: 'notApplicable',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: 45,
-    goldPrice: 38.25,
-    distributorPrice: 32,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['hydrating fluid', 'ez-accu shot'],
-  }),
-  seed({
-    id: 'p-hf0612',
-    title: '2.0 ml Hydrating Fluid',
-    description: 'Rehydration fluid for EZ-CFU™ and related quantitative formats.',
-    catalogNumber: 'HF0612',
-    href: `${MB_BASE}search?q=HF0612`,
-    productFormat: 'hydratingFluid',
-    biosafetyLevel: 'notApplicable',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: 52,
-    goldPrice: 44.2,
-    distributorPrice: 37,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['hydrating fluid', 'ez-cfu'],
-  }),
-  seed({
-    id: 'p-gs0001',
-    title: 'GI Parasite QC Pellets',
-    description: 'Parasite QC material for gastrointestinal testing verification.',
-    catalogNumber: 'GS-0001',
-    href: `${MB_BASE}search?q=GS-0001`,
-    productFormat: 'selectPack',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical'],
-    instrumentKits: ['giParasite'],
-    molecularSyndromic: 'no',
-    standards: ['clsi'],
-    taxonomy: 'parasites',
-    testMethods: ['compendial'],
-    listPrice: 520,
-    goldPrice: 442,
-    distributorPrice: 370,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['parasite', 'gi', 'gastrointestinal'],
-  }),
-  seed({
-    id: 'doc-8247',
-    title: '8247 Respiratory Control Panel (22 Targets) IFU',
-    description: 'Instructions for Use document for respiratory syndromic control panel.',
-    catalogNumber: '8247-IFU',
-    href: `${MB_BASE}search?q=8247`,
-    productFormat: 'document',
-    biosafetyLevel: 'notApplicable',
-    documentLanguage: 'english',
-    documentCategory: 'technicalPublications',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical', 'pharmaceutical'],
-    instrumentKits: ['respiratoryPanel'],
-    molecularSyndromic: 'yes',
-    standards: ['clsi'],
-    taxonomy: 'molecular',
-    testMethods: ['molecularQc'],
-    listPrice: null,
-    goldPrice: null,
-    distributorPrice: null,
+    id: 'doc-lamzede-smpc',
+    title: 'Lamzede® — Summary of Product Characteristics (SmPC)',
+    description: 'EU SmPC for velmanase alfa enzyme replacement therapy.',
+    summary:
+      'Authorized SmPC including indication, posology and method of administration, contraindications, special warnings, interactions, fertility/pregnancy/lactation, and adverse reaction summary for healthcare professionals in EU markets.',
+    contentId: 'LAMZEDE-HCP-SMPC',
+    href: `${CHIESI_BASE}hcp/lamzede-smpc`,
+    contentType: 'clinicalResource',
+    therapeuticArea: 'alphaMannosidosis',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'pdf',
+    language: 'english',
+    accessTier: 'hcpOnly',
+    keyHighlights: ['EU authorized label', 'Infusion posology', 'Adverse reactions table'],
+    lastUpdated: '2025-05-22',
     isDocument: true,
-    matchTerms: ['ifu', 'respiratory', '8247'],
-    demoUserTaxonomy: 'Regulatory Professional',
+    documents: { patientLeaflet: false, prescribingInfo: false, smpc: true, clinicalBrief: false },
+    matchTerms: ['lamzede', 'smpc', 'velmanase', 'eu label'],
+    demoUserTaxonomy: 'Healthcare Professional',
   }),
   seed({
-    id: 'doc-8254',
-    title: '8254 Blood Culture Identification Control Panel IFU',
-    description: 'Instructions for Use — blood culture identification control panel.',
-    catalogNumber: '8254-IFU',
-    href: `${MB_BASE}search?q=8254`,
-    productFormat: 'document',
-    biosafetyLevel: 'notApplicable',
-    documentLanguage: 'english',
-    documentCategory: 'technicalPublications',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical'],
-    instrumentKits: ['bloodCultureId'],
-    molecularSyndromic: 'yes',
-    standards: ['clsi'],
-    taxonomy: 'molecular',
-    testMethods: ['molecularQc'],
-    listPrice: null,
-    goldPrice: null,
-    distributorPrice: null,
+    id: 'd-cf-overview',
+    title: 'Cystic Fibrosis — Understanding the Disease',
+    description:
+      'Overview of CFTR mutations, pulmonary manifestations, and evolving treatment landscape.',
+    summary:
+      'Cystic fibrosis affects multiple organ systems with progressive pulmonary disease as the primary morbidity. This resource covers CFTR genotype-phenotype relationships, newborn screening, modulator therapies, airway clearance techniques, and transition from pediatric to adult care.',
+    contentId: 'CF-OVERVIEW',
+    href: `${CHIESI_BASE}diseases/cystic-fibrosis`,
+    contentType: 'diseaseInformation',
+    therapeuticArea: 'cysticFibrosis',
+    audienceTags: ['generalPublic', 'healthcareProfessional', 'rareDiseasePatient'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['CFTR mutations', 'Modulator therapies', 'Transition of care'],
+    lastUpdated: '2025-04-10',
+    readTimeMinutes: 11,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['cystic fibrosis', 'cftr', 'pulmonary', 'modulator'],
+  }),
+  seed({
+    id: 'd-pcd-overview',
+    title: 'Primary Ciliary Dyskinesia (PCD) — Diagnosis & Management',
+    description:
+      'Guidance on recognizing PCD, confirmatory testing, and long-term respiratory care.',
+    summary:
+      'PCD is a rare genetic disorder of motile cilia leading to chronic respiratory tract infections, situs abnormalities, and infertility. Covers clinical red flags, nasal nitric oxide screening, genetic panels, daily airway clearance, and monitoring for bronchiectasis.',
+    contentId: 'PCD-OVERVIEW',
+    href: `${CHIESI_BASE}diseases/pcd`,
+    contentType: 'diseaseInformation',
+    therapeuticArea: 'primaryCiliaryDyskinesia',
+    audienceTags: ['healthcareProfessional', 'caregiver', 'rareDiseasePatient'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Diagnostic red flags', 'Genetic testing panels', 'Airway clearance protocols'],
+    lastUpdated: '2025-03-08',
+    readTimeMinutes: 13,
+    imageSrc: CHIESI_IMG.research,
+    matchTerms: ['pcd', 'primary ciliary dyskinesia', 'cilia', 'bronchiectasis'],
+  }),
+  seed({
+    id: 'tg-infusion-caregiver',
+    title: 'Caregiver Guide — Home Infusion for Rare Disease Therapies',
+    description:
+      'Preparing for home infusion visits, managing side effects, and coordinating with infusion nurses.',
+    summary:
+      'For caregivers of patients receiving enzyme replacement or biologic infusions at home: pre-infusion checklists, creating a comfortable infusion space, recognizing infusion reactions, medication storage requirements, and communicating with home health agencies.',
+    contentId: 'CG-HOME-INFUSION',
+    href: `${CHIESI_BASE}support/home-infusion-caregiver`,
+    contentType: 'treatmentGuide',
+    therapeuticArea: 'alphaMannosidosis',
+    audienceTags: ['caregiver'],
+    resourceFormat: 'patientBrochure',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: ['Pre-infusion checklist', 'Reaction recognition guide', 'Storage requirements'],
+    lastUpdated: '2025-02-14',
+    readTimeMinutes: 9,
+    imageSrc: CHIESI_IMG.caregiver,
+    documents: DOC_PATIENT,
+    matchTerms: ['home infusion', 'caregiver', 'infusion nurse', 'enzyme replacement'],
+    demoUserTaxonomy: 'Caregiver',
+  }),
+  seed({
+    id: 'adv-rare-day',
+    title: 'Rare Disease Day 2026 — Community Activation Kit',
+    description:
+      'Social media assets, event planning guides, and media templates for Rare Disease Day.',
+    summary:
+      'Everything advocates need for Rare Disease Day: downloadable graphics, press release templates, virtual event run-of-show, patient story interview guides, legislator meeting scheduling tips, and hashtag strategy for global coordination.',
+    contentId: 'RDD-2026-KIT',
+    href: `${CHIESI_BASE}community/rare-disease-day-2026`,
+    contentType: 'advocacyResource',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['patientAdvocate', 'generalPublic'],
+    resourceFormat: 'infographic',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Social media toolkit', 'Press release templates', 'Virtual event guide'],
+    lastUpdated: '2025-01-20',
+    readTimeMinutes: 7,
+    imageSrc: CHIESI_IMG.advocacy,
+    matchTerms: ['rare disease day', 'advocacy', 'awareness', 'community event'],
+    demoUserTaxonomy: 'Patient Advocate',
+  }),
+  seed({
+    id: 'faq-insurance',
+    title: 'FAQ — Insurance Coverage for Rare Disease Treatments',
+    description:
+      'Answers to common questions about prior authorization, appeals, and patient assistance.',
+    summary:
+      'Frequently asked questions about navigating insurance for orphan drugs: understanding prior authorization, step therapy appeals, specialty pharmacy requirements, Medicare/Medicaid considerations, and how Chiesi Care Rare can help with benefit investigation.',
+    contentId: 'FAQ-INSURANCE',
+    href: `${CHIESI_BASE}support/faq/insurance`,
+    contentType: 'faq',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['rareDiseasePatient', 'caregiver'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Prior authorization tips', 'Appeals process', 'Specialty pharmacy FAQ'],
+    lastUpdated: '2025-11-08',
+    readTimeMinutes: 5,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['insurance', 'coverage', 'prior authorization', 'appeals', 'faq'],
+    demoUserTaxonomy: 'Rare disease Patient',
+  }),
+  seed({
+    id: 'news-rdd-summit',
+    title: 'Chiesi Rare Summit 2025 — Highlights & On-Demand Sessions',
+    description:
+      'Recap of keynote presentations, patient panels, and scientific sessions from the annual summit.',
+    summary:
+      'Catch up on Chiesi Rare Summit 2025: keynote on personalized medicine in rare diseases, patient panel on diagnostic odyssey, scientific sessions on EB wound healing and alpha-mannosidosis outcomes, and networking sessions for advocates and clinicians.',
+    contentId: 'NEWS-SUMMIT-2025',
+    href: `${CHIESI_BASE}news/rare-summit-2025`,
+    contentType: 'newsEvent',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['healthcareProfessional', 'patientAdvocate', 'generalPublic'],
+    resourceFormat: 'webinar',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: ['On-demand recordings', 'Patient panel replay', 'Scientific session slides'],
+    lastUpdated: '2025-10-28',
+    readTimeMinutes: 45,
+    imageSrc: CHIESI_IMG.advocacy,
+    matchTerms: ['summit', 'conference', 'webinar', 'news', '2025'],
+  }),
+  seed({
+    id: 'cr-respiratory-rare',
+    title: 'Rare Respiratory Diseases — HCP Resource Hub',
+    description:
+      'Clinical pathways for BOS, PCD, and AATD with referral criteria and monitoring schedules.',
+    summary:
+      'Centralized hub for pulmonologists and respiratory therapists: diagnostic algorithms for bronchiolitis obliterans syndrome, PCD referral criteria, AATD augmentation monitoring, pulmonary rehabilitation considerations, and links to specialist center directories.',
+    contentId: 'RESP-HCP-HUB',
+    href: `${CHIESI_BASE}hcp/respiratory-rare`,
+    contentType: 'clinicalResource',
+    therapeuticArea: 'bronchiolitisObliterans',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'hcpOnly',
+    keyHighlights: ['BOS diagnostic pathway', 'Specialist referral criteria', 'Monitoring schedules'],
+    lastUpdated: '2025-09-15',
+    readTimeMinutes: 20,
+    imageSrc: CHIESI_IMG.research,
+    documents: DOC_CLINICAL,
+    matchTerms: ['respiratory', 'pulmonology', 'bos', 'aatd', 'pcd', 'hcp hub'],
+    demoUserTaxonomy: 'Healthcare Professional',
+  }),
+  seed({
+    id: 'pt-peer-stories',
+    title: 'Patient Stories — Voices from the Rare Disease Community',
+    description:
+      'Video testimonials from patients and caregivers sharing diagnosis journeys and daily life.',
+    summary:
+      'Real stories from the community: a teenager with EB describing school accommodations, a parent navigating alpha-mannosidosis diagnosis, an adult with AATD discussing augmentation therapy, and an advocate reflecting on policy wins — with captions and transcript downloads.',
+    contentId: 'PATIENT-STORIES',
+    href: `${CHIESI_BASE}community/patient-stories`,
+    contentType: 'patientSupport',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['rareDiseasePatient', 'caregiver', 'patientAdvocate', 'generalPublic'],
+    resourceFormat: 'video',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Video testimonials', 'Downloadable transcripts', 'Community voices'],
+    lastUpdated: '2025-08-30',
+    readTimeMinutes: 30,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['patient stories', 'testimonial', 'community', 'video', 'journey'],
+    demoUserTaxonomy: 'Rare disease Patient',
+  }),
+  seed({
+    id: 'doc-filsuvez-leaflet',
+    title: 'Filsuvez® — Patient Information Leaflet',
+    description: 'Plain-language patient leaflet for Filsuvez topical gel.',
+    summary:
+      'Patient-facing leaflet explaining what Filsuvez is, how to apply the gel, what to expect during treatment, possible side effects in everyday language, and contact information for questions between clinic visits.',
+    contentId: 'FILSUVEZ-PATIENT-LEAFLET',
+    href: `${CHIESI_BASE}support/filsuvez-patient-leaflet`,
+    contentType: 'treatmentGuide',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['rareDiseasePatient', 'caregiver'],
+    resourceFormat: 'pdf',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Application instructions', 'Side effects in plain language', 'Support contacts'],
+    lastUpdated: '2025-07-01',
     isDocument: true,
-    matchTerms: ['blood culture', 'ifu', '8254'],
-    demoUserTaxonomy: 'Regulatory Professional',
+    documents: DOC_PATIENT,
+    matchTerms: ['patient leaflet', 'filsuvez', 'pil', 'patient information'],
+    demoUserTaxonomy: 'Rare disease Patient',
   }),
   seed({
-    id: 'doc-sds-0681',
-    title: 'Safety Data Sheet — E. coli ATCC 8739 (0681E7)',
-    description: 'SDS for Epower™ E. coli reference material.',
-    catalogNumber: '0681E7-SDS',
-    href: `${MB_BASE}search?q=0681E7+SDS`,
-    productFormat: 'document',
-    biosafetyLevel: 'bsl2',
-    documentLanguage: 'english',
-    documentCategory: 'sds',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'bacteria',
-    testMethods: ['gpt'],
-    listPrice: null,
-    goldPrice: null,
-    distributorPrice: null,
-    isDocument: true,
-    matchTerms: ['sds', 'safety data sheet', '0681'],
-    demoUserTaxonomy: 'Regulatory Professional',
+    id: 'adv-policy-brief',
+    title: 'Rare Disease Policy Brief — Access & Reimbursement 2025',
+    description:
+      'Legislative landscape and advocacy priorities for orphan drug access in the US and EU.',
+    summary:
+      'Detailed policy analysis for advocacy organizations: orphan drug designation trends, HTA reform in EU5, US state-level step therapy laws, Medicaid best-price implications, and recommended advocacy priorities for the 2025–2026 legislative cycle.',
+    contentId: 'ADVOCACY-POLICY-BRIEF',
+    href: `${CHIESI_BASE}community/policy-brief-2025`,
+    contentType: 'advocacyResource',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['patientAdvocate'],
+    resourceFormat: 'pdf',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: ['US & EU policy comparison', 'HTA reform analysis', 'Advocacy priority list'],
+    lastUpdated: '2025-09-01',
+    readTimeMinutes: 22,
+    imageSrc: CHIESI_IMG.advocacy,
+    documents: { patientLeaflet: false, prescribingInfo: false, smpc: false, clinicalBrief: true },
+    matchTerms: ['policy brief', 'reimbursement', 'orphan drug', 'advocacy', 'legislative'],
+    demoUserTaxonomy: 'Patient Advocate',
+    restricted: 'advocateBriefing',
   }),
   seed({
-    id: 'doc-qs-iso',
-    title: 'ISO 17025 CRM Certificate Overview — Quality Systems',
-    description: 'Quality systems document describing CRM certification scope.',
-    catalogNumber: 'QS-ISO17025',
-    href: `${MB_BASE}search?q=ISO+17025`,
-    productFormat: 'document',
-    biosafetyLevel: 'notApplicable',
-    documentLanguage: 'english',
-    documentCategory: 'qualitySystems',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['iso11133'],
-    taxonomy: 'bacteria',
-    testMethods: ['compendial'],
-    listPrice: null,
-    goldPrice: null,
-    distributorPrice: null,
-    isDocument: true,
-    matchTerms: ['iso 17025', 'quality systems', 'crm'],
-    demoUserTaxonomy: 'Regulatory Professional',
+    id: 'd-neonatal-rare',
+    title: 'Neonatal Rare Disease Screening — What Parents Should Know',
+    description:
+      'Guide to newborn screening, follow-up testing, and early intervention for rare conditions.',
+    summary:
+      'For expectant and new parents: how newborn screening works, what a positive screen means, confirmatory testing timelines, early intervention services, genetic counseling resources, and emotional support during the diagnostic waiting period.',
+    contentId: 'NEONATAL-SCREENING',
+    href: `${CHIESI_BASE}diseases/neonatal-screening`,
+    contentType: 'diseaseInformation',
+    therapeuticArea: 'neonatalRareDisease',
+    audienceTags: ['caregiver', 'rareDiseasePatient', 'generalPublic'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Newborn screening explained', 'Follow-up testing timeline', 'Genetic counseling links'],
+    lastUpdated: '2025-06-05',
+    readTimeMinutes: 8,
+    imageSrc: CHIESI_IMG.caregiver,
+    matchTerms: ['newborn screening', 'neonatal', 'new parents', 'early intervention'],
+    demoUserTaxonomy: 'Caregiver',
   }),
   seed({
-    id: 'p-oem',
-    title: 'OEM Custom Formulation — Private Label QC Set',
-    description: 'Private label OEM QC formulations — sales engagement required.',
-    catalogNumber: 'OEM-CUSTOM-001',
-    href: `${MB_BASE}contact`,
-    productFormat: 'selectPack',
-    biosafetyLevel: 'notApplicable',
-    antibioticResistant: 'no',
-    industryTypes: ['pharmaceutical', 'personalCare'],
-    instrumentKits: ['customPanel'],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'panel',
-    testMethods: ['compendial'],
-    listPrice: null,
-    goldPrice: null,
-    distributorPrice: null,
-    restricted: 'oem',
-    matchTerms: ['oem', 'private label'],
+    id: 'faq-clinical-trials',
+    title: 'FAQ — Participating in Rare Disease Clinical Trials',
+    description:
+      'How to find trials, understand eligibility, and prepare for site visits as a patient or caregiver.',
+    summary:
+      'Answers for patients and caregivers considering clinical trials: ClinicalTrials.gov navigation, inclusion/exclusion criteria in plain language, informed consent essentials, travel reimbursement, placebo concerns, and questions to ask the study coordinator.',
+    contentId: 'FAQ-CLINICAL-TRIALS',
+    href: `${CHIESI_BASE}support/faq/clinical-trials`,
+    contentType: 'faq',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['rareDiseasePatient', 'caregiver', 'patientAdvocate'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'public',
+    keyHighlights: ['Finding trials', 'Eligibility explained', 'Questions for coordinators'],
+    lastUpdated: '2025-05-18',
+    readTimeMinutes: 7,
+    imageSrc: CHIESI_IMG.patient,
+    matchTerms: ['clinical trial', 'faq', 'enrollment', 'clinicaltrials.gov'],
+    demoUserTaxonomy: 'Rare disease Patient',
   }),
   seed({
-    id: 'p-promo-us',
-    title: 'Direct Customer Q1 Promotional Bundle — US Only',
-    description: 'Limited-time direct-only promotional bundle for hospital lab accounts.',
-    catalogNumber: 'PROMO-US-Q1',
-    href: `${MB_BASE}search?q=promo`,
-    productFormat: 'selectPack',
-    biosafetyLevel: 'bsl2',
-    antibioticResistant: 'no',
-    industryTypes: ['clinical'],
-    instrumentKits: [],
-    molecularSyndromic: 'no',
-    standards: ['usp61'],
-    taxonomy: 'panel',
-    testMethods: ['gpt'],
-    listPrice: 399,
-    goldPrice: 339.15,
-    distributorPrice: null,
-    imageSrc: MB_IMG.ezAccu,
-    matchTerms: ['promotional', 'bundle', 'direct'],
-    restricted: 'direct-only-promo',
-    demoUserTaxonomy: 'Laboratory Procurement Manager',
+    id: 'cr-hcp-webinar-eb',
+    title: 'On-Demand Webinar — Advances in EB Wound Management',
+    description:
+      'CME-eligible webinar featuring dermatologists and nurse specialists on EB care best practices.',
+    summary:
+      'Recorded webinar (CME credit available): evidence-based wound bed preparation in EB, pain-adapted dressing strategies, role of topical therapies, case discussions from EB centers of excellence, and Q&A on multidisciplinary team coordination.',
+    contentId: 'WEBINAR-EB-WOUNDS',
+    href: `${CHIESI_BASE}hcp/webinars/eb-wound-management`,
+    contentType: 'clinicalResource',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'webinar',
+    language: 'english',
+    accessTier: 'hcpOnly',
+    keyHighlights: ['CME credit available', 'Case discussions', 'Multidisciplinary team tips'],
+    lastUpdated: '2025-04-22',
+    readTimeMinutes: 60,
+    imageSrc: CHIESI_IMG.research,
+    matchTerms: ['webinar', 'cme', 'eb wounds', 'dermatology', 'hcp'],
+    demoUserTaxonomy: 'Healthcare Professional',
+  }),
+  seed({
+    id: 'lang-it-filsuvez',
+    title: 'Filsuvez® — Informazioni per il paziente (Italiano)',
+    description: 'Scheda paziente in italiano per Filsuvez gel topico.',
+    summary:
+      'Risorse per pazienti e famiglie italofone: indicazioni approvate, istruzioni per l\'applicazione del gel, effetti collaterali comuni, numeri di contatto Chiesi Care Rare Italia, e link alla comunità DEBRA Italia.',
+    contentId: 'FILSUVEZ-IT-PATIENT',
+    href: `${CHIESI_BASE}it/prodotti/filsuvez`,
+    contentType: 'treatmentGuide',
+    therapeuticArea: 'epidermolysisBullosa',
+    audienceTags: ['rareDiseasePatient', 'caregiver'],
+    resourceFormat: 'patientBrochure',
+    language: 'italian',
+    accessTier: 'public',
+    keyHighlights: ['Scheda paziente italiana', 'Contatti supporto Italia', 'Link comunità DEBRA'],
+    lastUpdated: '2025-03-15',
+    imageSrc: CHIESI_IMG.product,
+    documents: DOC_PATIENT,
+    matchTerms: ['filsuvez', 'italiano', 'italian', 'paziente'],
   }),
 ];
 
 export function itemMetadataLine(item: SearchResultItem): string {
-  const format = searchFacetLabels.productFormat[item.productFormat];
-  return `Catalog No. ${item.catalogNumber} · ${format}`;
+  const type = searchFacetLabels.contentType[item.contentType];
+  const area = searchFacetLabels.therapeuticArea[item.therapeuticArea];
+  return `${type} · ${area} · ID ${item.contentId}`;
 }
 
-/** Legacy export — import map may reference this; returns null for Microbiologics demo. */
+/** Legacy export — import map may reference this; returns null for Chiesi demo. */
 export function selectAiSearchInsight() {
   return null;
 }
+
+/** @deprecated Use resolveAccessDisplay — kept for product-detail compatibility */
+export function resolvePriceDisplay(): { kind: 'hidden' } {
+  return { kind: 'hidden' };
+}
+
+export function formatPrice(amount: number, currency: 'USD' | 'EUR'): string {
+  return new Intl.NumberFormat(currency === 'EUR' ? 'de-DE' : 'en-US', {
+    style: 'currency',
+    currency,
+  }).format(amount);
+}
+
+/** @deprecated NetSuite product bridge — maps legacy document keys for ProductDetail */
+export type LegacyProductDocuments = {
+  coa: boolean;
+  sds: boolean;
+  ifu: boolean;
+};
+
+export function mapLegacyDocuments(docs: LegacyProductDocuments): ContentDocuments {
+  return {
+    patientLeaflet: docs.coa,
+    smpc: docs.sds,
+    prescribingInfo: docs.ifu,
+    clinicalBrief: false,
+  };
+}
+
+export function searchCatalogForLegacyBridge(item: {
+  catalogNumber: string;
+  productName: string;
+  shortDescription: string;
+  documents: LegacyProductDocuments;
+}): SearchResultItem {
+  return {
+    id: item.catalogNumber,
+    title: item.productName,
+    contentId: item.catalogNumber,
+    description: item.shortDescription,
+    summary: item.shortDescription,
+    href: '#',
+    contentType: 'product',
+    therapeuticArea: 'generalRareDisease',
+    audienceTags: ['healthcareProfessional'],
+    resourceFormat: 'webPage',
+    language: 'english',
+    accessTier: 'authenticated',
+    keyHighlights: [],
+    lastUpdated: '2025-01-01',
+    documents: mapLegacyDocuments(item.documents),
+  };
+}
+
+/** Legacy import-map / Microbiologics re-exports — retained for generated import maps */
+export const MB_BASE = CHIESI_BASE;
+export const DEMO_CATALOG_NUMBERS = DEMO_CONTENT_IDS;
+export const biosafetyLevels: string[] = [];
+export const productFormats = resourceFormats;
+export const documentLanguages = contentLanguages;
+export const documentCategories = contentTypes;
+export const antibioticResistantOptions: string[] = [];
+export const industryTypes = therapeuticAreas;
+export const instrumentKits: string[] = [];
+export const molecularSyndromicOptions: string[] = [];
+export const standardGuidelines: string[] = [];
+export const taxonomyGroups = therapeuticAreas;
+export const testMethods: string[] = [];

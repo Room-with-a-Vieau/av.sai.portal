@@ -208,7 +208,7 @@ function PriceBlock({
   }
 
   if (display.kind === 'hidden') {
-    if (user === 'Regulatory Professional') {
+    if (user === 'Patient Advocate') {
       return (
         <p className="text-sm text-muted-foreground">Document &amp; regulatory access — no pricing shown.</p>
       );
@@ -282,9 +282,9 @@ function DocumentationTab({
 
   const docItem = toDocumentSearchItem(product);
   const rows = [
-    { type: 'COA' as DocumentType, available: product.documents.coa },
-    { type: 'SDS' as DocumentType, available: product.documents.sds },
-    { type: 'IFU' as DocumentType, available: product.documents.ifu },
+    { type: 'Patient Leaflet' as DocumentType, available: product.documents.coa },
+    { type: 'SmPC' as DocumentType, available: product.documents.sds },
+    { type: 'Prescribing Info' as DocumentType, available: product.documents.ifu },
   ].filter((r): r is { type: DocumentType; available: boolean } => r.available);
 
   return (
@@ -307,7 +307,7 @@ function DocumentationTab({
                   <Download className="h-4 w-4" aria-hidden />
                   {type}
                 </Button>
-                {(type === 'SDS' || type === 'IFU') && (
+                {(type === 'SmPC' || type === 'Prescribing Info' || type === 'Clinical Brief') && (
                   <Button
                     type="button"
                     size="sm"
@@ -492,7 +492,7 @@ export const Default: FC<ProductDetailProps> = ({ fields, page, params }) => {
               <DialogHeader>
                 <DialogTitle>{previewContent.title}</DialogTitle>
                 <DialogDescription>
-                  Catalog {previewContent.catalogNumber} · {previewContent.lotNumber}
+                  {previewContent.contentId} · {previewContent.version}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3 text-sm">

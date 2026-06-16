@@ -1,18 +1,31 @@
 'use client';
 
 /**
- * SearchResults — Microbiologics product & document search (SitecoreAI demo).
+ * SearchResults — Chiesi Global Rare Diseases personalized content search (SitecoreAI demo).
  *
- * Mirrors microbiologics.com search with auth-scoped access:
- * - Anonymous: find by catalog #, download COA, "Log in to see price", SDS/IFU locked
- * - Authenticated (HeaderST persona): contract pricing + SDS/IFU download & inline preview
+ * Persona-aware rare disease information hub:
+ * - Anonymous: public disease info, patient leaflets, FAQs
+ * - Healthcare Professional: prescribing info, SmPC, clinical briefs, trial data
+ * - Patient Advocate: policy briefs, coalition toolkits, awareness resources
+ * - Caregiver / Rare disease Patient: care guides, support programs, patient stories
  */
 
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChevronDown, Download, Eye, Loader2, Lock, Search, X } from 'lucide-react';
+import {
+  BookOpen,
+  ChevronDown,
+  Clock,
+  Download,
+  Eye,
+  Loader2,
+  Lock,
+  Search,
+  Sparkles,
+  X,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import type { ComponentProps } from '@/lib/component-props';
@@ -37,48 +50,40 @@ import { cn } from '@/lib/utils';
 
 import {
   canAccessDocument,
-  DEMO_CATALOG_NUMBERS,
+  CHIESI_BASE,
+  contentLanguages,
+  contentTypes,
+  DEMO_CONTENT_IDS,
   documentPreviewContent,
+  documentRequiresHcp,
   documentRequiresLogin,
-  MB_BASE,
-  productHasAttachedDocuments,
-  antibioticResistantOptions,
-  biosafetyLevels,
-  documentCategories,
-  documentLanguages,
-  formatPrice,
   getDefaultCardImage,
-  industryTypes,
-  instrumentKits,
   itemMatchesQuery,
+  itemMetadataLine,
   itemVisibleForDemoUser,
-  molecularSyndromicOptions,
   normalizeQuery,
+  personaSearchHint,
   popularSearches,
-  productFormats,
   relevanceScore,
-  resolvePriceDisplay,
+  resolveAccessDisplay,
+  resourceFormats,
   RESULTS_PAGE_SIZE,
   searchCatalog,
   searchFacetLabels,
   supplementalResultsForDemoUserTaxonomy,
-  standardGuidelines,
-  taxonomyGroups,
-  testMethods,
-  type AntibioticResistant,
-  type BiosafetyLevel,
+  therapeuticAreas,
+  audienceTags,
+  accessTiers,
+  productHasAttachedDocuments,
+  type AccessTier,
+  type AudienceTag,
+  type ContentLanguage,
+  type ContentType,
   type DemoUserTaxonomy,
-  type DocumentCategory,
-  type DocumentLanguage,
   type DocumentType,
-  type IndustryType,
-  type InstrumentKit,
-  type MolecularSyndromic,
-  type ProductFormat,
+  type ResourceFormat,
   type SearchResultItem,
-  type StandardGuideline,
-  type TaxonomyGroup,
-  type TestMethod,
+  type TherapeuticArea,
 } from './data';
 
 export type SearchResultsProps = {
@@ -87,72 +92,49 @@ export type SearchResultsProps = {
   initialQuery?: string;
 };
 
-type SortMode = 'relevance' | 'az';
+type SortMode = 'relevance' | 'az' | 'recent';
 
-const TEAL = '#00788A';
+const CHIESI_PRIMARY = '#A61D5D';
+const CHIESI_TEAL = '#004B4D';
 
 type FacetSelections = {
-  biosafety: Set<BiosafetyLevel>;
-  formats: Set<ProductFormat>;
-  docLanguages: Set<DocumentLanguage>;
-  docCategories: Set<DocumentCategory>;
-  antibiotic: Set<AntibioticResistant>;
-  industries: Set<IndustryType>;
-  instruments: Set<InstrumentKit>;
-  syndromic: Set<MolecularSyndromic>;
-  standards: Set<StandardGuideline>;
-  taxonomy: Set<TaxonomyGroup>;
-  testMethods: Set<TestMethod>;
+  contentTypes: Set<ContentType>;
+  therapeuticAreas: Set<TherapeuticArea>;
+  audienceTags: Set<AudienceTag>;
+  resourceFormats: Set<ResourceFormat>;
+  languages: Set<ContentLanguage>;
+  accessTiers: Set<AccessTier>;
 };
 
 function emptyFacets(): FacetSelections {
   return {
-    biosafety: new Set(),
-    formats: new Set(),
-    docLanguages: new Set(),
-    docCategories: new Set(),
-    antibiotic: new Set(),
-    industries: new Set(),
-    instruments: new Set(),
-    syndromic: new Set(),
-    standards: new Set(),
-    taxonomy: new Set(),
-    testMethods: new Set(),
+    contentTypes: new Set(),
+    therapeuticAreas: new Set(),
+    audienceTags: new Set(),
+    resourceFormats: new Set(),
+    languages: new Set(),
+    accessTiers: new Set(),
   };
 }
 
 function countActiveFacets(f: FacetSelections): number {
   return (
-    f.biosafety.size +
-    f.formats.size +
-    f.docLanguages.size +
-    f.docCategories.size +
-    f.antibiotic.size +
-    f.industries.size +
-    f.instruments.size +
-    f.syndromic.size +
-    f.standards.size +
-    f.taxonomy.size +
-    f.testMethods.size
+    f.contentTypes.size +
+    f.therapeuticAreas.size +
+    f.audienceTags.size +
+    f.resourceFormats.size +
+    f.languages.size +
+    f.accessTiers.size
   );
 }
 
 function itemPassesFacets(item: SearchResultItem, f: FacetSelections): boolean {
-  if (f.biosafety.size && !f.biosafety.has(item.biosafetyLevel)) return false;
-  if (f.formats.size && !f.formats.has(item.productFormat)) return false;
-  if (f.docLanguages.size) {
-    if (!item.documentLanguage || !f.docLanguages.has(item.documentLanguage)) return false;
-  }
-  if (f.docCategories.size) {
-    if (!item.documentCategory || !f.docCategories.has(item.documentCategory)) return false;
-  }
-  if (f.antibiotic.size && !f.antibiotic.has(item.antibioticResistant)) return false;
-  if (f.industries.size && !item.industryTypes.some((i) => f.industries.has(i))) return false;
-  if (f.instruments.size && !item.instrumentKits.some((k) => f.instruments.has(k))) return false;
-  if (f.syndromic.size && !f.syndromic.has(item.molecularSyndromic)) return false;
-  if (f.standards.size && !item.standards.some((s) => f.standards.has(s))) return false;
-  if (f.taxonomy.size && !f.taxonomy.has(item.taxonomy)) return false;
-  if (f.testMethods.size && !item.testMethods.some((t) => f.testMethods.has(t))) return false;
+  if (f.contentTypes.size && !f.contentTypes.has(item.contentType)) return false;
+  if (f.therapeuticAreas.size && !f.therapeuticAreas.has(item.therapeuticArea)) return false;
+  if (f.audienceTags.size && !item.audienceTags.some((tag) => f.audienceTags.has(tag))) return false;
+  if (f.resourceFormats.size && !f.resourceFormats.has(item.resourceFormat)) return false;
+  if (f.languages.size && !f.languages.has(item.language)) return false;
+  if (f.accessTiers.size && !f.accessTiers.has(item.accessTier)) return false;
   return true;
 }
 
@@ -187,7 +169,7 @@ function FacetCheckboxGroup<T extends string>({
             <Checkbox
               checked={selected.has(key)}
               onCheckedChange={() => onToggle(key)}
-              className="mt-0.5 border-[#00788A] data-[state=checked]:bg-[#00788A] data-[state=checked]:text-white"
+              className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-white"
             />
             <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
               <span className="leading-snug">{labels[key]}</span>
@@ -213,7 +195,7 @@ function FacetSection({
     <Collapsible defaultOpen={defaultOpen} className="border-b border-border/60 py-3 last:border-b-0">
       <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground outline-none [&[data-state=open]_svg]:rotate-180">
         {title}
-        <ChevronDown className="size-4 shrink-0 text-[#00788A] transition-transform duration-200" />
+        <ChevronDown className="size-4 shrink-0 text-primary transition-transform duration-200" />
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-1">{children}</CollapsibleContent>
     </Collapsible>
@@ -229,19 +211,14 @@ function SearchFacetsPanel({
   resultCount,
 }: {
   facets: FacetSelections;
-  counts: ReturnType<typeof useFacetCounts> extends infer R ? R : never;
+  counts: ReturnType<typeof useFacetCounts>;
   onToggle: {
-    biosafety: (k: BiosafetyLevel) => void;
-    formats: (k: ProductFormat) => void;
-    docLanguages: (k: DocumentLanguage) => void;
-    docCategories: (k: DocumentCategory) => void;
-    antibiotic: (k: AntibioticResistant) => void;
-    industries: (k: IndustryType) => void;
-    instruments: (k: InstrumentKit) => void;
-    syndromic: (k: MolecularSyndromic) => void;
-    standards: (k: StandardGuideline) => void;
-    taxonomy: (k: TaxonomyGroup) => void;
-    testMethods: (k: TestMethod) => void;
+    contentTypes: (k: ContentType) => void;
+    therapeuticAreas: (k: TherapeuticArea) => void;
+    audienceTags: (k: AudienceTag) => void;
+    resourceFormats: (k: ResourceFormat) => void;
+    languages: (k: ContentLanguage) => void;
+    accessTiers: (k: AccessTier) => void;
   };
   activeFilterCount: number;
   clearFilters: () => void;
@@ -250,16 +227,16 @@ function SearchFacetsPanel({
   return (
     <div className="rounded-lg border border-border/70 bg-card shadow-sm">
       <div className="border-b border-border/60 px-4 py-3.5">
-        <p className="text-sm font-semibold text-foreground">Narrow By</p>
+        <p className="text-sm font-semibold text-foreground">Refine Results</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          <span className="font-semibold tabular-nums text-foreground">{resultCount}</span> Products
+          <span className="font-semibold tabular-nums text-foreground">{resultCount}</span> resources
         </p>
         {activeFilterCount > 0 ? (
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            className="mt-2 h-8 px-0 text-[#00788A] hover:text-[#00788A]"
+            className="mt-2 h-8 px-0 text-primary hover:text-primary"
             onClick={clearFilters}
           >
             Clear all filters
@@ -268,99 +245,54 @@ function SearchFacetsPanel({
       </div>
       <div className="max-h-[min(75vh,44rem)] overflow-y-auto px-2 pb-2">
         <FacetCheckboxGroup
-          title="Biosafety Level"
-          options={biosafetyLevels}
-          labels={searchFacetLabels.biosafetyLevel}
-          selected={facets.biosafety}
-          counts={counts.biosafety}
-          onToggle={onToggle.biosafety}
+          title="Content Type"
+          options={contentTypes}
+          labels={searchFacetLabels.contentType}
+          selected={facets.contentTypes}
+          counts={counts.contentTypes}
+          onToggle={onToggle.contentTypes}
         />
         <FacetCheckboxGroup
-          title="Product Format"
-          options={productFormats}
-          labels={searchFacetLabels.productFormat}
-          selected={facets.formats}
-          counts={counts.formats}
-          onToggle={onToggle.formats}
+          title="Therapeutic Area"
+          options={therapeuticAreas}
+          labels={searchFacetLabels.therapeuticArea}
+          selected={facets.therapeuticAreas}
+          counts={counts.therapeuticAreas}
+          onToggle={onToggle.therapeuticAreas}
         />
         <FacetCheckboxGroup
-          title="Document Language"
-          options={documentLanguages}
-          labels={searchFacetLabels.documentLanguage}
-          selected={facets.docLanguages}
-          counts={counts.docLanguages}
-          onToggle={onToggle.docLanguages}
+          title="Intended Audience"
+          options={audienceTags}
+          labels={searchFacetLabels.audienceTag}
+          selected={facets.audienceTags}
+          counts={counts.audienceTags}
+          onToggle={onToggle.audienceTags}
+        />
+        <FacetCheckboxGroup
+          title="Format"
+          options={resourceFormats}
+          labels={searchFacetLabels.resourceFormat}
+          selected={facets.resourceFormats}
+          counts={counts.resourceFormats}
+          onToggle={onToggle.resourceFormats}
           defaultOpen={false}
         />
         <FacetCheckboxGroup
-          title="Document Category"
-          options={documentCategories}
-          labels={searchFacetLabels.documentCategory}
-          selected={facets.docCategories}
-          counts={counts.docCategories}
-          onToggle={onToggle.docCategories}
+          title="Language"
+          options={contentLanguages}
+          labels={searchFacetLabels.contentLanguage}
+          selected={facets.languages}
+          counts={counts.languages}
+          onToggle={onToggle.languages}
           defaultOpen={false}
         />
         <FacetCheckboxGroup
-          title="Antibiotic/Drug Resistant Strains"
-          options={antibioticResistantOptions}
-          labels={searchFacetLabels.antibioticResistant}
-          selected={facets.antibiotic}
-          counts={counts.antibiotic}
-          onToggle={onToggle.antibiotic}
-          defaultOpen={false}
-        />
-        <FacetCheckboxGroup
-          title="Industry Type"
-          options={industryTypes}
-          labels={searchFacetLabels.industryType}
-          selected={facets.industries}
-          counts={counts.industries}
-          onToggle={onToggle.industries}
-          defaultOpen={false}
-        />
-        <FacetCheckboxGroup
-          title="Instrument/Type Kits"
-          options={instrumentKits}
-          labels={searchFacetLabels.instrumentKit}
-          selected={facets.instruments}
-          counts={counts.instruments}
-          onToggle={onToggle.instruments}
-          defaultOpen={false}
-        />
-        <FacetCheckboxGroup
-          title="Molecular Syndromic Testing"
-          options={molecularSyndromicOptions}
-          labels={searchFacetLabels.molecularSyndromic}
-          selected={facets.syndromic}
-          counts={counts.syndromic}
-          onToggle={onToggle.syndromic}
-          defaultOpen={false}
-        />
-        <FacetCheckboxGroup
-          title="Standards and Guidelines"
-          options={standardGuidelines}
-          labels={searchFacetLabels.standardGuideline}
-          selected={facets.standards}
-          counts={counts.standards}
-          onToggle={onToggle.standards}
-          defaultOpen={false}
-        />
-        <FacetCheckboxGroup
-          title="Taxonomy"
-          options={taxonomyGroups}
-          labels={searchFacetLabels.taxonomy}
-          selected={facets.taxonomy}
-          counts={counts.taxonomy}
-          onToggle={onToggle.taxonomy}
-        />
-        <FacetCheckboxGroup
-          title="Test Method"
-          options={testMethods}
-          labels={searchFacetLabels.testMethod}
-          selected={facets.testMethods}
-          counts={counts.testMethods}
-          onToggle={onToggle.testMethods}
+          title="Access Level"
+          options={accessTiers}
+          labels={searchFacetLabels.accessTier}
+          selected={facets.accessTiers}
+          counts={counts.accessTiers}
+          onToggle={onToggle.accessTiers}
           defaultOpen={false}
         />
       </div>
@@ -382,22 +314,24 @@ function DocumentAccessPanel({
   if (!productHasAttachedDocuments(item) || !item.documents) return null;
 
   const rows = [
-    { type: 'COA' as DocumentType, available: item.documents.coa },
-    { type: 'SDS' as DocumentType, available: item.documents.sds },
-    { type: 'IFU' as DocumentType, available: item.documents.ifu },
+    { type: 'Patient Leaflet' as DocumentType, available: item.documents.patientLeaflet },
+    { type: 'Prescribing Info' as DocumentType, available: item.documents.prescribingInfo },
+    { type: 'SmPC' as DocumentType, available: item.documents.smpc },
+    { type: 'Clinical Brief' as DocumentType, available: item.documents.clinicalBrief },
   ].filter((r): r is { type: DocumentType; available: boolean } => r.available);
 
   if (!rows.length) return null;
 
   return (
-    <div className="mt-3 rounded-md border border-border/60 bg-slate-50/80 px-3 py-2.5">
+    <div className="mt-3 rounded-md border border-border/60 bg-muted/30 px-3 py-2.5">
       <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-        Documents
+        Attached Documents
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {rows.map(({ type }) => {
           const allowed = canAccessDocument(item, type, user);
           const needsLogin = documentRequiresLogin(type) && !user;
+          const needsHcp = documentRequiresHcp(type) && user !== 'Healthcare Professional';
 
           if (allowed) {
             return (
@@ -406,38 +340,38 @@ function DocumentAccessPanel({
                   type="button"
                   size="sm"
                   variant="outline"
-                  className="h-8 gap-1.5 border-[#00788A]/30 text-xs"
+                  className="h-8 gap-1.5 border-primary/30 text-xs"
                   onClick={() => onDownload(item, type)}
                 >
                   <Download className="h-3.5 w-3.5" aria-hidden />
                   {type}
                 </Button>
-                {(type === 'SDS' || type === 'IFU') && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 gap-1 px-2 text-xs text-[#00788A]"
-                    onClick={() => onPreview(item, type)}
-                  >
-                    <Eye className="h-3.5 w-3.5" aria-hidden />
-                    Preview
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 gap-1 px-2 text-xs text-primary"
+                  onClick={() => onPreview(item, type)}
+                >
+                  <Eye className="h-3.5 w-3.5" aria-hidden />
+                  Preview
+                </Button>
               </div>
             );
           }
 
-          if (needsLogin) {
+          if (needsLogin || needsHcp) {
             return (
               <span
                 key={type}
                 className="inline-flex h-8 items-center gap-1.5 rounded-md border border-dashed border-border bg-muted/50 px-2.5 text-xs text-muted-foreground"
-                title="Sign in to access this document"
+                title={needsHcp ? 'Healthcare professional access required' : 'Sign in to access'}
               >
                 <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 {type}
-                <span className="hidden sm:inline">— Sign in</span>
+                <span className="hidden sm:inline">
+                  — {needsHcp ? 'HCP only' : 'Sign in'}
+                </span>
               </span>
             );
           }
@@ -447,53 +381,57 @@ function DocumentAccessPanel({
       </div>
       {!user ? (
         <p className="mt-2 text-xs text-muted-foreground">
-          COA available without login. Sign in via the header for SDS, IFU, and contract pricing.
+          Patient leaflets are public. Sign in via the header for clinical documents and personalized
+          results.
         </p>
       ) : null}
     </div>
   );
 }
 
-function PriceLine({
+function AccessBadge({
   item,
   user,
 }: {
   item: SearchResultItem;
   user: DemoUserTaxonomy | null;
 }) {
-  const display = resolvePriceDisplay(item, user);
+  const access = resolveAccessDisplay(item, user);
 
-  if (display.kind === 'login') {
+  if (access.kind === 'personalized') {
     return (
-      <p className="mt-1 text-sm font-medium text-[#00788A]">
-        Log in to see price
-      </p>
+      <Badge
+        variant="secondary"
+        className="gap-1 border-primary/20 bg-primary/10 text-primary hover:bg-primary/10"
+      >
+        <Sparkles className="h-3 w-3" aria-hidden />
+        {access.label}
+      </Badge>
     );
   }
 
-  if (display.kind === 'hidden') {
-    if (item.isDocument) {
-      return <p className="mt-1 text-xs text-muted-foreground">Document — no pricing</p>;
-    }
-    if (user === 'Regulatory Professional') {
-      return (
-        <p className="mt-1 text-xs text-muted-foreground">Document &amp; regulatory access</p>
-      );
-    }
-    return null;
+  if (access.kind === 'hcpOnly') {
+    return (
+      <Badge variant="outline" className="gap-1 text-muted-foreground">
+        <Lock className="h-3 w-3" aria-hidden />
+        HCP only
+      </Badge>
+    );
+  }
+
+  if (access.kind === 'signIn') {
+    return (
+      <Badge variant="outline" className="gap-1 text-muted-foreground">
+        <Lock className="h-3 w-3" aria-hidden />
+        Sign in for full access
+      </Badge>
+    );
   }
 
   return (
-    <p className="mt-1 flex flex-wrap items-baseline gap-2 text-sm">
-      <span className="font-semibold text-foreground">
-        {formatPrice(display.amount, display.currency)}
-      </span>
-      {display.listAmount != null && display.listAmount > display.amount ? (
-        <span className="text-xs text-muted-foreground line-through">
-          {formatPrice(display.listAmount, display.currency)}
-        </span>
-      ) : null}
-    </p>
+    <Badge variant="outline" className="text-muted-foreground">
+      Public
+    </Badge>
   );
 }
 
@@ -509,41 +447,76 @@ function ResultRow({
   onPreview: (item: SearchResultItem, docType: DocumentType) => void;
 }) {
   const img = item.imageSrc ?? getDefaultCardImage();
-  const formatLabel = searchFacetLabels.productFormat[item.productFormat];
+  const formatLabel = searchFacetLabels.resourceFormat[item.resourceFormat];
+  const typeLabel = searchFacetLabels.contentType[item.contentType];
 
   return (
-    <article className="flex flex-col gap-4 border-b border-border/60 py-5 sm:flex-row sm:items-start">
+    <article className="flex flex-col gap-4 border-b border-border/60 py-6 sm:flex-row sm:items-start">
       <a
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border border-border/50 bg-muted sm:h-28 sm:w-28"
+        className="relative h-28 w-full shrink-0 overflow-hidden rounded-lg border border-border/50 bg-muted sm:h-32 sm:w-40"
       >
         <Image
           src={img}
           alt=""
           fill
           unoptimized
-          sizes="112px"
-          className="object-contain p-1"
+          sizes="160px"
+          className="object-cover"
         />
+        <span className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+          {typeLabel}
+        </span>
       </a>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-medium text-[#00788A]">
-          {formatLabel}
-          <span className="mx-1.5 text-muted-foreground">·</span>
-          <span className="text-muted-foreground">Catalog No. {item.catalogNumber}</span>
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-medium" style={{ color: CHIESI_TEAL }}>
+            {formatLabel}
+            <span className="mx-1.5 text-muted-foreground">·</span>
+            <span className="font-mono text-muted-foreground">{item.contentId}</span>
+          </p>
+          <AccessBadge item={item} user={user} />
+        </div>
         <a
           href={item.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-1 block text-base font-semibold leading-snug text-foreground hover:text-[#00788A]"
+          className="mt-1 block text-lg font-semibold leading-snug text-foreground hover:text-primary"
         >
           {item.title}
         </a>
-        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
-        <PriceLine item={item} user={user} />
+        <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-foreground/85">{item.summary}</p>
+
+        {item.keyHighlights.length > 0 ? (
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {item.keyHighlights.map((highlight) => (
+              <li
+                key={highlight}
+                className="rounded-full border border-border/60 bg-muted/40 px-2.5 py-0.5 text-xs text-foreground/80"
+              >
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <BookOpen className="h-3.5 w-3.5" aria-hidden />
+            {itemMetadataLine(item)}
+          </span>
+          {item.readTimeMinutes ? (
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5" aria-hidden />
+              {item.readTimeMinutes} min read
+            </span>
+          ) : null}
+          <span>Updated {item.lastUpdated}</span>
+        </div>
+
         <DocumentAccessPanel
           item={item}
           user={user}
@@ -594,23 +567,16 @@ function buildFacetCounts(
 function useFacetCounts(queryMatched: SearchResultItem[], facets: FacetSelections) {
   return useMemo(
     () => ({
-      biosafety: buildFacetCounts(queryMatched, facets, 'biosafety', (i) => [i.biosafetyLevel]),
-      formats: buildFacetCounts(queryMatched, facets, 'formats', (i) => [i.productFormat]),
-      docLanguages: buildFacetCounts(queryMatched, facets, 'docLanguages', (i) =>
-        i.documentLanguage ? [i.documentLanguage] : []
-      ),
-      docCategories: buildFacetCounts(queryMatched, facets, 'docCategories', (i) =>
-        i.documentCategory ? [i.documentCategory] : []
-      ),
-      antibiotic: buildFacetCounts(queryMatched, facets, 'antibiotic', (i) => [
-        i.antibioticResistant,
+      contentTypes: buildFacetCounts(queryMatched, facets, 'contentTypes', (i) => [i.contentType]),
+      therapeuticAreas: buildFacetCounts(queryMatched, facets, 'therapeuticAreas', (i) => [
+        i.therapeuticArea,
       ]),
-      industries: buildFacetCounts(queryMatched, facets, 'industries', (i) => i.industryTypes),
-      instruments: buildFacetCounts(queryMatched, facets, 'instruments', (i) => i.instrumentKits),
-      syndromic: buildFacetCounts(queryMatched, facets, 'syndromic', (i) => [i.molecularSyndromic]),
-      standards: buildFacetCounts(queryMatched, facets, 'standards', (i) => i.standards),
-      taxonomy: buildFacetCounts(queryMatched, facets, 'taxonomy', (i) => [i.taxonomy]),
-      testMethods: buildFacetCounts(queryMatched, facets, 'testMethods', (i) => i.testMethods),
+      audienceTags: buildFacetCounts(queryMatched, facets, 'audienceTags', (i) => i.audienceTags),
+      resourceFormats: buildFacetCounts(queryMatched, facets, 'resourceFormats', (i) => [
+        i.resourceFormat,
+      ]),
+      languages: buildFacetCounts(queryMatched, facets, 'languages', (i) => [i.language]),
+      accessTiers: buildFacetCounts(queryMatched, facets, 'accessTiers', (i) => [i.accessTier]),
     }),
     [queryMatched, facets]
   );
@@ -641,27 +607,36 @@ export const SearchResults: FC<SearchResultsProps> = ({
     docType: DocumentType;
   } | null>(null);
 
-  const handleDocumentDownload = useCallback((item: SearchResultItem, docType: DocumentType) => {
-    if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
-      toast.message('Sign in required', {
-        description: `${docType} is available to authenticated users from your organization.`,
+  const handleDocumentDownload = useCallback(
+    (item: SearchResultItem, docType: DocumentType) => {
+      if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
+        toast.message('Access required', {
+          description:
+            docType === 'Prescribing Info' || docType === 'SmPC'
+              ? `${docType} is available to verified healthcare professionals.`
+              : `${docType} requires signing in via the header.`,
+        });
+        return;
+      }
+      toast.success(`${docType} download started`, {
+        description: `${item.contentId} — simulated secure document delivery`,
       });
-      return;
-    }
-    toast.success(`${docType} download started`, {
-      description: `Catalog #${item.catalogNumber} — simulated file delivery`,
-    });
-  }, [activeDemoUserTaxonomy]);
+    },
+    [activeDemoUserTaxonomy]
+  );
 
-  const handleDocumentPreview = useCallback((item: SearchResultItem, docType: DocumentType) => {
-    if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
-      toast.message('Sign in required', {
-        description: `Inline preview for ${docType} requires authentication.`,
-      });
-      return;
-    }
-    setPreviewDoc({ item, docType });
-  }, [activeDemoUserTaxonomy]);
+  const handleDocumentPreview = useCallback(
+    (item: SearchResultItem, docType: DocumentType) => {
+      if (!canAccessDocument(item, docType, activeDemoUserTaxonomy)) {
+        toast.message('Access required', {
+          description: `Preview for ${docType} requires appropriate sign-in.`,
+        });
+        return;
+      }
+      setPreviewDoc({ item, docType });
+    },
+    [activeDemoUserTaxonomy]
+  );
 
   const makeToggle = useCallback(
     (key: keyof FacetSelections) => (v: never) =>
@@ -710,6 +685,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
     const sorted = [...list];
     if (sort === 'az') {
       sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sort === 'recent') {
+      sorted.sort((a, b) => b.lastUpdated.localeCompare(a.lastUpdated));
     } else {
       sorted.sort((a, b) => {
         const ra = relevanceScore(a, query, activeDemoUserTaxonomy);
@@ -764,17 +741,12 @@ export const SearchResults: FC<SearchResultsProps> = ({
   const personaLabel = activeDemoUserTaxonomy ?? 'Not signed in';
 
   const facetToggleHandlers = {
-    biosafety: makeToggle('biosafety'),
-    formats: makeToggle('formats'),
-    docLanguages: makeToggle('docLanguages'),
-    docCategories: makeToggle('docCategories'),
-    antibiotic: makeToggle('antibiotic'),
-    industries: makeToggle('industries'),
-    instruments: makeToggle('instruments'),
-    syndromic: makeToggle('syndromic'),
-    standards: makeToggle('standards'),
-    taxonomy: makeToggle('taxonomy'),
-    testMethods: makeToggle('testMethods'),
+    contentTypes: makeToggle('contentTypes'),
+    therapeuticAreas: makeToggle('therapeuticAreas'),
+    audienceTags: makeToggle('audienceTags'),
+    resourceFormats: makeToggle('resourceFormats'),
+    languages: makeToggle('languages'),
+    accessTiers: makeToggle('accessTiers'),
   };
 
   return (
@@ -784,7 +756,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative min-w-0 flex-1">
               <Search
-                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#00788A]"
+                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-primary"
                 aria-hidden
               />
               <input
@@ -797,8 +769,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search by organism, catalog number, ATCC number, or product name..."
-                className="h-11 w-full rounded-md border border-border bg-background pl-11 pr-10 text-sm outline-none ring-[#00788A]/20 placeholder:text-muted-foreground focus:border-[#00788A] focus:ring-2"
+                placeholder="Search diseases, treatments, support programs, clinical resources..."
+                className="h-11 w-full rounded-md border border-border bg-background pl-11 pr-10 text-sm outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2"
                 autoComplete="off"
               />
               {draft ? (
@@ -818,8 +790,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
             </div>
             <Button
               type="button"
-              className="h-11 shrink-0 px-8 font-semibold text-white"
-              style={{ backgroundColor: TEAL }}
+              className="h-11 shrink-0 px-8 font-semibold text-primary-foreground"
+              style={{ backgroundColor: CHIESI_PRIMARY }}
               onClick={runSearch}
             >
               Search
@@ -834,7 +806,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 key={term}
                 type="button"
                 onClick={() => applyPopular(term)}
-                className="rounded-full border border-border px-3 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:border-[#00788A]/40 hover:text-[#00788A]"
+                className="rounded-full border border-border px-3 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-primary"
               >
                 {term}
               </button>
@@ -844,56 +816,53 @@ export const SearchResults: FC<SearchResultsProps> = ({
 
         <header className="mt-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-medium uppercase tracking-widest text-[#00788A]">Products</p>
+            <p className="text-xs font-medium uppercase tracking-widest text-primary">
+              Rare Disease Resources
+            </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
               {normalizeQuery(query) ? (
                 <>
-                  Results for <span style={{ color: TEAL }}>&ldquo;{displayHeading}&rdquo;</span>
+                  Results for{' '}
+                  <span style={{ color: CHIESI_PRIMARY }}>&ldquo;{displayHeading}&rdquo;</span>
                 </>
               ) : (
-                'Product search'
+                'Find information & support'
               )}
             </h1>
             <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-              Search mirrors{' '}
+              Personalized search across{' '}
               <a
-                href={MB_BASE}
+                href={CHIESI_BASE}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-[#00788A] hover:underline"
+                className="font-medium text-primary hover:underline"
               >
-                microbiologics.com
+                Chiesi Global Rare Diseases
               </a>{' '}
-              — reference materials with auth-scoped documents: COA is public; SDS and IFU require
-              header login. Contract pricing resolves from NetSuite when signed in.
+              — disease education, treatment guides, clinical resources, advocacy toolkits, and patient
+              support. Results adapt when you sign in as a Healthcare Professional, Patient Advocate,
+              Caregiver, or Rare disease Patient.
             </p>
             <div className="mt-3 rounded-md border border-border/50 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Demo catalog numbers: </span>
-              {DEMO_CATALOG_NUMBERS.map((d, i) => (
-                <span key={d.catalogNumber}>
+              <span className="font-semibold text-foreground">Demo content IDs: </span>
+              {DEMO_CONTENT_IDS.map((d, i) => (
+                <span key={d.contentId}>
                   {i > 0 ? ' · ' : ''}
                   <button
                     type="button"
-                    className="font-mono text-[#00788A] hover:underline"
-                    onClick={() => applyPopular(d.catalogNumber)}
+                    className="font-mono text-primary hover:underline"
+                    onClick={() => applyPopular(d.contentId)}
+                    title={d.label}
                   >
-                    {d.catalogNumber}
+                    {d.contentId}
                   </button>
                 </span>
               ))}
             </div>
           </div>
-          <div className="rounded-md border border-dashed border-[#00788A]/30 bg-[#00788A]/5 px-3 py-2 text-xs text-muted-foreground">
+          <div className="rounded-md border border-dashed border-primary/30 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
             <span className="font-semibold text-foreground">Signed in as:</span> {personaLabel}
-            {!activeDemoUserTaxonomy ? (
-              <span className="mt-0.5 block text-[#00788A]">
-                COA only · Sign in for SDS, IFU, and pricing
-              </span>
-            ) : (
-              <span className="mt-0.5 block text-emerald-700">
-                Full document access · Contract pricing active
-              </span>
-            )}
+            <span className="mt-0.5 block text-primary">{personaSearchHint(activeDemoUserTaxonomy)}</span>
           </div>
         </header>
 
@@ -912,13 +881,13 @@ export const SearchResults: FC<SearchResultsProps> = ({
             <div className="lg:hidden">
               <Collapsible defaultOpen={false}>
                 <CollapsibleTrigger className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-semibold">
-                  Narrow By
+                  Refine Results
                   {activeFilterCount > 0 ? (
                     <Badge variant="secondary" className="rounded-full">
                       {activeFilterCount}
                     </Badge>
                   ) : null}
-                  <ChevronDown className="size-4 text-[#00788A]" />
+                  <ChevronDown className="size-4 text-primary" />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pt-3">
                   <SearchFacetsPanel
@@ -938,11 +907,11 @@ export const SearchResults: FC<SearchResultsProps> = ({
             <div className="flex flex-col gap-3 border-b border-border/60 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 {isSearching ? (
-                  <Loader2 className="size-4 animate-spin text-[#00788A]" aria-hidden />
+                  <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
                 ) : null}
                 <span>
                   <strong className="font-semibold tabular-nums text-foreground">{filtered.length}</strong>{' '}
-                  {filtered.length === 1 ? 'result' : 'results'}
+                  {filtered.length === 1 ? 'resource' : 'resources'}
                 </span>
               </div>
               <label className="flex items-center gap-2 text-sm">
@@ -950,10 +919,11 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortMode)}
-                  className="h-9 rounded-md border border-border bg-background px-2 text-sm outline-none focus:ring-2 focus:ring-[#00788A]/20"
+                  className="h-9 rounded-md border border-border bg-background px-2 text-sm outline-none focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="relevance">Best match</option>
-                  <option value="az">Name A–Z</option>
+                  <option value="recent">Most recent</option>
+                  <option value="az">Title A–Z</option>
                 </select>
               </label>
             </div>
@@ -978,8 +948,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                   >
                     <p className="text-sm text-muted-foreground">
                       Showing {(safeResultsPage - 1) * RESULTS_PAGE_SIZE + 1}–
-                      {Math.min(safeResultsPage * RESULTS_PAGE_SIZE, filtered.length)} of{' '}
-                      {filtered.length}
+                      {Math.min(safeResultsPage * RESULTS_PAGE_SIZE, filtered.length)} of {filtered.length}
                     </p>
                     <div className="flex items-center gap-2">
                       <Button
@@ -1011,7 +980,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <div className="py-12 text-center">
                 <p className="text-sm font-medium text-secondary-foreground">No matches found.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try catalog numbers such as 0681E7, 0659E7, or SK-0ASP61.
+                  Try &ldquo;Filsuvez&rdquo;, &ldquo;epidermolysis bullosa&rdquo;, or &ldquo;patient
+                  support&rdquo;.
                 </p>
                 <Button type="button" variant="secondary" className="mt-4" onClick={clearFilters}>
                   Clear filters
@@ -1035,8 +1005,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 return (
                   <div className="space-y-3 rounded-md border border-border bg-muted/30 p-4 text-sm">
                     <p className="font-semibold">{content.title}</p>
-                    <p>Catalog #: {content.catalogNumber}</p>
-                    <p>Lot: {content.lotNumber}</p>
+                    <p>Content ID: {content.contentId}</p>
+                    <p>Version: {content.version}</p>
                     <p className="text-muted-foreground">{content.summary}</p>
                     <p className="border-t border-border pt-3 text-xs text-muted-foreground">
                       {content.approvedBy}

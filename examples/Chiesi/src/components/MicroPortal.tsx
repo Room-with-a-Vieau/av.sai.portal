@@ -171,61 +171,62 @@ const SHIP_TO_ADDRESSES: ShipToAddress[] = [
 ];
 
 const USER_PROFILES: Record<ProfileKey, UserProfile> = {
-  'laboratory-procurement-manager': {
-    key: 'laboratory-procurement-manager',
-    name: 'Sarah Chen',
-    title: 'Senior Procurement Manager',
-    company: 'Northwell Health — Microbiology Lab',
-    accountType: 'Direct — Hospital Lab',
-    region: 'North America — US East',
-    certifications: ['ISO 17025', 'CAP Accredited'],
-    contractTier: 'Gold',
-    currency: 'USD',
-    contextBanner:
-      'Account context resolved — contract pricing, catalog, and item restrictions updated from NetSuite',
-    mode: 'commerce',
-  },
-  'distributor-rep': {
-    key: 'distributor-rep',
-    name: 'Martin Koehl',
-    title: 'Procurement Lead',
-    company: 'BioSupply Partners GmbH',
-    accountType: 'Authorized Distributor — Tier 1',
-    region: 'EMEA — Germany',
-    certifications: ['ISO 13485'],
-    contractTier: 'Distributor — Tier 1',
-    currency: 'EUR',
-    contextBanner:
-      'Account context resolved — distributor pricing, catalog scope, and ship-to addresses updated from NetSuite',
-    mode: 'commerce',
-  },
-  'regulatory-professional': {
-    key: 'regulatory-professional',
-    name: 'Dr. Anika Patel',
-    title: 'Quality Assurance Director',
-    company: 'Novartis Pharmaceuticals — QC Division',
-    accountType: 'Authenticated — Regulatory Access',
-    region: 'North America — US East',
-    certifications: ['FDA Registered', 'ISO 17025'],
-    contractTier: 'Standard',
+  'healthcare-professional': {
+    key: 'healthcare-professional',
+    name: 'Dr. Elena Marchetti',
+    title: 'Pulmonologist & Rare Disease Specialist',
+    company: 'EB Center of Excellence — Milan',
+    accountType: 'Verified Healthcare Professional',
+    region: 'EMEA — Italy',
+    certifications: ['EB Specialist Network', 'HCP Portal Verified'],
+    contractTier: 'Clinical Access',
     currency: null,
-    documentAccessLabel: 'Document Access: Full Regulatory Library',
+    documentAccessLabel: 'Document Access: Full HCP Library',
     contextBanner:
-      'Account context resolved — document access permissions and regulatory library updated from NetSuite',
+      'HCP profile active — prescribing information, SmPC, and clinical briefs prioritized',
     mode: 'documents',
   },
-  scientist: {
-    key: 'scientist',
-    name: 'Dr. James Whitfield',
-    title: 'Senior Microbiologist',
-    company: 'Mayo Clinic — Clinical Microbiology Lab',
-    accountType: 'Authenticated — Research Access',
-    region: 'North America — US Central',
-    certifications: ['CLIA Certified', 'CAP Accredited'],
-    contractTier: 'Gold',
-    currency: 'USD',
+  'patient-advocate': {
+    key: 'patient-advocate',
+    name: 'Jordan Ellis',
+    title: 'Executive Director',
+    company: 'Rare Voices Coalition',
+    accountType: 'Patient Advocacy Organization',
+    region: 'North America — US',
+    certifications: ['NORD Member Organization'],
+    contractTier: 'Advocacy Partner',
+    currency: null,
+    documentAccessLabel: 'Document Access: Policy & Coalition Resources',
     contextBanner:
-      'Account context resolved — catalog access, search index, and contract pricing updated from NetSuite',
+      'Advocate profile active — policy resources and community programs prioritized',
+    mode: 'documents',
+  },
+  caregiver: {
+    key: 'caregiver',
+    name: 'Maria Santos',
+    title: 'Family Caregiver',
+    company: 'Caregiver — EB patient household',
+    accountType: 'Authenticated Caregiver',
+    region: 'North America — US West',
+    certifications: ['Chiesi Care Rare enrolled'],
+    contractTier: 'Support Access',
+    currency: null,
+    contextBanner:
+      'Caregiver profile active — practical care guides and support program resources prioritized',
+    mode: 'commerce',
+  },
+  'rare-disease-patient': {
+    key: 'rare-disease-patient',
+    name: 'Alex Chen',
+    title: 'Patient Member',
+    company: 'Chiesi Care Rare Patient Portal',
+    accountType: 'Authenticated Patient',
+    region: 'North America — US East',
+    certifications: ['Patient support program enrolled'],
+    contractTier: 'Patient Access',
+    currency: null,
+    contextBanner:
+      'Patient profile active — personalized disease information and support resources prioritized',
     mode: 'search-commerce',
   },
 };
@@ -422,7 +423,7 @@ export const MicroPortalProfileContext = createContext<{
 
 export function MicroPortalProfileProvider({
   children,
-  initialProfileKey = 'laboratory-procurement-manager',
+  initialProfileKey = 'healthcare-professional',
 }: {
   children: React.ReactNode;
   initialProfileKey?: ProfileKey;
@@ -507,7 +508,7 @@ function formatMoney(amount: number, currency: 'USD' | 'EUR'): string {
 function filterProductsForProfile(profileKey: ProfileKey, products: Product[]): Product[] {
   return products.filter((p) => {
     if (p.restricted === 'oem') return false;
-    if (p.restricted === 'emea-distributor-hidden' && profileKey === 'distributor-rep') {
+    if (p.restricted === 'emea-distributor-hidden' && profileKey === 'caregiver') {
       return false;
     }
     return true;
@@ -515,7 +516,7 @@ function filterProductsForProfile(profileKey: ProfileKey, products: Product[]): 
 }
 
 function getUnitPrice(product: Product, profile: UserProfile): number | null {
-  if (profile.key === 'distributor-rep') return product.distributorPrice;
+  if (profile.key === 'caregiver') return product.distributorPrice;
   if (profile.contractTier === 'Gold') return product.goldPrice;
   return product.listPrice;
 }
@@ -534,7 +535,7 @@ function highlightText(text: string, query: string): React.ReactNode {
 }
 
 function mockNetSuiteOrderNumber(profileKey: ProfileKey): string {
-  const prefix = profileKey === 'distributor-rep' ? 'SO-EMEA' : 'SO-US';
+  const prefix = profileKey === 'caregiver' ? 'SO-EMEA' : 'SO-US';
   return `${prefix}-2026-${String(Math.floor(100000 + Math.random() * 900000))}`;
 }
 
@@ -680,7 +681,7 @@ function MicroPortalAuthenticated({
   }, [cartLines, profile.currency]);
 
   const qtyOptions =
-    profileKey === 'distributor-rep' ? DISTRIBUTOR_QTY_OPTIONS : LAB_QTY_OPTIONS;
+    profileKey === 'caregiver' ? DISTRIBUTOR_QTY_OPTIONS : LAB_QTY_OPTIONS;
 
   const addToCart = (product: Product, qty = qtyOptions[0] ?? 1) => {
     setCart((prev) => {
@@ -722,7 +723,7 @@ function MicroPortalAuthenticated({
     const submittedLines = [...cartLines];
     setOrderConfirmation({
       orderNumber,
-      poRef: profileKey === 'distributor-rep' ? distributorPoRef || undefined : undefined,
+      poRef: profileKey === 'caregiver' ? distributorPoRef || undefined : undefined,
       lines: submittedLines,
     });
     appendLog('ORDER_SUBMITTED', `NetSuite ${orderNumber}`);
@@ -972,7 +973,7 @@ function MicroPortalAuthenticated({
                 {profile.currency ? formatMoney(cartTotal, profile.currency) : '—'}
               </span>
             </div>
-            {profileKey === 'distributor-rep' && (
+            {profileKey === 'caregiver' && (
               <div className="space-y-1 pt-2">
                 <Label htmlFor="po-ref">Distributor PO Reference</Label>
                 <Input
@@ -1004,7 +1005,7 @@ function MicroPortalAuthenticated({
               {orderConfirmation?.poRef ? ` · PO Ref: ${orderConfirmation.poRef}` : ''}
             </DialogDescription>
           </DialogHeader>
-          {profileKey === 'distributor-rep' && (orderConfirmation?.lines.length ?? 0) > 0 && (
+          {profileKey === 'caregiver' && (orderConfirmation?.lines.length ?? 0) > 0 && (
             <Button
               variant="outline"
               className="w-full"
@@ -1059,7 +1060,7 @@ function PriceBlock({
   product: Product;
   profile: UserProfile;
 }) {
-  if (profile.key === 'regulatory-professional') return null;
+  if (profile.key === 'patient-advocate') return null;
   const unit = getUnitPrice(product, profile);
   if (product.listPriceLabel) {
     return <p className="text-sm font-medium text-slate-600">{product.listPriceLabel}</p>;
@@ -1159,7 +1160,7 @@ function CommerceView({
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       <div>
-        {profileKey === 'distributor-rep' && (
+        {profileKey === 'caregiver' && (
           <div className="mb-4 max-w-md">
             <Label className="mb-1 block text-sm">Ship-to Address</Label>
             <Select value={shipToId} onValueChange={onShipToChange}>
@@ -1214,7 +1215,7 @@ function CommerceView({
         total={cartTotal}
         onUpdateQty={onUpdateQty}
         onCheckout={onCheckout}
-        onBatchCoa={profileKey === 'distributor-rep' ? onBatchCoa : undefined}
+        onBatchCoa={profileKey === 'caregiver' ? onBatchCoa : undefined}
       />
     </div>
   );
