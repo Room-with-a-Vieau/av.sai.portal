@@ -381,11 +381,11 @@ function DocumentAccessPanel({
 }) {
   if (!productHasAttachedDocuments(item) || !item.documents) return null;
 
-  const rows: { type: DocumentType; available: boolean }[] = [
-    { type: 'COA', available: item.documents.coa },
-    { type: 'SDS', available: item.documents.sds },
-    { type: 'IFU', available: item.documents.ifu },
-  ].filter((r) => r.available);
+  const rows = [
+    { type: 'COA' as DocumentType, available: item.documents.coa },
+    { type: 'SDS' as DocumentType, available: item.documents.sds },
+    { type: 'IFU' as DocumentType, available: item.documents.ifu },
+  ].filter((r): r is { type: DocumentType; available: boolean } => r.available);
 
   if (!rows.length) return null;
 
