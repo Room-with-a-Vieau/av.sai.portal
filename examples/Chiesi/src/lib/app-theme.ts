@@ -10,6 +10,7 @@ export const APP_THEMES = [
   'basspro',
   'threatlocker',
   'microbiologics',
+  'chiesi',
 ] as const;
 export type AppTheme = (typeof APP_THEMES)[number];
 

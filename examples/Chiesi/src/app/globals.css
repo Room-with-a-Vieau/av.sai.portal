@@ -331,6 +331,73 @@ html[data-theme='microbiologics'] .btn.btn-outline:hover {
   color: var(--color-primary-foreground);
 }
 
+/* chiesirarediseases.com: Open Sans body/headings; Caveat script accent; flat magenta CTAs */
+html[data-theme='chiesi'] {
+  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-caveat), 'Caveat', cursive;
+  --font-weight-heading: 700;
+}
+
+html[data-theme='chiesi'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
+  color: #000000;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[data-theme='chiesi'] .btn {
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: none;
+}
+
+html[data-theme='chiesi'] .btn.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-radius: 0;
+  border: none;
+}
+
+html[data-theme='chiesi'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}
+
+html[data-theme='chiesi'] .btn.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 0;
+}
+
+html[data-theme='chiesi'] .btn.btn-secondary:hover {
+  background-color: rgb(166 29 93 / 0.08);
+  color: var(--color-primary);
+}
+
+html[data-theme='chiesi'] section.relative .btn.btn-secondary {
+  color: var(--color-primary-foreground);
+  border-color: #ffffff;
+}
+
+html[data-theme='chiesi'] section.relative .btn.btn-secondary:hover {
+  background-color: rgb(255 255 255 / 0.12);
+  color: var(--color-primary-foreground);
+}
+
+html[data-theme='chiesi'] .btn.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary-foreground);
+  border: 1px solid #ffffff;
+  border-radius: 0;
+}
+
+html[data-theme='chiesi'] .btn.btn-outline:hover {
+  background-color: rgb(255 255 255 / 0.12);
+  color: var(--color-primary-foreground);
+}
+
 /* BUTTONS END */
 
 /* MultiPromo SideBySide: 20% shade on hover/focus only (no column resize / image zoom) */

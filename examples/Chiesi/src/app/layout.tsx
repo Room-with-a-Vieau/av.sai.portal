@@ -2,6 +2,7 @@ import './globals.css';
 
 import {
   Barlow_Condensed,
+  Caveat,
   Inter,
   Montserrat,
   Nunito_Sans,
@@ -65,6 +66,14 @@ const montserrat = Montserrat({
   display: 'swap',
 });
 
+/** Chiesi Global Rare Diseases — script accent for hero callouts (chiesirarediseases.com) */
+const caveat = Caveat({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-caveat',
+  weight: ['600', '700'],
+  display: 'swap',
+});
+
 const fontVariables = [
   inter.variable,
   nunitoSans.variable,
@@ -73,6 +82,7 @@ const fontVariables = [
   openSans.variable,
   robotoCondensed.variable,
   montserrat.variable,
+  caveat.variable,
 ].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -294,13 +294,14 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | microbiologics"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | basspro | threatlocker | microbiologics | chiesi"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
  * basspro (basspro.com): deep red primary (#a02621), golden yellow accent (#f2c029), forest green in gradients (#004b23).
  * threatlocker (threatlocker.com): navy primary (#0b223f), sky CTA accent (#3997d4), light section surfaces (#f4f4f4).
  * microbiologics (microbiologics.com): hero navy (#10112d), brand blue CTAs (#273792), teal highlights (#6dcce1), virology blue (#006ba2).
+ * chiesi (chiesirarediseases.com): magenta CTAs (#a61d5d), mauve hero accent (#9d6189), deep teal body (#004b4d), product blue (#0072ce).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -518,5 +519,52 @@
 }
 
 [data-theme='microbiologics'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='chiesi'] {
+  --background-image-gradient: linear-gradient(135deg, #9d6189 0%, #a61d5d 45%, #004b4d 100%);
+  --background-image-gradient-secondary: linear-gradient(
+    90deg,
+    #9d6189 0%,
+    #a61d5d 50%,
+    #004b4d 100%
+  );
+  --border-radius-default: 0;
+  --color-background: #ffffff;
+  --color-foreground: #333333;
+  --color-card: #ffffff;
+  --color-card-foreground: #000000;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #333333;
+  --color-primary: #a61d5d;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #8e184f;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #333333;
+  --color-secondary-hover: #ebebeb;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #5c5c5c;
+  --color-accent: #9d6189;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d1d1d1;
+  --color-input: #d1d1d1;
+  --color-ring: #a61d5d;
+  --color-tertiary-foreground: #004b4d;
+  --color-tertiary-hover: #ebebeb;
+  --color-tertiary: #f5f5f5;
+  --color-dark-foreground: #004b4d;
+  --color-dark-hover: #ebebeb;
+  --color-dark: #f5f5f5;
+  --color-light: #ffffff;
+  --color-light-hover: #f5f5f5;
+  --color-light-foreground: #333333;
+  --color-overlay: rgb(166 29 93 / 0.45);
+}
+
+[data-theme='chiesi'] .bg-primary {
   color: var(--color-primary-foreground);
 }
