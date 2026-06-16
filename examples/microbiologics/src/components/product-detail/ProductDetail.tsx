@@ -281,11 +281,11 @@ function DocumentationTab({
   }
 
   const docItem = toDocumentSearchItem(product);
-  const rows: { type: DocumentType; available: boolean }[] = [
-    { type: 'COA', available: product.documents.coa },
-    { type: 'SDS', available: product.documents.sds },
-    { type: 'IFU', available: product.documents.ifu },
-  ].filter((r) => r.available);
+  const rows = [
+    { type: 'COA' as DocumentType, available: product.documents.coa },
+    { type: 'SDS' as DocumentType, available: product.documents.sds },
+    { type: 'IFU' as DocumentType, available: product.documents.ifu },
+  ].filter((r): r is { type: DocumentType; available: boolean } => r.available);
 
   return (
     <div className="space-y-4">
