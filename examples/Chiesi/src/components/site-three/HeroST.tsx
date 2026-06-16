@@ -158,7 +158,10 @@ function heroEyebrowOverPhotoClass(darkImage: boolean): string {
 }
 
 function heroTitleOverPhotoClass(darkImage: boolean): string {
-  return cn(HERO_TITLE_CLASS, darkImage && HERO_TEXT_ON_DARK_IMAGE_CLASS);
+  return cn(
+    HERO_TITLE_CLASS,
+    darkImage ? HERO_TEXT_ON_DARK_IMAGE_CLASS : 'text-primary'
+  );
 }
 
 export const Default = (props: PageHeaderSTProps) => {

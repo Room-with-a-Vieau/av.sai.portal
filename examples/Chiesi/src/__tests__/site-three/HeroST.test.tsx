@@ -120,6 +120,8 @@ describe('HeroST', () => {
       const headings = container.querySelectorAll('h1');
       expect(headings[0]).not.toHaveClass('text-primary-foreground');
       expect(headings[1]).not.toHaveClass('text-primary-foreground');
+      expect(headings[0]).toHaveClass('text-primary');
+      expect(headings[1]).toHaveClass('text-primary');
     });
   });
 

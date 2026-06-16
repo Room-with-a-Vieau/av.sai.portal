@@ -345,6 +345,11 @@ html[data-theme='chiesi'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6
   text-transform: none;
 }
 
+/* HeroST eyebrow/title use text-primary on light hero imagery */
+html[data-theme='chiesi'] section[data-class-change] :is(h1, h2).text-primary {
+  color: var(--color-primary);
+}
+
 html[data-theme='chiesi'] .btn {
   border-radius: 0;
   font-family: var(--font-body);
