@@ -173,13 +173,20 @@ export const resourceFormats = Object.keys(searchFacetLabels.resourceFormat) as 
 export const contentLanguages = Object.keys(searchFacetLabels.contentLanguage) as ContentLanguage[];
 export const accessTiers = Object.keys(searchFacetLabels.accessTier) as AccessTier[];
 
+function unsplashPhoto(path: string): string {
+  return `https://images.unsplash.com/${path}?auto=format&fit=crop&w=400&h=300&q=80`;
+}
+
 const CHIESI_IMG = {
-  hero: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
-  patient: 'https://images.unsplash.com/photo-1584515933487-779824d29309?w=400&h=300&fit=crop',
-  research: 'https://images.unsplash.com/photo-1532187863486-abf9db5811ce?w=400&h=300&fit=crop',
-  advocacy: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop',
-  product: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop',
-  caregiver: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop',
+  hero: unsplashPhoto('photo-1576091160399-112ba8d25d1d'),
+  patient: unsplashPhoto('photo-1584515933487-779824d29309'),
+  /** Clinical / HCP resources — pulmonary & lab imagery */
+  research: unsplashPhoto('photo-1576091160550-2173dba999ef'),
+  advocacy: unsplashPhoto('photo-1529156069898-49953e39b3ac'),
+  product: unsplashPhoto('photo-1584308666744-24d5c474f2ae'),
+  caregiver: unsplashPhoto('photo-1519494026892-80bbd2d6fd0d'),
+  /** Alpha-1 / respiratory clinical overview */
+  aatd: unsplashPhoto('photo-1576091160550-2173dba999ef'),
 };
 
 export function getDefaultCardImage(): string {
@@ -624,7 +631,7 @@ export const searchCatalog: SearchResultItem[] = [
     keyHighlights: ['Diagnostic algorithm', 'Augmentation therapy criteria', 'Liver involvement screening'],
     lastUpdated: '2025-09-28',
     readTimeMinutes: 16,
-    imageSrc: CHIESI_IMG.research,
+    imageSrc: CHIESI_IMG.aatd,
     documents: DOC_CLINICAL,
     matchTerms: ['alpha-1', 'aatd', 'antitrypsin', 'copd', 'serpina1', 'augmentation'],
     demoUserTaxonomy: 'Healthcare Professional',
