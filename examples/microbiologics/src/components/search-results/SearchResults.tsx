@@ -90,6 +90,7 @@ export type SearchResultsProps = {
 type SortMode = 'relevance' | 'az';
 
 const TEAL = '#00788A';
+const DEMO_PRODUCT_DETAIL_URL = 'https://microbiologics.vercel.app/products/0659E7';
 
 type FacetSelections = {
   biosafety: Set<BiosafetyLevel>;
@@ -514,7 +515,7 @@ function ResultRow({
   return (
     <article className="flex flex-col gap-4 border-b border-border/60 py-5 sm:flex-row sm:items-start">
       <a
-        href={item.href}
+        href={DEMO_PRODUCT_DETAIL_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border border-border/50 bg-muted sm:h-28 sm:w-28"
@@ -535,7 +536,7 @@ function ResultRow({
           <span className="text-muted-foreground">Catalog No. {item.catalogNumber}</span>
         </p>
         <a
-          href={item.href}
+          href={DEMO_PRODUCT_DETAIL_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-1 block text-base font-semibold leading-snug text-foreground hover:text-[#00788A]"
@@ -660,7 +661,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
       });
       return;
     }
-    setPreviewDoc({ item, docType });
+    window.open(DEMO_PRODUCT_DETAIL_URL, '_blank', 'noopener,noreferrer');
   }, [activeDemoUserTaxonomy]);
 
   const makeToggle = useCallback(
