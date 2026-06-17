@@ -29,6 +29,23 @@ jest.mock('sonner', () => ({
   toast: { success: jest.fn() },
 }));
 
+jest.mock('@sitecore-content-sdk/nextjs', () => ({
+  Text: ({ field, tag: Tag = 'span', className }: { field?: { value?: string }; tag?: string; className?: string }) => (
+    <Tag className={className}>{field?.value}</Tag>
+  ),
+  useSitecore: jest.fn(() => ({
+    page: {
+      siteName: 'microbiologics',
+      mode: { isEditing: false, isPreview: false },
+      layout: { sitecore: { route: { name: 'Test', itemLanguage: 'en' } } },
+    },
+  })),
+}));
+
+jest.mock('@sitecore-content-sdk/events', () => ({
+  event: jest.fn(() => Promise.resolve(null)),
+}));
+
 const baseProps = {
   params: {},
   fields: {

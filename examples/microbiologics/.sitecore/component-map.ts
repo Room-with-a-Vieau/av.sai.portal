@@ -119,6 +119,7 @@ import * as ProductListingCarddev from 'src/components/product-listing/ProductLi
 import * as ProductListing from 'src/components/product-listing/ProductListing';
 import * as productlistingprops from 'src/components/product-listing/product-listing.props';
 import * as productlistingdictionary from 'src/components/product-listing/product-listing.dictionary';
+import * as useAddToCartEvent from 'src/components/product-detail/useAddToCartEvent';
 import * as ProductDetail from 'src/components/product-detail/ProductDetail';
 import * as productdetailtypes from 'src/components/product-detail/product-detail.types';
 import * as productdetailprops from 'src/components/product-detail/product-detail.props';
@@ -425,6 +426,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ProductListingCard', { ...ProductListingCarddev }],
   ['ProductListing', { ...ProductListing, componentType: 'client' }],
   ['product-listing', { ...productlistingprops, ...productlistingdictionary }],
+  ['useAddToCartEvent', { ...useAddToCartEvent, componentType: 'client' }],
   ['ProductDetail', { ...ProductDetail, componentType: 'client' }],
   ['product-detail', { ...productdetailtypes, ...productdetailprops, ...productdetailfields, ...productdetaildata }],
   ['ProductCarousel', { ...ProductCarousel, componentType: 'client' }],

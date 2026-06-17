@@ -58,6 +58,7 @@ import {
 } from './product-detail.fields';
 import type { ProductDetailProps } from './product-detail.props';
 import type { NetSuiteProductRecord } from './product-detail.types';
+import { useAddToCartEvent } from './useAddToCartEvent';
 
 const TEAL = '#00788A';
 
@@ -189,9 +190,11 @@ function ProductImageGallery({ product }: { product: NetSuiteProductRecord }) {
 function PriceBlock({
   product,
   user,
+  onAddToCart,
 }: {
   product: NetSuiteProductRecord;
   user: DemoUserTaxonomy | null;
+  onAddToCart: () => void;
 }) {
   const display = resolveProductPriceDisplay(product, user);
 
@@ -226,7 +229,12 @@ function PriceBlock({
           {formatPrice(display.listAmount, display.currency)}
         </span>
       ) : null}
-      <Button type="button" size="sm" className="ml-2 bg-[#00788A] hover:bg-[#006070]">
+      <Button
+        type="button"
+        size="sm"
+        className="ml-2 bg-[#00788A] hover:bg-[#006070]"
+        onClick={onAddToCart}
+      >
         Add to Cart
       </Button>
     </div>
@@ -349,7 +357,7 @@ function DocumentationTab({
   );
 }
 
-export const Default: FC<ProductDetailProps> = ({ fields, page, params }) => {
+export const Default: FC<ProductDetailProps> = ({ fields, page, params, rendering }) => {
   const { isEditing } = page.mode;
   const catalogNumber = resolveCatalogNumber(fields);
   const catalogNumberField = resolveCatalogNumberField(fields);
@@ -359,6 +367,12 @@ export const Default: FC<ProductDetailProps> = ({ fields, page, params }) => {
   );
   const user = useDemoTaxonomy();
   const [previewDoc, setPreviewDoc] = useState<DocumentType | null>(null);
+  const sendAddToCartEvent = useAddToCartEvent({ uid: rendering?.uid });
+
+  const handleAddToCart = useCallback(() => {
+    if (!product) return;
+    sendAddToCartEvent(product, user);
+  }, [product, user, sendAddToCartEvent]);
 
   const handleDownload = useCallback(
     (docType: DocumentType) => {
@@ -429,7 +443,7 @@ export const Default: FC<ProductDetailProps> = ({ fields, page, params }) => {
                 {product.productName}
               </h1>
               <div className="mt-4">
-                <PriceBlock product={product} user={user} />
+                <PriceBlock product={product} user={user} onAddToCart={handleAddToCart} />
               </div>
               <p className="mt-3 flex items-center gap-1.5 text-sm font-medium text-emerald-700">
                 <Check className="h-4 w-4" aria-hidden />
