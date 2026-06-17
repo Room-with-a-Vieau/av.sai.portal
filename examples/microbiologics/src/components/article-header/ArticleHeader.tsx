@@ -21,7 +21,7 @@ import { Default as Icon } from '@/components/icon/Icon';
 import { StructuredData } from '@/components/structured-data/StructuredData';
 import { generateArticleSchema, generatePersonSchema } from '@/lib/structured-data/schema';
 import { normalizeImageFieldSrc, unwrapImageField } from '@/lib/sitecore-image-field';
-import { resolveArticleHeaderFields } from './article-header.fields';
+import { resolveArticleHeaderFields, resolveArticleHeaderPageFields } from './article-header.fields';
 import { ArticleHeaderCard } from './ArticleHeaderCard.dev';
 
 export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields, page }) => {
@@ -390,7 +390,30 @@ export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields, 
   return <NoDataFallback componentName="ArticleHeader" />;
 };
 
-/** Microbiologics card layout — hero title overlay + CTA / summary band. */
+/**
+ * Card variant — datasource: imageRequired, Eyebrow, cta, summary.
+ * Page title from externalFields.pageHeaderTitle (or layout externalFields).
+ */
 export const Card: React.FC<ArticleHeaderProps> = (props) => {
-  return <ArticleHeaderCard {...props} />;
+  const { page, fields } = props;
+  const isPageEditing = page.mode.isEditing;
+  const { imageRequired, eyebrowOptional, cta, summary } = resolveArticleHeaderFields(
+    fields,
+    isPageEditing,
+  );
+  const { pageHeaderTitle } = resolveArticleHeaderPageFields(props, isPageEditing);
+
+  return (
+    <ArticleHeaderCard
+      {...props}
+      isPageEditing={isPageEditing}
+      cardFields={{
+        imageRequired,
+        eyebrowOptional,
+        cta,
+        summary,
+        pageHeaderTitle,
+      }}
+    />
+  );
 };

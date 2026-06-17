@@ -1,6 +1,6 @@
 import type { ImageField } from '@sitecore-content-sdk/nextjs';
 
-import { resolveArticleHeaderFields } from '@/components/article-header/article-header.fields';
+import { resolveArticleHeaderFields, resolveArticleHeaderPageFields } from '@/components/article-header/article-header.fields';
 
 const mockImage: ImageField = { value: { src: '/hero.jpg', alt: 'Hero' } } as ImageField;
 
@@ -76,5 +76,50 @@ describe('resolveArticleHeaderFields', () => {
     });
     expect(resolved.cta).toEqual({ value: 'Advancing Life-Saving Therapies' });
     expect(resolved.summary).toEqual({ value: 'Summary paragraph text.' });
+  });
+
+  it('returns empty datasource fields in editing mode for inline authoring', () => {
+    const resolved = resolveArticleHeaderFields(
+      {
+        data: {
+          datasource: {
+            cta: { value: '' },
+            summary: { value: '' },
+          },
+          externalFields: {},
+        },
+      },
+      true,
+    );
+    expect(resolved.cta).toEqual({ value: '' });
+    expect(resolved.summary).toEqual({ value: '' });
+  });
+});
+
+describe('resolveArticleHeaderPageFields', () => {
+  it('reads pageHeaderTitle from externalFields prop', () => {
+    const resolved = resolveArticleHeaderPageFields({
+      fields: {},
+      externalFields: {
+        pageHeaderTitle: { value: 'Article Title' },
+      },
+    });
+    expect(resolved.pageHeaderTitle).toEqual({ value: 'Article Title' });
+  });
+
+  it('reads pageHeaderTitle from fields.data.externalFields', () => {
+    const resolved = resolveArticleHeaderPageFields({
+      fields: {
+        data: {
+          externalFields: {
+            pageHeaderTitle: { jsonValue: { value: 'From Layout' } },
+          },
+        },
+      },
+      externalFields: {
+        pageHeaderTitle: { value: '' },
+      },
+    });
+    expect(resolved.pageHeaderTitle).toEqual({ value: 'From Layout' });
   });
 });

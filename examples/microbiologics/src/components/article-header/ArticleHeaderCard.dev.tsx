@@ -1,24 +1,41 @@
 'use client';
 
 import type React from 'react';
+import type { Field, ImageField } from '@sitecore-content-sdk/nextjs';
 import { Text } from '@sitecore-content-sdk/nextjs';
 
 import { Default as ImageWrapper } from '@/components/image/ImageWrapper.dev';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { JsonWrappedImageField } from '@/lib/sitecore-image-field';
 import { normalizeImageFieldSrc, unwrapImageField } from '@/lib/sitecore-image-field';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
-import { resolveArticleHeaderFields } from './article-header.fields';
 import type { ArticleHeaderProps } from './article-header.props';
 
 const TEAL = '#00788A';
 const CARD_BG = '#1c2536';
 
-export const ArticleHeaderCard: React.FC<ArticleHeaderProps> = ({ fields, externalFields, page }) => {
-  const { imageRequired, cta, summary } = resolveArticleHeaderFields(fields);
+export type ArticleHeaderCardResolvedFields = {
+  imageRequired?: ImageField | JsonWrappedImageField;
+  eyebrowOptional?: Field<string>;
+  cta?: Field<string>;
+  summary?: Field<string>;
+  pageHeaderTitle?: Field<string>;
+};
+
+export type ArticleHeaderCardProps = ArticleHeaderProps & {
+  isPageEditing: boolean;
+  cardFields: ArticleHeaderCardResolvedFields;
+};
+
+export const ArticleHeaderCard: React.FC<ArticleHeaderCardProps> = ({
+  fields,
+  isPageEditing,
+  cardFields,
+}) => {
+  const { imageRequired, eyebrowOptional, cta, summary, pageHeaderTitle } = cardFields;
   const heroImage = normalizeImageFieldSrc(unwrapImageField(imageRequired));
-  const { pageHeaderTitle } = externalFields || {};
-  const isPageEditing = page.mode.isEditing;
   const titleText = pageHeaderTitle?.value || 'Article header image';
 
   if (!fields) {
@@ -26,31 +43,39 @@ export const ArticleHeaderCard: React.FC<ArticleHeaderProps> = ({ fields, extern
   }
 
   return (
-    <header className={cn('@container article-header article-header-card relative w-full')} data-variant="card">
-      <div className="relative min-h-[280px] w-full overflow-hidden @md:min-h-[360px] @lg:min-h-[420px]">
+    <header
+      className={cn('@container article-header-card relative mb-0 w-full overflow-hidden')}
+      data-variant="card"
+      style={{ backgroundColor: CARD_BG }}
+    >
+      <div className="relative h-[320px] w-full @md:h-[400px] @lg:h-[480px]">
         <ImageWrapper
           image={heroImage}
           alt={titleText}
-          className="h-full w-full object-cover"
-          wrapperClass="relative h-full min-h-[280px] w-full @md:min-h-[360px] @lg:min-h-[420px]"
-          width={1920}
-          height={720}
-          priority
+          fill
+          className="object-cover object-center"
+          wrapperClass="absolute inset-0 h-full w-full"
           sizes="100vw"
+          priority
         />
         <div
           className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"
           aria-hidden
         />
-        {(pageHeaderTitle?.value || isPageEditing) && (
-          <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-8 pt-16 @md:px-10 @md:pb-10 @lg:px-12 @lg:pb-12">
+        <div className="absolute inset-x-0 bottom-0 z-10 mx-auto max-w-7xl px-6 pb-8 pt-12 @md:px-10 @md:pb-10 @lg:px-12 @lg:pb-12">
+          {(eyebrowOptional?.value || isPageEditing) && eyebrowOptional ? (
+            <Badge className="mb-4 inline-block bg-[#00788A] text-xs font-medium uppercase tracking-wide text-white hover:bg-[#00788A]">
+              <Text field={eyebrowOptional} />
+            </Badge>
+          ) : null}
+          {(pageHeaderTitle?.value || isPageEditing) && pageHeaderTitle ? (
             <Text
               tag="h1"
               field={pageHeaderTitle}
               className="font-heading max-w-4xl text-pretty text-3xl font-bold leading-tight tracking-tight text-white @md:text-4xl @lg:text-5xl"
             />
-          </div>
-        )}
+          ) : null}
+        </div>
       </div>
 
       <div className="w-full text-white" style={{ backgroundColor: CARD_BG }}>
