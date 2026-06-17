@@ -39,7 +39,7 @@ export function useAddToCartEvent({ uid }: { uid?: string }) {
           productFormat: product.generalInformation.productFormat,
           quantity: 1,
           unitPrice: unitPrice ?? 0,
-          listPrice: product.pricing.listPriceUsd ?? null,
+          listPrice: product.pricing.listPriceUsd ?? 0,
           stockStatus: product.stockStatus,
           interactionSource: 'product-detail',
           componentId: uid ?? '',
