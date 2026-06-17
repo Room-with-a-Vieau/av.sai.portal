@@ -7,6 +7,7 @@ import {
   SingleColumn as MultiPromoSingleColumn,
   SideBySide as MultiPromoSideBySide,
   CardCarousel as MultiPromoCardCarousel,
+  Card as MultiPromoCard,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -382,16 +383,16 @@ describe('MultiPromo', () => {
     it('marks the first card as active by default', () => {
       render(<MultiPromoCardCarousel {...mockProps} />);
       const articles = screen.getAllByRole('article');
-      expect(articles[0]).toHaveAttribute('aria-pressed', 'true');
-      expect(articles[1]).toHaveAttribute('aria-pressed', 'false');
+      expect(articles[0]).toHaveAttribute('aria-current', 'true');
+      expect(articles[1]).not.toHaveAttribute('aria-current');
     });
 
     it('activates a card on click', () => {
       render(<MultiPromoCardCarousel {...mockProps} />);
       const articles = screen.getAllByRole('article');
       fireEvent.click(articles[1]);
-      expect(articles[1]).toHaveAttribute('aria-pressed', 'true');
-      expect(articles[0]).toHaveAttribute('aria-pressed', 'false');
+      expect(articles[1]).toHaveAttribute('aria-current', 'true');
+      expect(articles[0]).not.toHaveAttribute('aria-current');
     });
 
     it('renders carousel navigation buttons', () => {
@@ -403,6 +404,44 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoCardCarousel {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('Card variant', () => {
+    it('renders promo heading and description in white text panel', () => {
+      render(<MultiPromoCard {...mockProps} />);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+    });
+
+    it('renders datasource title as eyebrow', () => {
+      render(<MultiPromoCard {...mockProps} />);
+      expect(screen.getAllByText('Featured Products').length).toBeGreaterThan(0);
+    });
+
+    it('renders full-bleed promo image', () => {
+      render(<MultiPromoCard {...mockProps} />);
+      expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
+    });
+
+    it('sets data-multipromo-variant on the section', () => {
+      const { container } = render(<MultiPromoCard {...mockProps} />);
+      expect(container.querySelector('[data-multipromo-variant="card"]')).toBeInTheDocument();
+    });
+
+    it('renders carousel navigation when multiple promos exist', () => {
+      render(<MultiPromoCard {...mockProps} />);
+      expect(screen.getByRole('button', { name: /previous promo/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /next promo/i })).toBeInTheDocument();
+      expect(screen.getAllByRole('tab')).toHaveLength(2);
+      expect(screen.getByRole('tab', { name: /go to promo 1/i })).toHaveClass('bg-white');
+      expect(screen.getByRole('tab', { name: /go to promo 2/i })).toHaveClass('bg-transparent');
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoCard {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });
