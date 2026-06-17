@@ -63,6 +63,7 @@ import * as HeaderST from 'src/components/site-three/HeaderST';
 import * as FooterST from 'src/components/site-three/FooterST';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
 import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
+import * as useIdentifyDemoPersona from 'src/components/site-three/non-sitecore/useIdentifyDemoPersona';
 import * as SearchBox from 'src/components/site-three/non-sitecore/SearchBox';
 import * as MiniCart from 'src/components/site-three/non-sitecore/MiniCart';
 import * as DemoUserSwitcher from 'src/components/site-three/non-sitecore/DemoUserSwitcher';
@@ -373,6 +374,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['FooterST', { ...FooterST }],
   ['FeatureBanner', { ...FeatureBanner, componentType: 'client' }],
   ['AccordionBlock', { ...AccordionBlock, componentType: 'client' }],
+  ['useIdentifyDemoPersona', { ...useIdentifyDemoPersona, componentType: 'client' }],
   ['SearchBox', { ...SearchBox, componentType: 'client' }],
   ['MiniCart', { ...MiniCart, componentType: 'client' }],
   ['DemoUserSwitcher', { ...DemoUserSwitcher, componentType: 'client' }],

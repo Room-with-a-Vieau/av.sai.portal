@@ -31,6 +31,7 @@ import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
 import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
+import * as useIdentifyDemoPersona from 'src/components/site-three/non-sitecore/useIdentifyDemoPersona';
 import * as SearchBox from 'src/components/site-three/non-sitecore/SearchBox';
 import * as MiniCart from 'src/components/site-three/non-sitecore/MiniCart';
 import * as DemoUserSwitcher from 'src/components/site-three/non-sitecore/DemoUserSwitcher';
@@ -171,6 +172,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['HeroST', { ...HeroST }],
   ['FeatureBanner', { ...FeatureBanner }],
   ['AccordionBlock', { ...AccordionBlock }],
+  ['useIdentifyDemoPersona', { ...useIdentifyDemoPersona }],
   ['SearchBox', { ...SearchBox }],
   ['MiniCart', { ...MiniCart }],
   ['DemoUserSwitcher', { ...DemoUserSwitcher }],

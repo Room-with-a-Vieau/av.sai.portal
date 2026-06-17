@@ -19,6 +19,45 @@ export const DEMO_USER_TAXONOMIES = [
 
 export type DemoUserTaxonomy = (typeof DEMO_USER_TAXONOMIES)[number];
 
+/** CDP identity attributes for each demo persona (DemoUserSwitcher). */
+export type DemoPersonaIdentity = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  title: string;
+};
+
+export const DEMO_PERSONA_IDENTITY: Record<DemoUserTaxonomy, DemoPersonaIdentity> = {
+  'Laboratory Procurement Manager': {
+    firstName: 'Linda',
+    lastName: 'Brooks',
+    email: 'lbm@geneticslab.com',
+    title: 'Laboratory Procurement Manager',
+  },
+  'Distributor Rep': {
+    firstName: 'Daniel',
+    lastName: 'Reyes',
+    email: 'dre@molecularsupply.com',
+    title: 'Distributor Rep',
+  },
+  'Regulatory Professional': {
+    firstName: 'Rebecca',
+    lastName: 'Porter',
+    email: 'rporter@compliancepartners.com',
+    title: 'Regulatory Professional',
+  },
+  Scientist: {
+    firstName: 'Julia',
+    lastName: 'Hart',
+    email: 'jhart@microbiologic-research.com',
+    title: 'Scientist',
+  },
+};
+
+export function getDemoPersonaIdentity(taxonomy: DemoUserTaxonomy): DemoPersonaIdentity {
+  return DEMO_PERSONA_IDENTITY[taxonomy];
+}
+
 export const MICRO_PORTAL_PROFILE_KEYS = [
   'laboratory-procurement-manager',
   'distributor-rep',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   Select,
@@ -19,11 +19,26 @@ import {
   TAXONOMY_TO_PROFILE_KEY,
   dispatchDemoLogout,
   dispatchProfileChange,
+  parseDemoUserTaxonomy,
+  type DemoUserTaxonomy,
 } from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
 
+import { useIdentifyDemoPersona } from './useIdentifyDemoPersona';
+
 export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
   const [taxonomy, setTaxonomy] = useState('');
+  const identifyDemoPersona = useIdentifyDemoPersona();
+
+  const identifyIfPersona = useCallback(
+    (value: string) => {
+      const persona = parseDemoUserTaxonomy(value);
+      if (persona) {
+        identifyDemoPersona(persona);
+      }
+    },
+    [identifyDemoPersona],
+  );
 
   useEffect(() => {
     const readTaxonomy = () => {
@@ -33,6 +48,12 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
     window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
     return () => window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);
   }, []);
+
+  useEffect(() => {
+    if (taxonomy) {
+      identifyIfPersona(taxonomy);
+    }
+  }, [taxonomy, identifyIfPersona]);
 
   const isAuthenticated = Boolean(taxonomy);
 
@@ -55,9 +76,9 @@ export function DemoUserSwitcher({ triggerClassName }: { triggerClassName?: stri
         detail: { taxonomy: value, authenticated: true },
       })
     );
-    const profileKey = TAXONOMY_TO_PROFILE_KEY[value as keyof typeof TAXONOMY_TO_PROFILE_KEY];
+    const profileKey = TAXONOMY_TO_PROFILE_KEY[value as DemoUserTaxonomy];
     if (profileKey) {
-      dispatchProfileChange(profileKey, value as (typeof DEMO_USER_OPTIONS)[number]['taxonomy']);
+      dispatchProfileChange(profileKey, value as DemoUserTaxonomy);
     }
   };
 
