@@ -103,14 +103,20 @@ export function resolveArticleHeaderFields(rawFields: unknown, isEditing = false
   return merged;
 }
 
+function asFieldBag(value: unknown): Record<string, unknown> | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  return value as Record<string, unknown>;
+}
+
 /** Page-level fields (title) from externalFields prop or layout `fields.data.externalFields`. */
 export function resolveArticleHeaderPageFields(
   props: Pick<ArticleHeaderProps, 'fields' | 'externalFields'>,
   isEditing = false,
 ): { pageHeaderTitle?: Field<string> } {
   const bags: Record<string, unknown>[] = [];
-  if (props.externalFields) {
-    bags.push(props.externalFields as Record<string, unknown>);
+  const externalBag = asFieldBag(props.externalFields);
+  if (externalBag) {
+    bags.push(externalBag);
   }
   if (hasLayoutData(props.fields) && props.fields.data.externalFields) {
     bags.push(props.fields.data.externalFields);
