@@ -74,8 +74,8 @@ describe('HomeDetail', () => {
       Name: { value: 'Sandbrock Ranch' },
       Address: { value: '2005 Calumet Drive, Aubrey, TX 76227' },
       'Community Type': { value: 'North' },
-      'price range': { value: '$412s' },
-      'square footage': { value: '1875-3586' },
+      'price range': { value: '459520 - 698999' },
+      'square footage range': { value: '2450 - 5850' },
       Overview: {
         value: '<p>Welcome to Sandbrock Ranch.</p><ul><li>Carriage House amenity center</li></ul>',
       },
@@ -106,8 +106,8 @@ describe('HomeDetail', () => {
 
   it('renders community stats', () => {
     render(<HomeDetailDefault {...mockProps} />);
-    expect(screen.getByText('$412s')).toBeInTheDocument();
-    expect(screen.getByText('1875-3586')).toBeInTheDocument();
+    expect(screen.getByText('$459,520 - $698,999')).toBeInTheDocument();
+    expect(screen.getByText('2450 - 5850')).toBeInTheDocument();
   });
 
   it('renders overview content', () => {

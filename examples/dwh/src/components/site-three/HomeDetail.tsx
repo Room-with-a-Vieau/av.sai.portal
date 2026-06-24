@@ -36,7 +36,7 @@ interface HomeDetailFields {
   ammenities?: Item[];
   floorplan?: ImageField;
   'price range'?: Field<string>;
-  'square footage'?: Field<string>;
+  'square footage range'?: Field<string>;
   Overview?: RichTextField | Field<string>;
 }
 
@@ -101,6 +101,24 @@ function getImageSrc(image?: ImageField): string | undefined {
   return image?.value?.src;
 }
 
+/**
+ * Formats a raw price-range string (e.g. "459520 - 698999") into a currency range
+ * (e.g. "$459,520 - $698,999"). Non-numeric segments are returned unchanged.
+ */
+function formatPriceRange(value?: string): string {
+  if (!value?.trim()) return '';
+
+  return value
+    .split('-')
+    .map((part) => {
+      const trimmed = part.trim();
+      const digits = trimmed.replace(/[^0-9]/g, '');
+      if (!digits) return trimmed;
+      return `$${Number(digits).toLocaleString('en-US')}`;
+    })
+    .join(' - ');
+}
+
 function getDirectionsUrl(address?: Field<string>): string {
   if (!address?.value?.trim()) return '#';
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address.value)}`;
@@ -121,12 +139,13 @@ export const Default = (props: HomeDetailProps) => {
     Image3,
     ammenities,
     'price range': priceRange,
-    'square footage': squareFootage,
+    'square footage range': squareFootage,
     Overview,
   } = fields;
 
   const communityTypes = getCommunityTypeLabels(communityType);
   const headerMeta = formatHeaderMeta(Address, communityTypes);
+  const formattedPriceRange = formatPriceRange(priceRange?.value);
 
   const carouselImages = useMemo(
     () =>
@@ -224,7 +243,7 @@ export const Default = (props: HomeDetailProps) => {
               <div>
                 <p className="mb-1 text-xs uppercase tracking-wide text-[#6f6a64]">From the</p>
                 <p className="text-lg font-medium text-[#2f2f2d]">
-                  <ContentSdkText field={priceRange} />
+                  {isEditing ? <ContentSdkText field={priceRange} /> : formattedPriceRange}
                 </p>
               </div>
               <div>
