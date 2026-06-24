@@ -27,6 +27,7 @@ import * as MultiPromo from 'src/components/site-three/MultiPromo';
 import * as MobileMenuWrapper from 'src/components/site-three/MobileMenuWrapper';
 import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrapper';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
+import * as HomeDetail from 'src/components/site-three/HomeDetail';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as HeroSearchBar from 'src/components/site-three/HeroSearchBar';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
@@ -164,6 +165,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MobileMenuWrapper', { ...MobileMenuWrapper }],
   ['MegaMenuItemWrapper', { ...MegaMenuItemWrapper }],
   ['ImageCarousel', { ...ImageCarousel }],
+  ['HomeDetail', { ...HomeDetail }],
   ['HeroST', { ...HeroST }],
   ['HeroSearchBar', { ...HeroSearchBar }],
   ['FeatureBanner', { ...FeatureBanner }],

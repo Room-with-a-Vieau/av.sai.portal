@@ -57,6 +57,7 @@ import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrap
 import * as MegaMenuItem from 'src/components/site-three/MegaMenuItem';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as ImageBanner from 'src/components/site-three/ImageBanner';
+import * as HomeDetail from 'src/components/site-three/HomeDetail';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as HeroSearchBar from 'src/components/site-three/HeroSearchBar';
 import * as HeaderST from 'src/components/site-three/HeaderST';
@@ -358,6 +359,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MegaMenuItem', { ...MegaMenuItem }],
   ['ImageCarousel', { ...ImageCarousel, componentType: 'client' }],
   ['ImageBanner', { ...ImageBanner }],
+  ['HomeDetail', { ...HomeDetail, componentType: 'client' }],
   ['HeroST', { ...HeroST, componentType: 'client' }],
   ['HeroSearchBar', { ...HeroSearchBar, componentType: 'client' }],
   ['HeaderST', { ...HeaderST }],
