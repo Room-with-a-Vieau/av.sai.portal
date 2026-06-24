@@ -227,6 +227,8 @@ import * as FooterNavigationCalloutdev from 'src/components/footer-navigation-ca
 import * as footernavigationcalloutprops from 'src/components/footer-navigation-callout/footer-navigation-callout.props';
 import * as floatingdockdev from 'src/components/floating-dock/floating-dock.dev';
 import * as Flexdev from 'src/components/flex/Flex.dev';
+import * as FeaturedCommunities from 'src/components/featured-communities/FeaturedCommunities';
+import * as featuredcommunitiesprops from 'src/components/featured-communities/featured-communities.props';
 import * as DownloadList from 'src/components/download-list/DownloadList';
 import * as downloadlistprops from 'src/components/download-list/download-list.props';
 import * as downloadlistfields from 'src/components/download-list/download-list.fields';
@@ -520,6 +522,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['footer-navigation-callout', { ...footernavigationcalloutprops }],
   ['floating-dock', { ...floatingdockdev }],
   ['Flex', { ...Flexdev }],
+  ['FeaturedCommunities', { ...FeaturedCommunities, componentType: 'client' }],
+  ['featured-communities', { ...featuredcommunitiesprops }],
   ['DownloadList', { ...DownloadList, componentType: 'client' }],
   ['download-list', { ...downloadlistprops, ...downloadlistfields }],
   ['CtaBanner', { ...CtaBanner }],
