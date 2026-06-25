@@ -22,9 +22,11 @@ import { HomeSearchMap } from './HomeSearchMap';
 import {
   cityFilterOptions,
   countListings,
+  DEFAULT_MARKET_SLUG,
   FILTER_SHOW_ALL,
   filterHomeCommunities,
   formatPrice,
+  getMarketMapConfig,
   homeSearchCommunities,
   homeSearchMapMarkers,
   priceFilterOptions,
@@ -136,7 +138,7 @@ export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSyn
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const marketFromUrl = searchParams.get('market') ?? 'portland';
+  const marketFromUrl = searchParams.get('market') ?? DEFAULT_MARKET_SLUG;
 
   const [activeTab, setActiveTab] = useState<HomeSearchTab>('home-search');
   const [zipCode, setZipCode] = useState('');
@@ -167,6 +169,11 @@ export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSyn
 
   const marketDisplay = useMemo(
     () => resolveMarketDisplay(selectedMarketSlug),
+    [selectedMarketSlug]
+  );
+
+  const mapConfig = useMemo(
+    () => getMarketMapConfig(selectedMarketSlug),
     [selectedMarketSlug]
   );
 
@@ -211,7 +218,15 @@ export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSyn
   return (
     <section className={cn('bg-white text-[#2f2f2d]', className)} aria-label="Find a home search results">
       <div className="border-b border-[#d8cfc3]">
-        <HomeSearchMap markers={visibleMarkers} className="h-[320px] w-full sm:h-[380px] lg:h-[420px]" />
+        <HomeSearchMap
+          markers={visibleMarkers}
+          center={mapConfig.center}
+          zoom={mapConfig.zoom}
+          osmBbox={mapConfig.osmBbox}
+          osmMarker={mapConfig.osmMarker}
+          regionLabel={marketDisplay.label}
+          className="h-[320px] w-full sm:h-[380px] lg:h-[420px]"
+        />
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6 px-4 py-3 text-xs text-[#2f2f2d]">
           <div className="flex items-center gap-2">
             <span className="inline-flex size-5 items-center justify-center rounded-sm bg-[#2f5f8f] text-[10px] font-bold text-white">

@@ -43,6 +43,37 @@ export type HomeCommunity = {
 export const HOME_SEARCH_MAP_CENTER = { lat: 45.6387, lng: -122.6615 };
 export const HOME_SEARCH_MAP_ZOOM = 10;
 
+/** Default market shown when no `market` query param is present. */
+export const DEFAULT_MARKET_SLUG = 'austin';
+
+export type MarketMapConfig = {
+  center: { lat: number; lng: number };
+  zoom: number;
+  /** OpenStreetMap bbox (left,bottom,right,top) used by the no-API-key fallback. */
+  osmBbox: string;
+  /** OpenStreetMap marker coordinate (lat,lng) used by the fallback. */
+  osmMarker: string;
+};
+
+const MARKET_MAP_CONFIGS: Record<string, MarketMapConfig> = {
+  austin: {
+    center: { lat: 30.3217, lng: -97.7431 },
+    zoom: 9,
+    osmBbox: '-98.25%2C29.85%2C-97.20%2C30.85',
+    osmMarker: '30.3217%2C-97.7431',
+  },
+  portland: {
+    center: HOME_SEARCH_MAP_CENTER,
+    zoom: HOME_SEARCH_MAP_ZOOM,
+    osmBbox: '-122.7827%2C45.4949%2C-122.4726%2C45.7821',
+    osmMarker: '45.6387%2C-122.6615',
+  },
+};
+
+export function getMarketMapConfig(marketSlug: string): MarketMapConfig {
+  return MARKET_MAP_CONFIGS[marketSlug] ?? MARKET_MAP_CONFIGS[DEFAULT_MARKET_SLUG]!;
+}
+
 export const FILTER_SHOW_ALL = 'show-all';
 
 export const priceFilterOptions = [
@@ -272,8 +303,8 @@ export function resolveMarketDisplay(marketSlug: string): { label: string; bread
   }
 
   return {
-    label: 'Vancouver, WA',
-    breadcrumb: ['HOME', 'FIND A HOME', 'WA', 'VANCOUVER'],
+    label: 'Austin, TX',
+    breadcrumb: ['HOME', 'FIND A HOME', 'TX', 'AUSTIN'],
   };
 }
 

@@ -17,14 +17,31 @@ type HomeSearchMapProps = {
   markers: MapMarker[];
   className?: string;
   onMarkerSelect?: (markerId: string) => void;
+  center?: { lat: number; lng: number };
+  zoom?: number;
+  osmBbox?: string;
+  osmMarker?: string;
+  regionLabel?: string;
 };
 
-export function HomeSearchMap({ markers, className, onMarkerSelect }: HomeSearchMapProps) {
+export function HomeSearchMap({
+  markers,
+  className,
+  onMarkerSelect,
+  center,
+  zoom,
+  osmBbox,
+  osmMarker,
+  regionLabel,
+}: HomeSearchMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(
     Boolean(typeof window !== 'undefined' && window.google && window.google.maps)
   );
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
+
+  const mapCenter = center ?? HOME_SEARCH_MAP_CENTER;
+  const mapZoom = zoom ?? HOME_SEARCH_MAP_ZOOM;
 
   useEffect(() => {
     if (!apiKey) return;
@@ -55,8 +72,8 @@ export function HomeSearchMap({ markers, className, onMarkerSelect }: HomeSearch
     if (!isLoaded || !mapRef.current || !window.google || !window.google.maps) return;
 
     const map = new window.google.maps.Map(mapRef.current, {
-      center: HOME_SEARCH_MAP_CENTER,
-      zoom: HOME_SEARCH_MAP_ZOOM,
+      center: mapCenter,
+      zoom: mapZoom,
       disableDefaultUI: true,
       zoomControl: true,
       fullscreenControl: false,
@@ -107,17 +124,19 @@ export function HomeSearchMap({ markers, className, onMarkerSelect }: HomeSearch
     return () => {
       googleMarkers.forEach((marker) => marker.setMap(null));
     };
-  }, [isLoaded, markers, onMarkerSelect]);
+  }, [isLoaded, markers, onMarkerSelect, mapCenter, mapZoom]);
 
   if (!apiKey) {
+    const bbox = osmBbox ?? '-122.7827%2C45.4949%2C-122.4726%2C45.7821';
+    const marker = osmMarker ?? '45.6387%2C-122.6615';
     return (
       <div className={cn('relative overflow-hidden bg-[#e8edf2]', className)}>
         <iframe
-          title="Vancouver area map"
+          title={`${regionLabel ?? 'Area'} map`}
           className="h-full w-full border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=-122.7827%2C45.4949%2C-122.4726%2C45.7821&layer=mapnik&marker=45.6387%2C-122.6615"
+          src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${marker}`}
         />
       </div>
     );
