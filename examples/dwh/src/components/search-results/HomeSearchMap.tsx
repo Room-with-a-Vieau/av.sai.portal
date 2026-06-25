@@ -36,14 +36,22 @@ function formatPriceFrom(value?: number): string {
 
 function bubbleHtml(marker: MapMarker): string {
   const price = formatPriceFrom(marker.priceFrom);
+  const heading = marker.href
+    ? `<a href="${marker.href}" style="font-weight:700;color:#2f5f8f;font-size:14px;line-height:1.2;text-decoration:none">${marker.label}</a>`
+    : `<div style="font-weight:700;color:#2f2f2d;font-size:14px;line-height:1.2">${marker.label}</div>`;
   return `
     <div style="min-width:170px;font-family:inherit">
-      <div style="font-weight:700;color:#2f2f2d;font-size:14px;line-height:1.2">${marker.label}</div>
+      ${heading}
       ${marker.area ? `<div style="color:#6b7280;font-size:12px;margin-top:2px">${marker.area}, TX</div>` : ''}
       ${price ? `<div style="color:#2f2f2d;font-size:12px;margin-top:6px">${price}</div>` : ''}
       ${
         marker.count
           ? `<div style="color:#f2894f;font-size:11px;font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.04em">${marker.count} homes available</div>`
+          : ''
+      }
+      ${
+        marker.href
+          ? `<a href="${marker.href}" style="display:inline-block;margin-top:8px;color:#f2894f;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;text-decoration:none">View Community &rsaquo;</a>`
           : ''
       }
     </div>`;
@@ -284,7 +292,16 @@ export function HomeSearchMap({
               className="pointer-events-auto absolute z-30 w-48 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-lg border border-[#d8cfc3] bg-white p-3 text-left shadow-xl"
               onClick={(event) => event.stopPropagation()}
             >
-              <p className="text-sm font-bold leading-tight text-[#2f2f2d]">{activePin.marker.label}</p>
+              {activePin.marker.href ? (
+                <a
+                  href={activePin.marker.href}
+                  className="text-sm font-bold leading-tight text-[#2f5f8f] hover:underline"
+                >
+                  {activePin.marker.label}
+                </a>
+              ) : (
+                <p className="text-sm font-bold leading-tight text-[#2f2f2d]">{activePin.marker.label}</p>
+              )}
               {activePin.marker.area ? (
                 <p className="mt-0.5 text-xs text-[#6b7280]">{activePin.marker.area}, TX</p>
               ) : null}
@@ -295,6 +312,14 @@ export function HomeSearchMap({
                 <p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-[#f2894f]">
                   {activePin.marker.count} homes available
                 </p>
+              ) : null}
+              {activePin.marker.href ? (
+                <a
+                  href={activePin.marker.href}
+                  className="mt-2 inline-block text-[11px] font-bold uppercase tracking-wide text-[#f2894f] hover:underline"
+                >
+                  View Community &rsaquo;
+                </a>
               ) : null}
               <span className="absolute left-1/2 top-full size-3 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r border-[#d8cfc3] bg-white" />
             </div>

@@ -21,6 +21,8 @@ export type MapMarker = {
   area?: string;
   /** Starting price shown in the marker callout bubble. */
   priceFrom?: number;
+  /** Destination for the community callout link. */
+  href?: string;
 };
 
 export type HomeListing = {
@@ -329,6 +331,7 @@ function buildAustinAreaMarkers(): MapMarker[] {
       communityId,
       area,
       priceFrom: bubble.priceFrom,
+      href: buildCommunitySiteHref(bubble.name, 'austin'),
     };
   });
 }
@@ -350,6 +353,17 @@ export type HomeSearchFilters = {
   region: string;
   marketSlug: string;
 };
+
+/**
+ * Builds the Sitecore community page URL, e.g. Double Creek Crossing (Austin
+ * market) -> `/Sites/Austin/Double-Creek-Crossing`. Spaces become dashes.
+ */
+export function buildCommunitySiteHref(name: string, marketSlug: string): string {
+  const { label } = resolveMarketDisplay(marketSlug);
+  const city = (label.split(',')[0] ?? '').trim().replace(/\s+/g, '-');
+  const slug = name.trim().replace(/\s+/g, '-');
+  return `/Sites/${city}/${slug}`;
+}
 
 export function formatPrice(value: number): string {
   return new Intl.NumberFormat('en-US', {

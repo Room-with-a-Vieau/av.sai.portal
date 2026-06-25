@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 
 import { HomeSearchMap } from './HomeSearchMap';
 import {
+  buildCommunitySiteHref,
   cityFilterOptions,
   countListings,
   DEFAULT_MARKET_SLUG,
@@ -76,8 +77,14 @@ function HomeListingRow({
       </div>
 
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-[#2f2f2d]">
-          {community.name} <span className="text-[#a7a09a]">&gt;</span>
+        <p className="text-sm font-semibold">
+          <a
+            href={buildCommunitySiteHref(community.name, community.marketSlug)}
+            className="text-[#2f5f8f] hover:underline"
+          >
+            {community.name}
+          </a>{' '}
+          <span className="text-[#a7a09a]">&gt;</span>
         </p>
         <h3 className="mt-1 text-lg font-bold text-[#2f2f2d]">{listing.name}</h3>
         <p className="mt-1 text-sm text-[#2f2f2d]">
@@ -119,7 +126,14 @@ function CommunitySection({ community }: { community: HomeCommunity }) {
   return (
     <section className="border-b border-[#d8cfc3]">
       <div className="flex flex-col gap-1 border-b border-[#d8cfc3]/70 bg-[#faf8f5] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-0">
-        <h2 className="font-serif text-2xl font-medium text-[#2f2f2d]">{community.name}</h2>
+        <h2 className="font-serif text-2xl font-medium">
+          <a
+            href={buildCommunitySiteHref(community.name, community.marketSlug)}
+            className="text-[#2f2f2d] transition-colors hover:text-[#2f5f8f] hover:underline"
+          >
+            {community.name}
+          </a>
+        </h2>
         <p className="text-sm text-[#a7a09a]">
           {community.city}, {community.state} | {community.region.replace(/^./, (c) => c.toUpperCase())}
         </p>
