@@ -162,6 +162,66 @@ export const homeSearchCommunities: HomeCommunity[] = [
       listing('amber-cottage', 'Cottage Homes', 459990, 1360, 2190, 4, 1, 2),
     ],
   },
+  // Austin, TX market — David Weekley Homes
+  // @see https://www.davidweekleyhomes.com/new-homes/tx/austin
+  {
+    id: 'double-creek-crossing',
+    name: 'Double Creek Crossing',
+    city: 'Austin',
+    state: 'TX',
+    region: 'north',
+    marketSlug: 'austin',
+    listings: [
+      listing('double-creek-classic', 'Classic Series', 379990, 1601, 2890, 9, 3, 0),
+      listing('double-creek-cottage', 'Cottage Series', 359990, 1400, 2410, 5, 2, 1),
+    ],
+  },
+  {
+    id: 'easton-park',
+    name: 'Easton Park',
+    city: 'Austin',
+    state: 'TX',
+    region: 'east',
+    marketSlug: 'austin',
+    listings: [
+      listing('easton-garden', 'Garden Collection', 449990, 1500, 2800, 6, 2, 2),
+      listing('easton-signature', 'Signature Series', 559990, 2012, 3210, 4, 1, 3),
+    ],
+  },
+  {
+    id: 'sweetwater',
+    name: 'Sweetwater',
+    city: 'Austin',
+    state: 'TX',
+    region: 'south',
+    marketSlug: 'austin',
+    listings: [
+      listing('sweetwater-signature', 'Signature Series', 629990, 2100, 3400, 5, 1, 4),
+    ],
+  },
+  {
+    id: 'leander-estates',
+    name: 'Leander Estates',
+    city: 'Leander',
+    state: 'TX',
+    region: 'north',
+    marketSlug: 'austin',
+    listings: [
+      listing('leander-classic', 'Classic Series', 525990, 1875, 3586, 8, 2, 5),
+      listing('leander-cottage', 'Cottage Series', 489990, 1620, 2740, 5, 1, 0),
+    ],
+  },
+  {
+    id: 'wolf-ranch',
+    name: 'Wolf Ranch',
+    city: 'Georgetown',
+    state: 'TX',
+    region: 'north',
+    marketSlug: 'austin',
+    listings: [
+      listing('wolf-ranch-cottage', 'Cottage Series', 489990, 1600, 2700, 6, 3, 1),
+    ],
+  },
 ];
 
 export const homeSearchMapMarkers: MapMarker[] = [
@@ -170,6 +230,12 @@ export const homeSearchMapMarkers: MapMarker[] = [
   { id: 'm-prune', lat: 45.601, lng: -122.419, type: 'community', count: 1, label: 'Prune Hill Village', communityId: 'prune-hill-village' },
   { id: 'm-hockinson', lat: 45.738, lng: -122.485, type: 'community', count: 2, label: 'Hockinson Meadows', communityId: 'hockinson-meadows' },
   { id: 'm-design', lat: 45.655, lng: -122.583, type: 'design-center', label: 'Design Center' },
+  // Austin, TX market markers
+  { id: 'm-double-creek', lat: 30.5427, lng: -97.5453, type: 'community', count: 2, label: 'Double Creek Crossing', communityId: 'double-creek-crossing' },
+  { id: 'm-easton-park', lat: 30.165, lng: -97.665, type: 'community', count: 2, label: 'Easton Park', communityId: 'easton-park' },
+  { id: 'm-sweetwater', lat: 30.3, lng: -97.96, type: 'community', count: 1, label: 'Sweetwater', communityId: 'sweetwater' },
+  { id: 'm-leander-estates', lat: 30.578, lng: -97.853, type: 'community', count: 2, label: 'Leander Estates', communityId: 'leander-estates' },
+  { id: 'm-wolf-ranch', lat: 30.628, lng: -97.715, type: 'community', count: 1, label: 'Wolf Ranch', communityId: 'wolf-ranch' },
 ];
 
 export type HomeSearchFilters = {
@@ -235,7 +301,9 @@ export function filterHomeCommunities(
     }
 
     if (zip) {
-      const haystack = `${community.name} ${community.city} ${community.state}`.toLowerCase();
+      const marketLabel = findDwhMarketBySlug(community.marketSlug)?.label ?? '';
+      const haystack =
+        `${community.name} ${community.city} ${community.state} ${marketLabel}`.toLowerCase();
       if (!haystack.includes(zip.toLowerCase())) return false;
     }
 
