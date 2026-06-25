@@ -127,6 +127,7 @@ import * as Header from 'src/components/component-library/Header';
 import * as FeaturesSection from 'src/components/component-library/FeaturesSection';
 import * as FAQ from 'src/components/component-library/FAQ';
 import * as ContactSection from 'src/components/component-library/ContactSection';
+import * as CommunityFloorPlans from 'src/components/community-floor-plans/CommunityFloorPlans';
 import * as CommerceHeaderMegaMenu from 'src/components/commerce/CommerceHeaderMegaMenu';
 import * as CommerceHeader from 'src/components/commerce/CommerceHeader';
 import * as Carousel from 'src/components/carousel/Carousel';
@@ -264,6 +265,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['FeaturesSection', { ...FeaturesSection }],
   ['FAQ', { ...FAQ }],
   ['ContactSection', { ...ContactSection }],
+  ['CommunityFloorPlans', { ...CommunityFloorPlans }],
   ['CommerceHeaderMegaMenu', { ...CommerceHeaderMegaMenu }],
   ['CommerceHeader', { ...CommerceHeader }],
   ['Carousel', { ...Carousel }],
