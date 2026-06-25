@@ -88,6 +88,31 @@ function getImageSrc(image?: ImageField): string | undefined {
   return image?.value?.src;
 }
 
+const normalizeKey = (key: string): string => key.replace(/[\s_-]+/g, '').toLowerCase();
+
+/**
+ * Resolves an ImageField from the merged fields by trying several name variants
+ * (case- and space-insensitive), so authoring works whether the Sitecore field is
+ * named `Image1`, `image1`, or `Image 1`. Preserves the Pages Editor editing metadata.
+ */
+function findImageField(
+  fields: Record<string, unknown>,
+  candidates: string[],
+): ImageField | undefined {
+  const wanted = new Set(candidates.map(normalizeKey));
+  for (const [key, value] of Object.entries(fields)) {
+    if (
+      wanted.has(normalizeKey(key)) &&
+      value &&
+      typeof value === 'object' &&
+      'value' in (value as Record<string, unknown>)
+    ) {
+      return value as ImageField;
+    }
+  }
+  return undefined;
+}
+
 /** Formats a raw price string (e.g. "527990") into currency (e.g. "$527,990"). */
 function formatPrice(value?: string): string {
   if (!value?.trim()) return '';
@@ -114,13 +139,17 @@ export const Default = (props: FloorplanDetailProps) => {
     price,
     status,
     Overview,
-    Image1,
-    Image2,
-    Image3,
-    'First Floor': firstFloor,
-    'Second Floor': secondFloor,
-    Basement: basement,
   } = fields;
+
+  // Resolve image fields tolerantly so inline selection works regardless of the
+  // exact Sitecore field casing/spacing (Image1 / image1 / Image 1, etc.).
+  const fieldsRecord = fields as Record<string, unknown>;
+  const Image1 = findImageField(fieldsRecord, ['Image1', 'image1', 'Image 1']);
+  const Image2 = findImageField(fieldsRecord, ['Image2', 'image2', 'Image 2']);
+  const Image3 = findImageField(fieldsRecord, ['Image3', 'image3', 'Image 3']);
+  const firstFloor = findImageField(fieldsRecord, ['First Floor', 'FirstFloor', 'firstfloor']);
+  const secondFloor = findImageField(fieldsRecord, ['Second Floor', 'SecondFloor', 'secondfloor']);
+  const basement = findImageField(fieldsRecord, ['Basement', 'basement']);
 
   const formattedPrice = formatPrice(price?.value);
 
