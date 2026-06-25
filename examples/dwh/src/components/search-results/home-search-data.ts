@@ -17,6 +17,10 @@ export type MapMarker = {
   count?: number;
   label: string;
   communityId?: string;
+  /** Area / neighborhood shown in the marker callout bubble. */
+  area?: string;
+  /** Starting price shown in the marker callout bubble. */
+  priceFrom?: number;
 };
 
 export type HomeListing = {
@@ -46,6 +50,8 @@ export const HOME_SEARCH_MAP_ZOOM = 10;
 /** Default market shown when no `market` query param is present. */
 export const DEFAULT_MARKET_SLUG = 'austin';
 
+export type MapBounds = { left: number; bottom: number; right: number; top: number };
+
 export type MarketMapConfig = {
   center: { lat: number; lng: number };
   zoom: number;
@@ -53,6 +59,8 @@ export type MarketMapConfig = {
   osmBbox: string;
   /** OpenStreetMap marker coordinate (lat,lng) used by the fallback. */
   osmMarker: string;
+  /** Numeric bounds matching osmBbox; used to project marker pins on the fallback map. */
+  bounds: MapBounds;
 };
 
 const MARKET_MAP_CONFIGS: Record<string, MarketMapConfig> = {
@@ -61,12 +69,14 @@ const MARKET_MAP_CONFIGS: Record<string, MarketMapConfig> = {
     zoom: 9,
     osmBbox: '-98.25%2C29.85%2C-97.20%2C30.85',
     osmMarker: '30.3217%2C-97.7431',
+    bounds: { left: -98.25, bottom: 29.85, right: -97.2, top: 30.85 },
   },
   portland: {
     center: HOME_SEARCH_MAP_CENTER,
     zoom: HOME_SEARCH_MAP_ZOOM,
     osmBbox: '-122.7827%2C45.4949%2C-122.4726%2C45.7821',
     osmMarker: '45.6387%2C-122.6615',
+    bounds: { left: -122.7827, bottom: 45.4949, right: -122.4726, top: 45.7821 },
   },
 };
 
@@ -255,6 +265,74 @@ export const homeSearchCommunities: HomeCommunity[] = [
   },
 ];
 
+/**
+ * Austin-area community pins. Each pin references one of the live Austin
+ * communities so clicking it surfaces a callout bubble (e.g. Double Creek
+ * Crossing, Easton Park). Spread across the Austin metro to suggest broad
+ * home availability.
+ */
+const AUSTIN_COMMUNITY_BUBBLES: Record<string, { name: string; priceFrom: number }> = {
+  'double-creek-crossing': { name: 'Double Creek Crossing', priceFrom: 359990 },
+  'easton-park': { name: 'Easton Park', priceFrom: 449990 },
+  sweetwater: { name: 'Sweetwater', priceFrom: 629990 },
+  'leander-estates': { name: 'Leander Estates', priceFrom: 489990 },
+  'wolf-ranch': { name: 'Wolf Ranch', priceFrom: 489990 },
+};
+
+type AustinAreaSeed = [area: string, lat: number, lng: number, communityId: string, count: number];
+
+const AUSTIN_AREA_SEEDS: AustinAreaSeed[] = [
+  // North / Northwest
+  ['Round Rock', 30.5083, -97.6789, 'double-creek-crossing', 8],
+  ['Georgetown', 30.6333, -97.677, 'wolf-ranch', 11],
+  ['Pflugerville', 30.4394, -97.62, 'double-creek-crossing', 6],
+  ['Hutto', 30.5427, -97.5467, 'double-creek-crossing', 9],
+  ['Leander', 30.5788, -97.8531, 'leander-estates', 12],
+  ['Cedar Park', 30.5052, -97.8203, 'leander-estates', 7],
+  ['Liberty Hill', 30.6649, -97.9225, 'leander-estates', 5],
+  ['Jonestown', 30.4946, -97.9242, 'leander-estates', 3],
+  // Central Austin
+  ['Downtown Austin', 30.2672, -97.7431, 'easton-park', 6],
+  ['Mueller', 30.298, -97.706, 'easton-park', 5],
+  ['East Austin', 30.264, -97.71, 'easton-park', 7],
+  ['South Congress', 30.248, -97.751, 'easton-park', 4],
+  ['Crestview', 30.338, -97.724, 'easton-park', 5],
+  ['Allandale', 30.355, -97.739, 'easton-park', 4],
+  // South / Southeast
+  ['Buda', 30.0855, -97.8403, 'sweetwater', 8],
+  ['Kyle', 29.9891, -97.8772, 'sweetwater', 6],
+  ['San Marcos', 29.8833, -97.9414, 'sweetwater', 5],
+  ['Del Valle', 30.173, -97.608, 'easton-park', 6],
+  ['Manchaca', 30.133, -97.84, 'sweetwater', 4],
+  // West / Southwest
+  ['Lakeway', 30.3635, -97.9789, 'sweetwater', 7],
+  ['Bee Cave', 30.3079, -97.9461, 'sweetwater', 5],
+  ['Dripping Springs', 30.1902, -98.0867, 'sweetwater', 6],
+  ['Spicewood', 30.4783, -98.1581, 'leander-estates', 3],
+  ['Sunset Valley', 30.236, -97.82, 'sweetwater', 4],
+  // East
+  ['Manor', 30.3402, -97.5572, 'double-creek-crossing', 7],
+  ['Bastrop', 30.1105, -97.3153, 'double-creek-crossing', 5],
+  ['Elgin', 30.3499, -97.37, 'double-creek-crossing', 4],
+];
+
+function buildAustinAreaMarkers(): MapMarker[] {
+  return AUSTIN_AREA_SEEDS.map(([area, lat, lng, communityId, count], index) => {
+    const bubble = AUSTIN_COMMUNITY_BUBBLES[communityId]!;
+    return {
+      id: `m-austin-${index}`,
+      lat,
+      lng,
+      type: 'community' as const,
+      count,
+      label: bubble.name,
+      communityId,
+      area,
+      priceFrom: bubble.priceFrom,
+    };
+  });
+}
+
 export const homeSearchMapMarkers: MapMarker[] = [
   { id: 'm-greely', lat: 45.815, lng: -122.747, type: 'community', count: 2, label: 'Greely Farms', communityId: 'greely-farms' },
   { id: 'm-salmon', lat: 45.711, lng: -122.649, type: 'community', count: 2, label: 'Salmon Creek Estates', communityId: 'salmon-creek-estates' },
@@ -262,11 +340,7 @@ export const homeSearchMapMarkers: MapMarker[] = [
   { id: 'm-hockinson', lat: 45.738, lng: -122.485, type: 'community', count: 2, label: 'Hockinson Meadows', communityId: 'hockinson-meadows' },
   { id: 'm-design', lat: 45.655, lng: -122.583, type: 'design-center', label: 'Design Center' },
   // Austin, TX market markers
-  { id: 'm-double-creek', lat: 30.5427, lng: -97.5453, type: 'community', count: 2, label: 'Double Creek Crossing', communityId: 'double-creek-crossing' },
-  { id: 'm-easton-park', lat: 30.165, lng: -97.665, type: 'community', count: 2, label: 'Easton Park', communityId: 'easton-park' },
-  { id: 'm-sweetwater', lat: 30.3, lng: -97.96, type: 'community', count: 1, label: 'Sweetwater', communityId: 'sweetwater' },
-  { id: 'm-leander-estates', lat: 30.578, lng: -97.853, type: 'community', count: 2, label: 'Leander Estates', communityId: 'leander-estates' },
-  { id: 'm-wolf-ranch', lat: 30.628, lng: -97.715, type: 'community', count: 1, label: 'Wolf Ranch', communityId: 'wolf-ranch' },
+  ...buildAustinAreaMarkers(),
 ];
 
 export type HomeSearchFilters = {

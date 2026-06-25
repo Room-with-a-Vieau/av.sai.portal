@@ -224,6 +224,7 @@ export const SearchResults: FC<SearchResultsProps> = ({ className, disableUrlSyn
           zoom={mapConfig.zoom}
           osmBbox={mapConfig.osmBbox}
           osmMarker={mapConfig.osmMarker}
+          bounds={mapConfig.bounds}
           regionLabel={marketDisplay.label}
           className="h-[320px] w-full sm:h-[380px] lg:h-[420px]"
         />
