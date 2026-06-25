@@ -15,6 +15,14 @@ import {
 
 import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
 
+jest.mock('lucide-react', () => ({
+  Bath: () => <span data-testid="icon-bath" />,
+  BedDouble: () => <span data-testid="icon-bed" />,
+  Building2: () => <span data-testid="icon-building" />,
+  Car: () => <span data-testid="icon-car" />,
+  Ruler: () => <span data-testid="icon-ruler" />,
+}));
+
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, tag, className }: { field?: Field<string>; tag?: string; className?: string }) => {
     const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
@@ -147,6 +155,23 @@ describe('CommunityFloorPlans Component', () => {
 
       const grid = container.querySelector('.grid.\\@lg\\:grid-cols-3');
       expect(grid).toBeInTheDocument();
+    });
+
+    it('should render the formatted price for a plan', () => {
+      render(<CommunityFloorPlans {...(defaultProps as unknown as Parameters<typeof CommunityFloorPlans>[0])} />);
+
+      expect(screen.getByText('$527,990')).toBeInTheDocument();
+    });
+
+    it('should render plan stats with labels and values', () => {
+      render(<CommunityFloorPlans {...(defaultProps as unknown as Parameters<typeof CommunityFloorPlans>[0])} />);
+
+      expect(screen.getByText('Stories')).toBeInTheDocument();
+      expect(screen.getByText('Bedrooms')).toBeInTheDocument();
+      expect(screen.getByText('Full Baths')).toBeInTheDocument();
+      expect(screen.getByText('Car Garage')).toBeInTheDocument();
+      expect(screen.getByText('Sq Ft')).toBeInTheDocument();
+      expect(screen.getByText('3209')).toBeInTheDocument();
     });
   });
 

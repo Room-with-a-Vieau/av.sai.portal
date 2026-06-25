@@ -3,15 +3,23 @@
 import React from 'react';
 import Image from 'next/image';
 import { Link, Text } from '@sitecore-content-sdk/nextjs';
+import type { Field } from '@sitecore-content-sdk/nextjs';
+import { Bath, BedDouble, Building2, Car, Ruler } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EditableButton as Button } from '@/components/button-component/ButtonComponent';
-import type { CommunityFloorPlansProps } from './community-floor-plans.props';
+import type {
+  CommunityFloorPlansFields,
+  CommunityFloorPlansProps,
+  FloorPlanItem,
+} from './community-floor-plans.props';
 
 interface TransformedFloorPlan {
   link: string;
   image: string;
   name: string;
   overview: string;
+  price: string;
+  stats: { id: string; label: string; value: string }[];
 }
 
 /** Strips HTML tags from a Rich Text value to produce a clean card preview. */
@@ -23,6 +31,30 @@ function toPlainText(html?: string): string {
     .replace(/&amp;/g, '&')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+/** Icons keyed by stat id, used to visually represent each floor-plan metric. */
+const STAT_ICONS: Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
+  stores: Building2,
+  bedrooms: BedDouble,
+  'full-baths': Bath,
+  'car-garage': Car,
+  'sq-footage': Ruler,
+};
+
+/** Reads a Sitecore number/text field value as a display string. */
+function fieldValue(field?: Field<string> | Field<number>): string {
+  const value = field?.value;
+  if (value === undefined || value === null) return '';
+  return String(value);
+}
+
+/** Formats a raw price string (e.g. "527990") into currency (e.g. "$527,990"). */
+function formatPrice(value?: string): string {
+  if (!value?.trim()) return '';
+  const digits = value.replace(/[^0-9]/g, '');
+  if (!digits) return value.trim();
+  return `$${Number(digits).toLocaleString('en-US')}`;
 }
 
 const normalizeKey = (key: string): string => key.replace(/[\s_-]+/g, '').toLowerCase();
@@ -39,13 +71,30 @@ function findImageSrc(fields: Record<string, unknown>, candidates: string[]): st
   return '';
 }
 
+/**
+ * Merges datasource fields (from `props.fields`) with the page item's route fields,
+ * so the component can use the page item itself as its data source (no datasource required).
+ * Datasource values take precedence when both are present.
+ */
+function mergeFields(
+  componentFields?: CommunityFloorPlansFields,
+  routeFields?: Record<string, unknown>,
+): CommunityFloorPlansFields {
+  return {
+    ...(routeFields as CommunityFloorPlansFields),
+    ...(componentFields ?? {}),
+  };
+}
+
 export const Default: React.FC<CommunityFloorPlansProps> = ({
   fields,
   params,
   isPageEditing: propIsEditing,
   page,
 }) => {
-  const { titleOptional, descriptionOptional, linkOptional, FloorPlans = [] } = fields || {};
+  const routeFields = page.layout?.sitecore?.route?.fields as Record<string, unknown> | undefined;
+  const mergedFields = mergeFields(fields, routeFields);
+  const { titleOptional, descriptionOptional, linkOptional, FloorPlans = [] } = mergedFields;
   const contextIsEditing = page.mode.isEditing;
 
   const isPageEditing = propIsEditing !== undefined ? propIsEditing : contextIsEditing;
@@ -53,16 +102,29 @@ export const Default: React.FC<CommunityFloorPlansProps> = ({
   const plans: TransformedFloorPlan[] = React.useMemo(() => {
     if (!FloorPlans?.length) return [];
 
-    return FloorPlans.map((plan) => ({
-      link: plan.url || '',
-      image: findImageSrc(plan.fields as unknown as Record<string, unknown>, [
-        'image1',
-        'Image1',
-        'Image 1',
-      ]),
-      name: plan.fields['Plan Name']?.value || '',
-      overview: toPlainText(plan.fields.Overview?.value),
-    }));
+    return FloorPlans.map((plan) => {
+      const planFields = plan.fields as FloorPlanItem;
+      const stats = [
+        { id: 'stores', label: 'Stories', value: fieldValue(planFields.Stores) },
+        { id: 'bedrooms', label: 'Bedrooms', value: fieldValue(planFields.Bedrooms) },
+        { id: 'full-baths', label: 'Full Baths', value: fieldValue(planFields['Full Baths']) },
+        { id: 'car-garage', label: 'Car Garage', value: fieldValue(planFields['Car Garage']) },
+        { id: 'sq-footage', label: 'Sq Ft', value: fieldValue(planFields['sq footage']) },
+      ].filter((stat) => stat.value);
+
+      return {
+        link: plan.url || '',
+        image: findImageSrc(plan.fields as unknown as Record<string, unknown>, [
+          'image1',
+          'Image1',
+          'Image 1',
+        ]),
+        name: planFields['Plan Name']?.value || '',
+        overview: toPlainText(planFields.Overview?.value),
+        price: formatPrice(planFields.price?.value),
+        stats,
+      };
+    });
   }, [FloorPlans]);
 
   const sectionId = 'community-floor-plans-section';
@@ -159,9 +221,37 @@ export const Default: React.FC<CommunityFloorPlansProps> = ({
                       </h3>
                     </Link>
                   )}
+                  {plan.price && (
+                    <p className="text-card-foreground mt-2 text-lg font-medium">{plan.price}</p>
+                  )}
+
                   <p className="text-secondary-foreground mt-3 line-clamp-3 text-base leading-[1.5] tracking-tight">
                     {plan.overview}
                   </p>
+
+                  {plan.stats.length > 0 && (
+                    <dl className="border-border mt-4 flex flex-wrap gap-x-5 gap-y-3 border-t pt-4">
+                      {plan.stats.map((stat) => {
+                        const Icon = STAT_ICONS[stat.id];
+                        return (
+                          <div key={stat.id} className="flex items-center gap-2" title={stat.label}>
+                            {Icon && (
+                              <Icon
+                                className="text-muted-foreground h-5 w-5 shrink-0"
+                                strokeWidth={1.5}
+                              />
+                            )}
+                            <div className="leading-tight">
+                              <dd className="text-card-foreground text-sm font-medium">
+                                {stat.value}
+                              </dd>
+                              <dt className="text-muted-foreground text-xs">{stat.label}</dt>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </dl>
+                  )}
                 </div>
               </article>
             ))}

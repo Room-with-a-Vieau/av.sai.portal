@@ -66,6 +66,12 @@ export const mockPlan1 = {
         height: 600,
       },
     } as ImageField,
+    Stores: { value: '2' } as Field<string>,
+    Bedrooms: { value: '5' } as Field<string>,
+    'Full Baths': { value: '4' } as Field<string>,
+    'Car Garage': { value: '2' } as Field<string>,
+    'sq footage': { value: '3209' } as Field<string>,
+    price: { value: '527990' } as Field<string>,
   },
 };
 
