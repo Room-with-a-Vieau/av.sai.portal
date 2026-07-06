@@ -41,6 +41,22 @@ export const fullArticleContentProps: ArticleContentProps = {
   },
 };
 
+export const servicePageVariantProps: ArticleContentProps = {
+  rendering: mockRendering,
+  params: {},
+  page: mockPage,
+  fields: {
+    pageHeaderTitle: { value: 'Modular Construction' } as Field<string>,
+    pageSubtitle: {
+      value: 'Build faster with more control over schedule, labor, and quality',
+    } as Field<string>,
+    pageSummary: {
+      value:
+        'Move critical work offsite into a controlled environment, so site work and home construction can happen at the same time. The result is reduced cycle time, fewer weather-related disruptions, and improved quality control.',
+    } as Field<string>,
+  },
+};
+
 export const splitTitleProps: ArticleContentProps = {
   ...fullArticleContentProps,
   fields: {

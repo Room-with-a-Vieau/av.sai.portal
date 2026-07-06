@@ -8,6 +8,7 @@ import {
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface Fields {
   PromoIcon: ImageField;
@@ -20,6 +21,119 @@ interface Fields {
 type PromoProps = {
   params: { [key: string]: string };
   fields: Fields;
+};
+
+const PROMO_BACKGROUND_OPTIONS = ['dark', 'light', 'primary', 'secondary', 'tertiary'] as const;
+type PromoBackground = (typeof PROMO_BACKGROUND_OPTIONS)[number];
+
+type BoldPromoBackgroundTheme = {
+  containerBg: string;
+  textColor: string;
+  richTextClasses: string;
+  buttonClasses: string;
+};
+
+const boldRichTextOnDarkBg =
+  '[&_h1]:mb-4 [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:uppercase [&_h1]:tracking-wide [&_h1]:text-white [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:uppercase [&_h2]:tracking-wide [&_h2]:text-white [&_h3]:mb-4 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-white [&_p]:mb-0 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-white [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:marker:text-white [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:marker:text-white [&_li]:text-base [&_li]:leading-relaxed [&_li]:text-white [&_li_p]:mb-0 [&_li_p]:text-base [&_li_p]:leading-relaxed [&_li_p]:text-white';
+
+const boldRichTextOnLightBg =
+  '[&_h1]:mb-4 [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:uppercase [&_h1]:tracking-wide [&_h1]:text-foreground [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:uppercase [&_h2]:tracking-wide [&_h2]:text-foreground [&_h3]:mb-4 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-foreground [&_p]:mb-0 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-foreground [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:marker:text-foreground [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:marker:text-foreground [&_li]:text-base [&_li]:leading-relaxed [&_li]:text-foreground [&_li_p]:mb-0 [&_li_p]:text-base [&_li_p]:leading-relaxed [&_li_p]:text-foreground';
+
+const boldPromoBackgroundThemes: Record<PromoBackground, BoldPromoBackgroundTheme> = {
+  dark: {
+    containerBg: 'bg-[#0a1a44]',
+    textColor: 'text-white',
+    richTextClasses: boldRichTextOnDarkBg,
+    buttonClasses:
+      'border-white bg-transparent text-white hover:bg-white hover:text-[#0a1a44]',
+  },
+  light: {
+    containerBg: 'bg-background',
+    textColor: 'text-foreground',
+    richTextClasses: boldRichTextOnLightBg,
+    buttonClasses:
+      'border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground',
+  },
+  primary: {
+    containerBg: 'bg-primary',
+    textColor: 'text-primary-foreground',
+    richTextClasses: boldRichTextOnDarkBg,
+    buttonClasses:
+      'border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-primary',
+  },
+  secondary: {
+    containerBg: 'bg-secondary',
+    textColor: 'text-secondary-foreground',
+    richTextClasses: boldRichTextOnLightBg,
+    buttonClasses:
+      'border-secondary-foreground bg-transparent text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary',
+  },
+  tertiary: {
+    containerBg: 'bg-tertiary',
+    textColor: 'text-tertiary-foreground',
+    richTextClasses: boldRichTextOnLightBg,
+    buttonClasses:
+      'border-tertiary-foreground bg-transparent text-tertiary-foreground hover:bg-tertiary-foreground hover:text-tertiary',
+  },
+};
+
+const resolvePromoBackground = (params: { [key: string]: string }): PromoBackground => {
+  const value = (params.Background ?? params.background ?? 'dark').toLowerCase().trim();
+
+  return PROMO_BACKGROUND_OPTIONS.includes(value as PromoBackground)
+    ? (value as PromoBackground)
+    : 'dark';
+};
+
+const BoldPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  const layoutDirection = imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse';
+  const background = resolvePromoBackground(props.params);
+  const theme = boldPromoBackgroundThemes[background];
+
+  return (
+    <section
+      data-class-change
+      className={`component promo w-full ${props.params.styles}`}
+      id={id ? id : undefined}
+    >
+      <div className={cn('flex flex-col items-stretch', layoutDirection, theme.containerBg)}>
+        <div className="w-full md:w-[42%] lg:w-[40%]">
+          <ContentSdkImage
+            field={props.fields.PromoIcon}
+            className="h-full min-h-[280px] w-full object-cover md:min-h-[420px]"
+          />
+        </div>
+        <div
+          className={cn(
+            'flex w-full flex-col justify-center overflow-visible px-8 py-10 md:w-[58%] md:px-12 md:py-14 lg:px-16 lg:py-20',
+            theme.textColor
+          )}
+        >
+          <ContentSdkRichText
+            tag="div"
+            className={theme.richTextClasses}
+            field={props.fields.PromoText}
+          />
+          <ContentSdkRichText
+            tag="div"
+            className={cn('mt-10 md:mt-12', theme.richTextClasses)}
+            field={props.fields.PromoText2}
+          />
+          <Button
+            variant="outline"
+            className={cn(
+              'mt-10 self-start px-6 py-2 font-semibold uppercase tracking-wide',
+              theme.buttonClasses
+            )}
+            asChild
+          >
+            <ContentSdkLink field={props.fields.PromoLink} />
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const PromoDefaultComponent = (props: PromoProps): JSX.Element => (
@@ -103,6 +217,22 @@ export const CenteredCard = (props: PromoProps): JSX.Element => {
         </div>
       </div>
     );
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const BoldLeft = (props: PromoProps): JSX.Element => {
+  if (props.fields) {
+    return BoldPromoLayout(props, 'left');
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const BoldRight = (props: PromoProps): JSX.Element => {
+  if (props.fields) {
+    return BoldPromoLayout(props, 'right');
   }
 
   return <PromoDefaultComponent {...props} />;

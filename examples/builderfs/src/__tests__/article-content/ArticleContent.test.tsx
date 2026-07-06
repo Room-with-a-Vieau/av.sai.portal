@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Default as ArticleContent } from '../../components/article-content/ArticleContent';
+import { Default as ArticleContent, ServicePageVariant } from '../../components/article-content/ArticleContent';
 import {
   fullArticleContentProps,
+  servicePageVariantProps,
   splitTitleProps,
   titleOnlyProps,
   pageTitleOnlyProps,
@@ -85,5 +86,23 @@ describe('ArticleContent', () => {
   it('exposes data-component for analytics and authoring', () => {
     const { container } = render(<ArticleContent {...fullArticleContentProps} />);
     expect(container.querySelector('[data-component="ArticleContent"]')).toBeInTheDocument();
+  });
+});
+
+describe('ArticleContent ServicePageVariant', () => {
+  it('renders header title, subtitle, and summary in a two-column layout', () => {
+    const { container } = render(<ServicePageVariant {...servicePageVariantProps} />);
+
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Modular Construction');
+    expect(
+      screen.getByText(/Build faster with more control over schedule, labor, and quality/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Move critical work offsite into a controlled environment/i)).toBeInTheDocument();
+    expect(container.querySelector('[data-variant="ServicePageVariant"]')).toBeInTheDocument();
+  });
+
+  it('returns null when no service page fields and not editing', () => {
+    const { container } = render(<ServicePageVariant {...emptyProps} />);
+    expect(container.firstChild).toBeNull();
   });
 });

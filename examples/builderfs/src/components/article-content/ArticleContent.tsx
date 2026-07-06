@@ -126,3 +126,63 @@ export const Default: React.FC<ArticleContentProps> = (props) => {
     </section>
   );
 };
+
+export const ServicePageVariant: React.FC<ArticleContentProps> = (props) => {
+  const { params, page } = props;
+  const isEditing = page.mode.isEditing;
+  const { pageHeaderTitle, pageSummary, pageSubtitle } = mergeArticleContentFields(props, isEditing);
+
+  const hasPageHeaderTitle = hasText(pageHeaderTitle);
+  const hasPageSubtitle = hasText(pageSubtitle);
+  const hasPageSummary = hasText(pageSummary);
+
+  const hasRenderableBlock = hasPageHeaderTitle || hasPageSubtitle || hasPageSummary || isEditing;
+
+  if (!hasRenderableBlock) {
+    return null;
+  }
+
+  const headingId = 'article-content-service-page-heading';
+
+  return (
+    <section
+      data-component="ArticleContent"
+      data-variant="ServicePageVariant"
+      className={cn('@container article-content w-full bg-background', params?.styles)}
+      aria-labelledby={hasPageHeaderTitle || isEditing ? headingId : undefined}
+    >
+      <div className="mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-14 lg:px-12 lg:py-16">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12 xl:gap-20">
+          {(hasPageHeaderTitle || isEditing) && pageHeaderTitle && (
+            <div className="lg:w-[38%] lg:shrink-0">
+              <Text
+                id={headingId}
+                tag="h2"
+                field={pageHeaderTitle}
+                className="font-heading text-primary text-balance text-3xl font-bold uppercase leading-[1.1] tracking-tight md:text-4xl lg:text-[2.75rem]"
+              />
+            </div>
+          )}
+
+          <div className="flex min-w-0 flex-col gap-4 lg:w-[62%] lg:gap-5">
+            {(hasPageSubtitle || isEditing) && pageSubtitle && (
+              <Text
+                tag="p"
+                field={pageSubtitle}
+                className="font-heading text-primary text-pretty text-base font-bold uppercase leading-snug tracking-wide md:text-lg lg:text-xl"
+              />
+            )}
+
+            {(hasPageSummary || isEditing) && pageSummary && (
+              <Text
+                tag="p"
+                field={pageSummary}
+                className="text-foreground/80 font-body text-pretty text-base leading-relaxed md:text-[1.0625rem] md:leading-[1.75]"
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
