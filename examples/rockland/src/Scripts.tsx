@@ -9,12 +9,17 @@ const CdpPageView = dynamic(() => import('components/content-sdk/CdpPageView'), 
   ssr: false,
 });
 
+const DemoPersonaAnalytics = dynamic(() => import('components/content-sdk/DemoPersonaAnalytics'), {
+  ssr: false,
+});
+
 const Scripts = (): JSX.Element => {
   return (
     <>
       {/* <BYOC /> */}
       {/* <FEAASScripts /> */}
       <CdpPageView />
+      <DemoPersonaAnalytics />
       <EditingScripts />
     </>
   );

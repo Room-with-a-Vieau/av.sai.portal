@@ -6,40 +6,66 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
-
-const DEMO_USERS = [
-  { label: 'User 1 - Developers and Contractors', taxonomy: 'Developers and Contractors' },
-  { label: 'User 2 - Single-Family Homebuilders', taxonomy: 'Single-Family Homebuilders' },
-  { label: 'User 3 - Large Enterprise Builders', taxonomy: 'Large Enterprise Builders' },
-] as const;
+import {
+  DEMO_TAXONOMY_CHANGE_EVENT,
+  DEMO_TAXONOMY_LOGOUT_VALUE,
+  DEMO_USER_PERSONAS,
+  clearStoredDemoTaxonomy,
+  readStoredDemoTaxonomy,
+  setStoredDemoTaxonomy,
+  type DemoUserTaxonomy,
+} from '@/lib/demo-taxonomy';
 
 export function DemoUserSwitcher() {
-  const [taxonomy, setTaxonomy] = useState('');
+  const [taxonomy, setTaxonomy] = useState<DemoUserTaxonomy | null>(null);
+  const isLoggedIn = Boolean(taxonomy);
 
   useEffect(() => {
-    const storedTaxonomy = window.localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY) ?? '';
-    setTaxonomy(storedTaxonomy);
+    const syncTaxonomy = () => {
+      setTaxonomy(readStoredDemoTaxonomy());
+    };
+
+    syncTaxonomy();
+    window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, syncTaxonomy);
+
+    return () => {
+      window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, syncTaxonomy);
+    };
   }, []);
 
   const handleValueChange = (value: string) => {
-    setTaxonomy(value);
-    window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, value);
-    window.dispatchEvent(new CustomEvent(DEMO_TAXONOMY_CHANGE_EVENT, { detail: { taxonomy: value } }));
+    if (value === DEMO_TAXONOMY_LOGOUT_VALUE) {
+      clearStoredDemoTaxonomy();
+      setTaxonomy(null);
+      return;
+    }
+
+    const persona = value as DemoUserTaxonomy;
+    setStoredDemoTaxonomy(persona);
+    setTaxonomy(persona);
   };
 
   return (
-    <Select value={taxonomy || undefined} onValueChange={handleValueChange}>
-      <SelectTrigger className="h-10 w-[15rem]">
+    <Select value={taxonomy ?? undefined} onValueChange={handleValueChange}>
+      <SelectTrigger className="h-10 w-[15rem]" aria-label={isLoggedIn ? 'Demo persona' : 'Login as demo persona'}>
         <SelectValue placeholder="Login" />
       </SelectTrigger>
       <SelectContent align="end">
-        {DEMO_USERS.map((user) => (
-          <SelectItem key={user.taxonomy} value={user.taxonomy}>
-            {user.label}
+        {isLoggedIn && (
+          <>
+            <SelectItem value={DEMO_TAXONOMY_LOGOUT_VALUE} className="font-medium text-primary">
+              Logout
+            </SelectItem>
+            <SelectSeparator />
+          </>
+        )}
+        {DEMO_USER_PERSONAS.map((persona) => (
+          <SelectItem key={persona} value={persona}>
+            {persona}
           </SelectItem>
         ))}
       </SelectContent>

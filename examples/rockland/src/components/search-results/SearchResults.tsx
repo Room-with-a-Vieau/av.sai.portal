@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 import type { ComponentProps } from '@/lib/component-props';
-import { DEMO_TAXONOMY_CHANGE_EVENT, DEMO_TAXONOMY_STORAGE_KEY } from '@/lib/demo-taxonomy';
+import { DEMO_TAXONOMY_CHANGE_EVENT, parseDemoUserTaxonomy, readStoredDemoTaxonomy } from '@/lib/demo-taxonomy';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -34,7 +34,6 @@ import {
   itemMetadataLine,
   itemVisibleForDemoUser,
   normalizeQuery,
-  parseDemoUserTaxonomy,
   popularSearches,
   relevanceScore,
   RESULTS_PAGE_SIZE,
@@ -317,7 +316,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
 
   useEffect(() => {
     const readTaxonomy = () => {
-      setDemoTaxonomyRaw(typeof window !== 'undefined' ? (window.localStorage.getItem(DEMO_TAXONOMY_STORAGE_KEY) ?? '') : '');
+      setDemoTaxonomyRaw(readStoredDemoTaxonomy() ?? '');
     };
     readTaxonomy();
     window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, readTaxonomy);

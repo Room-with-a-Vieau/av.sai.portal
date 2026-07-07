@@ -1,12 +1,16 @@
 /**
- * Mock search catalog for Builders FirstSource.
+ * Mock search catalog for Rockland Trust demo search.
  * Data only - UI lives in SearchResults.tsx.
  */
 
-export type DemoUserTaxonomy =
-  | 'Developers and Contractors'
-  | 'Single-Family Homebuilders'
-  | 'Large Enterprise Builders';
+import {
+  type DemoUserTaxonomy,
+  getPersonaCode,
+  parseDemoUserTaxonomy,
+} from '@/lib/demo-taxonomy';
+
+export type { DemoUserTaxonomy };
+export { parseDemoUserTaxonomy };
 
 export type SearchContentType = 'product' | 'blog' | 'service' | 'content';
 
@@ -173,18 +177,6 @@ export function getDefaultCardImage(): string {
   return catalogDemoImage(0);
 }
 
-export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
-  const t = raw?.trim();
-  if (
-    t === 'Developers and Contractors' ||
-    t === 'Single-Family Homebuilders' ||
-    t === 'Large Enterprise Builders'
-  ) {
-    return t;
-  }
-  return null;
-}
-
 export function normalizeQuery(q: string): string {
   return q.toLowerCase().trim().replace(/\s+/g, ' ');
 }
@@ -270,108 +262,202 @@ export function relevanceScore(
 }
 
 export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy): SearchResultItem[] {
-  const code =
-    persona === 'Developers and Contractors' ? 'dc' : persona === 'Single-Family Homebuilders' ? 'sfh' : 'leb';
+  const code = getPersonaCode(persona);
+  const rocklandBase = 'https://www.rocklandtrust.com/';
 
-  const rows: Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[] =
-    persona === 'Developers and Contractors'
-      ? [
-          {
-            title: 'Contractor quick path: delivery, pickup, and local support',
-            description:
-              'A contractor-focused view of BFS delivery and pickup services, dedicated support, and jobsite-ready material coordination.',
-            href: `${BLDR_BASE}services`,
-            contentType: 'service',
-            categories: ['builderServices'],
-            brands: ['buildersFirstSource'],
-            searchBuckets: ['services', 'products'],
-            dateLabel: 'Personalized service',
-            breadcrumb: ['Services', 'Delivery & support'],
-            matchTerms: ['contractor', 'developer', 'delivery', 'pickup', 'support'],
-            imageSrc: catalogDemoImage(0),
-            isNew: true,
-          },
-          {
-            title: 'Products for contractors: lumber, roofing, siding, drywall, and tools',
-            description:
-              'A practical product index for crews sourcing core jobsite materials from local Builders FirstSource locations.',
-            href: `${BLDR_BASE}products`,
-            contentType: 'product',
-            categories: ['buildingMaterials'],
-            brands: ['buildersFirstSource'],
-            searchBuckets: ['products'],
-            priceLabel: 'Request quote',
-            dateLabel: 'Product guide',
-            breadcrumb: ['Products', 'Building materials'],
-            matchTerms: ['contractor', 'lumber', 'roofing', 'siding', 'drywall', 'tools'],
-            imageSrc: catalogDemoImage(1),
-          },
-        ]
-      : persona === 'Single-Family Homebuilders'
-        ? [
-            {
-              title: 'myBLDR for single-family builders',
-              description:
-                'Connect front-end design and sales with material procurement through completion of each home build.',
-              href: `${BLDR_BASE}digital-tools/mybldr`,
-              contentType: 'content',
-              categories: ['digitalTools'],
-              brands: ['mybldr'],
-              searchBuckets: ['mybldr', 'services'],
-              dateLabel: 'Personalized portal',
-              breadcrumb: ['Digital Solutions', 'myBLDR'],
-              matchTerms: ['single-family', 'homebuilder', 'project management', 'selections', 'schedule'],
-              imageSrc: catalogDemoImage(2),
-              isNew: true,
-            },
-            {
-              title: 'Custom Builder Services for quality products and custom solutions',
-              description:
-                'BFS Custom Builder Services supports builders who need quality products, expertise, and project-specific solutions.',
-              href: BLDR_BASE,
-              contentType: 'service',
-              categories: ['builderServices', 'windowsDoorsMillwork'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['services', 'windows'],
-              dateLabel: 'Personalized service',
-              breadcrumb: ['Services', 'Custom Builder Services'],
-              matchTerms: ['custom builder', 'single-family', 'expertise', 'premium homes'],
-              imageSrc: catalogDemoImage(3),
-            },
-          ]
-        : [
-            {
-              title: 'Enterprise builder operations: advanced manufacturing at scale',
-              description:
-                'Innovative manufacturing facilities create components that improve jobsite efficiency across larger builder programs.',
-              href: BLDR_BASE,
-              contentType: 'service',
-              categories: ['manufacturedComponents', 'builderServices'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['advancedManufacturing', 'services'],
-              dateLabel: 'Personalized enterprise',
-              breadcrumb: ['Services', 'Advanced Manufacturing'],
-              matchTerms: ['enterprise', 'large builder', 'scale', 'operations', 'components'],
-              imageSrc: catalogDemoImage(4),
-              isNew: true,
-            },
-            {
-              title: 'Multi-Family Services and modular construction support',
-              description:
-                'Service pathways for larger organizations coordinating multi-family, modular, and repeatable building programs.',
-              href: `${BLDR_BASE}services`,
-              contentType: 'service',
-              categories: ['builderServices', 'manufacturedComponents'],
-              brands: ['buildersFirstSource'],
-              searchBuckets: ['services', 'advancedManufacturing'],
-              dateLabel: 'Personalized service',
-              breadcrumb: ['Services', 'Enterprise builders'],
-              matchTerms: ['enterprise', 'multi-family', 'modular', 'large builder'],
-              imageSrc: catalogDemoImage(5),
-            },
-          ];
+  const rowsByPersona: Record<
+    DemoUserTaxonomy,
+    Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[]
+  > = {
+    'Young Professional': [
+      {
+        title: 'Advantage Checking for early-career banking',
+        description:
+          'A checking option for professionals balancing direct deposit, digital tools, and everyday spending with fewer fees.',
+        href: `${rocklandBase}personal/banking/checking-products/advantage-checking`,
+        contentType: 'service',
+        categories: ['builderServices', 'digitalTools'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'mybldr'],
+        dateLabel: 'Personalized checking',
+        breadcrumb: ['Personal', 'Checking', 'Advantage Checking'],
+        matchTerms: ['young professional', 'checking', 'direct deposit', 'everyday banking'],
+        imageSrc: catalogDemoImage(0),
+        isNew: true,
+      },
+      {
+        title: 'Online & Mobile Banking for on-the-go account control',
+        description:
+          'Manage balances, transfers, and alerts from your phone — built for customers who bank between meetings and commutes.',
+        href: `${rocklandBase}personal/services/online-and-mobile-banking`,
+        contentType: 'content',
+        categories: ['digitalTools'],
+        brands: ['mybldr'],
+        searchBuckets: ['mybldr', 'services'],
+        dateLabel: 'Digital banking',
+        breadcrumb: ['Personal', 'Services', 'Online & Mobile Banking'],
+        matchTerms: ['mobile banking', 'online banking', 'alerts', 'transfers'],
+        imageSrc: catalogDemoImage(1),
+      },
+    ],
+    'First-Time Homebuyer': [
+      {
+        title: 'First-time homebuyer guidance and mortgage programs',
+        description:
+          'Resources for buyers navigating pre-approval, down payment planning, and choosing the right mortgage product.',
+        href: `${rocklandBase}personal/loans/mortgage-products/first-time-homebuyers`,
+        contentType: 'content',
+        categories: ['resources', 'builderServices'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'products'],
+        dateLabel: 'Homebuyer guide',
+        breadcrumb: ['Personal', 'Loans', 'First-Time Homebuyers'],
+        matchTerms: ['first-time homebuyer', 'mortgage', 'pre-approval', 'down payment'],
+        imageSrc: catalogDemoImage(2),
+        isNew: true,
+      },
+      {
+        title: 'Home loan pre-approval to shop with confidence',
+        description:
+          'Understand borrowing power before you tour homes and make offers in competitive Massachusetts and Rhode Island markets.',
+        href: `${rocklandBase}personal/loans/mortgage-products/home-loan-pre-approval`,
+        contentType: 'service',
+        categories: ['builderServices'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services'],
+        dateLabel: 'Mortgage service',
+        breadcrumb: ['Personal', 'Loans', 'Pre-Approval'],
+        matchTerms: ['pre-approval', 'home loan', 'first home', 'mortgage rates'],
+        imageSrc: catalogDemoImage(3),
+      },
+    ],
+    'Growing Family': [
+      {
+        title: 'Savings and money market options for family goals',
+        description:
+          'Compare savings, CDs, and money market accounts for emergency funds, education, and long-term family planning.',
+        href: `${rocklandBase}personal/banking/savings-products`,
+        contentType: 'service',
+        categories: ['buildingMaterials', 'resources'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['products', 'services'],
+        dateLabel: 'Family savings',
+        breadcrumb: ['Personal', 'Banking', 'Savings Products'],
+        matchTerms: ['growing family', 'savings', 'money market', 'cds', 'education'],
+        imageSrc: catalogDemoImage(4),
+        isNew: true,
+      },
+      {
+        title: 'Home equity lines and loans for renovation or tuition',
+        description:
+          'Tap home equity for kitchen upgrades, room additions, or tuition with guidance from Rockland Trust lending specialists.',
+        href: `${rocklandBase}personal/loans/home-equity-products`,
+        contentType: 'service',
+        categories: ['builderServices'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'products'],
+        dateLabel: 'Home equity',
+        breadcrumb: ['Personal', 'Loans', 'Home Equity'],
+        matchTerms: ['home equity', 'heloc', 'renovation', 'family', 'tuition'],
+        imageSrc: catalogDemoImage(5),
+      },
+    ],
+    'Small Business Owner': [
+      {
+        title: 'Business checking built for owner-operators',
+        description:
+          'Business banking accounts with tools for deposits, payments, and cash flow visibility for small and mid-sized companies.',
+        href: `${rocklandBase}business/banking/business-checking`,
+        contentType: 'service',
+        categories: ['builderServices'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services'],
+        dateLabel: 'Business banking',
+        breadcrumb: ['Business', 'Banking', 'Business Checking'],
+        matchTerms: ['small business', 'business checking', 'cash flow', 'owner'],
+        imageSrc: catalogDemoImage(6),
+        isNew: true,
+      },
+      {
+        title: 'Business credit cards and treasury support',
+        description:
+          'Separate business spending, manage payables, and explore treasury services as your company scales.',
+        href: `${rocklandBase}business/banking/business-credit-cards`,
+        contentType: 'service',
+        categories: ['builderServices', 'digitalTools'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'mybldr'],
+        dateLabel: 'Business credit',
+        breadcrumb: ['Business', 'Banking', 'Credit Cards'],
+        matchTerms: ['business credit card', 'treasury', 'payables', 'small business owner'],
+        imageSrc: catalogDemoImage(7),
+      },
+    ],
+    'Digital-First Consumer': [
+      {
+        title: 'Rockland Trust mobile app: banking in your pocket',
+        description:
+          'Deposit checks, pay bills, and monitor accounts with biometric login and real-time alerts — no branch visit required.',
+        href: `${rocklandBase}personal/services/online-and-mobile-banking`,
+        contentType: 'content',
+        categories: ['digitalTools'],
+        brands: ['mybldr'],
+        searchBuckets: ['mybldr', 'services'],
+        dateLabel: 'Mobile app',
+        breadcrumb: ['Personal', 'Services', 'Mobile Banking'],
+        matchTerms: ['digital-first', 'mobile app', 'biometric', 'alerts', 'remote deposit'],
+        imageSrc: catalogDemoImage(8),
+        isNew: true,
+      },
+      {
+        title: 'Rockland Complete Checking with digital perks',
+        description:
+          'A checking package for customers who prefer self-service tools, fee rebates, and integrated money management.',
+        href: `${rocklandBase}personal/banking/checking-products/rockland-complete-checking`,
+        contentType: 'service',
+        categories: ['digitalTools', 'builderServices'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['mybldr', 'services'],
+        dateLabel: 'Digital checking',
+        breadcrumb: ['Personal', 'Checking', 'Rockland Complete'],
+        matchTerms: ['digital consumer', 'complete checking', 'self-service', 'online'],
+        imageSrc: catalogDemoImage(9),
+      },
+    ],
+    'College Student': [
+      {
+        title: 'Free Student Checking with no monthly maintenance fee',
+        description:
+          'Student-friendly checking with mobile tools, debit card access, and budgeting features while you are in school.',
+        href: `${rocklandBase}personal/banking/checking-products/free-student-checking`,
+        contentType: 'service',
+        categories: ['builderServices', 'digitalTools'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'mybldr'],
+        dateLabel: 'Student checking',
+        breadcrumb: ['Personal', 'Checking', 'Free Student Checking'],
+        matchTerms: ['college student', 'student checking', 'no fee', 'campus banking'],
+        imageSrc: catalogDemoImage(10),
+        isNew: true,
+      },
+      {
+        title: 'NH Student Loans and education financing resources',
+        description:
+          'Explore student loan options, repayment guidance, and tools to compare borrowing before the semester starts.',
+        href: `${rocklandBase}personal/services/nh-student-loans`,
+        contentType: 'content',
+        categories: ['resources'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services', 'products'],
+        dateLabel: 'Student loans',
+        breadcrumb: ['Personal', 'Services', 'NH Student Loans'],
+        matchTerms: ['student loans', 'college', 'education financing', 'repayment'],
+        imageSrc: catalogDemoImage(11),
+      },
+    ],
+  };
 
-  return rows.map((row, i) => ({
+  return rowsByPersona[persona].map((row, i) => ({
     ...row,
     id: `demo-sup-${code}-${i + 1}`,
     demoUserTaxonomy: persona,
@@ -899,14 +985,22 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const buckets = detectSearchBuckets(n);
   const key = insightKey(buckets, user);
 
-  const personaHint =
-    user === 'Developers and Contractors'
-      ? 'Prioritize local availability, delivery windows, and jobsite-ready materials.'
-      : user === 'Single-Family Homebuilders'
-        ? 'Use myBLDR, selections, schedules, and budget workflows to keep each home moving.'
-        : user === 'Large Enterprise Builders'
-          ? 'Look for scalable component manufacturing, multi-family services, and repeatable procurement programs.'
-          : 'Use facets to compare products, services, blogs, and content by need.';
+  const personaHint: Record<DemoUserTaxonomy, string> = {
+    'Young Professional':
+      'Prioritize checking, direct deposit, and mobile tools that fit an early-career schedule.',
+    'First-Time Homebuyer':
+      'Start with pre-approval, first-time buyer programs, and mortgage education before you shop.',
+    'Growing Family':
+      'Compare savings, CDs, and home equity options that support household and education goals.',
+    'Small Business Owner':
+      'Look for business checking, credit, and treasury services that scale with your company.',
+    'Digital-First Consumer':
+      'Favor mobile banking, alerts, and self-service account tools over branch-only workflows.',
+    'College Student':
+      'Focus on no-fee student checking, debit access, and education loan resources.',
+  };
+
+  const personaGuidance = user ? personaHint[user] : 'Use facets to compare products, services, blogs, and content by need.';
 
   if (buckets.includes('mybldr')) {
     return {
@@ -915,7 +1009,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
       body:
         'myBLDR is positioned as a digital homebuilding platform that connects design, sales, material procurement, and build completion.',
       bullets: [
-        personaHint,
+        personaGuidance,
         'Review Projects for plans, selections, schedules, budgets, and access control',
         'Open Materials when the goal is quotes, purchase orders, delivery dates, and fulfillment photos',
       ],
@@ -931,7 +1025,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
       body:
         'READY-FRAME and advanced manufacturing content are strong matches when the search goal is jobsite efficiency, reduced labor, and repeatable production.',
       bullets: [
-        personaHint,
+        personaGuidance,
         'Filter to Manufactured components for READY-FRAME, trusses, and design services',
         'Pair product results with service results like Truss and EWP Design or Advanced Manufacturing',
       ],
@@ -947,7 +1041,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
       body:
         'Window, door, and millwork searches should include both product categories and service support from specialists or custom millwork teams.',
       bullets: [
-        personaHint,
+        personaGuidance,
         'Use Windows, Doors, and Moulding & Millwork product results for category discovery',
         'Add Custom Builder Services or Window and Door Specialists for project support',
       ],
@@ -963,7 +1057,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
       body:
         'BFS services span delivery, support, design, installed services, multi-family, modular construction, credit, and digital portal workflows.',
       bullets: [
-        personaHint,
+        personaGuidance,
         'Use Builder services for operations and support needs',
         'Use Digital tools when the need includes project, schedule, budget, or procurement coordination',
       ],
@@ -979,7 +1073,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
       body:
         'BFS product availability can vary by location, so product discovery should be followed by local store or quote validation.',
       bullets: [
-        personaHint,
+        personaGuidance,
         'Filter by Building materials for lumber, roofing, siding, drywall, tools, and exterior products',
         'Filter by Windows, doors & millwork for premium window and finish categories',
       ],
@@ -992,7 +1086,7 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
     id: `ai-gen-${key}`,
     headline: 'AI suggestion - refine by products, services, blogs, or content',
     body:
-      'This Builder FirstSource mock catalog combines product categories, service lines, homepage content, myBLDR details, and related article topics.',
+      'This Rockland Trust mock catalog combines personal and business banking products, services, learning content, and persona-tailored recommendations.',
     bullets: [
       'Try popular searches such as myBLDR, READY-FRAME, Premium Windows, or Advanced Manufacturing',
       'Switch the demo persona to personalize result ordering and supplemental rows',
