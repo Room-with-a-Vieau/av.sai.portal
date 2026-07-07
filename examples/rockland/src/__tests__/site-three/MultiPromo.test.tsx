@@ -80,6 +80,11 @@ describe('MultiPromo', () => {
                     value: 'Product One',
                   },
                 },
+                Slug: {
+                  jsonValue: {
+                    value: 'Product One',
+                  },
+                },
               },
               {
                 id: 'promo-2',
@@ -110,6 +115,11 @@ describe('MultiPromo', () => {
                   },
                 },
                 slug: {
+                  jsonValue: {
+                    value: 'Product Two',
+                  },
+                },
+                Slug: {
                   jsonValue: {
                     value: 'Product Two',
                   },
@@ -348,6 +358,55 @@ describe('MultiPromo', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoSideTabs {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+
+    it('does not use heading text for tab labels when slug is missing', () => {
+      const propsWithoutSlug = {
+        ...mockProps,
+        fields: {
+          data: {
+            datasource: {
+              children: {
+                results: [
+                  {
+                    id: 'promo-no-slug',
+                    heading: {
+                      jsonValue: {
+                        value: 'Long Promo Heading Title',
+                      },
+                    },
+                    description: {
+                      jsonValue: {
+                        value: 'Description text',
+                      },
+                    },
+                    image: {
+                      jsonValue: {
+                        value: {
+                          src: '/images/product1.jpg',
+                          alt: 'Product 1',
+                        },
+                      },
+                    },
+                    link: {
+                      jsonValue: {
+                        value: {
+                          href: '/product1',
+                          text: 'Learn More',
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      render(<MultiPromoSideTabs {...propsWithoutSlug} />);
+      expect(screen.getByRole('tab', { name: 'Promotion 1' })).toBeInTheDocument();
+      expect(screen.queryByRole('tab', { name: 'Long Promo Heading Title' })).not.toBeInTheDocument();
     });
   });
 });

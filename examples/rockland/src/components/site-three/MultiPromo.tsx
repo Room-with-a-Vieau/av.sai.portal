@@ -27,6 +27,7 @@ interface SimplePromoFields {
   heading: IGQLTextField;
   description: IGQLTextField;
   slug?: IGQLTextField;
+  Slug?: IGQLTextField;
   image: IGQLImageField;
   link: IGQLLinkField;
 }
@@ -66,6 +67,9 @@ const parentBasedGridClasses =
   'grid lg:[.multipromo-2-3_&]:grid-cols-[2fr_3fr] lg:[.multipromo-3-2_&]:grid-cols-[3fr_2fr] lg:grid-cols-[1fr_1fr] gap-14';
 const parentBasedGridItemClasses =
   '[.multipromo-centered_&]:items-center [.bg-gradient_&]:text-white items-start';
+
+const getPromoSlugField = (promo: SimplePromoFields) =>
+  promo.slug?.jsonValue ?? promo.Slug?.jsonValue;
 
 export const Default = (props: MultiPromoProps) => {
   const datasource = useMemo(
@@ -259,7 +263,7 @@ export const SideTabs = (props: MultiPromoProps) => {
             >
               {promos.map((promo, index) => {
                 const isActive = index === activeIndex;
-                const tabLabel = promo.slug?.jsonValue ?? promo.heading?.jsonValue;
+                const tabLabel = getPromoSlugField(promo);
 
                 return (
                   <button
