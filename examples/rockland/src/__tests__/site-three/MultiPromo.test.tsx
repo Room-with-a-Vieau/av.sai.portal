@@ -15,11 +15,24 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
+  Image: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
+  ),
   Link: ({ field, children, className }: any) => (
     <a href={field?.value?.href || '#'} className={className}>
       {children || field?.value?.text || ''}
     </a>
   ),
+  useSitecore: () => ({
+    page: {
+      mode: {
+        isEditing: false,
+        isPreview: false,
+        isNormal: true,
+      },
+    },
+  }),
 }));
 
 // Mock NoDataFallback
@@ -340,13 +353,19 @@ describe('MultiPromo', () => {
       expect(screen.getByRole('link', { name: 'View Product 2' })).toBeInTheDocument();
     });
 
-    it('renders only the active promo image', () => {
-      render(<MultiPromoSideTabs {...mockProps} />);
-      expect(screen.getAllByRole('img')).toHaveLength(1);
-      expect(screen.getByRole('img')).toHaveAttribute('src', '/images/product1.jpg');
+    it('renders only the active promo image visibly', () => {
+      const { container } = render(<MultiPromoSideTabs {...mockProps} />);
+      const activePanel = container.querySelector('[data-promo-panel][data-active="true"]');
+      expect(activePanel?.querySelector('img')).toHaveAttribute('src', '/images/product1.jpg');
 
       fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
-      expect(screen.getByRole('img')).toHaveAttribute('src', '/images/product2.jpg');
+      const nextActivePanel = container.querySelector('[data-promo-panel][data-active="true"]');
+      expect(nextActivePanel?.querySelector('img')).toHaveAttribute('src', '/images/product2.jpg');
+    });
+
+    it('keeps all promo panels mounted for Sitecore editing', () => {
+      const { container } = render(<MultiPromoSideTabs {...mockProps} />);
+      expect(container.querySelectorAll('[data-promo-panel]')).toHaveLength(2);
     });
 
     it('applies side tabs layout class', () => {

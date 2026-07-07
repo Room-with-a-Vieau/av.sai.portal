@@ -78,12 +78,91 @@ const boldPromoBackgroundThemes: Record<PromoBackground, BoldPromoBackgroundThem
   },
 };
 
-const resolvePromoBackground = (params: { [key: string]: string }): PromoBackground => {
-  const value = (params.Background ?? params.background ?? 'dark').toLowerCase().trim();
+const resolvePromoBackground = (
+  params: { [key: string]: string },
+  fallback: PromoBackground = 'dark'
+): PromoBackground => {
+  const value = (params.Background ?? params.background ?? fallback).toLowerCase().trim();
 
   return PROMO_BACKGROUND_OPTIONS.includes(value as PromoBackground)
     ? (value as PromoBackground)
-    : 'dark';
+    : fallback;
+};
+
+type ColumnsPromoBackgroundTheme = {
+  containerBg: string;
+  titleClasses: string;
+  rateClasses: string;
+  buttonClasses: string;
+};
+
+const columnsPromoTitleBase =
+  'font-heading text-3xl leading-tight tracking-tight lg:text-4xl [&_h1]:font-heading [&_h1]:text-3xl [&_h1]:font-normal [&_h1]:leading-tight [&_h1]:lg:text-4xl [&_h2]:font-heading [&_h2]:text-3xl [&_h2]:font-normal [&_h2]:leading-tight [&_h2]:lg:text-4xl [&_p]:font-heading [&_p]:text-3xl [&_p]:font-normal [&_p]:leading-tight [&_p]:lg:text-4xl';
+
+const columnsPromoRateBase =
+  'font-body text-center [&_h1]:font-heading [&_h1]:mb-2 [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:font-heading [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:font-heading [&_h3]:mb-4 [&_h3]:text-4xl [&_h3]:font-bold [&_p]:mb-2 [&_p]:text-sm [&_p]:leading-relaxed';
+
+const columnsPromoButtonBase =
+  'rounded-none bg-transparent px-6 py-2 text-sm font-semibold uppercase tracking-wide';
+
+const columnsTitleOnLight = cn(columnsPromoTitleBase, 'text-primary [&_h1]:text-primary [&_h2]:text-primary [&_p]:text-primary');
+const columnsTitleOnDark = cn(columnsPromoTitleBase, 'text-white [&_h1]:text-white [&_h2]:text-white [&_p]:text-white');
+
+const columnsRateOnLight = cn(
+  columnsPromoRateBase,
+  'text-foreground [&_h1]:text-primary [&_h2]:text-primary [&_h3]:text-primary [&_p]:text-muted-foreground'
+);
+const columnsRateOnDark = cn(
+  columnsPromoRateBase,
+  'text-white [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_p]:text-white/80'
+);
+
+const columnsPromoBackgroundThemes: Record<PromoBackground, ColumnsPromoBackgroundTheme> = {
+  dark: {
+    containerBg: 'bg-[#0a1a44]',
+    titleClasses: columnsTitleOnDark,
+    rateClasses: columnsRateOnDark,
+    buttonClasses: cn(
+      columnsPromoButtonBase,
+      'border-white text-white hover:bg-white hover:text-[#0a1a44]'
+    ),
+  },
+  light: {
+    containerBg: 'bg-muted',
+    titleClasses: columnsTitleOnLight,
+    rateClasses: columnsRateOnLight,
+    buttonClasses: cn(
+      columnsPromoButtonBase,
+      'border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+    ),
+  },
+  primary: {
+    containerBg: 'bg-primary',
+    titleClasses: columnsTitleOnDark,
+    rateClasses: columnsRateOnDark,
+    buttonClasses: cn(
+      columnsPromoButtonBase,
+      'border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary'
+    ),
+  },
+  secondary: {
+    containerBg: 'bg-secondary',
+    titleClasses: columnsTitleOnDark,
+    rateClasses: columnsRateOnDark,
+    buttonClasses: cn(
+      columnsPromoButtonBase,
+      'border-secondary-foreground text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary'
+    ),
+  },
+  tertiary: {
+    containerBg: 'bg-tertiary',
+    titleClasses: columnsTitleOnDark,
+    rateClasses: columnsRateOnDark,
+    buttonClasses: cn(
+      columnsPromoButtonBase,
+      'border-tertiary-foreground text-tertiary-foreground hover:bg-tertiary-foreground hover:text-tertiary'
+    ),
+  },
 };
 
 const splitPromoTitleClasses =
@@ -94,6 +173,48 @@ const splitPromoBodyClasses =
 
 const splitPromoButtonClasses =
   'rounded-none bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-semibold uppercase tracking-wide';
+
+const ColumnsPromoLayout = (props: PromoProps): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  const background = resolvePromoBackground(props.params, 'light');
+  const theme = columnsPromoBackgroundThemes[background];
+  const { PromoText, PromoText2, PromoText3, PromoLink, PromoLink2 } = props.fields;
+
+  return (
+    <section
+      data-class-change
+      className={cn('component promo w-full', theme.containerBg, props.params.styles)}
+      id={id ? id : undefined}
+    >
+      <div className="container mx-auto px-6 py-12 md:px-10 md:py-14 lg:px-12">
+        <div className="grid items-center gap-10 md:grid-cols-3 md:gap-8 lg:gap-12">
+          <div className="flex flex-col justify-center md:pr-4">
+            <ContentSdkRichText tag="div" className={theme.titleClasses} field={PromoText3} />
+            <span aria-hidden="true" className="bg-accent mt-4 block h-1 w-16" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-6 text-center">
+            <ContentSdkRichText tag="div" className={theme.rateClasses} field={PromoText} />
+            {PromoLink?.value?.href && (
+              <Button variant="outline" className={theme.buttonClasses} asChild>
+                <ContentSdkLink field={PromoLink} />
+              </Button>
+            )}
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-6 text-center">
+            <ContentSdkRichText tag="div" className={theme.rateClasses} field={PromoText2} />
+            {PromoLink2?.value?.href && (
+              <Button variant="outline" className={theme.buttonClasses} asChild>
+                <ContentSdkLink field={PromoLink2} />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const SplitPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): JSX.Element => {
   const id = props.params.RenderingIdentifier;
@@ -299,6 +420,14 @@ export const Left = (props: PromoProps): JSX.Element => {
 export const Right = (props: PromoProps): JSX.Element => {
   if (props.fields) {
     return SplitPromoLayout(props, 'right');
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const Columns = (props: PromoProps): JSX.Element => {
+  if (props.fields) {
+    return ColumnsPromoLayout(props);
   }
 
   return <PromoDefaultComponent {...props} />;

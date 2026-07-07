@@ -4,7 +4,9 @@ import { useMemo, useState } from 'react';
 import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
+  Image as ContentSdkEditableImage,
   Link as ContentSdkLink,
+  useSitecore,
 } from '@sitecore-content-sdk/nextjs';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
@@ -178,20 +180,26 @@ const SideTabsPromoPanel = ({
   promo,
   tabId,
   panelId,
+  isEditing,
 }: {
   promo: SimplePromoFields;
   tabId: string;
   panelId: string;
+  isEditing: boolean;
 }) => {
   const { image, heading, description, link } = promo ?? {};
+  const headingField = heading?.jsonValue;
+  const descriptionField = description?.jsonValue;
+  const imageField = image?.jsonValue;
+  const linkField = link?.jsonValue;
 
   return (
     <>
-      <div className="bg-muted/60 flex min-h-[280px] items-center justify-center p-6 sm:min-h-[360px] lg:min-h-[420px]">
-        {image?.jsonValue && (
-          <ContentSdkImage
-            field={image.jsonValue}
-            className="max-h-[360px] w-full max-w-full object-contain lg:max-h-[420px]"
+      <div className="relative min-h-[280px] overflow-hidden bg-background sm:min-h-[360px] lg:min-h-[420px]">
+        {(imageField?.value?.src || isEditing) && imageField && (
+          <ContentSdkEditableImage
+            field={imageField}
+            className="h-full min-h-[280px] w-full object-cover object-center sm:min-h-[360px] lg:min-h-[420px]"
           />
         )}
       </div>
@@ -202,19 +210,19 @@ const SideTabsPromoPanel = ({
         aria-labelledby={tabId}
         className="bg-primary text-primary-foreground relative flex min-h-[280px] flex-col justify-center px-6 py-8 sm:min-h-[360px] sm:px-10 lg:min-h-[420px] lg:px-12"
       >
-        {heading?.jsonValue && (
+        {(headingField?.value || isEditing) && headingField && (
           <h3 className="text-accent font-heading mb-4 text-pretty text-2xl leading-tight tracking-tight sm:text-3xl lg:text-4xl">
-            <ContentSdkText field={heading.jsonValue} />
+            <ContentSdkText field={headingField} />
           </h3>
         )}
-        {description?.jsonValue && (
+        {(descriptionField?.value || isEditing) && descriptionField && (
           <p className="font-body mb-6 max-w-prose text-base leading-relaxed text-white/95 sm:text-lg">
-            <ContentSdkText field={description.jsonValue} />
+            <ContentSdkText field={descriptionField} />
           </p>
         )}
-        {link?.jsonValue && (
+        {(linkField?.value?.href || isEditing) && linkField && (
           <ContentSdkLink
-            field={link.jsonValue}
+            field={linkField}
             className="font-body inline-flex w-fit items-center border border-white px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-white/10"
           />
         )}
@@ -225,6 +233,8 @@ const SideTabsPromoPanel = ({
 
 export const SideTabs = (props: MultiPromoProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { page } = useSitecore();
+  const isEditing = page.mode.isEditing;
 
   const promos = useMemo(
     () => props.fields?.data?.datasource?.children?.results?.filter(Boolean) ?? [],
@@ -232,28 +242,34 @@ export const SideTabs = (props: MultiPromoProps) => {
   );
 
   if (props.fields) {
-    const activePromo = promos[activeIndex] ?? promos[0];
-
     return (
       <section
         className={cn('multi-promo-side-tabs relative w-full', props.params?.styles || '')}
         data-class-change
       >
         <div className="container mx-auto px-4 py-8 lg:py-12">
-          <div className="border-border overflow-hidden rounded-none border shadow-sm lg:grid lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)_minmax(0,3fr)]">
-            <div className="lg:contents">
-              {activePromo ? (
-                <SideTabsPromoPanel
-                  promo={activePromo}
-                  tabId={`multi-promo-side-tab-${activePromo.id}`}
-                  panelId={`multi-promo-side-tab-panel-${activePromo.id}`}
-                />
-              ) : (
-                <>
-                  <div className="bg-muted/60 min-h-[280px]" />
-                  <div className="bg-primary min-h-[280px]" />
-                </>
-              )}
+          <div className="border-border overflow-hidden rounded-none border shadow-sm lg:grid lg:grid-cols-[minmax(0,20fr)_minmax(0,3fr)]">
+            <div className="min-w-0">
+              {promos.map((promo, index) => {
+                const isActive = index === activeIndex;
+
+                return (
+                  <div
+                    key={promo.id}
+                    data-promo-panel
+                    data-active={isActive}
+                    hidden={!isActive}
+                    className="grid grid-cols-1 lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] lg:items-stretch"
+                  >
+                    <SideTabsPromoPanel
+                      promo={promo}
+                      tabId={`multi-promo-side-tab-${promo.id}`}
+                      panelId={`multi-promo-side-tab-panel-${promo.id}`}
+                      isEditing={isEditing}
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             <div

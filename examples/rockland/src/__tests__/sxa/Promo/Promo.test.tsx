@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Default as PromoDefault, CenteredCard, Left as PromoLeft, Right as PromoRight } from 'components/sxa/Promo';
+import { Default as PromoDefault, CenteredCard, Left as PromoLeft, Right as PromoRight, Columns as PromoColumns } from 'components/sxa/Promo';
 import {
   defaultPromoProps,
   centeredCardPromoProps,
@@ -13,6 +13,7 @@ import {
   emptyPromoProps,
   emptyTextFieldsProps,
   splitPromoProps,
+  columnsPromoProps,
 } from './Promo.mockProps';
 
 // Mock the Sitecore Content SDK components and shadcn UI Button
@@ -314,5 +315,81 @@ describe('Promo Component - Right Variant', () => {
   it('renders default component when fields are null', () => {
     const { container } = render(<PromoRight {...emptyPromoProps} />);
     expect(container.querySelector('.is-empty-hint')).toBeInTheDocument();
+  });
+});
+
+describe('Promo Component - Columns Variant', () => {
+  it('renders three-column featured rates layout', () => {
+    const { container } = render(<PromoColumns {...columnsPromoProps} />);
+
+    const section = container.querySelector('section.component.promo');
+    expect(section).toBeInTheDocument();
+    expect(section).toHaveClass('columns-promo-style');
+    expect(container.querySelector('.md\\:grid-cols-3')).toBeInTheDocument();
+  });
+
+  it('renders PromoText3 in the left column with accent line', () => {
+    const { container } = render(<PromoColumns {...columnsPromoProps} />);
+
+    expect(container).toHaveTextContent('Featured Rates');
+    expect(container.querySelector('.bg-accent.h-1.w-16')).toBeInTheDocument();
+  });
+
+  it('renders PromoText and PromoLink in the middle column', () => {
+    const { container } = render(<PromoColumns {...columnsPromoProps} />);
+
+    expect(container).toHaveTextContent('Express Mortgage');
+    expect(container).toHaveTextContent('6.874% APR');
+
+    const links = container.querySelectorAll('a');
+    expect(links[0]).toHaveAttribute('href', '/mortgages/express');
+    expect(links[0]).toHaveTextContent('Learn More');
+  });
+
+  it('renders PromoText2 and PromoLink2 in the right column', () => {
+    const { container } = render(<PromoColumns {...columnsPromoProps} />);
+
+    expect(container).toHaveTextContent('Home Equity Line of Credit');
+    expect(container).toHaveTextContent('6.240% APR');
+
+    const links = container.querySelectorAll('a');
+    expect(links[1]).toHaveAttribute('href', '/home-equity');
+    expect(links[1]).toHaveTextContent('Learn More');
+  });
+
+  it('renders default component when fields are null', () => {
+    const { container } = render(<PromoColumns {...emptyPromoProps} />);
+    expect(container.querySelector('.is-empty-hint')).toBeInTheDocument();
+  });
+
+  it('uses light background by default for Rockland featured rates styling', () => {
+    const { container } = render(<PromoColumns {...columnsPromoProps} />);
+
+    const section = container.querySelector('section.component.promo');
+    expect(section).toHaveClass('bg-muted');
+  });
+
+  it('applies dark background theme when Background param is set', () => {
+    const { container } = render(
+      <PromoColumns
+        {...columnsPromoProps}
+        params={{ ...columnsPromoProps.params, Background: 'dark' }}
+      />
+    );
+
+    const section = container.querySelector('section.component.promo');
+    expect(section).toHaveClass('bg-[#0a1a44]');
+  });
+
+  it('applies primary background theme when Background param is set', () => {
+    const { container } = render(
+      <PromoColumns
+        {...columnsPromoProps}
+        params={{ ...columnsPromoProps.params, Background: 'primary' }}
+      />
+    );
+
+    const section = container.querySelector('section.component.promo');
+    expect(section).toHaveClass('bg-primary');
   });
 });

@@ -27,10 +27,26 @@ type FeatureBannerProps = {
   fields: Fields;
 };
 
-const FeatureItem = (props: FeatureItemFields) => {
+type FeatureItemProps = FeatureItemFields & {
+  imageClassName?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+};
+
+const FeatureItem = ({
+  imageClassName = 'h-6 w-6 object-contain',
+  imageWidth = 24,
+  imageHeight = 24,
+  ...props
+}: FeatureItemProps) => {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <ContentSdkImage field={props?.image?.jsonValue} className="w-6 h-6 object-contain" />
+    <div className="flex flex-col items-center gap-2">
+      <ContentSdkImage
+        field={props?.image?.jsonValue}
+        width={imageWidth}
+        height={imageHeight}
+        className={imageClassName}
+      />
       <p className="text-base text-center">
         <ContentSdkText field={props?.heading?.jsonValue} />
       </p>
@@ -75,9 +91,15 @@ export const Vertical = (props: FeatureBannerProps) => {
           <h2 className="text-2xl lg:text-5xl">
             <ContentSdkText field={datasource?.title?.jsonValue} />
           </h2>
-          <div className="flex flex-wrap lg:flex-nowrap justify-center items-start gap-10">
+          <div className="flex flex-wrap justify-center items-start gap-8 md:gap-10 lg:gap-12">
             {datasource?.children?.results?.map((item) => (
-              <FeatureItem key={item.id} {...item} />
+              <FeatureItem
+                key={item.id}
+                {...item}
+                imageClassName="h-16 w-16 object-contain sm:h-20 sm:w-20"
+                imageWidth={80}
+                imageHeight={80}
+              />
             )) || []}
           </div>
         </div>

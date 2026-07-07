@@ -202,3 +202,41 @@ export const splitPromoProps: PromoProps = {
     },
   },
 };
+
+/**
+ * Props for Columns promo variant
+ */
+export const columnsPromoProps: PromoProps = {
+  params: {
+    RenderingIdentifier: 'promo-columns',
+    styles: 'columns-promo-style',
+  },
+  fields: {
+    PromoIcon: mockPromoData.defaultIcon,
+    PromoText3: {
+      value: 'Featured Rates',
+    },
+    PromoText: {
+      value:
+        '<h2>Express Mortgage</h2><p>20 year term as low as</p><h3>6.874% APR</h3>',
+    },
+    PromoText2: {
+      value:
+        '<h2>Home Equity Line of Credit</h2><p>featured</p><h3>6.240% APR</h3>',
+    },
+    PromoLink: {
+      value: {
+        href: '/mortgages/express',
+        text: 'Learn More',
+        linktype: 'internal',
+      },
+    },
+    PromoLink2: {
+      value: {
+        href: '/home-equity',
+        text: 'Learn More',
+        linktype: 'internal',
+      },
+    },
+  },
+};
