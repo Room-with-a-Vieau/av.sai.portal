@@ -14,37 +14,37 @@ const DEMO_PERSONA_PROFILES: Record<DemoUserTaxonomy, Omit<DemoPersonaProfile, '
   'Young Professional': {
     firstName: 'Jordan',
     lastName: 'Mitchell',
-    email: 'jordan.mitchell@demo.rocklandtrust.local',
+    email: 'jordan.mitchell@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-yp',
   },
   'First-Time Homebuyer': {
     firstName: 'Alexis',
     lastName: 'Chen',
-    email: 'alexis.chen@demo.rocklandtrust.local',
+    email: 'alexis.chen@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-fth',
   },
   'Growing Family': {
     firstName: 'Megan',
     lastName: 'Sullivan',
-    email: 'megan.sullivan@demo.rocklandtrust.local',
+    email: 'megan.sullivan@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-gf',
   },
   'Small Business Owner': {
     firstName: 'Marcus',
     lastName: 'Rivera',
-    email: 'marcus.rivera@demo.rocklandtrust.local',
+    email: 'marcus.rivera@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-sbo',
   },
   'Digital-First Consumer': {
     firstName: 'Riley',
     lastName: 'Park',
-    email: 'riley.park@demo.rocklandtrust.local',
+    email: 'riley.park@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-dfc',
   },
   'College Student': {
     firstName: 'Taylor',
     lastName: 'Brooks',
-    email: 'taylor.brooks@demo.rocklandtrust.local',
+    email: 'taylor.brooks@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-cs',
   },
 };

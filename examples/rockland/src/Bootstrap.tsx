@@ -4,6 +4,7 @@ import { useEffect, JSX } from 'react';
 import { initContentSdk } from '@sitecore-content-sdk/nextjs';
 import { eventsPlugin } from '@sitecore-content-sdk/events';
 import { analyticsBrowserAdapter, analyticsPlugin } from '@sitecore-content-sdk/analytics-core';
+import { personalizeBrowserAdapter, personalizeBrowserPlugin } from '@sitecore-content-sdk/personalize';
 import config from 'sitecore.config';
 
 const Bootstrap = ({ siteName }: { siteName: string }): JSX.Element | null => {
@@ -28,6 +29,12 @@ const Bootstrap = ({ siteName }: { siteName: string }): JSX.Element | null => {
             adapter: analyticsBrowserAdapter(),
           }),
           eventsPlugin(),
+          personalizeBrowserPlugin({
+            options: {
+              enablePersonalizeCookie: true,
+            },
+            adapter: personalizeBrowserAdapter(),
+          }),
         ],
       });
     } else {

@@ -25,7 +25,7 @@ describe('demo-persona-profiles', () => {
       persona: 'College Student',
       firstName: 'Taylor',
       lastName: 'Brooks',
-      email: 'taylor.brooks@demo.rocklandtrust.local',
+      email: 'taylor.brooks@demo.rocklandtrust.com',
       identifierId: 'rockland-demo-cs',
     });
   });

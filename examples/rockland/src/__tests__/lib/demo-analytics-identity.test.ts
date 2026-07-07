@@ -6,8 +6,15 @@ import {
 } from '@/lib/demo-analytics-identity';
 
 const mockSetClientId = jest.fn().mockResolvedValue(undefined);
-const mockIdentity = jest.fn().mockResolvedValue(null);
+const mockSetProfileId = jest.fn().mockResolvedValue(undefined);
+const mockIdentity = jest.fn().mockResolvedValue({ status: 'ok' });
+const mockGetClientId = jest.fn();
 const mockGetAnalyticsPlugin = jest.fn();
+const mockGetPersonalizePlugin = jest.fn();
+
+jest.mock('@sitecore-content-sdk/analytics-core', () => ({
+  getClientId: () => mockGetClientId(),
+}));
 
 jest.mock('@sitecore-content-sdk/events', () => ({
   identity: (...args: unknown[]) => mockIdentity(...args),
@@ -17,6 +24,10 @@ jest.mock('@sitecore-content-sdk/analytics-core/internal', () => ({
   CLIENT_ID_COOKIE_NAME: 'cid',
   COOKIE_NAME_PREFIX: 'sc_',
   getAnalyticsPlugin: () => mockGetAnalyticsPlugin(),
+}));
+
+jest.mock('@sitecore-content-sdk/personalize/internal', () => ({
+  getPersonalizePlugin: () => mockGetPersonalizePlugin(),
 }));
 
 jest.mock('sitecore.config', () => ({
@@ -39,18 +50,28 @@ describe('demo-analytics-identity', () => {
     document.cookie = 'sc_cid=existing-client-id; path=/';
     document.cookie = 'sc_cid_personalize=existing-profile-id; path=/';
 
+    mockGetClientId.mockReturnValue('existing-client-id');
     mockGetAnalyticsPlugin.mockReturnValue({
       options: {
+        cookies: {
+          domain: 'localhost',
+        },
         visitorIds: { clientId: 'existing-client-id', profileId: 'existing-profile-id' },
       },
       adapter: {
         setClientId: mockSetClientId,
       },
     });
+    mockGetPersonalizePlugin.mockReturnValue({
+      adapter: {
+        setProfileId: mockSetProfileId,
+      },
+    });
 
     window.scContentSDK = {
       analytics_core: {
         getClientId: jest.fn(),
+        getProfileId: jest.fn(),
         options: {
           siteName: 'rockland',
           contextId: 'test-context-id',
@@ -86,24 +107,28 @@ describe('demo-analytics-identity', () => {
 
   it('resets the analytics session on logout', async () => {
     process.env.NODE_ENV = 'production';
+    mockGetClientId.mockReturnValueOnce('').mockReturnValue('new-client-id');
 
     await resetDemoPersonaAnalyticsSession();
 
     expect(mockSetClientId).toHaveBeenCalledTimes(1);
+    expect(mockSetProfileId).toHaveBeenCalledTimes(1);
     expect(mockGetAnalyticsPlugin().options.visitorIds).toBeUndefined();
   });
 
   it('requests a new profile and sends identity on persona login', async () => {
     process.env.NODE_ENV = 'production';
+    mockGetClientId.mockReturnValueOnce('').mockReturnValue('new-client-id');
 
     await identifyDemoPersona('Young Professional');
 
     expect(mockSetClientId).toHaveBeenCalledTimes(1);
+    expect(mockSetProfileId).toHaveBeenCalledTimes(1);
     expect(mockIdentity).toHaveBeenCalledWith({
       channel: 'WEB',
       firstName: 'Jordan',
       lastName: 'Mitchell',
-      email: 'jordan.mitchell@demo.rocklandtrust.local',
+      email: 'jordan.mitchell@demo.rocklandtrust.com',
       identifiers: [{ id: 'rockland-demo-yp', provider: 'rockland-demo' }],
       extensionData: {
         demoPersona: 'Young Professional',
@@ -120,7 +145,7 @@ describe('demo-analytics-identity', () => {
     expect(mockSetClientId).not.toHaveBeenCalled();
     expect(mockIdentity).toHaveBeenCalledWith(
       expect.objectContaining({
-        email: 'taylor.brooks@demo.rocklandtrust.local',
+        email: 'taylor.brooks@demo.rocklandtrust.com',
       })
     );
   });

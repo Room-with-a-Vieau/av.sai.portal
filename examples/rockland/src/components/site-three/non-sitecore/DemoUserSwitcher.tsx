@@ -19,6 +19,10 @@ import {
   setStoredDemoTaxonomy,
   type DemoUserTaxonomy,
 } from '@/lib/demo-taxonomy';
+import {
+  identifyDemoPersona,
+  resetDemoPersonaAnalyticsSession,
+} from '@/lib/demo-analytics-identity';
 
 export function DemoUserSwitcher() {
   const [taxonomy, setTaxonomy] = useState<DemoUserTaxonomy | null>(null);
@@ -41,12 +45,14 @@ export function DemoUserSwitcher() {
     if (value === DEMO_TAXONOMY_LOGOUT_VALUE) {
       clearStoredDemoTaxonomy();
       setTaxonomy(null);
+      void resetDemoPersonaAnalyticsSession();
       return;
     }
 
     const persona = value as DemoUserTaxonomy;
     setStoredDemoTaxonomy(persona);
     setTaxonomy(persona);
+    void identifyDemoPersona(persona, { resetSession: true });
   };
 
   return (
