@@ -24,6 +24,16 @@ interface PromoFields {
       target?: string;
     };
   };
+  PromoLink2?: {
+    value: {
+      href: string;
+      text: string;
+      linktype?: string;
+      url?: string;
+      anchor?: string;
+      target?: string;
+    };
+  };
   PromoText2: {
     value: string;
   };
@@ -56,6 +66,13 @@ export const mockPromoData = {
     value: {
       href: '/products/featured',
       text: 'Learn More',
+      linktype: 'internal',
+    },
+  },
+  secondaryLink: {
+    value: {
+      href: '/products/savings',
+      text: 'View Savings',
       linktype: 'internal',
     },
   },
@@ -148,5 +165,40 @@ export const emptyTextFieldsProps: PromoProps = {
     PromoLink: mockPromoData.defaultLink,
     PromoText2: mockPromoData.emptyText,
     PromoText3: mockPromoData.emptyText,
+  },
+};
+
+/**
+ * Props for Left / Right split promo variants
+ */
+export const splitPromoProps: PromoProps = {
+  params: {
+    RenderingIdentifier: 'promo-split',
+    styles: 'split-promo-style',
+  },
+  fields: {
+    PromoIcon: mockPromoData.defaultIcon,
+    PromoText: {
+      value: 'Personal Banking',
+    },
+    PromoText2: {
+      value:
+        '<p>We offer a wide variety of personal banking products, including: checking, savings and money market accounts, relationship accounts, and loans.</p>',
+    },
+    PromoText3: mockPromoData.emptyText,
+    PromoLink: {
+      value: {
+        href: '/checking',
+        text: 'View Our Checking Products',
+        linktype: 'internal',
+      },
+    },
+    PromoLink2: {
+      value: {
+        href: '/savings',
+        text: 'View Our Savings Products',
+        linktype: 'internal',
+      },
+    },
   },
 };

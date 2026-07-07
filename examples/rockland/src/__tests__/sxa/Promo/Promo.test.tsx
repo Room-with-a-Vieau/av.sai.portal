@@ -5,13 +5,14 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Default as PromoDefault, CenteredCard } from 'components/sxa/Promo';
+import { Default as PromoDefault, CenteredCard, Left as PromoLeft, Right as PromoRight } from 'components/sxa/Promo';
 import {
   defaultPromoProps,
   centeredCardPromoProps,
   minimalPromoProps,
   emptyPromoProps,
   emptyTextFieldsProps,
+  splitPromoProps,
 } from './Promo.mockProps';
 
 // Mock the Sitecore Content SDK components and shadcn UI Button
@@ -256,5 +257,62 @@ describe('Promo Component - Accessibility', () => {
     expect(container.querySelector('h2')).toBeInTheDocument();
     expect(container.querySelector('img')).toBeInTheDocument();
     expect(container.querySelector('a')).toBeInTheDocument();
+  });
+});
+
+describe('Promo Component - Left Variant', () => {
+  it('renders image before content in the layout', () => {
+    const { container } = render(<PromoLeft {...splitPromoProps} />);
+
+    const section = container.querySelector('section.component.promo');
+    expect(section).toBeInTheDocument();
+    expect(section).toHaveClass('split-promo-style');
+
+    const layout = section?.querySelector('.md\\:flex-row');
+    expect(layout).toBeInTheDocument();
+    expect(layout?.querySelector(':scope > div:first-child img')).toBeInTheDocument();
+  });
+
+  it('renders title, accent line, body copy, and both promo links', () => {
+    const { container } = render(<PromoLeft {...splitPromoProps} />);
+
+    expect(container).toHaveTextContent('Personal Banking');
+    expect(container).toHaveTextContent('personal banking products');
+    expect(container.querySelector('.bg-accent.h-1.w-16')).toBeInTheDocument();
+
+    const links = container.querySelectorAll('a');
+    expect(links).toHaveLength(2);
+    expect(links[0]).toHaveAttribute('href', '/checking');
+    expect(links[0]).toHaveTextContent('View Our Checking Products');
+    expect(links[1]).toHaveAttribute('href', '/savings');
+    expect(links[1]).toHaveTextContent('View Our Savings Products');
+  });
+
+  it('renders default component when fields are null', () => {
+    const { container } = render(<PromoLeft {...emptyPromoProps} />);
+    expect(container.querySelector('.is-empty-hint')).toBeInTheDocument();
+  });
+});
+
+describe('Promo Component - Right Variant', () => {
+  it('renders mirrored layout with image after content on desktop', () => {
+    const { container } = render(<PromoRight {...splitPromoProps} />);
+
+    const layout = container.querySelector('.md\\:flex-row-reverse');
+    expect(layout).toBeInTheDocument();
+  });
+
+  it('renders both CTA buttons with theme button styling', () => {
+    const { container } = render(<PromoRight {...splitPromoProps} />);
+
+    const buttons = container.querySelectorAll('button');
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0]).toHaveTextContent('View Our Checking Products');
+    expect(buttons[1]).toHaveTextContent('View Our Savings Products');
+  });
+
+  it('renders default component when fields are null', () => {
+    const { container } = render(<PromoRight {...emptyPromoProps} />);
+    expect(container.querySelector('.is-empty-hint')).toBeInTheDocument();
   });
 });

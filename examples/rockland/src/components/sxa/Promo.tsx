@@ -14,6 +14,7 @@ interface Fields {
   PromoIcon: ImageField;
   PromoText: Field<string>;
   PromoLink: LinkField;
+  PromoLink2?: LinkField;
   PromoText2: Field<string>;
   PromoText3: Field<string>;
 }
@@ -83,6 +84,55 @@ const resolvePromoBackground = (params: { [key: string]: string }): PromoBackgro
   return PROMO_BACKGROUND_OPTIONS.includes(value as PromoBackground)
     ? (value as PromoBackground)
     : 'dark';
+};
+
+const splitPromoTitleClasses =
+  'font-heading text-primary text-3xl leading-tight tracking-tight lg:text-4xl [&_h1]:font-heading [&_h1]:text-3xl [&_h1]:font-normal [&_h1]:leading-tight [&_h1]:text-primary [&_h1]:lg:text-4xl [&_h2]:font-heading [&_h2]:text-3xl [&_h2]:font-normal [&_h2]:leading-tight [&_h2]:text-primary [&_h2]:lg:text-4xl [&_p]:font-heading [&_p]:text-3xl [&_p]:font-normal [&_p]:leading-tight [&_p]:text-primary [&_p]:lg:text-4xl';
+
+const splitPromoBodyClasses =
+  'font-body text-foreground mt-6 max-w-prose text-base leading-relaxed [&_p]:mb-0 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-foreground';
+
+const splitPromoButtonClasses =
+  'rounded-none bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-semibold uppercase tracking-wide';
+
+const SplitPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): JSX.Element => {
+  const id = props.params.RenderingIdentifier;
+  const layoutDirection = imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse';
+  const { PromoIcon, PromoText, PromoText2, PromoLink, PromoLink2 } = props.fields;
+
+  return (
+    <section
+      data-class-change
+      className={cn('component promo w-full bg-background', props.params.styles)}
+      id={id ? id : undefined}
+    >
+      <div className={cn('flex flex-col items-stretch', layoutDirection)}>
+        <div className="w-full md:w-1/2">
+          <ContentSdkImage
+            field={PromoIcon}
+            className="h-full min-h-[320px] w-full object-cover md:min-h-[480px]"
+          />
+        </div>
+        <div className="flex w-full flex-col justify-center px-8 py-10 md:w-1/2 md:px-12 md:py-14 lg:px-16 lg:py-16">
+          <ContentSdkRichText tag="div" className={splitPromoTitleClasses} field={PromoText} />
+          <span aria-hidden="true" className="bg-accent mt-4 block h-1 w-16" />
+          <ContentSdkRichText tag="div" className={splitPromoBodyClasses} field={PromoText2} />
+          <div className="mt-8 flex flex-col gap-3 self-start">
+            {PromoLink?.value?.href && (
+              <Button variant="default" className={splitPromoButtonClasses} asChild>
+                <ContentSdkLink field={PromoLink} />
+              </Button>
+            )}
+            {PromoLink2?.value?.href && (
+              <Button variant="default" className={splitPromoButtonClasses} asChild>
+                <ContentSdkLink field={PromoLink2} />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const BoldPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): JSX.Element => {
@@ -233,6 +283,22 @@ export const BoldLeft = (props: PromoProps): JSX.Element => {
 export const BoldRight = (props: PromoProps): JSX.Element => {
   if (props.fields) {
     return BoldPromoLayout(props, 'right');
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const Left = (props: PromoProps): JSX.Element => {
+  if (props.fields) {
+    return SplitPromoLayout(props, 'left');
+  }
+
+  return <PromoDefaultComponent {...props} />;
+};
+
+export const Right = (props: PromoProps): JSX.Element => {
+  if (props.fields) {
+    return SplitPromoLayout(props, 'right');
   }
 
   return <PromoDefaultComponent {...props} />;
