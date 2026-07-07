@@ -1,5 +1,6 @@
 /* Same @import order as examples/portal/src/app/globals.css */
 @import '../assets/styles/globals.css';
+@import '../assets/styles/themes/rockland-tokens.css';
 @import '../assets/styles/tailwind-bootstrap-grid.css';
 @import '../assets/styles/column-splitter.css';
 @import 'tailwindcss';

@@ -294,10 +294,11 @@
 }
 
 /*
- * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs"> (see NEXT_PUBLIC_APP_THEME).
+ * Brand palettes — select with <html data-theme="bcbst | dwyeromega | builderfs | rockland"> (see NEXT_PUBLIC_APP_THEME).
  * bcbst: tokens are defined in @theme above (lime accent / existing portal brand).
  * dwyeromega: steel headings (#75787b), deep indigo primary/footer (#2a2b67), red accent / alternate CTAs (#da2a2b).
  * builderfs (bldr.com): deep blue primary (#292670), pigment red accent (#ED1D24) — logo palette.
+ * rockland: official brand palette in src/assets/styles/themes/rockland-tokens.css (blue #005394 primary, #ffc233 accent).
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -383,45 +384,25 @@
   color: var(--color-primary-foreground);
 }
 
-/* rocklandtrust.com: green primary (#007a3d) with golden-yellow accent (#ffc72c) used on headings/highlights. */
+
+/* Legacy portal component tokens — bridge semantic Rockland tokens to existing UI classes. */
 [data-theme='rockland'] {
-  --background-image-gradient: linear-gradient(180deg, #ffc72c 0%, #007a3d 100%);
-  --background-image-gradient-secondary: linear-gradient(90deg, #eef4f0 0%, #007a3d 50%, #ffc72c 100%);
-  --color-background: #ffffff;
-  --color-foreground: #1c2b24;
-  --color-card: #ffffff;
-  --color-card-foreground: #1c2b24;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #1c2b24;
-  --color-primary: #007a3d;
-  --color-primary-foreground: #ffffff;
-  --color-primary-hover: #00612f;
-  --color-secondary: #eef4f0;
-  --color-secondary-foreground: #1c2b24;
-  --color-secondary-hover: #dfeae4;
-  --color-muted: #f1f5f3;
-  --color-muted-foreground: #5b6b63;
-  --color-accent: #ffc72c;
-  --color-accent-foreground: #1c2b24;
-  --color-destructive: #dc2626;
-  --color-destructive-hover: #b91c1c;
-  --color-destructive-foreground: #ffffff;
-  --color-border: #d6e0da;
-  --color-input: #d6e0da;
-  --color-ring: #007a3d;
-  --color-tertiary-foreground: #1c2b24;
-  --color-tertiary-hover: #dfeae4;
-  --color-tertiary: #eef4f0;
-  --color-dark-foreground: #1c2b24;
-  --color-dark-hover: #dfeae4;
-  --color-dark: #eef4f0;
-  --color-light: #f6faf8;
-  --color-light-hover: #eef4f0;
-  --color-light-foreground: #1c2b24;
-  --color-overlay: rgb(0 122 61 / 0.45);
+  --color-card: var(--color-background);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-background);
+  --color-popover-foreground: var(--color-foreground);
+  --color-border: var(--color-gray-200);
+  --color-input: var(--color-gray-200);
+  --color-ring: var(--color-primary);
+  --color-dark: var(--color-secondary-background);
+  --color-dark-foreground: var(--color-foreground);
+  --color-dark-hover: var(--color-secondary-background-active);
+  --color-light: var(--color-primary-background);
+  --color-light-hover: var(--color-primary-background-active);
+  --color-light-foreground: var(--color-foreground);
+  --color-overlay: var(--color-blackAlpha-500);
 }
 
-/* Green primary is dark — force light heading text on bg-primary (footer/hero) surfaces. */
 [data-theme='rockland'] .bg-primary {
   color: var(--color-primary-foreground);
 }

@@ -104,9 +104,15 @@ Do not change the default (`'bcbst'`) unless the user asks.
 
 ### Step 4 — Add color tokens (`src/assets/styles/globals.css`)
 
-Add a new palette block after the existing ones. Copy the full token set from an existing
-theme (e.g. `dwyeromega`) and replace the values. Populate **every** token — do not leave a
-theme partially defined, or it will inherit base tokens inconsistently.
+Add a new palette block after the existing ones. For **extensive official brand systems** (semantic tokens, color scales, dark mode), prefer a dedicated file:
+
+```
+src/assets/styles/themes/<key>-tokens.css   ← scoped to [data-theme='<key>'] (+ .dark overrides)
+```
+
+Import it from `src/app/globals.css` and keep a small **legacy bridge block** in `src/assets/styles/globals.css` for portal tokens (`--color-card`, `--color-border`, `--color-light`, etc.) that existing components expect.
+
+For simpler themes, inline tokens in `globals.css` as below. Copy the full token set from an existing theme (e.g. `dwyeromega`) and replace the values.
 
 ```css
 [data-theme='<key>'] {
