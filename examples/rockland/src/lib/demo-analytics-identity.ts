@@ -52,7 +52,7 @@ export async function waitForAnalyticsSdk(timeoutMs = 10000): Promise<boolean> {
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
-    if (typeof window !== 'undefined' && window.scContentSDK?.analytics_core?.getClientId) {
+    if (typeof window !== 'undefined' && window.scContentSDK?.analytics_core) {
       return true;
     }
 
