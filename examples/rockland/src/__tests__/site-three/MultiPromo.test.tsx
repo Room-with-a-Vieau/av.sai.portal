@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import {
   Default as MultiPromoDefault,
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
+  SideTabs as MultiPromoSideTabs,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -74,6 +75,11 @@ describe('MultiPromo', () => {
                     },
                   },
                 },
+                slug: {
+                  jsonValue: {
+                    value: 'Product One',
+                  },
+                },
               },
               {
                 id: 'promo-2',
@@ -101,6 +107,11 @@ describe('MultiPromo', () => {
                       href: '/product2',
                       text: 'View Product 2',
                     },
+                  },
+                },
+                slug: {
+                  jsonValue: {
+                    value: 'Product Two',
                   },
                 },
               },
@@ -292,6 +303,50 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoSingleColumn {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('SideTabs variant', () => {
+    it('renders slug labels in tab buttons', () => {
+      render(<MultiPromoSideTabs {...mockProps} />);
+      expect(screen.getByRole('tab', { name: 'Product One' })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: 'Product Two' })).toBeInTheDocument();
+    });
+
+    it('shows the first promo content by default', () => {
+      render(<MultiPromoSideTabs {...mockProps} />);
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 1' })).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 1' })).toBeInTheDocument();
+    });
+
+    it('switches promo content when a tab is clicked', () => {
+      render(<MultiPromoSideTabs {...mockProps} />);
+      fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
+
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 2' })).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 2' })).toBeInTheDocument();
+    });
+
+    it('renders only the active promo image', () => {
+      render(<MultiPromoSideTabs {...mockProps} />);
+      expect(screen.getAllByRole('img')).toHaveLength(1);
+      expect(screen.getByRole('img')).toHaveAttribute('src', '/images/product1.jpg');
+
+      fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
+      expect(screen.getByRole('img')).toHaveAttribute('src', '/images/product2.jpg');
+    });
+
+    it('applies side tabs layout class', () => {
+      const { container } = render(<MultiPromoSideTabs {...mockProps} />);
+      expect(container.querySelector('.multi-promo-side-tabs')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoSideTabs {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });

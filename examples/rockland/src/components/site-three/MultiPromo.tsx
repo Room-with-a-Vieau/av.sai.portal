@@ -1,12 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
 } from '@sitecore-content-sdk/nextjs';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
+import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
 interface Fields {
@@ -25,6 +26,7 @@ interface SimplePromoFields {
   id: string;
   heading: IGQLTextField;
   description: IGQLTextField;
+  slug?: IGQLTextField;
   image: IGQLImageField;
   link: IGQLLinkField;
 }
@@ -165,5 +167,136 @@ export const SingleColumn = (props: MultiPromoProps) => {
       </section>
     );
   }
+  return <NoDataFallback componentName="MultiPromo" />;
+};
+
+const SideTabsPromoPanel = ({
+  promo,
+  tabId,
+  panelId,
+}: {
+  promo: SimplePromoFields;
+  tabId: string;
+  panelId: string;
+}) => {
+  const { image, heading, description, link } = promo ?? {};
+
+  return (
+    <>
+      <div className="bg-muted/60 flex min-h-[280px] items-center justify-center p-6 sm:min-h-[360px] lg:min-h-[420px]">
+        {image?.jsonValue && (
+          <ContentSdkImage
+            field={image.jsonValue}
+            className="max-h-[360px] w-full max-w-full object-contain lg:max-h-[420px]"
+          />
+        )}
+      </div>
+
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={tabId}
+        className="bg-primary text-primary-foreground relative flex min-h-[280px] flex-col justify-center px-6 py-8 sm:min-h-[360px] sm:px-10 lg:min-h-[420px] lg:px-12"
+      >
+        {heading?.jsonValue && (
+          <h3 className="text-accent font-heading mb-4 text-pretty text-2xl leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+            <ContentSdkText field={heading.jsonValue} />
+          </h3>
+        )}
+        {description?.jsonValue && (
+          <p className="font-body mb-6 max-w-prose text-base leading-relaxed text-white/95 sm:text-lg">
+            <ContentSdkText field={description.jsonValue} />
+          </p>
+        )}
+        {link?.jsonValue && (
+          <ContentSdkLink
+            field={link.jsonValue}
+            className="font-body inline-flex w-fit items-center border border-white px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-white/10"
+          />
+        )}
+      </div>
+    </>
+  );
+};
+
+export const SideTabs = (props: MultiPromoProps) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const promos = useMemo(
+    () => props.fields?.data?.datasource?.children?.results?.filter(Boolean) ?? [],
+    [props.fields?.data?.datasource?.children?.results]
+  );
+
+  if (props.fields) {
+    const activePromo = promos[activeIndex] ?? promos[0];
+
+    return (
+      <section
+        className={cn('multi-promo-side-tabs relative w-full', props.params?.styles || '')}
+        data-class-change
+      >
+        <div className="container mx-auto px-4 py-8 lg:py-12">
+          <div className="border-border overflow-hidden rounded-none border shadow-sm lg:grid lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)_minmax(0,3fr)]">
+            <div className="lg:contents">
+              {activePromo ? (
+                <SideTabsPromoPanel
+                  promo={activePromo}
+                  tabId={`multi-promo-side-tab-${activePromo.id}`}
+                  panelId={`multi-promo-side-tab-panel-${activePromo.id}`}
+                />
+              ) : (
+                <>
+                  <div className="bg-muted/60 min-h-[280px]" />
+                  <div className="bg-primary min-h-[280px]" />
+                </>
+              )}
+            </div>
+
+            <div
+              className="border-border flex flex-col border-t lg:border-t-0 lg:border-l"
+              role="tablist"
+              aria-label="Promotions"
+            >
+              {promos.map((promo, index) => {
+                const isActive = index === activeIndex;
+                const tabLabel = promo.slug?.jsonValue ?? promo.heading?.jsonValue;
+
+                return (
+                  <button
+                    key={promo.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={`multi-promo-side-tab-panel-${promo.id}`}
+                    id={`multi-promo-side-tab-${promo.id}`}
+                    onClick={() => setActiveIndex(index)}
+                    className={cn(
+                      'font-body relative flex min-h-[4.5rem] flex-1 items-center border-b border-border px-4 py-3 text-left text-sm font-semibold leading-snug transition-colors last:border-b-0 sm:px-5 sm:text-base',
+                      isActive
+                        ? 'bg-accent text-primary z-10'
+                        : 'bg-background text-primary hover:bg-muted/40'
+                    )}
+                  >
+                    {isActive && (
+                      <span
+                        aria-hidden="true"
+                        className="border-r-accent absolute left-0 top-1/2 hidden h-0 w-0 -translate-x-full -translate-y-1/2 border-y-[0.75rem] border-r-[0.75rem] border-y-transparent lg:block"
+                      />
+                    )}
+                    {tabLabel ? (
+                      <ContentSdkText field={tabLabel} />
+                    ) : (
+                      <span>{`Promotion ${index + 1}`}</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return <NoDataFallback componentName="MultiPromo" />;
 };
