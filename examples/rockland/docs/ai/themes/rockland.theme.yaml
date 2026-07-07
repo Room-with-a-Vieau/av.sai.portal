@@ -1,0 +1,93 @@
+# Client Brand Theme — Rockland Trust
+# Wired into the app via the create-new-theme skill (data-theme="rockland").
+
+client:
+  name: "Rockland Trust"
+  sourceUrl: "https://www.rocklandtrust.com/"
+  extractedAt: "2026-07-07"
+  extractedBy: "create-new-theme skill (screenshot + web analysis fallback)"
+
+colors:
+  primary: "#007a3d"
+  primaryForeground: "#ffffff"
+  secondary: "#eef4f0"
+  secondaryForeground: "#1c2b24"
+  accent: "#ffc72c"
+  accentForeground: "#1c2b24"
+  background: "#ffffff"
+  foreground: "#1c2b24"
+  muted: "#f1f5f3"
+  mutedForeground: "#5b6b63"
+  headerBackground: "#ffffff"
+  headerForeground: "#1c2b24"
+  footerBackground: "#007a3d"
+  footerForeground: "#ffffff"
+  border: "#d6e0da"
+  ring: "#007a3d"
+  extra: []
+
+typography:
+  headingFamily: "Montserrat"
+  headingWeight: "700"
+  bodyFamily: "Open Sans"
+  bodyWeight: "400"
+  monoFamily: ""
+  googleFontsUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600;700&display=swap"
+  scale:
+    hero: ""
+    h1: ""
+    h2: ""
+    h3: ""
+    body: ""
+    small: ""
+  headingTransform: ""
+  letterSpacing: ""
+  lineHeight: ""
+
+spacing:
+  density: "normal"
+  sectionGap: ""
+  containerMaxWidth: ""
+  containerPadding: ""
+
+shape:
+  borderRadius: ""
+  buttonRadius: ""
+  cardRadius: ""
+  imageRadius: ""
+  shadowStyle: "subtle"
+  borderStyle: ""
+
+tone:
+  overall: "corporate, trustworthy, approachable"
+  colorMode: "light"
+  contrast: "medium"
+  imagery: "photography"
+  heroStyle: "split-image-text"
+  cardStyle: "flat"
+  navStyle: "solid-bar"
+
+tailwind:
+  colors:
+    brand:
+      primary: "#007a3d"
+      secondary: "#eef4f0"
+      accent: "#ffc72c"
+  fontFamily:
+    heading: ["Montserrat", "sans-serif"]
+    body: ["Open Sans", "sans-serif"]
+  borderRadius:
+    DEFAULT: ""
+    button: ""
+    card: ""
+
+cssVariables: ""
+
+extraction:
+  confidence: "medium"
+  method: "visual-only"
+  notes:
+    - "Playwright scraper unavailable (package not installed); values from the homepage screenshot + brand knowledge."
+    - "Rockland does not publish official brand hex codes; green #007a3d and yellow #ffc72c are close visual approximations — confirm against brand guidelines."
+    - "Fonts are Google Fonts substitutes (Montserrat/Open Sans); replace if the actual brand fonts are known."
+    - "Yellow is used as an accent/highlight (including some display headings). Body/heading text kept dark green (#1c2b24) for readability; yellow headings can be added on request."

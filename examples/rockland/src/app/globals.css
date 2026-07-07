@@ -165,6 +165,14 @@ html[data-theme='builderfs'] .btn.btn-primary:hover {
   color: var(--color-accent-foreground);
 }
 
+/* rocklandtrust.com: Montserrat display headings, Open Sans body (Google Fonts substitutes for the brand type). */
+html[data-theme='rockland'] {
+  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 700;
+}
+
 /* BUTTONS END */
 
 main {

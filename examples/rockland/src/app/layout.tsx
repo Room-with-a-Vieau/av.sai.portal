@@ -3,6 +3,7 @@ import './globals.css';
 import {
   Barlow_Condensed,
   Inter,
+  Montserrat,
   Open_Sans,
   Roboto_Condensed,
   Source_Sans_3,
@@ -46,12 +47,21 @@ const robotoCondensed = Roboto_Condensed({
   display: 'swap',
 });
 
+/** Rockland Trust — Montserrat display headings, Open Sans body (reused above) */
+const montserrat = Montserrat({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-montserrat',
+  weight: ['500', '600', '700'],
+  display: 'swap',
+});
+
 const fontVariables = [
   inter.variable,
   sourceSans3.variable,
   barlowCondensed.variable,
   openSans.variable,
   robotoCondensed.variable,
+  montserrat.variable,
 ].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
