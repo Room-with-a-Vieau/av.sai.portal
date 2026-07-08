@@ -34,6 +34,10 @@ const HERO_BG_LAYER_CLASS = 'absolute inset-0 z-10 bg-muted';
 const HERO_CONTENT_BAND_CLASS =
   'min-h-[400px] max-h-[600px] md:min-h-[500px] md:max-h-[600px] lg:min-h-[600px] lg:max-h-[800px]';
 
+/** Image-only variant — ~75% of the standard hero band for more content below the fold */
+const HERO_IMAGE_ONLY_BAND_CLASS =
+  'min-h-[300px] max-h-[450px] md:min-h-[375px] md:max-h-[450px] lg:min-h-[450px] lg:max-h-[600px]';
+
 /** Main headline scale (smaller than previous display sizes for shorter hero band) */
 const HERO_TITLE_CLASS = 'text-3xl md:text-4xl lg:text-5xl';
 
@@ -308,6 +312,26 @@ export const Stacked = (props: PageHeaderSTProps) => {
             className={`absolute inset-0 z-10 ${HERO_BG_IMAGE_CLASS}`}
           />
         </div>
+      </div>
+    </section>
+  );
+};
+
+export const Image = (props: PageHeaderSTProps) => {
+  return (
+    <section
+      className={`relative overflow-hidden border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      data-class-change
+    >
+      <div className={cn('relative w-full bg-muted', HERO_IMAGE_ONLY_BAND_CLASS)}>
+        <ContentSdkImage
+          field={props?.fields?.Image1}
+          width={1920}
+          height={1080}
+          priority={true}
+          fetchPriority="high"
+          className={`absolute inset-0 ${HERO_BG_IMAGE_CLASS}`}
+        />
       </div>
     </section>
   );

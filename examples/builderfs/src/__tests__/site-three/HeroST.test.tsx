@@ -7,6 +7,7 @@ import {
   Centered as HeroSTCentered,
   SplitScreen as HeroSTSplitScreen,
   Stacked as HeroSTStacked,
+  Image as HeroSTImage,
 } from '@/components/site-three/HeroST';
 
 // Mock useContainerOffsets hook
@@ -273,6 +274,32 @@ describe('HeroST', () => {
 
     it('applies custom styles in stacked variant', () => {
       const { container } = render(<HeroSTStacked {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
+    });
+  });
+
+  describe('Image variant', () => {
+    it('renders only the hero image', () => {
+      const { container } = render(<HeroSTImage {...mockProps} />);
+
+      const image = container.querySelector('img');
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', '/images/hero-bg.jpg');
+      expect(image).toHaveAttribute('alt', 'Hero background');
+    });
+
+    it('does not render text content or links', () => {
+      render(<HeroSTImage {...mockProps} />);
+
+      expect(screen.queryByText('New Collection')).not.toBeInTheDocument();
+      expect(screen.queryByText('Premium Audio Experience')).not.toBeInTheDocument();
+      expect(screen.queryByText('Shop Now')).not.toBeInTheDocument();
+      expect(screen.queryByText('Learn More')).not.toBeInTheDocument();
+    });
+
+    it('applies custom styles in image variant', () => {
+      const { container } = render(<HeroSTImage {...mockProps} />);
       const section = container.querySelector('section');
       expect(section).toHaveClass('test-styles');
     });
