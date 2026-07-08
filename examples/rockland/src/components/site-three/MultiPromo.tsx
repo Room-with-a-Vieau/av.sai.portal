@@ -5,9 +5,9 @@ import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
   Image as ContentSdkEditableImage,
-  Link as ContentSdkLink,
   useSitecore,
 } from '@sitecore-content-sdk/nextjs';
+import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
@@ -59,7 +59,7 @@ const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
         <p className="lg:text-lg mb-2">
           <ContentSdkText field={description?.jsonValue} />
         </p>
-        <ContentSdkLink field={link?.jsonValue} className="btn btn-ghost" />
+        <TrackedCtaLink field={link?.jsonValue} className="btn btn-ghost" />
       </div>
     </div>
   );
@@ -221,7 +221,7 @@ const SideTabsPromoPanel = ({
           </p>
         )}
         {(linkField?.value?.href || isEditing) && linkField && (
-          <ContentSdkLink
+          <TrackedCtaLink
             field={linkField}
             className="font-body inline-flex w-fit items-center border border-white px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-white/10"
           />

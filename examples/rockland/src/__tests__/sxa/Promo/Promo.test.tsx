@@ -49,6 +49,17 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   },
 }));
 
+jest.mock('@/components/content-sdk/TrackedCtaLink', () => ({
+  TrackedCtaLink: ({ field, className }: any) => {
+    if (!field?.value?.href) return null;
+    return (
+      <a href={field.value.href} className={className}>
+        {field.value.text}
+      </a>
+    );
+  },
+}));
+
 // Mock the Button component
 jest.mock('../../../components/ui/button', () => ({
   Button: ({ children }: any) => <button className="mocked-button">{children}</button>,
@@ -278,13 +289,15 @@ describe('Promo Component - Left Variant', () => {
     const { container } = render(<PromoLeft {...splitPromoProps} />);
 
     expect(container).toHaveTextContent('Personal Banking');
-    expect(container).toHaveTextContent('personal banking products');
+    expect(container).toHaveTextContent('No minimum balance requirement or monthly maintenance fee');
     expect(container.querySelector('.bg-accent.h-1.w-16')).toBeInTheDocument();
+    expect(container.querySelector('.content-sdk-rich-text ul')).toBeInTheDocument();
 
     const links = container.querySelectorAll('a');
     expect(links).toHaveLength(2);
-    expect(links[0]).toHaveAttribute('href', '/checking');
-    expect(links[0]).toHaveTextContent('View Our Checking Products');
+    expect(links[0]).toHaveAttribute('href', '/checking/open');
+    expect(links[0]).toHaveTextContent('OPEN A FREE CHECKING ACCOUNT');
+    expect(links[0]).toHaveClass('hover:bg-primary-hover');
     expect(links[1]).toHaveAttribute('href', '/savings');
     expect(links[1]).toHaveTextContent('View Our Savings Products');
   });
@@ -303,13 +316,15 @@ describe('Promo Component - Right Variant', () => {
     expect(layout).toBeInTheDocument();
   });
 
-  it('renders both CTA buttons with theme button styling', () => {
+  it('renders both CTA links with theme button styling', () => {
     const { container } = render(<PromoRight {...splitPromoProps} />);
 
-    const buttons = container.querySelectorAll('button');
-    expect(buttons).toHaveLength(2);
-    expect(buttons[0]).toHaveTextContent('View Our Checking Products');
-    expect(buttons[1]).toHaveTextContent('View Our Savings Products');
+    const links = container.querySelectorAll('a');
+    expect(links).toHaveLength(2);
+    expect(links[0]).toHaveTextContent('OPEN A FREE CHECKING ACCOUNT');
+    expect(links[0]).toHaveClass('bg-primary', 'text-primary-foreground', 'hover:bg-primary-hover');
+    expect(links[1]).toHaveTextContent('View Our Savings Products');
+    expect(links[1]).toHaveClass('bg-primary', 'text-primary-foreground', 'hover:bg-primary-hover');
   });
 
   it('renders default component when fields are null', () => {

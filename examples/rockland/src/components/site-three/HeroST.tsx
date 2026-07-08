@@ -3,11 +3,11 @@
 import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
-  Link as ContentSdkLink,
   ImageField,
   Field,
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
+import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
 import { cn } from '@/lib/utils';
 
 interface Fields {
@@ -107,12 +107,12 @@ export const Default = (props: PageHeaderSTProps) => {
                 <ContentSdkText field={props?.fields?.Title} />
               </h1>
               <div className="mt-8">
-                <ContentSdkLink
+                <TrackedCtaLink
                   field={props?.fields?.Link1}
                   prefetch={false}
                   className="btn btn-primary mr-4"
                 />
-                <ContentSdkLink
+                <TrackedCtaLink
                   field={props?.fields?.Link2}
                   prefetch={false}
                   className="btn btn-secondary"
@@ -154,12 +154,12 @@ export const Right = (props: PageHeaderSTProps) => {
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">
-              <ContentSdkLink
+              <TrackedCtaLink
                 field={props?.fields?.Link1}
                 prefetch={false}
                 className="btn btn-primary mr-4"
               />
-              <ContentSdkLink
+              <TrackedCtaLink
                 field={props?.fields?.Link2}
                 prefetch={false}
                 className="btn btn-secondary"
@@ -201,12 +201,12 @@ export const Centered = (props: PageHeaderSTProps) => {
               <ContentSdkText field={props?.fields?.Title} />
             </h1>
             <div className="mt-8">
-              <ContentSdkLink
+              <TrackedCtaLink
                 field={props?.fields?.Link1}
                 prefetch={false}
                 className="btn btn-primary mr-4"
               />
-              <ContentSdkLink
+              <TrackedCtaLink
                 field={props?.fields?.Link2}
                 prefetch={false}
                 className="btn btn-secondary"
@@ -235,12 +235,12 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
             <ContentSdkText field={props?.fields?.Title} />
           </h1>
           <div className="mt-8">
-            <ContentSdkLink
+            <TrackedCtaLink
               field={props?.fields?.Link1}
               prefetch={false}
               className="btn btn-secondary mr-4"
             />
-            <ContentSdkLink
+            <TrackedCtaLink
               field={props?.fields?.Link2}
               prefetch={false}
               className="btn btn-secondary"
@@ -278,12 +278,12 @@ export const Stacked = (props: PageHeaderSTProps) => {
             <ContentSdkText field={props?.fields?.Title} />
           </h1>
           <div className="mt-8">
-            <ContentSdkLink
+            <TrackedCtaLink
               field={props?.fields?.Link1}
               prefetch={false}
               className="btn btn-secondary mr-4"
             />
-            <ContentSdkLink
+            <TrackedCtaLink
               field={props?.fields?.Link2}
               prefetch={false}
               className="btn btn-secondary"

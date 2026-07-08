@@ -1,13 +1,13 @@
 import React, { type JSX } from 'react';
 import {
   NextImage as ContentSdkImage,
-  Link as ContentSdkLink,
   RichText as ContentSdkRichText,
   ImageField,
   Field,
   LinkField,
 } from '@sitecore-content-sdk/nextjs';
 import { Button } from '@/components/ui/button';
+import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
 import { cn } from '@/lib/utils';
 
 interface Fields {
@@ -168,11 +168,16 @@ const columnsPromoBackgroundThemes: Record<PromoBackground, ColumnsPromoBackgrou
 const splitPromoTitleClasses =
   'font-heading text-primary text-3xl leading-tight tracking-tight lg:text-4xl [&_h1]:font-heading [&_h1]:text-3xl [&_h1]:font-normal [&_h1]:leading-tight [&_h1]:text-primary [&_h1]:lg:text-4xl [&_h2]:font-heading [&_h2]:text-3xl [&_h2]:font-normal [&_h2]:leading-tight [&_h2]:text-primary [&_h2]:lg:text-4xl [&_p]:font-heading [&_p]:text-3xl [&_p]:font-normal [&_p]:leading-tight [&_p]:text-primary [&_p]:lg:text-4xl';
 
-const splitPromoBodyClasses =
-  'font-body text-foreground mt-6 max-w-prose text-base leading-relaxed [&_p]:mb-0 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-foreground';
+const splitPromoBodyClasses = cn(
+  'content-sdk-rich-text font-body text-foreground mt-6 max-w-prose text-base leading-relaxed',
+  '[&_p]:mb-0 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-foreground [&_p+p]:mt-3',
+  '[&_ul]:my-4 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:space-y-3 [&_ul]:pl-6 [&_ul]:marker:text-primary',
+  '[&_ol]:my-4 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:space-y-3 [&_ol]:pl-6 [&_ol]:marker:text-primary',
+  '[&_li]:text-base [&_li]:leading-relaxed [&_li]:text-foreground [&_li]:pl-1 [&_li_p]:mb-0 [&_li_p]:text-base [&_li_p]:leading-relaxed [&_li_p]:text-foreground'
+);
 
-const splitPromoButtonClasses =
-  'rounded-none bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-semibold uppercase tracking-wide';
+const splitPromoCtaClasses =
+  'inline-flex items-center justify-center whitespace-nowrap rounded-none bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground no-underline transition-colors hover:bg-primary-hover hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
 const ColumnsPromoLayout = (props: PromoProps): JSX.Element => {
   const id = props.params.RenderingIdentifier;
@@ -197,7 +202,7 @@ const ColumnsPromoLayout = (props: PromoProps): JSX.Element => {
             <ContentSdkRichText tag="div" className={theme.rateClasses} field={PromoText} />
             {PromoLink?.value?.href && (
               <Button variant="outline" className={theme.buttonClasses} asChild>
-                <ContentSdkLink field={PromoLink} />
+                <TrackedCtaLink field={PromoLink} />
               </Button>
             )}
           </div>
@@ -206,7 +211,7 @@ const ColumnsPromoLayout = (props: PromoProps): JSX.Element => {
             <ContentSdkRichText tag="div" className={theme.rateClasses} field={PromoText2} />
             {PromoLink2?.value?.href && (
               <Button variant="outline" className={theme.buttonClasses} asChild>
-                <ContentSdkLink field={PromoLink2} />
+                <TrackedCtaLink field={PromoLink2} />
               </Button>
             )}
           </div>
@@ -240,14 +245,10 @@ const SplitPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): J
           <ContentSdkRichText tag="div" className={splitPromoBodyClasses} field={PromoText2} />
           <div className="mt-8 flex flex-col gap-3 self-start">
             {PromoLink?.value?.href && (
-              <Button variant="default" className={splitPromoButtonClasses} asChild>
-                <ContentSdkLink field={PromoLink} />
-              </Button>
+              <TrackedCtaLink field={PromoLink} className={splitPromoCtaClasses} />
             )}
             {PromoLink2?.value?.href && (
-              <Button variant="default" className={splitPromoButtonClasses} asChild>
-                <ContentSdkLink field={PromoLink2} />
-              </Button>
+              <TrackedCtaLink field={PromoLink2} className={splitPromoCtaClasses} />
             )}
           </div>
         </div>
@@ -299,7 +300,7 @@ const BoldPromoLayout = (props: PromoProps, imagePosition: 'left' | 'right'): JS
             )}
             asChild
           >
-            <ContentSdkLink field={props.fields.PromoLink} />
+            <TrackedCtaLink field={props.fields.PromoLink} />
           </Button>
         </div>
       </div>
@@ -348,7 +349,7 @@ export const Default = (props: PromoProps): JSX.Element => {
             className="font-bold py-1 px-3 mx-6 mb-4 mt-auto relative b-0"
             asChild
           >
-            <ContentSdkLink field={props.fields.PromoLink} />
+            <TrackedCtaLink field={props.fields.PromoLink} />
           </Button>
         </div>
       </div>
@@ -383,7 +384,7 @@ export const CenteredCard = (props: PromoProps): JSX.Element => {
             className="font-bold text-xl text-center w-full py-1 px-3 ml-4 mb-4 relative b-0"
             asChild
           >
-            <ContentSdkLink field={props.fields.PromoLink} />
+            <TrackedCtaLink field={props.fields.PromoLink} />
           </Button>
         </div>
       </div>

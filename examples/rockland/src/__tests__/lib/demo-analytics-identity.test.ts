@@ -1,9 +1,9 @@
 import {
   clearAnalyticsCookies,
   identifyDemoPersona,
-  isDemoAnalyticsEnabled,
   resetDemoPersonaAnalyticsSession,
 } from '@/lib/demo-analytics-identity';
+import { isCdpAnalyticsEnabled } from '@/lib/cdp-analytics';
 
 const mockSetClientId = jest.fn().mockResolvedValue(undefined);
 const mockSetProfileId = jest.fn().mockResolvedValue(undefined);
@@ -91,11 +91,11 @@ describe('demo-analytics-identity', () => {
     process.env.NODE_ENV = 'development';
     process.env.NEXT_PUBLIC_ENABLE_DEMO_ANALYTICS = undefined;
 
-    expect(isDemoAnalyticsEnabled()).toBe(false);
+    expect(isCdpAnalyticsEnabled()).toBe(false);
 
     process.env.NEXT_PUBLIC_ENABLE_DEMO_ANALYTICS = 'true';
 
-    expect(isDemoAnalyticsEnabled()).toBe(true);
+    expect(isCdpAnalyticsEnabled()).toBe(true);
   });
 
   it('clears analytics cookies', () => {
@@ -126,13 +126,15 @@ describe('demo-analytics-identity', () => {
     expect(mockSetProfileId).toHaveBeenCalledTimes(1);
     expect(mockIdentity).toHaveBeenCalledWith({
       channel: 'WEB',
+      currency: 'USD',
       firstName: 'Jordan',
       lastName: 'Mitchell',
       email: 'jordan.mitchell@demo.rocklandtrust.com',
-      identifiers: [{ id: 'rockland-demo-yp', provider: 'rockland-demo' }],
+      identifiers: [{ id: 'jordan.mitchell@demo.rocklandtrust.com', provider: 'email' }],
       extensionData: {
         demoPersona: 'Young Professional',
         demoPersonaCode: 'yp',
+        demoPersonaId: 'rockland-demo-yp',
       },
     });
   });
@@ -146,6 +148,7 @@ describe('demo-analytics-identity', () => {
     expect(mockIdentity).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'taylor.brooks@demo.rocklandtrust.com',
+        identifiers: [{ id: 'taylor.brooks@demo.rocklandtrust.com', provider: 'email' }],
       })
     );
   });

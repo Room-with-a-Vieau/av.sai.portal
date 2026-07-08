@@ -183,13 +183,13 @@ export const splitPromoProps: PromoProps = {
     },
     PromoText2: {
       value:
-        '<p>We offer a wide variety of personal banking products, including: checking, savings and money market accounts, relationship accounts, and loans.</p>',
+        '<ul><li>No minimum balance requirement or monthly maintenance fee</li><li>Free access to Rockland Trust ATMs</li><li>Free access to Online Banking and Mobile Banking</li></ul>',
     },
     PromoText3: mockPromoData.emptyText,
     PromoLink: {
       value: {
-        href: '/checking',
-        text: 'View Our Checking Products',
+        href: '/checking/open',
+        text: 'OPEN A FREE CHECKING ACCOUNT',
         linktype: 'internal',
       },
     },

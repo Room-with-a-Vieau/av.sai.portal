@@ -9,10 +9,8 @@ import { identity } from '@sitecore-content-sdk/events';
 import config from 'sitecore.config';
 
 import { getPersonaCode, type DemoUserTaxonomy } from '@/lib/demo-taxonomy';
-import {
-  DEMO_PERSONA_IDENTIFIER_PROVIDER,
-  getDemoPersonaProfile,
-} from '@/lib/demo-persona-profiles';
+import { isCdpAnalyticsEnabled } from '@/lib/cdp-analytics';
+import { getDemoPersonaProfile } from '@/lib/demo-persona-profiles';
 
 const ANALYTICS_COOKIE_NAMES = [
   `${COOKIE_NAME_PREFIX}${CLIENT_ID_COOKIE_NAME}`,
@@ -23,11 +21,7 @@ const ANALYTICS_SDK_POLL_MS = 50;
 const ANALYTICS_SDK_TIMEOUT_MS = 15000;
 const ANALYTICS_CLIENT_ID_TIMEOUT_MS = 10000;
 
-export function isDemoAnalyticsEnabled(): boolean {
-  return (
-    process.env.NEXT_PUBLIC_ENABLE_DEMO_ANALYTICS === 'true' || process.env.NODE_ENV !== 'development'
-  );
-}
+export const isDemoAnalyticsEnabled = isCdpAnalyticsEnabled;
 
 function getAnalyticsCookieDomain(): string | undefined {
   if (typeof window === 'undefined') return undefined;
@@ -161,18 +155,20 @@ export async function identifyDemoPersona(
 
     const response = await identity({
       channel: 'WEB',
+      currency: 'USD',
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
       identifiers: [
         {
-          id: profile.identifierId,
-          provider: DEMO_PERSONA_IDENTIFIER_PROVIDER,
+          id: profile.email,
+          provider: 'email',
         },
       ],
       extensionData: {
         demoPersona: persona,
         demoPersonaCode: getPersonaCode(persona),
+        demoPersonaId: profile.identifierId,
       },
     });
 

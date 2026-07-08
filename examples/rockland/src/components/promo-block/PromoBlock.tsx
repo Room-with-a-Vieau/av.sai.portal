@@ -1,4 +1,5 @@
-import { Link, RichText, Text } from '@sitecore-content-sdk/nextjs';
+import { RichText, Text } from '@sitecore-content-sdk/nextjs';
+import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
 import { Orientation } from '@/enumerations/Orientation.enum';
 import { Variation } from '@/enumerations/Variation.enum';
 import { ButtonType } from '@/enumerations/ButtonStyle.enum';
@@ -75,7 +76,7 @@ const PromoBlock = (props: PromoBlockProps): JSX.Element => {
           >
             {link && (
               <Button asChild>
-                <Link field={link} />
+                <TrackedCtaLink field={link} />
               </Button>
             )}
           </Flex>
