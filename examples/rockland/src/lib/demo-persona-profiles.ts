@@ -24,9 +24,9 @@ const DEMO_PERSONA_PROFILES: Record<DemoUserTaxonomy, Omit<DemoPersonaProfile, '
     identifierId: 'rockland-demo-fth',
   },
   'Growing Family': {
-    firstName: 'Megan',
-    lastName: 'Sullivan',
-    email: 'megan.sullivan@demo.rocklandtrust.com',
+    firstName: 'Jordan',
+    lastName: 'Bennett',
+    email: 'jordan.bennett@demo.rocklandtrust.com',
     identifierId: 'rockland-demo-gf',
   },
   'Small Business Owner': {
