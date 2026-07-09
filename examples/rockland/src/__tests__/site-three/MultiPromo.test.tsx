@@ -6,6 +6,8 @@ import {
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
   SideTabs as MultiPromoSideTabs,
+  TopTabs as MultiPromoTopTabs,
+  TopTabsNoImage as MultiPromoTopTabsNoImage,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -426,6 +428,142 @@ describe('MultiPromo', () => {
       render(<MultiPromoSideTabs {...propsWithoutSlug} />);
       expect(screen.getByRole('tab', { name: 'Promotion 1' })).toBeInTheDocument();
       expect(screen.queryByRole('tab', { name: 'Long Promo Heading Title' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('TopTabs variant', () => {
+    it('renders slug labels in tab buttons', () => {
+      render(<MultiPromoTopTabs {...mockProps} />);
+      expect(screen.getByRole('tab', { name: 'Product One' })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: 'Product Two' })).toBeInTheDocument();
+    });
+
+    it('shows the first promo content by default', () => {
+      render(<MultiPromoTopTabs {...mockProps} />);
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 1' })).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 1' })).toBeInTheDocument();
+    });
+
+    it('switches promo content when a tab is clicked', () => {
+      render(<MultiPromoTopTabs {...mockProps} />);
+      fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
+
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 2' })).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 2' })).toBeInTheDocument();
+    });
+
+    it('renders only the active promo image visibly', () => {
+      const { container } = render(<MultiPromoTopTabs {...mockProps} />);
+      const activePanel = container.querySelector('[data-promo-panel][data-active="true"]');
+      expect(activePanel?.querySelector('img')).toHaveAttribute('src', '/images/product1.jpg');
+
+      fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
+      const nextActivePanel = container.querySelector('[data-promo-panel][data-active="true"]');
+      expect(nextActivePanel?.querySelector('img')).toHaveAttribute('src', '/images/product2.jpg');
+    });
+
+    it('keeps all promo panels mounted for Sitecore editing', () => {
+      const { container } = render(<MultiPromoTopTabs {...mockProps} />);
+      expect(container.querySelectorAll('[data-promo-panel]')).toHaveLength(2);
+    });
+
+    it('applies top tabs layout class', () => {
+      const { container } = render(<MultiPromoTopTabs {...mockProps} />);
+      expect(container.querySelector('.multi-promo-top-tabs')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoTopTabs {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+
+    it('does not use heading text for tab labels when slug is missing', () => {
+      const propsWithoutSlug = {
+        ...mockProps,
+        fields: {
+          data: {
+            datasource: {
+              children: {
+                results: [
+                  {
+                    id: 'promo-no-slug',
+                    heading: {
+                      jsonValue: {
+                        value: 'Long Promo Heading Title',
+                      },
+                    },
+                    description: {
+                      jsonValue: {
+                        value: 'Description text',
+                      },
+                    },
+                    image: {
+                      jsonValue: {
+                        value: {
+                          src: '/images/product1.jpg',
+                          alt: 'Product 1',
+                        },
+                      },
+                    },
+                    link: {
+                      jsonValue: {
+                        value: {
+                          href: '/product1',
+                          text: 'Learn More',
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      render(<MultiPromoTopTabs {...propsWithoutSlug} />);
+      expect(screen.getByRole('tab', { name: 'Promotion 1' })).toBeInTheDocument();
+      expect(screen.queryByRole('tab', { name: 'Long Promo Heading Title' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('TopTabsNoImage variant', () => {
+    it('renders slug labels in tab buttons', () => {
+      render(<MultiPromoTopTabsNoImage {...mockProps} />);
+      expect(screen.getByRole('tab', { name: 'Product One' })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: 'Product Two' })).toBeInTheDocument();
+    });
+
+    it('shows the first promo content by default without images', () => {
+      render(<MultiPromoTopTabsNoImage {...mockProps} />);
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 1' })).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 1' })).toBeInTheDocument();
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
+
+    it('switches promo content when a tab is clicked', () => {
+      render(<MultiPromoTopTabsNoImage {...mockProps} />);
+      fireEvent.click(screen.getByRole('tab', { name: 'Product Two' }));
+
+      expect(screen.getByRole('heading', { level: 3, name: 'Product 2' })).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 2' })).toBeInTheDocument();
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
+
+    it('applies top tabs no image layout class', () => {
+      const { container } = render(<MultiPromoTopTabsNoImage {...mockProps} />);
+      expect(container.querySelector('.multi-promo-top-tabs-no-image')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoTopTabsNoImage {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });
 });

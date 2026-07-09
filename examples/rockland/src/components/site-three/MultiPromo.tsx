@@ -320,3 +320,163 @@ export const SideTabs = (props: MultiPromoProps) => {
 
   return <NoDataFallback componentName="MultiPromo" />;
 };
+
+const TopTabsPromoPanel = ({
+  promo,
+  tabId,
+  panelId,
+  isEditing,
+  showImage = true,
+}: {
+  promo: SimplePromoFields;
+  tabId: string;
+  panelId: string;
+  isEditing: boolean;
+  showImage?: boolean;
+}) => {
+  const { image, heading, description, link } = promo ?? {};
+  const headingField = heading?.jsonValue;
+  const descriptionField = description?.jsonValue;
+  const imageField = image?.jsonValue;
+  const linkField = link?.jsonValue;
+
+  return (
+    <div
+      id={panelId}
+      role="tabpanel"
+      aria-labelledby={tabId}
+      className="bg-background px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12"
+    >
+      {showImage && (imageField?.value?.src || isEditing) && imageField && (
+        <div className="mb-8 overflow-hidden">
+          <ContentSdkEditableImage
+            field={imageField}
+            className="h-auto max-h-[320px] w-full object-cover object-center"
+          />
+        </div>
+      )}
+      {(headingField?.value || isEditing) && headingField && (
+        <h3 className="font-heading text-primary mb-6 text-pretty text-2xl leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+          <ContentSdkText field={headingField} />
+        </h3>
+      )}
+      {(descriptionField?.value || isEditing) && descriptionField && (
+        <div className="font-body text-foreground max-w-prose text-base leading-relaxed sm:text-lg [&_p+p]:mt-4 [&_p]:mb-0 [&_strong]:font-semibold">
+          <ContentSdkText field={descriptionField} />
+        </div>
+      )}
+      {(linkField?.value?.href || isEditing) && linkField && (
+        <div className="mt-8">
+          <TrackedCtaLink
+            field={linkField}
+            className="font-body inline-flex w-fit items-center bg-primary px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary-hover"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const TopTabsLayout = ({
+  props,
+  showImage,
+  layoutClass,
+}: {
+  props: MultiPromoProps;
+  showImage: boolean;
+  layoutClass: string;
+}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { page } = useSitecore();
+  const isEditing = page.mode.isEditing;
+
+  const promos = useMemo(
+    () => props.fields?.data?.datasource?.children?.results?.filter(Boolean) ?? [],
+    [props.fields?.data?.datasource?.children?.results]
+  );
+
+  if (props.fields) {
+    return (
+      <section
+        className={cn(layoutClass, 'relative w-full', props.params?.styles || '')}
+        data-class-change
+      >
+        <div className="container mx-auto px-4 py-8 lg:py-12">
+          <div className="border-border overflow-hidden rounded-none border shadow-sm">
+            <div
+              className="border-border flex flex-wrap border-b"
+              role="tablist"
+              aria-label="Promotions"
+            >
+              {promos.map((promo, index) => {
+                const isActive = index === activeIndex;
+                const tabLabel = getPromoSlugField(promo);
+
+                return (
+                  <button
+                    key={promo.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={`multi-promo-top-tab-panel-${promo.id}`}
+                    id={`multi-promo-top-tab-${promo.id}`}
+                    onClick={() => setActiveIndex(index)}
+                    className={cn(
+                      'font-body relative flex min-h-[4.5rem] flex-1 items-center justify-center border-r border-border px-4 py-4 text-center text-xs font-bold uppercase leading-snug tracking-wide transition-colors last:border-r-0 sm:min-h-[5rem] sm:px-6 sm:text-sm',
+                      isActive
+                        ? 'bg-primary text-primary-foreground z-10 border-r-primary'
+                        : 'bg-background text-primary hover:bg-muted/40'
+                    )}
+                  >
+                    {tabLabel ? (
+                      <ContentSdkText field={tabLabel} />
+                    ) : (
+                      <span>{`Promotion ${index + 1}`}</span>
+                    )}
+                    {isActive && (
+                      <span
+                        aria-hidden="true"
+                        className="border-t-primary absolute bottom-0 left-1/2 h-0 w-0 -translate-x-1/2 translate-y-full border-x-[0.65rem] border-t-[0.65rem] border-x-transparent"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="min-w-0">
+              {promos.map((promo, index) => {
+                const isActive = index === activeIndex;
+
+                return (
+                  <div
+                    key={promo.id}
+                    data-promo-panel
+                    data-active={isActive}
+                    hidden={!isActive}
+                  >
+                    <TopTabsPromoPanel
+                      promo={promo}
+                      tabId={`multi-promo-top-tab-${promo.id}`}
+                      panelId={`multi-promo-top-tab-panel-${promo.id}`}
+                      isEditing={isEditing}
+                      showImage={showImage}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return <NoDataFallback componentName="MultiPromo" />;
+};
+
+export const TopTabs = (props: MultiPromoProps) =>
+  TopTabsLayout({ props, showImage: true, layoutClass: 'multi-promo-top-tabs' });
+
+export const TopTabsNoImage = (props: MultiPromoProps) =>
+  TopTabsLayout({ props, showImage: false, layoutClass: 'multi-promo-top-tabs-no-image' });
