@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-06-09T00:00:00Z"
+lastUpdatedAt: "2026-07-14T00:00:00Z"
 lastUpdatedBy: "claude-agent"
 
 project:
@@ -3072,6 +3072,51 @@ lookups:
   - path: "/sitecore/content/main/main-website/Presentation/Page Designs/Landing Page"
     itemId: "{E38ABC20-C7EA-43C8-AAAF-22CA71342814}"
     lastReadAt: "2026-06-09T00:00:00Z"
+
+# Information architecture (AI-created page trees)
+ia:
+  - name: "novacare-mayo-clinic-ia"
+    siteName: "novacare"
+    contentRootPath: "/sitecore/content/novacare/novacare/Home"
+    contentRootId: "{E100C53B-3D49-4A33-80F1-2A9D7F8533FB}"
+    pageTemplateId: "{1EC164B2-BD5D-41D8-8046-D91FE5F46F83}"
+    pageTemplateName: "Detail Page"
+    specPath: "docs/ai/ia/novacare-ia.md"
+    statePath: "docs/ai/ia/novacare-ia-state.json"
+    status: "complete"
+    createdAt: "2026-07-14T00:00:00Z"
+    updatedAt: "2026-07-14T00:00:00Z"
+    itemCount: 76
+    topLevelSections:
+      - { name: "care-at-mayo-clinic", itemId: "{6891B81B-70CD-4B5C-91B7-FA9D4B7F39F7}" }
+      - { name: "health-library", itemId: "{C4B62CFB-A953-4FAE-9502-C94E8C568092}" }
+      - { name: "for-medical-professionals", itemId: "{98497846-9162-4E43-A11F-A2B1B907CE20}" }
+      - { name: "research", itemId: "{D6661D9F-F9A7-4CB0-9CDD-F6DCAF34F30A}" }
+      - { name: "education", itemId: "{E9BB97BD-E30C-46D2-B97B-B0767DAF1F06}" }
+      - { name: "giving-to-mayo-clinic", itemId: "{8D6DCC89-0F75-4FAD-BA0D-13F6C8B3B9D0}" }
+      - { name: "about-mayo-clinic", itemId: "{290A8C6E-5E66-4878-823D-8D741AFB7F26}" }
+      - { name: "businesses", itemId: "{D72810B2-C86D-456D-B06D-878EF461DE13}" }
+      - { name: "students", itemId: "{A725A8D4-B574-42B6-952A-5BBEC0393BB1}" }
+      - { name: "international-patients", itemId: "{DEDF4202-7307-40FC-8B75-96F14F93C1EC}" }
+      - { name: "charitable-care-financial-assistance", itemId: "{8F7E885A-D97F-4957-A43D-811628771D89}" }
+      - { name: "log-in", itemId: "{934BCBED-B5F8-439B-B6DB-CC1A63D94FBE}" }
+    healthLifestyleArticles:
+      parentPath: "/sitecore/content/novacare/novacare/Home/health-library/health-lifestyle"
+      parentId: "{A6021169-21FA-4799-963A-381EE3DC1947}"
+      templateId: "{537CAD02-FA7D-4FCE-989E-246844A833A1}"
+      createdAt: "2026-07-14T00:00:00Z"
+      itemCount: 10
+      articles:
+        - { name: "mediterranean-diet-for-heart-health", itemId: "{4189DC6E-8B29-4666-BE62-2DC71BA4AB4C}" }
+        - { name: "stress-relief-from-laughter", itemId: "{B6921BBF-45B9-4061-A1E3-5C2DD0E8C031}" }
+        - { name: "emotional-eating-and-weight-loss", itemId: "{89AFB7E4-BA5B-47DC-9A36-9C909CF0FCC7}" }
+        - { name: "aerobic-exercise-top-10-reasons", itemId: "{FDB42625-7C23-4091-9C26-B97D48C91495}" }
+        - { name: "walking-trim-waistline-improve-health", itemId: "{DBD74636-66B4-4501-81AA-6FF2F8BF73B6}" }
+        - { name: "herbal-supplements-and-heart-medicines", itemId: "{D641BED8-CE3B-49E7-AB69-CE7CCCFABE08}" }
+        - { name: "mindfulness-exercises", itemId: "{55C93AB5-3BA3-4F8E-88BB-A41FD577DB54}" }
+        - { name: "water-how-much-should-you-drink", itemId: "{26FCEB52-50C8-4F11-8C50-158A1A841933}" }
+        - { name: "fall-prevention-simple-tips", itemId: "{01185E75-2DBF-4DE9-BAF9-38C51612D16B}" }
+        - { name: "dietary-fiber-essential-for-healthy-diet", itemId: "{22A4BD94-2367-4524-B5CD-A70DA056C55E}" }
 
 # Demo datasource items (AI-created content, not new component definitions)
 demoContent: []
