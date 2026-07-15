@@ -1,9 +1,19 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import type { SiteInfo } from '@sitecore-content-sdk/nextjs';
 import sites from '.sitecore/sites.json';
 
 export const dynamic = 'force-dynamic';
 
 const CACHE_MAX_AGE = 86400; // 24 hours
+
+/** Sites JSON may be empty at build time; cast so hostName is typed correctly. */
+const sitesNormalized: SiteInfo[] = (
+  sites as { name: string; hostName?: string; language?: string }[]
+).map((s) => ({
+  name: s.name,
+  hostName: s.hostName ?? '*',
+  language: s.language ?? 'en',
+}));
 
 /** Generates the ai.txt content with crawler permissions and AI endpoints. */
 function generateAiTxtContent(siteUrl: string): string {
@@ -56,8 +66,8 @@ function resolveSiteUrl(request: NextRequest): string {
     return `${protocol}://${host}`;
   }
 
-  const defaultSite = sites?.[0];
-  if (defaultSite?.hostName) {
+  const defaultSite = sitesNormalized[0];
+  if (defaultSite?.hostName && defaultSite.hostName !== '*') {
     return `https://${defaultSite.hostName}`;
   }
 
