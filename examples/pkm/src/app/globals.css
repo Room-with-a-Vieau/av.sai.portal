@@ -1,6 +1,7 @@
 /* Same @import order as examples/portal/src/app/globals.css */
 @import '../assets/styles/globals.css';
 @import '../assets/styles/themes/rockland-tokens.css';
+@import '../assets/styles/themes/pkm-tokens.css';
 @import '../assets/styles/tailwind-bootstrap-grid.css';
 @import '../assets/styles/column-splitter.css';
 @import 'tailwindcss';
@@ -171,6 +172,14 @@ html[data-theme='rockland'] {
   --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   --font-accent: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 700;
+}
+
+/* Progressive PKM: Source Sans 3 substitutes for proprietary 96 Sans (trustworthy, friendly, readable). */
+html[data-theme='pkm'] {
+  --font-body: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
   --font-weight-heading: 700;
 }
 
