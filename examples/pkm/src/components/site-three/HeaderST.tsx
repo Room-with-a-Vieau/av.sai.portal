@@ -9,7 +9,7 @@ import {
 } from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
-import { SearchBox } from './non-sitecore/SearchBox';
+import { HeaderPreviewSearch } from './non-sitecore/HeaderPreviewSearch';
 import { DemoUserSwitcher } from './non-sitecore/DemoUserSwitcher';
 import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
@@ -75,9 +75,9 @@ export const Default = (props: HeaderSTProps) => {
             <li className="hidden lg:block">
               <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={navLinkClass} />
             </li>
-            <li className="mr-auto lg:mr-0">
+            <li className="mr-auto flex min-w-0 flex-1 justify-end lg:mr-0 lg:justify-center lg:px-4">
               {params.showSearchBox ? (
-                <SearchBox searchLink={fields?.SearchLink} />
+                <HeaderPreviewSearch searchLink={fields?.SearchLink} />
               ) : (
                 <ContentSdkLink field={fields?.SearchLink} prefetch={false} className={navLinkClass} />
               )}

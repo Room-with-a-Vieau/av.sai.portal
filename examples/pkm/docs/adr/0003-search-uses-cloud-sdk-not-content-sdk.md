@@ -2,7 +2,13 @@
 
 ## Status
 
-Accepted (revised)
+Superseded in part (2026-07-28)
+
+**Update:** Progressive Knowledge Management (PKM) also enables **Sitecore Search Legacy**
+(`@sitecore-search/react` + `@sitecore-search/ui`) for header Preview Search and full results,
+adapted from Prospera. See `src/components/search/`, `HeaderPreviewSearch`, and
+`NEXT_PUBLIC_SEARCH_*` in `.env.remote.example`. The OOTB `SearchExperience` component remains
+available; choose Legacy widgets when CEC-configured Preview Search / Q&A is required.
 
 ## Context
 

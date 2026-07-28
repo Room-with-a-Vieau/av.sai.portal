@@ -77,6 +77,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'assets.dwyeromega.com',
         port: '',
         pathname: '/do-product-images/**',

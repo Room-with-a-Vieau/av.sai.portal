@@ -123,6 +123,14 @@ jest.mock('../../components/site-three/non-sitecore/MiniCart', () => ({
   ),
 }));
 
+jest.mock('../../components/site-three/non-sitecore/HeaderPreviewSearch', () => ({
+  HeaderPreviewSearch: ({ searchLink }: any) => (
+    <div data-testid="search-box" data-search-link={searchLink?.value?.href}>
+      Search Box Component
+    </div>
+  ),
+}));
+
 jest.mock('../../components/site-three/non-sitecore/SearchBox', () => ({
   SearchBox: ({ searchLink }: any) => (
     <div data-testid="search-box" data-search-link={searchLink?.value?.href}>
