@@ -3,12 +3,18 @@
 import type React from 'react';
 import { RichText, Text } from '@sitecore-content-sdk/nextjs';
 
+import { Default as ImageWrapper } from '@/components/image/ImageWrapper.dev';
 import { cn } from '@/lib/utils';
+import { normalizeImageFieldSrc, unwrapImageField } from '@/lib/sitecore-image-field';
 
 import { mergeArticleContentFields } from './article-content.fields';
 import type { ArticleContentProps } from './article-content.props';
 
 function hasText(field?: { value?: string | null }) {
+  return Boolean(field?.value?.trim());
+}
+
+function hasRichText(field?: { value?: string | null }) {
   return Boolean(field?.value?.trim());
 }
 
@@ -184,5 +190,157 @@ export const ServicePageVariant: React.FC<ArticleContentProps> = (props) => {
         </div>
       </div>
     </section>
+  );
+};
+
+/**
+ * Progressive Knowledge Management page layout for employee portal content.
+ * Uses page titles, summary, subtitle, Detail rich text, and page image.
+ */
+export const kmpage: React.FC<ArticleContentProps> = (props) => {
+  const { params, page } = props;
+  const isEditing = page.mode.isEditing;
+  const {
+    pageTitle,
+    pageShortTitle,
+    pageHeaderTitle,
+    pageSummary,
+    pageSubtitle,
+    Detail,
+    image: rawImage,
+  } = mergeArticleContentFields(props, isEditing);
+
+  const image = normalizeImageFieldSrc(unwrapImageField(rawImage));
+  const hasImage = Boolean(image?.value?.src);
+
+  const hasPageHeaderTitle = hasText(pageHeaderTitle);
+  const hasPageTitle = hasText(pageTitle);
+  const hasPageShortTitle = hasText(pageShortTitle);
+  const hasPageSubtitle = hasText(pageSubtitle);
+  const hasPageSummary = hasText(pageSummary);
+  const hasDetail = hasRichText(Detail as { value?: string | null });
+
+  const primaryHeadline = hasPageHeaderTitle ? pageHeaderTitle : pageTitle;
+  const showSecondaryPageTitle =
+    hasPageHeaderTitle &&
+    hasPageTitle &&
+    pageTitle?.value?.trim() !== pageHeaderTitle?.value?.trim();
+  const showPrimaryHeading = Boolean(primaryHeadline) && (hasText(primaryHeadline) || isEditing);
+
+  const hasRenderableBlock =
+    hasImage ||
+    hasPageShortTitle ||
+    hasPageHeaderTitle ||
+    hasPageTitle ||
+    hasPageSubtitle ||
+    hasPageSummary ||
+    hasDetail ||
+    isEditing;
+
+  if (!hasRenderableBlock) {
+    return null;
+  }
+
+  const headingId = 'article-content-kmpage-heading';
+
+  return (
+    <article
+      data-component="ArticleContent"
+      data-variant="kmpage"
+      className={cn('@container article-content article-content--kmpage w-full bg-background', params?.styles)}
+      aria-labelledby={showPrimaryHeading ? headingId : undefined}
+    >
+      {(hasImage || isEditing) && image && (
+        <figure className="relative w-full overflow-hidden bg-secondary">
+          <div className="relative aspect-[21/9] w-full min-h-[12rem] md:min-h-[16rem] lg:min-h-[18rem]">
+            <ImageWrapper
+              image={image}
+              priority
+              sizes="100vw"
+              className="absolute inset-0 h-full w-full object-cover"
+              wrapperClass="absolute inset-0 h-full w-full"
+              alt=""
+            />
+            <div
+              className="pointer-events-none absolute inset-0 bg-linear-to-t from-secondary/55 via-secondary/10 to-transparent"
+              aria-hidden
+            />
+          </div>
+        </figure>
+      )}
+
+      <div className="border-border/40 border-b bg-primary-background/40">
+        <div className="mx-auto max-w-4xl px-6 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14">
+          <div className="space-y-5 md:space-y-6">
+            {(hasPageShortTitle || isEditing) && pageShortTitle && (
+              <Text
+                tag="p"
+                field={pageShortTitle}
+                className="text-primary font-body text-xs font-semibold uppercase tracking-[0.14em] md:text-sm"
+              />
+            )}
+
+            <header className="space-y-3 md:space-y-4">
+              {showPrimaryHeading && primaryHeadline && (
+                <Text
+                  id={headingId}
+                  tag="h1"
+                  field={primaryHeadline}
+                  className="font-heading text-secondary text-balance text-3xl font-bold leading-[1.12] tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-[1.1]"
+                />
+              )}
+
+              {showSecondaryPageTitle && pageTitle && (
+                <Text
+                  tag="p"
+                  field={pageTitle}
+                  className="font-body text-muted-foreground text-base font-medium md:text-lg"
+                />
+              )}
+
+              {(hasPageSubtitle || isEditing) && pageSubtitle && (
+                <Text
+                  tag="p"
+                  field={pageSubtitle}
+                  className="text-foreground/85 font-body max-w-3xl text-pretty text-lg leading-relaxed md:text-xl"
+                />
+              )}
+            </header>
+
+            {(hasPageSummary || isEditing) && pageSummary && (
+              <aside className="border-primary/30 bg-background max-w-3xl rounded-r-lg border-l-4 py-4 pl-5 pr-4 shadow-sm md:py-5 md:pl-6">
+                <p className="text-secondary mb-1.5 font-body text-xs font-semibold uppercase tracking-wider">
+                  Summary
+                </p>
+                <Text
+                  tag="p"
+                  field={pageSummary}
+                  className="text-foreground/90 font-body text-pretty whitespace-pre-wrap text-base leading-relaxed md:text-[1.0625rem] md:leading-[1.7]"
+                />
+              </aside>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {(hasDetail || isEditing) && Detail && (
+        <div className="mx-auto max-w-4xl px-6 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14">
+          <div
+            className={cn(
+              'article-content__detail content-sdk-rich-text text-foreground not-prose w-full max-w-3xl min-w-0',
+              'font-body text-base leading-[1.75] md:text-[1.0625rem] md:leading-[1.75]',
+              '[&_h2]:font-heading [&_h2]:text-secondary [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight',
+              '[&_h3]:font-heading [&_h3]:text-secondary [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:text-xl [&_h3]:font-semibold',
+              '[&_p]:mb-4 [&_p]:text-pretty',
+              '[&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6',
+              '[&_li]:mb-1.5 [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline',
+              '[&_strong]:font-semibold [&_strong]:text-foreground',
+            )}
+          >
+            <RichText field={Detail} />
+          </div>
+        </div>
+      )}
+    </article>
   );
 };

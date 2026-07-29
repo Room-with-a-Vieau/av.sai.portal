@@ -1,6 +1,6 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-07-15T16:50:00Z"
-lastUpdatedBy: "claude-agent"
+lastUpdatedAt: "2026-07-29T14:05:00Z"
+lastUpdatedBy: "cursor-agent"
 
 project:
   siteCollection: "main"
@@ -3103,3 +3103,173 @@ ia:
       - { displayName: "3M: Materials Science That Powers Next-Generation Manufacturing", name: "3m-materials-science-manufacturing", itemId: "{D31EB171-AF59-45A3-B732-9E5A9A46F944}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/3m-materials-science-manufacturing" }
       - { displayName: "Bosch Rexroth and Connected Motion Control for Industry 4.0", name: "bosch-rexroth-connected-motion", itemId: "{A9F86D14-11B4-4502-B286-5785C4F3ED3C}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/bosch-rexroth-connected-motion" }
       - { displayName: "Parker Hannifin: Motion and Control as the Quiet Force Behind High-Performance Plants", name: "parker-hannifin-motion-control", itemId: "{C8D456DC-8255-4E10-9F5C-EE7C0E96162D}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/parker-hannifin-motion-control" }
+
+  - name: "pkm-top-nav"
+    status: "complete"
+    createdAt: "2026-07-28T21:30:00Z"
+    updatedAt: "2026-07-29T13:35:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Home"
+    contentRootItemId: "{6D0A0F2F-BF24-4FA4-9562-00B59DD05063}"
+    pageBranchId: "{EC16FA58-5F86-4B5A-BFAA-10FAFE515BA3}"
+    pageBranchName: "Services Page"
+    pageBranchNameItemId: "{9B1E408C-875B-497D-A7F3-92282D3775C9}"
+    pageTemplateId: "{919189FF-6E09-4BFA-BB4C-367EB452378B}"
+    pageTemplateName: "Services Page"
+    language: "en"
+    fullTreePath: "docs/ai/manifests/pkm-ia-tree.yaml"
+    notes: >
+      Full IA created (~101 Services Page items: 7 L1 + L2/L3). HeroST1 customized on all L1 and L2 pages.
+      L3 HeroST1 still use branch defaults. Item names use "and" for "&"; pageTitle retains "&".
+      Detail (rich text) populated on all Services Page items under Home (short HTML for AI discoverability).
+      image field set on all ~101 Services Pages to Progressive DAM marshmallow family photo
+      (src 89538338843c4f9ebab1c4128e14a6ff, dam-id _gYQa693RVCjoFYoZuA9AQ).
+      Home itself is Home Page template and was skipped. See pkm-ia-tree.yaml for full item IDs.
+    pages:
+      - displayName: "Claims"
+        name: "Claims"
+        itemId: "{4E985075-F29B-46E6-875F-B014AC5E5ED6}"
+        path: "/sitecore/content/progressive/pkm/Home/Claims"
+        heroSt1ItemId: "{06E51BE9-9B9B-475F-9FF9-994F3232B8F0}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Claims/Data/HeroST1"
+      - displayName: "Policyholder Service"
+        name: "Policyholder Service"
+        itemId: "{F58DEFE9-BC53-45CF-9635-FA9B8328CD67}"
+        path: "/sitecore/content/progressive/pkm/Home/Policyholder Service"
+        heroSt1ItemId: "{2FDD8F04-E287-4898-BAA8-B601D50C2248}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Policyholder Service/Data/HeroST1"
+      - displayName: "Products"
+        name: "Products"
+        itemId: "{C4F18B58-7892-4570-A826-638BC2EC45C3}"
+        path: "/sitecore/content/progressive/pkm/Home/Products"
+        heroSt1ItemId: "{443C42C4-A027-4FB3-BE20-3F6969672894}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Products/Data/HeroST1"
+      - displayName: "Tools & Systems"
+        name: "Tools and Systems"
+        itemId: "{A82B6DC7-67C6-4E5C-BE15-EE7FABDB164A}"
+        path: "/sitecore/content/progressive/pkm/Home/Tools and Systems"
+        heroSt1ItemId: "{503A99B5-7691-4489-8CAF-12859F706E47}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Tools and Systems/Data/HeroST1"
+      - displayName: "Reports"
+        name: "Reports"
+        itemId: "{A60D5A00-5D6D-479D-9829-56408C17272D}"
+        path: "/sitecore/content/progressive/pkm/Home/Reports"
+        heroSt1ItemId: "{73C8AE10-61CB-4154-9674-0A03321A4C51}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Reports/Data/HeroST1"
+      - displayName: "Learning"
+        name: "Learning"
+        itemId: "{05BFD1CD-FC98-49A3-929C-7BE5D5FEBF07}"
+        path: "/sitecore/content/progressive/pkm/Home/Learning"
+        heroSt1ItemId: "{BE738B41-2838-4D75-B92B-26628DACD681}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/Learning/Data/HeroST1"
+      - displayName: "People & Teams"
+        name: "People and Teams"
+        itemId: "{2CD69DB3-1052-4702-BF07-C366C4994063}"
+        path: "/sitecore/content/progressive/pkm/Home/People and Teams"
+        heroSt1ItemId: "{2CE2990B-1877-41B3-938F-6E7E06A21C1E}"
+        heroSt1Path: "/sitecore/content/progressive/pkm/Home/People and Teams/Data/HeroST1"
+
+  - name: "pkm-claims-agent-faqs"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-29T13:08:00Z"
+    updatedAt: "2026-07-29T13:15:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Data/AI Config/FAQ"
+    contentRootItemId: "{243BA5AA-6C55-4279-8E48-5C918D729934}"
+    faqTemplateId: "{E1F2A3B4-C5D6-4E7F-8A9B-0C1D2E3F4A5B}"
+    faqTemplateName: "AI FAQ Item"
+    folderTemplateId: "{E7F8A9B0-C1D2-4E3F-4A5B-6C7D8E9F0A1B}"
+    folderTemplateName: "AI FAQ Folder"
+    language: "en"
+    fields: ["question", "answer"]
+    iaSpecPath: "docs/ai/ia/pkm-claims-faq-ia.md"
+    faqItemCount: 50
+    folderCount: 6
+    notes: >
+      Progressive claims-agent FAQs for internal KM / AI discovery. Pre-existing SYNC sample FAQs
+      under FAQ root were left in place. All 50 new items created with question/answer fields.
+    folders:
+      - { name: "Claim Intake", itemId: "{E5592E6B-2214-4342-B0D7-87F93ABBD0B1}", count: 10 }
+      - { name: "Coverage Eligibility", itemId: "{876F7CE4-554C-4C12-B181-D38705EB77F7}", count: 10 }
+      - { name: "Claim Status", itemId: "{C6663299-AF98-49FA-89B6-DDF8BEF0758E}", count: 8 }
+      - { name: "Documentation", itemId: "{FDE7CB47-14E9-46CD-902B-2B21725E808B}", count: 8 }
+      - { name: "Escalations", itemId: "{A4BF6755-A43A-46AC-A1A7-5B81CAB2787E}", count: 7 }
+      - { name: "Systems Tools", itemId: "{994295B1-9655-40C8-9CF4-3BB908BCD8AF}", count: 7 }
+    sampleVerified:
+      - { name: "When is FNOL required", itemId: "{CE70F5A0-C579-4086-B3DA-A4DAD959715D}", path: "/sitecore/content/progressive/pkm/Data/AI Config/FAQ/Claim Intake/When is FNOL required" }
+
+  - name: "progressive-ai-faq-items"
+    kind: "content"
+    status: "complete"
+    createdAt: "2026-07-29T13:10:00Z"
+    updatedAt: "2026-07-29T13:15:00Z"
+    siteName: "pkm"
+    templateId: "{E1F2A3B4-C5D6-4E7F-8A9B-0C1D2E3F4A5B}"
+    templateName: "AI FAQ Item"
+    language: "en"
+    fields: ["question", "answer"]
+    notes: "Subset listing for Docs/Escalations/Systems Tools batch (22 of 50). See pkm-claims-agent-faqs for full IA."
+    parents:
+      - { name: "Documentation", itemId: "{FDE7CB47-14E9-46CD-902B-2B21725E808B}", path: "/sitecore/content/progressive/pkm/Data/AI Config/FAQ/Documentation" }
+      - { name: "Escalations", itemId: "{A4BF6755-A43A-46AC-A1A7-5B81CAB2787E}", path: "/sitecore/content/progressive/pkm/Data/AI Config/FAQ/Escalations" }
+      - { name: "Systems Tools", itemId: "{994295B1-9655-40C8-9CF4-3BB908BCD8AF}", path: "/sitecore/content/progressive/pkm/Data/AI Config/FAQ/Systems Tools" }
+    items:
+      - { name: "Required photo standards", itemId: "{9A8649A6-ABA7-426D-8B1E-57C970412F33}", parent: "Documentation" }
+      - { name: "Statement template use", itemId: "{8BCD5EAA-2DA2-4F2C-9BEF-09703678E6A9}", parent: "Documentation" }
+      - { name: "Medical records requests", itemId: "{EDAE8158-FE8F-49A4-99E2-EA8A660CE514}", parent: "Documentation" }
+      - { name: "Repair estimate requirements", itemId: "{24270F23-2077-4277-917F-9EA9C7A13CA9}", parent: "Documentation" }
+      - { name: "File naming conventions", itemId: "{7EE94438-291A-4F80-A332-31BF3B1A84AE}", parent: "Documentation" }
+      - { name: "Authenticating documents", itemId: "{46B535E2-DC0B-420F-8A9F-149283EC874A}", parent: "Documentation" }
+      - { name: "Police report timing", itemId: "{1AFD1CBA-1375-4F8A-956A-4680DA5EEE62}", parent: "Documentation" }
+      - { name: "Missing document follow up", itemId: "{9F8FDC92-BE1D-4418-B9E2-FE70365B9BD3}", parent: "Documentation" }
+      - { name: "When to escalate a claim", itemId: "{3582D241-5D82-4EF7-B347-F100D65C0F30}", parent: "Escalations" }
+      - { name: "Litigation hold indicators", itemId: "{D6748D30-C4B3-44B5-8E55-32879F92DE43}", parent: "Escalations" }
+      - { name: "VIP claim handling", itemId: "{EF6E66C9-DEDF-4DBA-AADA-A31816742B43}", parent: "Escalations" }
+      - { name: "Catastrophe claim routing", itemId: "{C454335B-AE3E-40EA-8217-09792327B30E}", parent: "Escalations" }
+      - { name: "Fraud indicator escalation", itemId: "{432923A6-D06A-4779-8141-5EB3D0F5BD66}", parent: "Escalations" }
+      - { name: "Supervisor approval thresholds", itemId: "{A245650B-B6CD-47F8-BDDF-D19BFF3C75E8}", parent: "Escalations" }
+      - { name: "Exception documentation", itemId: "{64499BDA-C0D0-4204-9C0E-8D8BED65774B}", parent: "Escalations" }
+      - { name: "Policy lookup tips", itemId: "{81132F61-D6D3-4EAD-B614-B9FC963DB7BC}", parent: "Systems Tools" }
+      - { name: "Claims lookup by number", itemId: "{88EEA813-D20C-4289-A447-3674A07A891E}", parent: "Systems Tools" }
+      - { name: "Customer identity matching", itemId: "{D4EA37A6-8525-4D50-94AD-177554E2BB4D}", parent: "Systems Tools" }
+      - { name: "Access request process", itemId: "{2AE9CF28-3127-49E4-9BE3-383689CF149D}", parent: "Systems Tools" }
+      - { name: "Common system errors", itemId: "{EF5C32BC-8E12-4E83-87FC-B66828FE615F}", parent: "Systems Tools" }
+      - { name: "Where to find forms", itemId: "{17F62384-2C85-4D8A-9DBB-F486B10AAAEA}", parent: "Systems Tools" }
+      - { name: "Reporting a tools outage", itemId: "{64CF355A-7A4E-479E-9D88-295D25524FD8}", parent: "Systems Tools" }
+
+  - name: "ArticleContent"
+    kind: "context"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-07-29T13:50:00Z"
+    updatedAt: "2026-07-29T14:05:00Z"
+    siteName: "pkm"
+    notes: >
+      Added Progressive KM employee-portal variant `kmpage` (lowercase export matches Sitecore
+      Variant Definition item name). Uses pageShortTitle, pageHeaderTitle, pageTitle, pageSubtitle,
+      pageSummary, Detail (rich text), and image. React: src/components/article-content/ArticleContent.tsx.
+      Sitecore variant already existed under Headless Variants; code + tests completed 2026-07-29.
+    react:
+      filePath: "src/components/article-content/ArticleContent.tsx"
+      componentMapKey: "ArticleContent"
+      variants:
+        - "Default"
+        - "ServicePageVariant"
+        - "kmpage"
+    variants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/ArticleContent"
+      containerItemId: "{5CAB3B17-8A72-46E7-A6E3-FBF6DA968DD7}"
+      items:
+        - { name: "Default", path: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/ArticleContent/Default" }
+        - { name: "ServicePageVariant", path: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/ArticleContent/ServicePageVariant" }
+        - { name: "kmpage", itemId: "{1733C1E8-C99E-4C9A-9B70-C7D570846381}", path: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/ArticleContent/kmpage" }
+    verification:
+      checkedAt: "2026-07-29T14:05:00Z"
+      passed:
+        - "Sitecore Variant Definition kmpage exists"
+        - "Named export kmpage in ArticleContent.tsx"
+        - "Unit tests for kmpage pass (18/18 article-content)"
+      failed: []
+      pendingManual:
+        - "Assign kmpage variant on Services Page ArticleContent rendering in Experience Editor"

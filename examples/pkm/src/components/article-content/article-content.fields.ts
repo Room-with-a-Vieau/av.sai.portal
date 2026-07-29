@@ -1,51 +1,86 @@
-import type { Field, Page } from '@sitecore-content-sdk/nextjs';
+import type { Field, ImageField, Page, RichTextField } from '@sitecore-content-sdk/nextjs';
+
+import type { JsonWrappedImageField } from '@/lib/sitecore-image-field';
+import { unwrapImageField } from '@/lib/sitecore-image-field';
 
 import type { ArticleContentFields, ArticleContentProps } from './article-content.props';
 
-const FIELD_KEYS: (keyof ArticleContentFields)[] = [
+const TEXT_FIELD_KEYS: (keyof Omit<ArticleContentFields, 'image'>)[] = [
   'pageTitle',
   'pageShortTitle',
   'pageHeaderTitle',
   'pageSummary',
   'pageSubtitle',
   'ArticleBody',
+  'Detail',
 ];
 
 /** Accept legacy Sitecore / layout keys until templates and queries are fully renamed. */
-const MIGRATION_ALIASES: Record<keyof ArticleContentFields, readonly string[]> = {
+const MIGRATION_ALIASES: Record<keyof Omit<ArticleContentFields, 'image'>, readonly string[]> = {
   pageTitle: ['pageTitle', 'Title'],
   pageShortTitle: ['pageShortTitle', 'ShortTitle'],
   pageHeaderTitle: ['pageHeaderTitle', 'HeaderTitle'],
   pageSummary: ['pageSummary', 'Summary'],
   pageSubtitle: ['pageSubtitle', 'Subtitle'],
   ArticleBody: ['ArticleBody'],
+  Detail: ['Detail'],
 };
+
+const IMAGE_ALIASES = ['image', 'Image', 'pageThumbnail'] as const;
 
 function hasText(field?: { value?: string | null }) {
   return Boolean(field?.value?.trim());
 }
 
-function unwrapCell(cell: Field<string> | { jsonValue?: Field<string> } | undefined): Field<string> | undefined {
+function unwrapCell(
+  cell: Field<string> | RichTextField | ImageField | { jsonValue?: Field<string> | RichTextField | ImageField } | undefined,
+): Field<string> | RichTextField | ImageField | undefined {
   if (!cell) return undefined;
   if (typeof cell === 'object' && 'jsonValue' in cell && cell.jsonValue !== undefined) {
     return cell.jsonValue;
   }
-  return cell as Field<string>;
+  return cell as Field<string> | RichTextField | ImageField;
 }
 
 function pickResolvedField(
   bag: Record<string, unknown> | undefined,
-  key: keyof ArticleContentFields,
+  key: keyof Omit<ArticleContentFields, 'image'>,
   requireNonEmpty: boolean,
-): Field<string> | undefined {
+): Field<string> | RichTextField | undefined {
   if (!bag) return undefined;
   for (const name of MIGRATION_ALIASES[key]) {
     const raw = bag[name];
-    const field = unwrapCell(raw as Field<string> | { jsonValue?: Field<string> } | undefined);
+    const field = unwrapCell(raw as Field<string> | { jsonValue?: Field<string> } | undefined) as
+      | Field<string>
+      | RichTextField
+      | undefined;
     if (!field) continue;
     if (requireNonEmpty) {
-      if (hasText(field)) return field;
+      if (hasText(field as Field<string>)) return field;
     } else if (field !== undefined) {
+      return field;
+    }
+  }
+  return undefined;
+}
+
+function pickResolvedImage(
+  bag: Record<string, unknown> | undefined,
+  requireSrc: boolean,
+): ImageField | undefined {
+  if (!bag) return undefined;
+  for (const name of IMAGE_ALIASES) {
+    const raw = bag[name];
+    const field = unwrapImageField(
+      unwrapCell(raw as ImageField | JsonWrappedImageField | undefined) as
+        | ImageField
+        | JsonWrappedImageField
+        | undefined,
+    );
+    if (!field) continue;
+    if (requireSrc) {
+      if (field.value?.src) return field;
+    } else {
       return field;
     }
   }
@@ -56,10 +91,12 @@ function readNestedFieldBag(bag: unknown): Partial<ArticleContentFields> {
   if (!bag || typeof bag !== 'object') return {};
   const rec = bag as Record<string, unknown>;
   const out: Partial<ArticleContentFields> = {};
-  for (const key of FIELD_KEYS) {
+  for (const key of TEXT_FIELD_KEYS) {
     const field = pickResolvedField(rec, key, true);
     if (field) out[key] = field;
   }
+  const image = pickResolvedImage(rec, true);
+  if (image) out.image = image;
   return out;
 }
 
@@ -81,10 +118,12 @@ function readRouteFields(page: Page): Partial<ArticleContentFields> {
   const rf = route?.fields as Record<string, unknown> | undefined;
   if (!rf) return {};
   const out: Partial<ArticleContentFields> = {};
-  for (const key of FIELD_KEYS) {
+  for (const key of TEXT_FIELD_KEYS) {
     const field = pickResolvedField(rf, key, true);
     if (field) out[key] = field;
   }
+  const image = pickResolvedImage(rf, true);
+  if (image) out.image = image;
   return out;
 }
 
@@ -121,8 +160,8 @@ export function mergeArticleContentFields(props: ArticleContentProps, isEditing:
     readRouteFields(page) as Record<string, unknown>,
   ];
 
-  for (const key of FIELD_KEYS) {
-    let chosen: Field<string> | undefined;
+  for (const key of TEXT_FIELD_KEYS) {
+    let chosen: Field<string> | RichTextField | undefined;
     for (const bag of candidatesList) {
       chosen = pickResolvedField(bag, key, true);
       if (chosen) break;
@@ -137,6 +176,19 @@ export function mergeArticleContentFields(props: ArticleContentProps, isEditing:
       merged[key] = chosen;
     }
   }
+
+  let image: ImageField | undefined;
+  for (const bag of candidatesList) {
+    image = pickResolvedImage(bag, true);
+    if (image) break;
+  }
+  if (!image && isEditing) {
+    for (const bag of candidatesList) {
+      image = pickResolvedImage(bag, false);
+      if (image) break;
+    }
+  }
+  if (image) merged.image = image;
 
   return merged as ArticleContentFields;
 }

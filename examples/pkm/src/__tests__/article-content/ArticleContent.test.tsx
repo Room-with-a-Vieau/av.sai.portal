@@ -1,9 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Default as ArticleContent, ServicePageVariant } from '../../components/article-content/ArticleContent';
+import {
+  Default as ArticleContent,
+  ServicePageVariant,
+  kmpage,
+} from '../../components/article-content/ArticleContent';
 import {
   fullArticleContentProps,
   servicePageVariantProps,
+  kmpageProps,
   splitTitleProps,
   titleOnlyProps,
   pageTitleOnlyProps,
@@ -26,6 +31,24 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   }) => {
     if (!field?.value && Tag !== 'h1') return null;
     return React.createElement(Tag, { className, id }, field?.value ?? '');
+  },
+  RichText: ({ field, className }: { field?: { value?: string }; className?: string }) => {
+    if (!field?.value) return null;
+    return React.createElement('div', {
+      className,
+      dangerouslySetInnerHTML: { __html: field.value },
+    });
+  },
+}));
+
+jest.mock('../../components/image/ImageWrapper.dev', () => ({
+  Default: ({ image }: { image?: { value?: { src?: string; alt?: string } } }) => {
+    if (!image?.value?.src) return null;
+    return React.createElement('img', {
+      src: image.value.src,
+      alt: image.value.alt ?? '',
+      'data-testid': 'kmpage-hero-image',
+    });
   },
 }));
 
@@ -103,6 +126,33 @@ describe('ArticleContent ServicePageVariant', () => {
 
   it('returns null when no service page fields and not editing', () => {
     const { container } = render(<ServicePageVariant {...emptyProps} />);
+    expect(container.firstChild).toBeNull();
+  });
+});
+
+describe('ArticleContent kmpage', () => {
+  // Export must stay lowercase to match Sitecore Variant Definition `kmpage`.
+  // JSX requires PascalCase tags, so tests use createElement.
+  it('renders image, titles, summary callout, and Detail body', () => {
+    const { container } = render(React.createElement(kmpage, kmpageProps));
+
+    expect(screen.getByTestId('kmpage-hero-image')).toHaveAttribute(
+      'src',
+      expect.stringContaining('89538338843c4f9ebab1c4128e14a6ff'),
+    );
+    expect(screen.getByText('Claims')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Claims Knowledge Base');
+    expect(screen.getByText('Claim Intake & Standards')).toBeInTheDocument();
+    expect(screen.getByText('Summary')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Shared internal standards for commercial lines claim intake/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Progressive Claims Knowledge Base for associates/i)).toBeInTheDocument();
+    expect(container.querySelector('[data-variant="kmpage"]')).toBeInTheDocument();
+  });
+
+  it('returns null when no kmpage fields and not editing', () => {
+    const { container } = render(React.createElement(kmpage, emptyProps));
     expect(container.firstChild).toBeNull();
   });
 });
