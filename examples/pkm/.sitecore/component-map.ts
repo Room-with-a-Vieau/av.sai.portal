@@ -268,6 +268,8 @@ import * as AnimatedSectiondev from 'src/components/animated-section/AnimatedSec
 import * as animatedsectionprops from 'src/components/animated-section/animated-section.props';
 import * as AlertBannerdev from 'src/components/alert-banner/AlertBanner.dev';
 import * as alertbannerprops from 'src/components/alert-banner/alert-banner.props';
+import * as AiFaq from 'src/components/ai-faq/AiFaq';
+import * as aifaqprops from 'src/components/ai-faq/ai-faq.props';
 
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCServerWrapper],
@@ -523,6 +525,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['animated-section', { ...animatedsectionprops }],
   ['AlertBanner', { ...AlertBannerdev }],
   ['alert-banner', { ...alertbannerprops }],
+  ['AiFaq', { ...AiFaq, componentType: 'client' }],
+  ['ai-faq', { ...aifaqprops }],
 ]);
 
 export default componentMap;

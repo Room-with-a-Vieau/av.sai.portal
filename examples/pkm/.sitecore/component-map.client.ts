@@ -109,6 +109,7 @@ import * as ArticleHeader from 'src/components/article-header/ArticleHeader';
 import * as ArticleContent from 'src/components/article-content/ArticleContent';
 import * as AnimatedSectiondev from 'src/components/animated-section/AnimatedSection.dev';
 import * as AlertBannerdev from 'src/components/alert-banner/AlertBanner.dev';
+import * as AiFaq from 'src/components/ai-faq/AiFaq';
 
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCClientWrapper],
@@ -217,6 +218,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ArticleContent', { ...ArticleContent }],
   ['AnimatedSection', { ...AnimatedSectiondev }],
   ['AlertBanner', { ...AlertBannerdev }],
+  ['AiFaq', { ...AiFaq }],
 ]);
 
 export default componentMap;

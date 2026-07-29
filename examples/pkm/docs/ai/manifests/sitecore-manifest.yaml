@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-07-29T14:05:00Z"
+lastUpdatedAt: "2026-07-29T16:20:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3273,3 +3273,243 @@ ia:
       failed: []
       pendingManual:
         - "Assign kmpage variant on Services Page ArticleContent rendering in Experience Editor"
+
+  - name: "pkm-usa-state-taxonomy"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-29T16:15:00Z"
+    updatedAt: "2026-07-29T16:20:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Data/Taxonomy/State"
+    contentRootItemId: "{2E272F3C-C281-426A-A49C-69DB53802EB4}"
+    templateId: "{B26A9C54-47E8-4DB1-9222-8D93F026D610}"
+    templateName: "Topic"
+    language: "en"
+    itemCount: 50
+    fields:
+      - { name: "titleRequired", note: "Full US state name" }
+    notes: >
+      Created all 50 US state Topic items under Taxonomy/State. Item name = state code (AL..WY).
+      titleRequired set to full state name. DC/territories not included.
+    sampleVerified:
+      - { name: "TX", itemId: "{4212A16A-133B-4BB7-8511-597EE80D24BC}", path: "/sitecore/content/progressive/pkm/Data/Taxonomy/State/TX" }
+      - { name: "CA", itemId: "{4B5BC72C-F025-4788-892D-F0414DC20F7A}", path: "/sitecore/content/progressive/pkm/Data/Taxonomy/State/CA" }
+    items:
+      - { name: "AL", title: "Alabama", itemId: "{177B84C5-6CE0-487F-B9E7-74847B0E2E18}" }
+      - { name: "AK", title: "Alaska", itemId: "{33463BF4-48E6-437A-8462-08DD113EF925}" }
+      - { name: "AZ", title: "Arizona", itemId: "{2AA88A4E-AB3C-48A0-8460-AF23D38B98A1}" }
+      - { name: "AR", title: "Arkansas", itemId: "{4E7B1369-15E0-4830-83E1-178C61E33584}" }
+      - { name: "CA", title: "California", itemId: "{4B5BC72C-F025-4788-892D-F0414DC20F7A}" }
+      - { name: "CO", title: "Colorado", itemId: "{E3C5396D-5781-47FB-84B6-3B750CD722EE}" }
+      - { name: "CT", title: "Connecticut", itemId: "{6F3FC757-EFF3-4248-BCFE-25C5CF0D90E6}" }
+      - { name: "DE", title: "Delaware", itemId: "{CE683697-342F-4E24-9931-0D72382F6C59}" }
+      - { name: "FL", title: "Florida", itemId: "{AE3259D8-71EB-46C4-9F3D-C874B6D69588}" }
+      - { name: "GA", title: "Georgia", itemId: "{13B908C5-0A59-4DC8-9347-9669409F9A47}" }
+      - { name: "HI", title: "Hawaii", itemId: "{6734A2D5-3AB6-477D-914F-DFA0408A4AA9}" }
+      - { name: "ID", title: "Idaho", itemId: "{B55D8669-CFDC-4472-A549-3039104D800F}" }
+      - { name: "IL", title: "Illinois", itemId: "{C22E1970-292A-44E8-BC01-C87E5E465A31}" }
+      - { name: "IN", title: "Indiana", itemId: "{C491159F-8AA8-4509-841E-71BD3ACC4938}" }
+      - { name: "IA", title: "Iowa", itemId: "{081DDCFE-F0F5-4949-A722-CD035ED21B6B}" }
+      - { name: "KS", title: "Kansas", itemId: "{E04F7602-84FD-494E-8BE4-88D4E7F916F5}" }
+      - { name: "KY", title: "Kentucky", itemId: "{F2D2E435-A70B-4813-B308-9530BC4978A8}" }
+      - { name: "LA", title: "Louisiana", itemId: "{0907EEE2-2B42-4EA5-A6BC-68896A906D5B}" }
+      - { name: "ME", title: "Maine", itemId: "{0B0407B1-9126-462C-99EE-9A824A641B64}" }
+      - { name: "MD", title: "Maryland", itemId: "{9CA51625-C619-44C5-9D4A-B42ADC44BECE}" }
+      - { name: "MA", title: "Massachusetts", itemId: "{C3CCDECD-99AF-4E92-8D90-0547DE3766AF}" }
+      - { name: "MI", title: "Michigan", itemId: "{2223A9D7-D51A-41E8-8A61-20E155A6C8D8}" }
+      - { name: "MN", title: "Minnesota", itemId: "{E532F8F1-F5D4-4AEC-AB41-8C471B481B0E}" }
+      - { name: "MS", title: "Mississippi", itemId: "{9BA322B2-0108-4715-B34B-ACC3C3825480}" }
+      - { name: "MO", title: "Missouri", itemId: "{E3DB1629-6973-4292-92E5-5E0A83AD71BC}" }
+      - { name: "MT", title: "Montana", itemId: "{E6B5628B-35AF-41C0-A409-4AE376E0D42D}" }
+      - { name: "NE", title: "Nebraska", itemId: "{E6E64363-A90E-494A-B8D2-CE705498BEFC}" }
+      - { name: "NV", title: "Nevada", itemId: "{C076144E-0F50-4B88-846E-AB429F724B29}" }
+      - { name: "NH", title: "New Hampshire", itemId: "{8022885C-7856-4EEE-8EAF-6AF89DCB05E2}" }
+      - { name: "NJ", title: "New Jersey", itemId: "{4B54B87B-B262-4591-B66F-1D72371ED1ED}" }
+      - { name: "NM", title: "New Mexico", itemId: "{5D948351-BAEA-4015-B728-8089E5230732}" }
+      - { name: "NY", title: "New York", itemId: "{31101187-1565-4BCA-A283-1409DE338083}" }
+      - { name: "NC", title: "North Carolina", itemId: "{491A85C3-2DDD-48A8-866B-93E9056EE819}" }
+      - { name: "ND", title: "North Dakota", itemId: "{A04E771E-3245-48F6-9778-355ACC751F91}" }
+      - { name: "OH", title: "Ohio", itemId: "{36B02609-BB26-4CD3-86C2-846B9BEE9F10}" }
+      - { name: "OK", title: "Oklahoma", itemId: "{BF1799CC-B05C-48EF-BCC5-3D5662922F08}" }
+      - { name: "OR", title: "Oregon", itemId: "{30D11B08-D28F-4EA1-B9FD-40D8DE87239B}" }
+      - { name: "PA", title: "Pennsylvania", itemId: "{3E3EE101-FBEA-4FF5-B413-DA7869124179}" }
+      - { name: "RI", title: "Rhode Island", itemId: "{F62B13ED-9018-4227-8D55-2E66966F3DC3}" }
+      - { name: "SC", title: "South Carolina", itemId: "{63AE9670-BBE1-488F-87E9-5F2464448C50}" }
+      - { name: "SD", title: "South Dakota", itemId: "{ECBE8C32-179B-4D6A-A6EE-4FCB5069D3B8}" }
+      - { name: "TN", title: "Tennessee", itemId: "{AD489CFA-6B66-4658-BB5B-0641314E00FE}" }
+      - { name: "TX", title: "Texas", itemId: "{4212A16A-133B-4BB7-8511-597EE80D24BC}" }
+      - { name: "UT", title: "Utah", itemId: "{C56D50A4-590C-4EBB-93D6-4FEE17D98D59}" }
+      - { name: "VT", title: "Vermont", itemId: "{D1767634-D1F2-4AE8-9FD5-9FF381E9DD88}" }
+      - { name: "VA", title: "Virginia", itemId: "{2CAC4047-2C31-4068-908D-6B1459F115F4}" }
+      - { name: "WA", title: "Washington", itemId: "{5ED324AB-B3CB-43F9-ADE1-5993CA3E5873}" }
+      - { name: "WV", title: "West Virginia", itemId: "{C80742DD-200F-4D54-9A5D-BF1AE939EF66}" }
+      - { name: "WI", title: "Wisconsin", itemId: "{C6C000E7-4703-463A-B3AC-17B66FB72EAF}" }
+      - { name: "WY", title: "Wyoming", itemId: "{93CABD43-E6AB-4582-8CF0-0E50BDCF0C22}" }
+    verification:
+      checkedAt: "2026-07-29T16:20:00Z"
+      passed:
+        - "Parent State folder has 50 Topic children"
+        - "Sample TX/CA created with Topic template"
+      failed: []
+      pendingManual: []
+
+  - name: "pkm-home-questions-answers"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-29T19:24:00Z"
+    updatedAt: "2026-07-29T19:40:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Home/Questions and Answers"
+    contentRootItemId: "{1A5EA69F-D5D1-43A8-979A-332B6CDE0013}"
+    parentPath: "/sitecore/content/progressive/pkm/Home"
+    parentItemId: "{6D0A0F2F-BF24-4FA4-9562-00B59DD05063}"
+    faqTemplateId: "{73E57EAA-B54A-41E1-B689-BF7DAE9155AD}"
+    faqTemplateName: "AIFAQ"
+    folderTemplateId: "{D1DEC580-83CA-4700-8EA4-4DBB35D6E0C4}"
+    folderTemplateName: "Page Folder"
+    language: "en"
+    fields: ["Question", "Answer"]
+    iaSpecPath: "docs/ai/ia/pkm-home-questions-answers-ia.md"
+    faqItemCount: 50
+    folderCount: 6
+    notes: >
+      Recreated Progressive Claims Advisor / SME Q&A IA under Home using new AIFAQ and Page Folder
+      templates. Same topic structure as Data/AI Config/FAQ (pkm-claims-agent-faqs). Empty legacy
+      /Home/Page Folder left in place. AIFAQ not in Home insert options but create_content_item succeeded.
+    folders:
+      - { name: "Claim Intake", itemId: "{AEE914AD-AFD5-442A-9E5D-F087E3DE6752}", count: 10 }
+      - { name: "Coverage Eligibility", itemId: "{C59A1054-DEDC-41F5-9641-8842A26E026C}", count: 10 }
+      - { name: "Claim Status", itemId: "{1C8AA83D-A901-49B1-9003-B78C91FBBE02}", count: 8 }
+      - { name: "Documentation", itemId: "{97231AD4-1F97-4C08-9E92-03BD95F6D5A5}", count: 8 }
+      - { name: "Escalations", itemId: "{5A452D73-CA7E-4853-A37D-660F8B70CB5B}", count: 7 }
+      - { name: "Systems Tools", itemId: "{395A4948-4389-4E16-9D74-93BD24036B71}", count: 7 }
+    sampleVerified:
+      - { name: "When is FNOL required", itemId: "{F9C0FB51-F4DC-49CF-AEBF-74E6D72576C3}", path: "/sitecore/content/progressive/pkm/Home/Questions and Answers/Claim Intake/When is FNOL required" }
+    items:
+      - { name: "When is FNOL required", itemId: "{F9C0FB51-F4DC-49CF-AEBF-74E6D72576C3}", parent: "Claim Intake" }
+      - { name: "Required fields for FNOL", itemId: "{21B06DB3-70D7-41A9-8AE3-E12E4402D213}", parent: "Claim Intake" }
+      - { name: "Late reported losses", itemId: "{4388FFE4-E99A-4904-B02F-5CA85D5FC939}", parent: "Claim Intake" }
+      - { name: "Multi party accidents", itemId: "{55877AB7-7CEA-48D3-B386-2F6416F9BB6F}", parent: "Claim Intake" }
+      - { name: "Commercial vs personal intake", itemId: "{2356271C-B041-4901-9135-FC35900E383A}", parent: "Claim Intake" }
+      - { name: "Severity assignment at intake", itemId: "{5A17118B-A7F2-4D8F-9922-25C8FA7FC7BE}", parent: "Claim Intake" }
+      - { name: "Duplicate claim checks", itemId: "{D27F7B71-EC35-464A-A58F-8815A22AA722}", parent: "Claim Intake" }
+      - { name: "Weather event surge intake", itemId: "{25A047EF-6B8E-4FCC-BDA1-157D5C558A9B}", parent: "Claim Intake" }
+      - { name: "Third party reported claims", itemId: "{BDC7F022-7CF3-46C8-B116-67BCDB727501}", parent: "Claim Intake" }
+      - { name: "Incomplete FNOL handling", itemId: "{864B645D-073D-438B-BA00-D295FB8BA70C}", parent: "Claim Intake" }
+      - { name: "How to verify active policy", itemId: "{A21916A8-EC90-43BB-A47A-AADAC6CA1E9A}", parent: "Coverage Eligibility" }
+      - { name: "Loss date vs effective dates", itemId: "{AEFFB36D-429E-4D2E-ADAE-084FE89521BF}", parent: "Coverage Eligibility" }
+      - { name: "Finding applicable coverages", itemId: "{318C8714-A55E-4FD8-BA02-B4E0F4D667E5}", parent: "Coverage Eligibility" }
+      - { name: "Deductible communication", itemId: "{F400C9FC-C114-4BA8-B433-2DBCF014CED0}", parent: "Coverage Eligibility" }
+      - { name: "Common auto exclusions", itemId: "{EEA61B7A-94AF-475D-86BF-E982347D0E8F}", parent: "Coverage Eligibility" }
+      - { name: "Glass claim coverage", itemId: "{6E0B2179-4112-45A3-B98A-FC678AA3C05C}", parent: "Coverage Eligibility" }
+      - { name: "Rental reimbursement eligibility", itemId: "{F39A4BF0-A513-4964-A340-54CE743DCA96}", parent: "Coverage Eligibility" }
+      - { name: "UM UIM questions", itemId: "{30BE8FEB-43A2-484B-A1B5-571F9C358FFB}", parent: "Coverage Eligibility" }
+      - { name: "Named insured mismatches", itemId: "{76248284-B05E-402B-8F4A-F5B39259495F}", parent: "Coverage Eligibility" }
+      - { name: "Special handling flags", itemId: "{F54E5EAB-CD84-424B-BFD1-35F971329736}", parent: "Coverage Eligibility" }
+      - { name: "What open claims means", itemId: "{1CF3CAB9-3F3A-442A-AA8A-35865E22C44F}", parent: "Claim Status" }
+      - { name: "Pending information SLAs", itemId: "{B1636A56-8E50-4541-9D3E-61B115BCCDC9}", parent: "Claim Status" }
+      - { name: "In review ownership", itemId: "{DC9D4811-24A5-43D5-9C38-5075885F5D51}", parent: "Claim Status" }
+      - { name: "Approved claim next steps", itemId: "{01EA652D-F5FB-4887-86AC-94D5E4B659D3}", parent: "Claim Status" }
+      - { name: "Denial letter requirements", itemId: "{8E1EBA0B-D3F6-4F44-A85A-BFB638AD207D}", parent: "Claim Status" }
+      - { name: "When to reopen a claim", itemId: "{A2ADB930-517C-43C8-BE4F-1526E57EDA32}", parent: "Claim Status" }
+      - { name: "Customer status scripts", itemId: "{E42CA0AF-DC32-41D3-A8BC-602B2DCC44A2}", parent: "Claim Status" }
+      - { name: "Aging open claim escalations", itemId: "{72D5BD79-7178-4AFE-9D10-FB9BCDE34B35}", parent: "Claim Status" }
+      - { name: "Required photo standards", itemId: "{A7055C87-F8B9-49AD-B4FA-E26B59B42E02}", parent: "Documentation" }
+      - { name: "Statement template use", itemId: "{B9BCE844-B95A-465C-B435-F87E334A3A92}", parent: "Documentation" }
+      - { name: "Medical records requests", itemId: "{895C145C-7D42-4F6C-8DBA-88F96BECBC1F}", parent: "Documentation" }
+      - { name: "Repair estimate requirements", itemId: "{A869EB04-91B3-4111-96DB-858D3437A260}", parent: "Documentation" }
+      - { name: "File naming conventions", itemId: "{753E5D77-18D4-497A-A026-5158DC0C071E}", parent: "Documentation" }
+      - { name: "Authenticating documents", itemId: "{2948EEBC-5092-4567-B2FA-ACFEBB060FC2}", parent: "Documentation" }
+      - { name: "Police report timing", itemId: "{1516A461-336E-4A5A-AEA6-FEDFF7496F28}", parent: "Documentation" }
+      - { name: "Missing document follow up", itemId: "{C31A7B91-7C2C-4A61-A1CE-330C044E1DFF}", parent: "Documentation" }
+      - { name: "When to escalate a claim", itemId: "{3DF33A26-7DB2-48AD-9994-27F809DE4E15}", parent: "Escalations" }
+      - { name: "Litigation hold indicators", itemId: "{43509818-B833-4230-9F01-AD6A570F3B7B}", parent: "Escalations" }
+      - { name: "VIP claim handling", itemId: "{BF73E23B-A852-41E7-BEA5-37BA60973978}", parent: "Escalations" }
+      - { name: "Catastrophe claim routing", itemId: "{956398FA-6C79-450B-9FF9-88B1F917BB16}", parent: "Escalations" }
+      - { name: "Fraud indicator escalation", itemId: "{28EA7DE0-EA82-41FC-8420-224B2B4269B2}", parent: "Escalations" }
+      - { name: "Supervisor approval thresholds", itemId: "{3468B6E2-D469-4F93-BE64-FC6E2364EE9D}", parent: "Escalations" }
+      - { name: "Exception documentation", itemId: "{85FFC1BB-29C9-472A-AB57-FF0190C0271D}", parent: "Escalations" }
+      - { name: "Policy lookup tips", itemId: "{C28A2A24-1E26-45F7-9094-3E66FA9F2E06}", parent: "Systems Tools" }
+      - { name: "Claims lookup by number", itemId: "{D3D19C70-33CD-4B1B-9013-AB1AC4370D03}", parent: "Systems Tools" }
+      - { name: "Customer identity matching", itemId: "{A15DA6D5-EEB2-4B16-BE8A-63E6D372868E}", parent: "Systems Tools" }
+      - { name: "Access request process", itemId: "{F762A08D-3C90-48E6-BC90-AAB574AC9838}", parent: "Systems Tools" }
+      - { name: "Common system errors", itemId: "{37CEDF6A-0DA2-460B-B76A-003F2DA98C6B}", parent: "Systems Tools" }
+      - { name: "Where to find forms", itemId: "{E92E5996-6BF9-431C-937E-E2493284D799}", parent: "Systems Tools" }
+      - { name: "Reporting a tools outage", itemId: "{1D70AAD9-9002-446D-BC7B-DAD3CCF41EF9}", parent: "Systems Tools" }
+    verification:
+      checkedAt: "2026-07-29T19:40:00Z"
+      passed:
+        - "Root Questions and Answers has 6 Page Folder children"
+        - "Sample AIFAQ When is FNOL required has Question and Answer fields"
+      failed: []
+      pendingManual:
+        - "Consider adding AIFAQ to Page Folder insert options in Sitecore"
+        - "Empty /Home/Page Folder can be removed or renamed if unused"
+
+  - name: "AiFaq"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-07-29T19:45:00Z"
+    updatedAt: "2026-07-29T19:55:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      Reuses existing AIFAQ template {73E57EAA-B54A-41E1-B689-BF7DAE9155AD} (Question/Answer Multi-Line Text).
+      No new datasource or folder template. Datasource location = Home/Questions and Answers.
+      React at src/components/ai-faq/AiFaq.tsx (repo convention; uiim not used in this starter).
+    react:
+      filePath: "src/components/ai-faq/AiFaq.tsx"
+      componentMapKey: "AiFaq"
+      variants:
+        - "Default"
+    templates:
+      datasource:
+        name: "AIFAQ"
+        path: "/sitecore/templates/Project/progressive/AIFAQ"
+        itemId: "{73E57EAA-B54A-41E1-B689-BF7DAE9155AD}"
+        reusedExisting: true
+        sectionName: "Question and Answer"
+        fields:
+          - { name: "Question", type: "Multi-Line Text", itemId: "{2D71E32D-E990-46B3-8CA1-58CD89743D5E}" }
+          - { name: "Answer", type: "Multi-Line Text", itemId: "{4F8DC72E-1548-471C-9F3E-A13E944E4321}" }
+      folder:
+        name: "Page Folder"
+        path: "/sitecore/templates/Project/progressive/Page Folder"
+        itemId: "{D1DEC580-83CA-4700-8EA4-4DBB35D6E0C4}"
+        reusedExisting: true
+      renderingParams:
+        name: "AiFaq"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/AiFaq"
+        itemId: "{769A95E2-B7CA-4A58-9511-AECACB80FF9C}"
+        baseTemplatesSet: true
+    rendering:
+      name: "AiFaq"
+      path: "/sitecore/layout/Renderings/Project/progressive/AiFaq"
+      itemId: "{5177E6FA-B40B-4E25-8316-77C18967751B}"
+      componentName: "AiFaq"
+      datasourceTemplatePath: "/sitecore/templates/Project/progressive/AIFAQ"
+      datasourceLocationQuery: "query:$site/*[@@name='Home']/*[@@name='Questions and Answers']"
+      parametersTemplateId: "{769A95E2-B7CA-4A58-9511-AECACB80FF9C}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      fieldEditorFields: "{2D71E32D-E990-46B3-8CA1-58CD89743D5E}|{4F8DC72E-1548-471C-9F3E-A13E944E4321}"
+      registeredInAvailableRenderings: false
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/AiFaq"
+      containerId: "{84D6039F-CB60-44CA-B01B-1E8BFD8E41AE}"
+      variants:
+        - { name: "Default", itemId: "{5EE2CE10-DDDD-4677-A409-9775A04C69A7}" }
+    verification:
+      checkedAt: "2026-07-29T19:55:00Z"
+      passed:
+        - "JSON Rendering created with componentName AiFaq"
+        - "Parameters Template set to rendering params GUID"
+        - "get_component confirms datasource template AIFAQ and location query"
+        - "Question and Answer Multi-Line Text on datasource"
+        - "Default Headless Variant created"
+        - "React AiFaq registered via sitecore-tools:generate-map"
+      failed: []
+      pendingManual:
+        - "Register AiFaq in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Confirm Datasource Template/Location in Content Editor if picker misbehaves (silent-write fields)"
