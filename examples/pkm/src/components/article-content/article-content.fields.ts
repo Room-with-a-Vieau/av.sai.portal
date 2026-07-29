@@ -87,13 +87,24 @@ function pickResolvedImage(
   return undefined;
 }
 
+type TextFieldKey = (typeof TEXT_FIELD_KEYS)[number];
+
+/** Assigns a text/rich-text field without TS rejecting the union across heterogeneous keys. */
+function setTextField(
+  out: Partial<ArticleContentFields>,
+  key: TextFieldKey,
+  field: Field<string> | RichTextField,
+) {
+  (out as Record<TextFieldKey, Field<string> | RichTextField | undefined>)[key] = field;
+}
+
 function readNestedFieldBag(bag: unknown): Partial<ArticleContentFields> {
   if (!bag || typeof bag !== 'object') return {};
   const rec = bag as Record<string, unknown>;
   const out: Partial<ArticleContentFields> = {};
   for (const key of TEXT_FIELD_KEYS) {
     const field = pickResolvedField(rec, key, true);
-    if (field) out[key] = field;
+    if (field) setTextField(out, key, field);
   }
   const image = pickResolvedImage(rec, true);
   if (image) out.image = image;
@@ -120,7 +131,7 @@ function readRouteFields(page: Page): Partial<ArticleContentFields> {
   const out: Partial<ArticleContentFields> = {};
   for (const key of TEXT_FIELD_KEYS) {
     const field = pickResolvedField(rf, key, true);
-    if (field) out[key] = field;
+    if (field) setTextField(out, key, field);
   }
   const image = pickResolvedImage(rf, true);
   if (image) out.image = image;
@@ -173,7 +184,7 @@ export function mergeArticleContentFields(props: ArticleContentProps, isEditing:
       }
     }
     if (chosen !== undefined) {
-      merged[key] = chosen;
+      setTextField(merged, key, chosen);
     }
   }
 
