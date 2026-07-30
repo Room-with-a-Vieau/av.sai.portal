@@ -3513,3 +3513,81 @@ ia:
       pendingManual:
         - "Register AiFaq in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Confirm Datasource Template/Location in Content Editor if picker misbehaves (silent-write fields)"
+
+  - name: "FAQListing"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-07-29T22:00:00Z"
+    updatedAt: "2026-07-29T22:20:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      ArticleListing-style listing: datasource with Treelist (FeaturedFaq) of AIFAQ references
+      {73E57EAA-B54A-41E1-B689-BF7DAE9155AD}. No ComponentQuery. Default React variant is accordion.
+      Datasource template pre-existed at components/FAQListing {FEE1EB5B-...}.
+      React at src/components/faq-listing/FAQListing.tsx.
+    react:
+      filePath: "src/components/faq-listing/FAQListing.tsx"
+      componentMapKey: "FAQListing"
+      variants:
+        - "Default"
+    templates:
+      datasource:
+        name: "FAQListing"
+        path: "/sitecore/templates/Project/progressive/components/FAQListing"
+        itemId: "{FEE1EB5B-C164-42C3-B38E-B6800773F0D7}"
+        reusedExisting: true
+        sectionName: "Data"
+        fields:
+          - { name: "titleOptional", type: "Single-Line Text", itemId: "{148DD1B6-36EF-4340-B953-1AD913FE2272}" }
+          - { name: "descriptionOptional", type: "Single-Line Text", itemId: "{E8AFA2D6-F7BD-426E-AAEF-E293B776DCF1}" }
+          - { name: "linkOptional", type: "General Link", itemId: "{28DDA99E-CCB6-4A4C-8DFA-6F8088EBF326}" }
+          - { name: "FeaturedFaq", type: "Treelist", itemId: "{77E65489-86B0-4100-852B-A6B702BAE8ED}" }
+      folder:
+        name: "FAQListing Folder"
+        path: "/sitecore/templates/Project/progressive/Folders/FAQListing Folder"
+        itemId: "{8A4273DC-35E8-4FB3-AEAE-2898179BC593}"
+        insertOptionsSet: true
+      renderingParams:
+        name: "FAQListing"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/FAQListing"
+        itemId: "{7BC119C5-9E91-40AD-8400-0FFF83B193C0}"
+        baseTemplatesSet: true
+    rendering:
+      name: "FAQListing"
+      path: "/sitecore/layout/Renderings/Project/progressive/FAQListing"
+      itemId: "{C64D7EEC-E926-4FD1-98E7-FDECF0FA8CE1}"
+      componentName: "FAQListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/progressive/components/FAQListing"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@name='FAQListings']|query:$sharedSites/*[@@name='Data']/*[@@name='FAQListings']"
+      parametersTemplateId: "{7BC119C5-9E91-40AD-8400-0FFF83B193C0}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      fieldEditorFields: "titleOptional|descriptionOptional|linkOptional|FeaturedFaq"
+      registeredInAvailableRenderings: false
+    datasourceFolder:
+      path: "/sitecore/content/progressive/pkm/Data/FAQListings"
+      itemId: "{3EA7EDBE-0D3E-44CA-A12A-F597E4187A50}"
+      exampleItem:
+        name: "Claim Intake FAQs"
+        itemId: "{B8AB93D5-F5D9-4899-9B07-A6A29EAAAC2D}"
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/FAQListing"
+      containerId: "{DD708D7A-12C0-4C47-9811-31FEB8FBB8FA}"
+      variants:
+        - { name: "Default", itemId: "{7C321C59-DC27-4589-8FAF-D6FFCF511E11}" }
+    verification:
+      checkedAt: "2026-07-29T22:20:00Z"
+      passed:
+        - "JSON Rendering FAQListing with componentName FAQListing"
+        - "Parameters Template linked and base templates set"
+        - "Datasource Template/Location verified via Authoring GraphQL"
+        - "FeaturedFaq Treelist Source uses Q&A tree + IncludeTemplatesForSelection=AIFAQ"
+        - "Default Headless Variant created"
+        - "FAQListings folder + example Claim Intake FAQs with FeaturedFaq refs"
+        - "React FAQListing accordion registered via sitecore-tools:generate-map"
+      failed: []
+      pendingManual:
+        - "Register FAQListing in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Optionally register AiFaq {5177E6FA-B40B-4E25-8316-77C18967751B} in the same Available Renderings update"
