@@ -131,6 +131,10 @@ import * as locationsearchprops from 'src/components/location-search/location-se
 import * as locationsearchitemprops from 'src/components/location-search/location-search-item.props';
 import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
 import * as googlemapsprops from 'src/components/location-search/google-maps.props';
+import * as KmArticleContent from 'src/components/km-article-content/KmArticleContent';
+import * as kmarticlecontentprops from 'src/components/km-article-content/km-article-content.props';
+import * as kmarticlecontenticons from 'src/components/km-article-content/km-article-content.icons';
+import * as kmarticlecontentfields from 'src/components/km-article-content/km-article-content.fields';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
 import * as ImageGalleryGriddev from 'src/components/image-gallery/ImageGalleryGrid.dev';
 import * as ImageGalleryFiftyFiftydev from 'src/components/image-gallery/ImageGalleryFiftyFifty.dev';
@@ -401,6 +405,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['location-search-item', { ...locationsearchitemprops }],
   ['GoogleMap', { ...GoogleMapdev }],
   ['google-maps', { ...googlemapsprops }],
+  ['KmArticleContent', { ...KmArticleContent, componentType: 'client' }],
+  ['km-article-content', { ...kmarticlecontentprops, ...kmarticlecontenticons, ...kmarticlecontentfields }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],
   ['ImageGalleryGrid', { ...ImageGalleryGriddev }],
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],

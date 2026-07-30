@@ -63,6 +63,7 @@ import * as LocationSearchMapRightdev from 'src/components/location-search/Locat
 import * as LocationSearchDefaultdev from 'src/components/location-search/LocationSearchDefault.dev';
 import * as LocationSearch from 'src/components/location-search/LocationSearch';
 import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
+import * as KmArticleContent from 'src/components/km-article-content/KmArticleContent';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
 import * as ImageGalleryGriddev from 'src/components/image-gallery/ImageGalleryGrid.dev';
 import * as ImageGalleryFiftyFiftydev from 'src/components/image-gallery/ImageGalleryFiftyFifty.dev';
@@ -175,6 +176,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['LocationSearchDefault', { ...LocationSearchDefaultdev }],
   ['LocationSearch', { ...LocationSearch }],
   ['GoogleMap', { ...GoogleMapdev }],
+  ['KmArticleContent', { ...KmArticleContent }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],
   ['ImageGalleryGrid', { ...ImageGalleryGriddev }],
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],

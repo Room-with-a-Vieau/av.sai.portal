@@ -3591,3 +3591,116 @@ ia:
       pendingManual:
         - "Register FAQListing in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Optionally register AiFaq {5177E6FA-B40B-4E25-8316-77C18967751B} in the same Available Renderings update"
+
+  - name: "pkm-home-knowledge-articles"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-30T13:10:00Z"
+    updatedAt: "2026-07-30T13:15:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Home"
+    contentRootItemId: "{6D0A0F2F-BF24-4FA4-9562-00B59DD05063}"
+    branchId: "{EC16FA58-5F86-4B5A-BFAA-10FAFE515BA3}"
+    branchName: "Services Page"
+    branchNameItemId: "{913BFBB5-A30E-444E-8725-6E0CB72AA454}"
+    templateId: "{D7F6AC65-F7B0-4B71-AAB8-DB39D06FC6BF}"
+    templateName: "Services Page"
+    language: "en"
+    itemCount: 7
+    iaSpecPath: "docs/ai/ia/pkm-home-knowledge-articles-ia.md"
+    notes: >
+      Created Knowledge Articles section under Home from Services Page branch so each page
+      receives local /Data and presentation details. User supplied $name GUID {913BFBB5-...};
+      create_content_item requires the Branch definition ID {EC16FA58-...}. Services Page is
+      not listed in Home insert options but create succeeded (same pattern as existing Claims/etc.).
+    sampleVerified:
+      - { name: "Knowledge Articles", itemId: "{EF281E84-FF74-48C8-B64F-00933F9F0EFF}", hasLocalData: true }
+      - { name: "CommercialProperty", itemId: "{DBD3E687-C2DC-49B5-A51D-4B6C462D9BE7}", hasLocalData: true }
+    items:
+      - { name: "Knowledge Articles", title: "Knowledge Articles", itemId: "{EF281E84-FF74-48C8-B64F-00933F9F0EFF}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles", parent: "Home" }
+      - { name: "CommercialLines", title: "Commercial Lines", itemId: "{1A8C1BCA-FADD-45A3-8A6E-7155C6751BE3}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/CommercialLines", parent: "Knowledge Articles" }
+      - { name: "CommercialProperty", title: "Commercial Property", itemId: "{DBD3E687-C2DC-49B5-A51D-4B6C462D9BE7}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/CommercialLines/CommercialProperty", parent: "CommercialLines" }
+      - { name: "CommercialAuto", title: "Commercial Auto", itemId: "{1A0B2134-7EC9-4896-B9E2-64530610DF08}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/CommercialLines/CommercialAuto", parent: "CommercialLines" }
+      - { name: "PersonalLines", title: "Personal Lines", itemId: "{C957A336-ABDE-4908-9B4B-BC81B74FEF7F}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines", parent: "Knowledge Articles" }
+      - { name: "Auto", title: "Auto", itemId: "{B0789647-4B73-4E34-B6A7-FA3E98F6C2CD}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Auto", parent: "PersonalLines" }
+      - { name: "Homeowners", title: "Homeowners", itemId: "{CDC93682-3AC4-4922-BFD6-F75905AD3289}", path: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Homeowners", parent: "PersonalLines" }
+    verification:
+      checkedAt: "2026-07-30T13:15:00Z"
+      passed:
+        - "All 7 Services Page items created from Services Page branch"
+        - "Knowledge Articles and CommercialProperty verified with local Data children"
+        - "Tree structure matches IA: CommercialLines (2 children) + PersonalLines (2 children)"
+      failed: []
+      pendingManual:
+        - "Add Services Page / branch to Home (and Services Page) insert options if authors need CE insert"
+        - "Fill Detail/image content and publish when ready"
+
+  - name: "KmArticleContent"
+    kind: "context-only"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-07-30T13:30:00Z"
+    updatedAt: "2026-07-30T13:40:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      Context-only component for Knowledge Article page template {42F8929A-83CD-48FE-92F0-8AAC46E6CC62}.
+      Renders route/page fields in numbered sections. LOB and Peril type Multilists render as Lucide
+      icon chips (mapped by Topic name). No datasource template/location/ComponentQuery.
+    react:
+      filePath: "src/components/km-article-content/KmArticleContent.tsx"
+      componentMapKey: "KmArticleContent"
+      variants:
+        - "Default"
+    pageTemplate:
+      name: "Knowledge Article"
+      path: "/sitecore/templates/Project/progressive/Knowledge Article"
+      itemId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+      reusedExisting: true
+      sections:
+        - name: "01-Article Header"
+          fields: ["KB-ID", "Title", "LOB", "Peril type"]
+        - name: "02-Purpose and Scope"
+          fields: ["Purpose"]
+        - name: "03-FNOL Workflow"
+          fields: ["Intake Triggers", "Core Triage Questions", "General Escalation Rules"]
+        - name: "04-Investigation and Documentation"
+          fields: ["Standard Site Inspection Rules", "Photo Video Standards", "General Mitigation"]
+        - name: "05-Reserving and Payment"
+          fields: ["Baseline Reserve Guidelines", "General Payment Triggers"]
+        - name: "06-Common Scenarios"
+          fields: ["Common Scenarios"]
+    templates:
+      renderingParams:
+        name: "KmArticleContent"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/KmArticleContent"
+        itemId: "{7BBB2AB1-3688-4AB2-AB5E-E2F03C07D924}"
+        baseTemplatesSet: true
+    rendering:
+      name: "KmArticleContent"
+      path: "/sitecore/layout/Renderings/Project/progressive/KmArticleContent"
+      itemId: "{F44005E1-CCBB-4B27-9598-5EF43FB60A46}"
+      componentName: "KmArticleContent"
+      datasourceTemplatePath: ""
+      datasourceLocationQuery: ""
+      parametersTemplateId: "{7BBB2AB1-3688-4AB2-AB5E-E2F03C07D924}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      fieldEditorFields: "KB-ID|Title|LOB|Peril type|Purpose|Intake Triggers|Core Triage Questions|General Escalation Rules|Standard Site Inspection Rules|Photo Video Standards|General Mitigation|Baseline Reserve Guidelines|General Payment Triggers|Common Scenarios"
+      registeredInAvailableRenderings: false
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/KmArticleContent"
+      containerId: "{B053556E-CD90-4FC4-A0FB-103FA954AC8F}"
+      variants:
+        - { name: "Default", itemId: "{B6A72F2A-15BE-4113-B40F-0305459DC374}" }
+    verification:
+      checkedAt: "2026-07-30T13:40:00Z"
+      passed:
+        - "JSON Rendering KmArticleContent created; get_component confirms no datasource required"
+        - "Parameters Template linked; ComponentQuery empty"
+        - "Default Headless Variant created"
+        - "React KmArticleContent registered via sitecore-tools:generate-map"
+      failed: []
+      pendingManual:
+        - "Register KmArticleContent in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Place KmArticleContent on Knowledge Article page designs / partial designs"
