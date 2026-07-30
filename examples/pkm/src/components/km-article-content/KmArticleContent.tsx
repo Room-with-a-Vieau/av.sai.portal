@@ -6,14 +6,10 @@ import type { RichTextField } from '@sitecore-content-sdk/nextjs';
 
 import { cn } from '@/lib/utils';
 
-import {
-  hasRichText,
-  hasText,
-  mergeKmArticleContentFields,
-  topicLabel,
-} from './km-article-content.fields';
-import { iconForTopic } from './km-article-content.icons';
-import type { KmArticleContentProps, KmTopicReference } from './km-article-content.props';
+import { TopicIconChip } from '@/components/taxonomy/TopicIconChip';
+
+import { hasRichText, hasText, mergeKmArticleContentFields } from './km-article-content.fields';
+import type { KmArticleContentProps } from './km-article-content.props';
 
 type ContentBlock = {
   id: string;
@@ -34,19 +30,6 @@ const KmArticleContentEmpty: React.FC = () => (
     this component.
   </div>
 );
-
-function TopicChip({ topic }: { topic: KmTopicReference }) {
-  const label = topicLabel(topic);
-  const Icon = iconForTopic(label);
-  return (
-    <span className="border-border bg-background text-foreground inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-medium shadow-sm">
-      <span className="bg-primary/10 text-primary inline-flex size-7 items-center justify-center rounded-lg">
-        <Icon className="size-4" aria-hidden />
-      </span>
-      {label}
-    </span>
-  );
-}
 
 function SectionNav({ sections }: { sections: { id: string; title: string; number: string }[] }) {
   if (sections.length === 0) return null;
@@ -222,7 +205,7 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
                         <div className="flex flex-wrap gap-2">
                           {lob.length > 0 ? (
                             lob.map((topic) => (
-                              <TopicChip key={topic.id || topic.name} topic={topic} />
+                              <TopicIconChip key={topic.id || topic.name} topic={topic} />
                             ))
                           ) : (
                             <p className="text-muted-foreground text-sm">Select LOB topics on the page.</p>
@@ -238,7 +221,7 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
                         <div className="flex flex-wrap gap-2">
                           {perilTypes.length > 0 ? (
                             perilTypes.map((topic) => (
-                              <TopicChip key={topic.id || topic.name} topic={topic} />
+                              <TopicIconChip key={topic.id || topic.name} topic={topic} />
                             ))
                           ) : (
                             <p className="text-muted-foreground text-sm">

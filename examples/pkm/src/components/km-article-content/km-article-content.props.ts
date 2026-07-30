@@ -1,14 +1,9 @@
 import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
 
 import type { ComponentProps } from '@/lib/component-props';
-import type { ReferenceField } from '@/types/ReferenceField.props';
+import type { TaxonomyTopicReference } from '@/lib/taxonomy-topic';
 
-export type KmTopicReference = ReferenceField & {
-  fields?: {
-    titleRequired?: Field<string>;
-    Title?: Field<string>;
-  };
-};
+export type KmTopicReference = TaxonomyTopicReference;
 
 /**
  * Page fields from Knowledge Article template {42F8929A-83CD-48FE-92F0-8AAC46E6CC62}.

@@ -3455,7 +3455,8 @@ ia:
     siteName: "pkm"
     siteCollection: "progressive"
     notes: >
-      Reuses existing AIFAQ template {73E57EAA-B54A-41E1-B689-BF7DAE9155AD} (Question/Answer Multi-Line Text).
+      Reuses existing AIFAQ template {73E57EAA-B54A-41E1-B689-BF7DAE9155AD} (Question/Answer Multi-Line Text,
+      plus LOB and Peril Type Treelists). Displays LOB/Peril as TopicIconChip icons (shared with KmArticleContent).
       No new datasource or folder template. Datasource location = Home/Questions and Answers.
       React at src/components/ai-faq/AiFaq.tsx (repo convention; uiim not used in this starter).
     react:
@@ -3473,6 +3474,8 @@ ia:
         fields:
           - { name: "Question", type: "Multi-Line Text", itemId: "{2D71E32D-E990-46B3-8CA1-58CD89743D5E}" }
           - { name: "Answer", type: "Multi-Line Text", itemId: "{4F8DC72E-1548-471C-9F3E-A13E944E4321}" }
+          - { name: "LOB", type: "Treelist", itemId: "{1448612E-D0C2-4300-9CBF-29A59CE05CA8}" }
+          - { name: "Peril Type", type: "Treelist", itemId: "{59A219EF-0EB8-4F95-8C6D-0CAD71F56AA0}" }
       folder:
         name: "Page Folder"
         path: "/sitecore/templates/Project/progressive/Page Folder"
@@ -3493,7 +3496,7 @@ ia:
       parametersTemplateId: "{769A95E2-B7CA-4A58-9511-AECACB80FF9C}"
       componentQuery: ""
       addFieldEditorButton: "1"
-      fieldEditorFields: "{2D71E32D-E990-46B3-8CA1-58CD89743D5E}|{4F8DC72E-1548-471C-9F3E-A13E944E4321}"
+      fieldEditorFields: "{2D71E32D-E990-46B3-8CA1-58CD89743D5E}|{4F8DC72E-1548-471C-9F3E-A13E944E4321}|{1448612E-D0C2-4300-9CBF-29A59CE05CA8}|{59A219EF-0EB8-4F95-8C6D-0CAD71F56AA0}"
       registeredInAvailableRenderings: false
     headlessVariants:
       containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/AiFaq"
@@ -3501,19 +3504,21 @@ ia:
       variants:
         - { name: "Default", itemId: "{5EE2CE10-DDDD-4677-A409-9775A04C69A7}" }
     verification:
-      checkedAt: "2026-07-29T19:55:00Z"
+      checkedAt: "2026-07-30T15:05:00Z"
       passed:
         - "JSON Rendering created with componentName AiFaq"
         - "Parameters Template set to rendering params GUID"
         - "get_component confirms datasource template AIFAQ and location query"
         - "Question and Answer Multi-Line Text on datasource"
+        - "LOB and Peril Type Treelist chips in AiFaq Default variant"
+        - "FieldEditorFields includes Question|Answer|LOB|Peril Type"
         - "Default Headless Variant created"
         - "React AiFaq registered via sitecore-tools:generate-map"
       failed: []
       pendingManual:
         - "Register AiFaq in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Confirm Datasource Template/Location in Content Editor if picker misbehaves (silent-write fields)"
-
+    updatedAt: "2026-07-30T15:05:00Z"
   - name: "FAQListing"
     kind: "simple"
     category: "Page Content"

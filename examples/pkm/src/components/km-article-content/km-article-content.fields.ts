@@ -1,6 +1,11 @@
 import type { Field, Page, RichTextField } from '@sitecore-content-sdk/nextjs';
 
+import { resolveTopicList, topicLabel, type TaxonomyTopicReference } from '@/lib/taxonomy-topic';
+
 import type { KmArticleContentFields, KmArticleContentProps, KmTopicReference } from './km-article-content.props';
+
+export { topicLabel };
+export type { TaxonomyTopicReference };
 
 function unwrapCell<T>(cell: T | { jsonValue?: T } | undefined): T | undefined {
   if (!cell) return undefined;
@@ -42,12 +47,7 @@ function pickTopics(
   bag: Record<string, unknown> | undefined,
   names: string[]
 ): KmTopicReference[] {
-  if (!bag) return [];
-  for (const name of names) {
-    const raw = bag[name];
-    if (Array.isArray(raw)) return raw as KmTopicReference[];
-  }
-  return [];
+  return resolveTopicList(bag, names);
 }
 
 function readBag(bag: Record<string, unknown> | undefined, requireNonEmpty: boolean): KmArticleContentFields {
@@ -173,16 +173,6 @@ export function mergeKmArticleContentFields(
       : undefined;
 
   return mergeBags([flat, nestedExternal, routeFields(page)], isEditing);
-}
-
-export function topicLabel(topic: KmTopicReference): string {
-  return (
-    topic.fields?.titleRequired?.value?.trim() ||
-    topic.fields?.Title?.value?.trim() ||
-    topic.displayName?.trim() ||
-    topic.name ||
-    'Topic'
-  );
 }
 
 export function hasRichText(field?: RichTextField): boolean {

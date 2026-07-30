@@ -3,6 +3,8 @@
 import type React from 'react';
 import { Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 
+import { TopicIconChip } from '@/components/taxonomy/TopicIconChip';
+import { resolveTopicList } from '@/lib/taxonomy-topic';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
@@ -15,7 +17,8 @@ const AiFaqEmpty: React.FC = () => (
 );
 
 /**
- * Progressive Claims Advisor Q&A — editable Multi-Line Question and Answer from AIFAQ.
+ * Progressive Claims Advisor Q&A — editable Multi-Line Question and Answer from AIFAQ,
+ * with LOB / Peril Type taxonomy chips when selected.
  */
 export const Default: React.FC<AiFaqProps> = (props) => {
   const { fields, params } = props;
@@ -27,8 +30,15 @@ export const Default: React.FC<AiFaqProps> = (props) => {
   }
 
   const { Question, Answer } = fields;
+  const lob = resolveTopicList(fields as Record<string, unknown>, ['LOB', 'lob']);
+  const perilTypes = resolveTopicList(fields as Record<string, unknown>, [
+    'Peril Type',
+    'perilType',
+    'PerilType',
+  ]);
   const hasQuestion = Boolean(Question?.value?.trim());
   const hasAnswer = Boolean(Answer?.value?.trim());
+  const hasTopics = lob.length > 0 || perilTypes.length > 0;
 
   if (!hasQuestion && !hasAnswer && !isEditing) {
     return <AiFaqEmpty />;
@@ -50,9 +60,21 @@ export const Default: React.FC<AiFaqProps> = (props) => {
         aria-hidden
       />
       <div className="flex flex-col gap-3 px-6 py-5 pl-7 sm:px-8 sm:pl-9">
-        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          Question & answer
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            Question & answer
+          </p>
+          {hasTopics && (
+            <div className="flex flex-wrap justify-end gap-1.5" aria-label="Applies to">
+              {lob.map((topic) => (
+                <TopicIconChip key={topic.id || topic.name} topic={topic} size="sm" />
+              ))}
+              {perilTypes.map((topic) => (
+                <TopicIconChip key={topic.id || topic.name} topic={topic} size="sm" />
+              ))}
+            </div>
+          )}
+        </div>
         {(hasQuestion || isEditing) && (
           <Text
             tag="h2"
@@ -66,6 +88,11 @@ export const Default: React.FC<AiFaqProps> = (props) => {
             field={Answer}
             className="text-muted-foreground whitespace-pre-wrap text-pretty text-base leading-relaxed"
           />
+        )}
+        {isEditing && !hasTopics && (
+          <p className="text-muted-foreground text-xs">
+            Select LOB and Peril Type topics on this FAQ item to show applicability chips.
+          </p>
         )}
       </div>
     </article>
