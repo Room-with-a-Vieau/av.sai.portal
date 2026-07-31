@@ -3709,3 +3709,155 @@ ia:
       pendingManual:
         - "Register KmArticleContent in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Place KmArticleContent on Knowledge Article page designs / partial designs"
+
+  - name: "pkm-personal-lines-kb-articles"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-30T19:50:00Z"
+    updatedAt: "2026-07-30T19:55:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines"
+    contentRootItemId: "{C957A336-ABDE-4908-9B4B-BC81B74FEF7F}"
+    templateId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+    templateName: "Knowledge Article"
+    language: "en"
+    itemCount: 4
+    iaSpecPath: "docs/ai/ia/pkm-personal-lines-kb-articles-ia.md"
+    notes: >
+      Created 4 Progressive SME Knowledge Articles under existing PersonalLines/Auto and
+      PersonalLines/Homeowners (Services Page parents). Populated all KA sections 01–06 plus
+      pageTitle/pageShortTitle/pageHeaderTitle/pageSummary. Added Wind Hail peril taxonomy
+      topic {F27BF167-...} for KB-HO-1002. Auto articles have Personal Auto LOB; HO articles
+      have Personal Home LOB + Water Damage or Wind Hail peril.
+    supportingTaxonomy:
+      - { name: "Wind Hail", itemId: "{F27BF167-E841-4254-A84B-2F72EC78167F}", path: "/sitecore/content/progressive/pkm/Data/Taxonomy/Peril Types/Wind Hail" }
+    sampleVerified:
+      - { name: "KB-AU-1001-FNOL", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", hasPurpose: true, lob: "Personal Auto" }
+      - { name: "KB-HO-1001-WaterDamage", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", hasPurpose: true, lob: "Personal Home", peril: "Water Damage" }
+    items:
+      - { name: "KB-AU-1001-FNOL", kbId: "KB-AU-1001", title: "Personal Auto FNOL — First Notice of Loss Intake", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", parent: "Auto" }
+      - { name: "KB-AU-1002-CoverageDetermination", kbId: "KB-AU-1002", title: "Personal Auto Coverage Determination", itemId: "{BC70A3A2-56ED-4798-AC9F-A28B7531A205}", parent: "Auto" }
+      - { name: "KB-HO-1001-WaterDamage", kbId: "KB-HO-1001", title: "Homeowners Water Damage — Intake to Mitigation", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", parent: "Homeowners" }
+      - { name: "KB-HO-1002-WindHail", kbId: "KB-HO-1002", title: "Homeowners Wind and Hail — Storm Damage Handling", itemId: "{02878C46-F3A7-4034-A056-9CEBBF9BCA11}", parent: "Homeowners" }
+    verification:
+      checkedAt: "2026-07-30T19:55:00Z"
+      passed:
+        - "4 Knowledge Article items created under Auto and Homeowners"
+        - "Verified KB-AU-1001 and KB-HO-1001 field values including rich text sections and LOB/Peril"
+        - "Wind Hail peril topic created for HO wind article"
+      failed: []
+      pendingManual:
+        - "Ensure Knowledge Article page design includes KmArticleContent"
+        - "Publish when ready for Edge"
+
+  - name: "pkm-home-shared-content"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-07-31T01:05:00Z"
+    updatedAt: "2026-07-31T01:25:00Z"
+    siteName: "pkm"
+    contentRootPath: "/sitecore/content/progressive/pkm/Home"
+    contentRootItemId: "{6D0A0F2F-BF24-4FA4-9562-00B59DD05063}"
+    templateId: "{84DBE64B-0FED-4125-A971-725C0155C321}"
+    templateName: "Page Folder"
+    templatePath: "/sitecore/templates/Project/click-click-launch/Site/Page Folder"
+    language: "en"
+    itemCount: 51
+    iaSpecPath: "docs/ai/ia/pkm-home-shared-content-ia.md"
+    notes: >
+      Shared Content under Home with 10 numbered section folders. Nested structure reduced to
+      StateSpecific (FL/NC/TX) only — National, LOBSpecific, and PerilSpecific removed from all
+      sections 01–09. 10-FAQs was missing and recreated as {72305A56-02E1-4D85-AC58-EB881E221CB3}
+      with StateSpecific/FL/NC/TX.
+    updatedAt: "2026-07-31T01:30:00Z"
+    nestedStructurePerSection:
+      - StateSpecific: [FL, NC, TX]
+    items:
+      - { name: "Shared Content", itemId: "{476D9474-B092-4F4D-B45E-FE1B25771B8F}", path: "/sitecore/content/progressive/pkm/Home/Shared Content", parent: "Home" }
+      - { name: "01-General", itemId: "{F1637618-1C7E-4733-8462-834596C444A7}", parent: "Shared Content" }
+      - { name: "02-FNOLWorkflow", itemId: "{3445AADB-A902-4787-BDB9-FB68490ECB85}", parent: "Shared Content" }
+      - { name: "03-InvestigationAndDocumentation", itemId: "{820F599F-CEA2-4F18-B645-B9286CF0FB41}", parent: "Shared Content" }
+      - { name: "04-ReservingAndPayment", itemId: "{8A5F657F-B24A-4734-BE2C-CD25C558A9C7}", parent: "Shared Content" }
+      - { name: "05-CommonScenarios", itemId: "{BB2FD57D-6181-45F4-8CB8-28BDACBCE78A}", parent: "Shared Content" }
+      - { name: "06-CoverageDetermination", itemId: "{958767CE-8460-4546-ADB8-8C8E15DF3259}", parent: "Shared Content" }
+      - { name: "07-ClaimsTimelines", itemId: "{BB7D0FBD-3D1F-41DC-8582-D096A8923001}", parent: "Shared Content" }
+      - { name: "08-RegulatoryAndCompliance", itemId: "{046F920F-86A7-47A1-8161-002B7D2E1E6F}", parent: "Shared Content" }
+      - { name: "09-VendorAndMitigationNetworks", itemId: "{961D5558-07C1-4088-8AAD-A95BCE466DAB}", parent: "Shared Content" }
+      - { name: "10-FAQs", itemId: "{72305A56-02E1-4D85-AC58-EB881E221CB3}", parent: "Shared Content" }
+    verification:
+      checkedAt: "2026-07-31T01:30:00Z"
+      passed:
+        - "Deleted National/LOBSpecific/PerilSpecific under sections 01–09"
+        - "StateSpecific retained under those sections"
+        - "10-FAQs recreated with StateSpecific/FL/NC/TX only"
+      failed: []
+      pendingManual: []
+
+  - name: "KnowledeVariant"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-07-31T13:15:00Z"
+    updatedAt: "2026-07-31T13:20:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      Simple datasource component using existing KnowledgeChunks template
+      {BDF6C974-E68C-46A2-A0A9-D382FD0927EB}. Displays Rich Text Content only.
+      Component name spelling KnowledeVariant matches user request.
+      Datasource location = Home/Shared Content. Example item under 01-General.
+      React at src/components/knowlede-variant/KnowledeVariant.tsx.
+    react:
+      filePath: "src/components/knowlede-variant/KnowledeVariant.tsx"
+      componentMapKey: "KnowledeVariant"
+      variants:
+        - "Default"
+    templates:
+      datasource:
+        name: "KnowledgeChunks"
+        path: "/sitecore/templates/Project/progressive/KnowledgeChunks"
+        itemId: "{BDF6C974-E68C-46A2-A0A9-D382FD0927EB}"
+        reusedExisting: true
+        sectionName: "Variant Content"
+        fields:
+          - { name: "Content", type: "Rich Text", itemId: "{76E0C665-5C4D-4D03-AE66-A5F3D12978BA}" }
+      renderingParams:
+        name: "KnowledeVariant"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/KnowledeVariant"
+        itemId: "{084F5481-195A-47A8-A87C-CCE46B78AA09}"
+        baseTemplatesSet: true
+        standardValuesId: "{4BC0779C-E5DA-43EC-AB0A-90F3651BAE32}"
+    rendering:
+      name: "KnowledeVariant"
+      path: "/sitecore/layout/Renderings/Project/progressive/KnowledeVariant"
+      itemId: "{7C8268A5-70F7-45DD-B15F-7F7AC8B41532}"
+      componentName: "KnowledeVariant"
+      datasourceTemplatePath: "/sitecore/templates/Project/progressive/KnowledgeChunks"
+      datasourceLocationQuery: "query:$site/*[@@name='Home']/*[@@name='Shared Content']"
+      parametersTemplateId: "{084F5481-195A-47A8-A87C-CCE46B78AA09}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      fieldEditorFields: "Content"
+      registeredInAvailableRenderings: false
+    exampleDatasource:
+      name: "KnowledeVariant Example"
+      itemId: "{187F77EE-29BF-4C0C-97A6-F789A36939F0}"
+      path: "/sitecore/content/progressive/pkm/Home/Shared Content/01-General/KnowledeVariant Example"
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/KnowledeVariant"
+      containerId: "{6A6E4349-60D5-448D-924D-1017E05756D2}"
+      variants:
+        - { name: "Default", itemId: "{B2681DD1-C04A-4792-9C4F-3DCEA90D6095}" }
+    verification:
+      checkedAt: "2026-07-31T13:20:00Z"
+      passed:
+        - "JSON Rendering created with componentName KnowledeVariant"
+        - "Parameters Template set to rendering params GUID"
+        - "Reused KnowledgeChunks datasource template with Content Rich Text"
+        - "Default Headless Variant created"
+        - "Example KnowledgeChunks item created under Shared Content/01-General"
+        - "React KnowledeVariant registered via sitecore-tools:generate-map"
+      failed: []
+      pendingManual:
+        - "Register KnowledeVariant in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Confirm Datasource Template/Location in Content Editor if picker misbehaves (silent-write fields)"

@@ -21,6 +21,7 @@ import * as textbannerprops from 'src/components/text-banner/text-banner.props';
 import * as TestimonialCarouselItem from 'src/components/testimonial-carousel/TestimonialCarouselItem';
 import * as TestimonialCarousel from 'src/components/testimonial-carousel/TestimonialCarousel';
 import * as testimonialcarouselprops from 'src/components/testimonial-carousel/testimonial-carousel.props';
+import * as TopicIconChip from 'src/components/taxonomy/TopicIconChip';
 import * as Title from 'src/components/sxa/Title';
 import * as RowSplitter from 'src/components/sxa/RowSplitter';
 import * as RichText from 'src/components/sxa/RichText';
@@ -131,9 +132,10 @@ import * as locationsearchprops from 'src/components/location-search/location-se
 import * as locationsearchitemprops from 'src/components/location-search/location-search-item.props';
 import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
 import * as googlemapsprops from 'src/components/location-search/google-maps.props';
+import * as KnowledeVariant from 'src/components/knowlede-variant/KnowledeVariant';
+import * as knowledevariantprops from 'src/components/knowlede-variant/knowlede-variant.props';
 import * as KmArticleContent from 'src/components/km-article-content/KmArticleContent';
 import * as kmarticlecontentprops from 'src/components/km-article-content/km-article-content.props';
-import * as kmarticlecontenticons from 'src/components/km-article-content/km-article-content.icons';
 import * as kmarticlecontentfields from 'src/components/km-article-content/km-article-content.fields';
 import * as ImageGalleryNoSpacingdev from 'src/components/image-gallery/ImageGalleryNoSpacing.dev';
 import * as ImageGalleryGriddev from 'src/components/image-gallery/ImageGalleryGrid.dev';
@@ -298,6 +300,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['TestimonialCarouselItem', { ...TestimonialCarouselItem }],
   ['TestimonialCarousel', { ...TestimonialCarousel, componentType: 'client' }],
   ['testimonial-carousel', { ...testimonialcarouselprops }],
+  ['TopicIconChip', { ...TopicIconChip }],
   ['Title', { ...Title }],
   ['RowSplitter', { ...RowSplitter }],
   ['RichText', { ...RichText }],
@@ -405,8 +408,10 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['location-search-item', { ...locationsearchitemprops }],
   ['GoogleMap', { ...GoogleMapdev }],
   ['google-maps', { ...googlemapsprops }],
+  ['KnowledeVariant', { ...KnowledeVariant, componentType: 'client' }],
+  ['knowlede-variant', { ...knowledevariantprops }],
   ['KmArticleContent', { ...KmArticleContent, componentType: 'client' }],
-  ['km-article-content', { ...kmarticlecontentprops, ...kmarticlecontenticons, ...kmarticlecontentfields }],
+  ['km-article-content', { ...kmarticlecontentprops, ...kmarticlecontentfields }],
   ['ImageGalleryNoSpacing', { ...ImageGalleryNoSpacingdev }],
   ['ImageGalleryGrid', { ...ImageGalleryGriddev }],
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],

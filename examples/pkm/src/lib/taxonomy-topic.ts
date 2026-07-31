@@ -30,6 +30,7 @@ const ICON_BY_KEY: Record<string, LucideIcon> = {
   'smoke damage': CloudFog,
   theft: Lock,
   'water damage': Droplets,
+  'wind hail': CloudFog,
   // Knowledge Domain / LOB
   'commercial claims': Building2,
   'personal home': Home,
