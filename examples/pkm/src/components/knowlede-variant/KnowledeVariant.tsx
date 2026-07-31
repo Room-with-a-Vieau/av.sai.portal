@@ -66,10 +66,14 @@ export const Default: React.FC<KnowledeVariantProps> = (props) => {
               <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                 Source
               </span>
-              <Link
-                field={sourceDocument}
-                className="text-primary text-sm font-medium underline-offset-4 hover:underline"
-              />
+              {sourceDocument ? (
+                <Link
+                  field={sourceDocument}
+                  className="text-primary text-sm font-medium underline-offset-4 hover:underline"
+                />
+              ) : (
+                <span className="text-muted-foreground text-sm">Select a source Knowledge Article</span>
+              )}
             </div>
           )}
           {hasTopics && (
