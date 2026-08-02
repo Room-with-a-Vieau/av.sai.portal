@@ -24,6 +24,17 @@ export type KmArticleContentFields = {
   'Baseline Reserve Guidelines'?: RichTextField;
   'General Payment Triggers'?: RichTextField;
   'Common Scenarios'?: RichTextField;
+  /** Helpfulness thumbs-up total */
+  PositiveCount?: Field<string | number>;
+  /** Helpfulness thumbs-down total */
+  NegativeCount?: Field<string | number>;
+  /** Number of star ratings submitted */
+  TotalRatings?: Field<string | number>;
+  /** Sum of all star values (1–5 each) */
+  RatingsSum?: Field<string | number>;
+  /** AverageRating = RatingsSum / TotalRatings */
+  AverageRating?: Field<string | number>;
+  LastRated?: Field<string>;
   // Layout Service / GraphQL aliases
   kbId?: Field<string>;
   title?: Field<string>;
@@ -39,6 +50,18 @@ export type KmArticleContentFields = {
   baselineReserveGuidelines?: RichTextField;
   generalPaymentTriggers?: RichTextField;
   commonScenarios?: RichTextField;
+  positiveCount?: Field<string | number>;
+  negativeCount?: Field<string | number>;
+  totalRatings?: Field<string | number>;
+  ratingsSum?: Field<string | number>;
+  averageRating?: Field<string | number>;
+  lastRated?: Field<string>;
+  'Positive Count'?: Field<string | number>;
+  'Negative Count'?: Field<string | number>;
+  'Total Ratings'?: Field<string | number>;
+  'Rating Sum'?: Field<string | number>;
+  'Average Rating'?: Field<string | number>;
+  'Last Rated'?: Field<string>;
 };
 
 export type KmArticleContentProps = ComponentProps & {

@@ -3645,13 +3645,15 @@ ia:
     category: "Page Content"
     status: "complete"
     createdAt: "2026-07-30T13:30:00Z"
-    updatedAt: "2026-07-30T13:40:00Z"
+    updatedAt: "2026-08-02T14:10:00Z"
     siteName: "pkm"
     siteCollection: "progressive"
     notes: >
       Context-only component for Knowledge Article page template {42F8929A-83CD-48FE-92F0-8AAC46E6CC62}.
       Renders route/page fields in numbered sections. LOB and Peril type Multilists render as Lucide
-      icon chips (mapped by Topic name). No datasource template/location/ComponentQuery.
+      icon chips (mapped by Topic name). Header also shows Advisor feedback: thumbs (PositiveCount /
+      NegativeCount) and star average (AverageRating = RatingsSum / TotalRatings). No datasource.
+      2026-08-02: seeded rating fields on all 19 Knowledge Articles; React UI updated.
     react:
       filePath: "src/components/km-article-content/KmArticleContent.tsx"
       componentMapKey: "KmArticleContent"
@@ -3675,6 +3677,8 @@ ia:
           fields: ["Baseline Reserve Guidelines", "General Payment Triggers"]
         - name: "06-Common Scenarios"
           fields: ["Common Scenarios"]
+        - name: "07-Ratings"
+          fields: ["PositiveCount", "NegativeCount", "TotalRatings", "RatingsSum", "AverageRating", "LastRated"]
     templates:
       renderingParams:
         name: "KmArticleContent"
@@ -3699,16 +3703,19 @@ ia:
       variants:
         - { name: "Default", itemId: "{B6A72F2A-15BE-4113-B40F-0305459DC374}" }
     verification:
-      checkedAt: "2026-07-30T13:40:00Z"
+      checkedAt: "2026-08-02T14:10:00Z"
       passed:
         - "JSON Rendering KmArticleContent created; get_component confirms no datasource required"
         - "Parameters Template linked; ComponentQuery empty"
         - "Default Headless Variant created"
         - "React KmArticleContent registered via sitecore-tools:generate-map"
+        - "Rating fields seeded on 19 Knowledge Articles; KmArticleContent shows thumbs + stars under LOB/Peril"
       failed: []
       pendingManual:
         - "Register KmArticleContent in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Place KmArticleContent on Knowledge Article page designs / partial designs"
+        - "Publish Knowledge Articles after rating seed for Edge"
+        - "Wire interactive thumbs/stars to persist increments (display-only today)"
 
   - name: "pkm-personal-lines-kb-articles"
     kind: "ia"
@@ -3749,6 +3756,72 @@ ia:
       pendingManual:
         - "Ensure Knowledge Article page design includes KmArticleContent"
         - "Publish when ready for Edge"
+
+  - name: "pkm-kb-articles-batch-commercial-personal-5"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-02T13:30:00Z"
+    updatedAt: "2026-08-02T13:35:00Z"
+    siteName: "pkm"
+    templateId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+    templateName: "Knowledge Article"
+    language: "en"
+    itemCount: 5
+    notes: >
+      Five Progressive SME Knowledge Articles across CommercialAuto (2), CommercialProperty (1),
+      Personal Auto (1), and Homeowners (1). Full sections 01–06 populated; LOB/Peril taxonomy set.
+      Commercial articles use Knowledge Domain "Commercial Claims"; personal use Personal Auto / Personal Home.
+    items:
+      - { name: "KB-CA-1001-CommercialAutoFNOL", kbId: "KB-CA-1001", title: "Commercial Auto FNOL — Business Vehicle Intake", itemId: "{D99BB2BD-2AAF-4742-8620-905CCB3892C2}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CA-1002-HiredNonOwnedAuto", kbId: "KB-CA-1002", title: "Hired and Non-Owned Auto — Coverage Triage", itemId: "{6E6F8315-B910-48D9-BCD7-7CC196610CA5}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CP-1001-FireLoss", kbId: "KB-CP-1001", title: "Commercial Property Fire — Intake to Mitigation", itemId: "{8334CBA5-15F1-476D-9944-CD90BB701C76}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Fire" }
+      - { name: "KB-AU-1003-VehicleTheft", kbId: "KB-AU-1003", title: "Personal Auto Vehicle Theft — Recovery and Total Loss", itemId: "{DD437660-8828-4608-9B1D-06C6B0E73559}", parent: "Auto", lob: "Personal Auto", peril: "Theft" }
+      - { name: "KB-HO-1003-KitchenFireSmoke", kbId: "KB-HO-1003", title: "Homeowners Kitchen Fire and Smoke Damage", itemId: "{13DA39AD-0778-4BEB-BECA-421106229DA0}", parent: "Homeowners", lob: "Personal Home", peril: "Fire|Smoke Damage" }
+    verification:
+      checkedAt: "2026-08-02T13:35:00Z"
+      passed:
+        - "5 Knowledge Article items created under correct LOB folders"
+        - "Verified KB-CA-1001, KB-CP-1001, and KB-AU-1003 field values including rich text sections and LOB/Peril"
+      failed: []
+      pendingManual:
+        - "Publish when ready for Edge"
+        - "Confirm page designs include KmArticleContent for commercial folders"
+
+  - name: "pkm-kb-articles-batch-spread-10"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-02T13:45:00Z"
+    updatedAt: "2026-08-02T14:00:00Z"
+    siteName: "pkm"
+    templateId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+    templateName: "Knowledge Article"
+    language: "en"
+    itemCount: 10
+    notes: >
+      Ten additional Progressive SME Knowledge Articles spread across the four main LOB folders:
+      CommercialAuto (3), CommercialProperty (3), Personal Auto (2), Homeowners (2).
+      Full sections 01–06 populated; LOB/Peril taxonomy set where applicable.
+    items:
+      - { name: "KB-CA-1003-LiabilityTriage", kbId: "KB-CA-1003", title: "Commercial Auto Liability — Third-Party Injury and PD", itemId: "{6603D085-B8AD-44B1-8656-FE5F26C41DCE}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CA-1004-GlassComprehensive", kbId: "KB-CA-1004", title: "Commercial Auto Glass and Comprehensive Damage", itemId: "{C102B50B-3537-4BDB-8E62-2CFA6BCA45AC}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CA-1005-ToolsCargo", kbId: "KB-CA-1005", title: "Commercial Auto — Tools, Equipment, and Cargo After Collision", itemId: "{3E173CFE-F7A6-4CCE-9D44-64B3EA20DA76}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CP-1002-BusinessInterruption", kbId: "KB-CP-1002", title: "Commercial Property Business Interruption — After a Covered Loss", itemId: "{FC8F587F-0354-452B-AE90-E8FEE418C90B}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Business Interruption" }
+      - { name: "KB-CP-1003-WaterSprinkler", kbId: "KB-CP-1003", title: "Commercial Property Water and Sprinkler Damage", itemId: "{0CE5A1F4-120B-4B41-9212-DAFFD1B5B92C}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Water Damage" }
+      - { name: "KB-CP-1004-WindHail", kbId: "KB-CP-1004", title: "Commercial Property Wind and Hail — Roof and Exterior", itemId: "{65ED85FB-5915-4E87-B7BB-F46CD2C254F4}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Wind Hail" }
+      - { name: "KB-AU-1004-GlassClaims", kbId: "KB-AU-1004", title: "Personal Auto Glass Claims — ADAS and Network Handling", itemId: "{E35EE802-3082-41D5-B10D-73A1154CA238}", parent: "Auto", lob: "Personal Auto" }
+      - { name: "KB-AU-1005-UMUIMIntake", kbId: "KB-AU-1005", title: "Personal Auto Uninsured and Underinsured Motorist Intake", itemId: "{533E1C5F-A219-491D-BA13-F9EB069E3753}", parent: "Auto", lob: "Personal Auto" }
+      - { name: "KB-HO-1004-TheftBurglary", kbId: "KB-HO-1004", title: "Homeowners Theft and Burglary Claims", itemId: "{498591A1-5845-44D9-B5EA-97C6BC2A9966}", parent: "Homeowners", lob: "Personal Home", peril: "Theft" }
+      - { name: "KB-HO-1005-FallenTreeWind", kbId: "KB-HO-1005", title: "Homeowners Fallen Tree and Wind Damage", itemId: "{DE28564F-C405-4461-8793-A2923DF67115}", parent: "Homeowners", lob: "Personal Home", peril: "Wind Hail" }
+    verification:
+      checkedAt: "2026-08-02T14:00:00Z"
+      passed:
+        - "10 Knowledge Article items created under correct LOB folders (3+3+2+2)"
+        - "Verified KB-CA-1003, KB-CP-1002, KB-AU-1004, KB-HO-1004 field content and LOB/Peril"
+        - "KB-HO-1005 fields backfilled after empty create; LOB/Peril corrected on KB-HO-1004"
+      failed: []
+      pendingManual:
+        - "Publish when ready for Edge"
+        - "Confirm page designs include KmArticleContent"
 
   - name: "pkm-home-shared-content"
     kind: "ia"

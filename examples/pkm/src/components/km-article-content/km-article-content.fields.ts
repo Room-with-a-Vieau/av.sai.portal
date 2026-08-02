@@ -43,6 +43,33 @@ function pickRichText(
   return undefined;
 }
 
+function pickScalar(
+  bag: Record<string, unknown> | undefined,
+  names: string[],
+  requireNonEmpty: boolean
+): Field<string | number> | undefined {
+  if (!bag) return undefined;
+  for (const name of names) {
+    const field = unwrapCell(
+      bag[name] as Field<string | number> | { jsonValue?: Field<string | number> } | undefined
+    );
+    if (!field) continue;
+    const raw = field.value;
+    if (raw === undefined || raw === null) continue;
+    if (!requireNonEmpty) return field;
+    if (typeof raw === 'number') return field;
+    if (typeof raw === 'string' && raw.trim() !== '') return field;
+  }
+  return undefined;
+}
+
+/** Parse integer/decimal field values from Sitecore (string or number). */
+export function fieldNumber(field?: Field<string | number>): number | undefined {
+  if (field?.value === undefined || field.value === null || field.value === '') return undefined;
+  const n = typeof field.value === 'number' ? field.value : Number(String(field.value).trim());
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function pickTopics(
   bag: Record<string, unknown> | undefined,
   names: string[]
@@ -91,6 +118,28 @@ function readBag(bag: Record<string, unknown> | undefined, requireNonEmpty: bool
       requireNonEmpty
     ),
     'Common Scenarios': pickRichText(bag, ['Common Scenarios', 'commonScenarios'], requireNonEmpty),
+    PositiveCount: pickScalar(
+      bag,
+      ['PositiveCount', 'Positive Count', 'positiveCount'],
+      requireNonEmpty
+    ),
+    NegativeCount: pickScalar(
+      bag,
+      ['NegativeCount', 'Negative Count', 'negativeCount'],
+      requireNonEmpty
+    ),
+    TotalRatings: pickScalar(
+      bag,
+      ['TotalRatings', 'Total Ratings', 'totalRatings'],
+      requireNonEmpty
+    ),
+    RatingsSum: pickScalar(bag, ['RatingsSum', 'Rating Sum', 'ratingsSum'], requireNonEmpty),
+    AverageRating: pickScalar(
+      bag,
+      ['AverageRating', 'Average Rating', 'averageRating'],
+      requireNonEmpty
+    ),
+    LastRated: pickText(bag, ['LastRated', 'Last Rated', 'lastRated'], requireNonEmpty),
   };
 }
 
@@ -111,7 +160,22 @@ function mergeBags(bags: (Record<string, unknown> | undefined)[], isEditing: boo
     'Baseline Reserve Guidelines',
     'General Payment Triggers',
     'Common Scenarios',
+    'PositiveCount',
+    'NegativeCount',
+    'TotalRatings',
+    'RatingsSum',
+    'AverageRating',
+    'LastRated',
   ];
+
+  const ratingKeys = new Set<keyof KmArticleContentFields>([
+    'PositiveCount',
+    'NegativeCount',
+    'TotalRatings',
+    'RatingsSum',
+    'AverageRating',
+    'LastRated',
+  ]);
 
   for (const key of keys) {
     if (key === 'LOB' || key === 'Peril type') {
@@ -134,7 +198,7 @@ function mergeBags(bags: (Record<string, unknown> | undefined)[], isEditing: boo
         break;
       }
     }
-    if (!filled[key] && isEditing) {
+    if (!filled[key] && (isEditing || ratingKeys.has(key))) {
       for (const bag of bags) {
         const partial = readBag(bag, false);
         const value = partial[key];

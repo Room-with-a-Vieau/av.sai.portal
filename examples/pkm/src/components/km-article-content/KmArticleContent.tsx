@@ -3,12 +3,18 @@
 import type React from 'react';
 import { RichText, Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import type { RichTextField } from '@sitecore-content-sdk/nextjs';
+import { Star, ThumbsDown, ThumbsUp } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
 import { TopicIconChip } from '@/components/taxonomy/TopicIconChip';
 
-import { hasRichText, hasText, mergeKmArticleContentFields } from './km-article-content.fields';
+import {
+  fieldNumber,
+  hasRichText,
+  hasText,
+  mergeKmArticleContentFields,
+} from './km-article-content.fields';
 import type { KmArticleContentProps } from './km-article-content.props';
 
 type ContentBlock = {
@@ -60,9 +66,91 @@ function SectionNav({ sections }: { sections: { id: string; title: string; numbe
   );
 }
 
+function StarRow({ average, total }: { average: number; total: number }) {
+  const rounded = Math.round(average * 2) / 2;
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-0.5" aria-hidden>
+        {Array.from({ length: 5 }, (_, i) => {
+          const fill = Math.min(1, Math.max(0, rounded - i));
+          return (
+            <span key={i} className="relative inline-flex size-4">
+              <Star className="text-muted-foreground/35 absolute inset-0 size-4" strokeWidth={1.5} />
+              {fill > 0 && (
+                <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
+                  <Star className="size-4 fill-amber-400 text-amber-400" strokeWidth={1.5} />
+                </span>
+              )}
+            </span>
+          );
+        })}
+      </div>
+      <p className="text-foreground text-sm font-semibold tabular-nums">
+        {average.toFixed(1)}
+        <span className="text-muted-foreground ml-1.5 font-normal">
+          · {total.toLocaleString()} {total === 1 ? 'rating' : 'ratings'}
+        </span>
+      </p>
+    </div>
+  );
+}
+
+function ArticleRatings({
+  positive,
+  negative,
+  average,
+  total,
+  isEditing,
+}: {
+  positive?: number;
+  negative?: number;
+  average?: number;
+  total?: number;
+  isEditing: boolean;
+}) {
+  const hasVotes =
+    (positive !== undefined && positive > 0) || (negative !== undefined && negative > 0);
+  const hasStars = average !== undefined && total !== undefined && total > 0;
+
+  if (!hasVotes && !hasStars && !isEditing) return null;
+
+  return (
+    <div className="border-border/80 mt-1 space-y-3 border-t pt-4">
+      <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+        Advisor feedback
+      </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
+        {(hasVotes || isEditing) && (
+          <div className="flex items-center gap-3" aria-label="Helpfulness votes">
+            <span className="border-border bg-background text-foreground inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm tabular-nums">
+              <ThumbsUp className="size-3.5 text-emerald-600" aria-hidden />
+              <span className="font-semibold">{(positive ?? 0).toLocaleString()}</span>
+              <span className="sr-only">positive</span>
+            </span>
+            <span className="border-border bg-background text-foreground inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm tabular-nums">
+              <ThumbsDown className="size-3.5 text-rose-600" aria-hidden />
+              <span className="font-semibold">{(negative ?? 0).toLocaleString()}</span>
+              <span className="sr-only">negative</span>
+            </span>
+          </div>
+        )}
+        {(hasStars || isEditing) && (
+          <div aria-label={`Average rating ${average?.toFixed(1) ?? '0'} out of 5`}>
+            {hasStars && average !== undefined && total !== undefined ? (
+              <StarRow average={average} total={total} />
+            ) : (
+              <p className="text-muted-foreground text-sm">No star ratings yet.</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /**
  * KmArticleContent — context-only rendering of Knowledge Article page fields.
- * Sectioned layout with LOB / Peril Type icon chips in the header.
+ * Sectioned layout with LOB / Peril Type icon chips and advisor ratings in the header.
  */
 export const Default: React.FC<KmArticleContentProps> = (props) => {
   const { params, isPageEditing: propIsEditing } = props;
@@ -74,6 +162,17 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
   const title = fields.Title;
   const lob = fields.LOB || [];
   const perilTypes = fields['Peril type'] || [];
+
+  const positiveCount = fieldNumber(fields.PositiveCount);
+  const negativeCount = fieldNumber(fields.NegativeCount);
+  const totalRatings = fieldNumber(fields.TotalRatings);
+  const ratingsSum = fieldNumber(fields.RatingsSum);
+  const averageFromField = fieldNumber(fields.AverageRating);
+  const averageRating =
+    averageFromField ??
+    (totalRatings && totalRatings > 0 && ratingsSum !== undefined
+      ? ratingsSum / totalRatings
+      : undefined);
 
   const sections: SectionDef[] = [
     {
@@ -156,11 +255,17 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
     }))
     .filter((section) => section.blocks.length > 0);
 
+  const hasRatings =
+    (positiveCount !== undefined && positiveCount > 0) ||
+    (negativeCount !== undefined && negativeCount > 0) ||
+    (totalRatings !== undefined && totalRatings > 0);
+
   const hasHeader =
     hasText(kbId) ||
     hasText(title) ||
     lob.length > 0 ||
     perilTypes.length > 0 ||
+    hasRatings ||
     isEditing;
 
   if (!hasHeader && visibleSections.length === 0) {
@@ -233,6 +338,14 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
                     )}
                   </div>
                 )}
+
+                <ArticleRatings
+                  positive={positiveCount}
+                  negative={negativeCount}
+                  average={averageRating}
+                  total={totalRatings}
+                  isEditing={isEditing}
+                />
               </header>
             )}
 
