@@ -2,6 +2,7 @@ import { SitecoreClient } from '@sitecore-content-sdk/nextjs/client';
 import scConfig from 'sitecore.config';
 
 import type { KnowledgeArticleListItem } from '@/components/knowledge-listing/knowledge-listing.props';
+import type { TaxonomyTopicReference } from '@/lib/taxonomy-topic';
 
 /** Knowledge Articles hub under Home */
 const DEFAULT_ROOT_PATH = '/sitecore/content/progressive/pkm/Home/Knowledge Articles';
@@ -150,8 +151,21 @@ function readString(field?: EdgeJsonField): string {
   return '';
 }
 
+function mapTopics(topics?: EdgeTopic[]): TaxonomyTopicReference[] | undefined {
+  if (!topics?.length) return undefined;
+  return topics
+    .filter((t): t is EdgeTopic & { id: string; name: string } => Boolean(t.id && t.name))
+    .map((t) => ({
+      id: t.id,
+      name: t.name,
+      displayName: t.displayName || t.name,
+    }));
+}
+
 function mapNode(node: EdgeArticleNode | null | undefined): KnowledgeArticleListItem | null {
   if (!node?.id) return null;
+  const lobItems = mapTopics(node.lob?.targetItems);
+  const perilItems = mapTopics(node.perilType?.targetItems);
   return {
     id: node.id,
     name: node.name || '',
@@ -161,8 +175,8 @@ function mapNode(node: EdgeArticleNode | null | undefined): KnowledgeArticleList
     title: node.title as KnowledgeArticleListItem['title'],
     kbId: node.kbId as KnowledgeArticleListItem['kbId'],
     purpose: node.purpose as KnowledgeArticleListItem['purpose'],
-    lob: node.lob,
-    perilType: node.perilType,
+    lob: lobItems ? { targetItems: lobItems } : undefined,
+    perilType: perilItems ? { targetItems: perilItems } : undefined,
     averageRating: readNumber(node.averageRating),
     positiveCount: readNumber(node.positiveCount),
     totalRatings: readNumber(node.totalRatings),
