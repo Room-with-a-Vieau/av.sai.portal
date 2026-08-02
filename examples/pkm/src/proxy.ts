@@ -1,4 +1,5 @@
 import { type NextRequest } from 'next/server';
+import type { SiteInfo } from '@sitecore-content-sdk/nextjs';
 import {
   defineProxy,
   AppRouterMultisiteProxy,
@@ -7,10 +8,13 @@ import {
   RedirectsProxy,
   LocaleProxy,
 } from '@sitecore-content-sdk/nextjs/proxy';
-import sitesAll from '.sitecore/sites.json';
+import sitesJson from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 import client from './lib/sitecore-client';
+
+/** Sites JSON may be empty at build time; cast so site.name is typed correctly. */
+const sitesAll = sitesJson as SiteInfo[];
 
 /**
  * Edge publishes many sites with hostName "*". SiteResolver picks the first match,
