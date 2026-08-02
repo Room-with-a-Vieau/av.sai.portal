@@ -9,7 +9,8 @@ import placeholderImageLoader from '@/utils/placeholderImageLoader';
 
 /**
  * Hosts allowed by Next.js `remotePatterns` — keep optimized instead of forcing `unoptimized`.
- * Aligns with kit-nextjs-article-starter plus sandbox / PoC hosts.
+ * Content Hub sandbox is allowlisted for remotePatterns but served unoptimized (Vercel
+ * `/_next/image` often cannot fetch mrfbasech.sitecoresandbox.cloud successfully).
  */
 function isAllowedRemoteImageHost(url: string): boolean {
   try {
@@ -18,8 +19,21 @@ function isAllowedRemoteImageHost(url: string): boolean {
       /^edge/.test(hostname) ||
       /^xmc-/.test(hostname) ||
       hostname.endsWith('.sitecore-staging.cloud') ||
-      hostname.endsWith('.sitecorecloud.io') ||
-      hostname.endsWith('.sitecoresandbox.cloud')
+      hostname.endsWith('.sitecorecloud.io')
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Content Hub / Stylelabs hosts — load directly; do not proxy via Vercel optimizer. */
+function isContentHubSandboxHost(url: string): boolean {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    return (
+      hostname.endsWith('.sitecoresandbox.cloud') ||
+      hostname.endsWith('.sitecorecontenthub.cloud') ||
+      hostname.includes('stylelabs.cloud')
     );
   } catch {
     return false;
@@ -87,9 +101,11 @@ export default function ClientImage({ image, className, sizes, priority, ...rest
     src.startsWith('https://') &&
     isClient &&
     !src.includes(typeof window !== 'undefined' ? window.location.hostname : '') &&
-    !isAllowedRemoteImageHost(src);
+    !isAllowedRemoteImageHost(src) &&
+    !isContentHubSandboxHost(src);
 
-  const isUnoptimized = unoptimized || isSvg || isExternalNotAllowed;
+  const isUnoptimized =
+    unoptimized || isSvg || isExternalNotAllowed || isContentHubSandboxHost(src);
 
   if (isEditing || isPreview || isSvg) {
     return <ContentSdkImage field={image} className={className} />;

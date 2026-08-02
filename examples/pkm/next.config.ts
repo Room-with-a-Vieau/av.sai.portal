@@ -40,6 +40,9 @@ const nextConfig: NextConfig = {
   // can be served from the Next.js Image Optimization API
   // see https://nextjs.org/docs/app/api-reference/components/image#remotepatterns
   images: {
+    // Bypass Vercel optimizer for Content Hub sandbox (see sitecore-image-loader.ts)
+    loader: 'custom',
+    loaderFile: './src/lib/sitecore-image-loader.ts',
     remotePatterns: [
       {
         protocol: 'https',
@@ -53,6 +56,18 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: '*.sitecoresandbox.cloud',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mrfbasech.sitecoresandbox.cloud',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'bcbsa.sitecoresandbox.cloud',
         port: '',
         pathname: '/**',
@@ -60,12 +75,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'dwyer-omega.sitecoresandbox.cloud',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'mrfbasech.sitecoresandbox.cloud',
         port: '',
         pathname: '/**',
       },
