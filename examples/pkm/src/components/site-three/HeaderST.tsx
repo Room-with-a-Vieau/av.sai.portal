@@ -28,7 +28,9 @@ type HeaderSTProps = ComponentProps & {
   fields: Fields;
 };
 
-const navLinkClass = 'block p-4 font-[family-name:var(--font-body)] text-secondary-foreground font-normal';
+/** Top header row sits on light bg-background; secondary-foreground is white in PKM theme. */
+const navLinkClass =
+  'block p-4 font-[family-name:var(--font-body)] text-foreground font-normal hover:text-primary';
 
 /** Sitecore checkbox / string params for rendering parameter ReverseTheme */
 function isReverseThemeParam(value: string | undefined): boolean {
@@ -44,7 +46,8 @@ export const Default = (props: HeaderSTProps) => {
   return (
     <section
       className={cn(
-        'sticky top-0 z-30 w-full min-w-0 border-b border-border/30 bg-background shadow-sm',
+        // relative: SearchBox/MiniCart panels use lg:absolute and must span this full-width header
+        'relative sticky top-0 z-30 w-full min-w-0 border-b border-border/30 bg-background shadow-sm',
         params?.styles
       )}
       data-class-change
@@ -111,7 +114,7 @@ export const Default = (props: HeaderSTProps) => {
                 <ContentSdkLink
                   field={fields?.CartLink}
                   prefetch={false}
-                  className="block p-4 text-secondary-foreground"
+                  className="block p-4 text-foreground hover:text-primary"
                 >
                   <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
                 </ContentSdkLink>

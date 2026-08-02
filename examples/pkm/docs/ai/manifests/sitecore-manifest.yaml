@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-02T15:15:00Z"
+lastUpdatedAt: "2026-08-02T17:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -4100,3 +4100,129 @@ ia:
       pendingManual:
         - "Register KnowledeVariant in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
         - "Confirm Datasource Template/Location in Content Editor if picker misbehaves (silent-write fields)"
+
+  - name: "KnowledgeListing"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-08-02T16:50:00Z"
+    updatedAt: "2026-08-02T18:20:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      Fully dynamic selection from Home/Knowledge Articles via Edge GraphQL (no FeaturedArticles).
+      ListingMode Droplist: Recently Updated (updatedDate), Recently Viewed (localStorage history),
+      Favorites (AverageRating then PositiveCount — community top-rated). MaxItems caps results.
+      Headless variants Default (Card), ListView, DetailView.
+    react:
+      filePath: "src/components/knowledge-listing/KnowledgeListing.tsx"
+      componentMapKey: "KnowledgeListing"
+      variants:
+        - "Default"
+        - "ListView"
+        - "DetailView"
+    templates:
+      datasource:
+        name: "KnowledgeListing"
+        path: "/sitecore/templates/Project/progressive/components/KnowledgeListing"
+        itemId: "{3AC1B045-AE12-46DF-B605-3356993AC628}"
+        baseTemplatesSet: true
+        sectionName: "Data"
+        sectionId: "{88E72A58-A1E6-4220-B7A0-EDE864D14A59}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{1B4A0BAE-F9F2-40F4-AD8A-88B1FAB16794}" }
+          - { name: "Description", type: "Single-Line Text", itemId: "{10814BD1-FAC9-48E7-8E28-6D3ED86EDFAD}" }
+          - { name: "MaxItems", type: "Integer", itemId: "{DB380942-7210-4461-B33A-0F9BC0FD0644}" }
+          - { name: "ListingMode", type: "Droplist", itemId: "{590DFE91-0FA6-4A14-A75D-8C26E1808DDC}", source: "/sitecore/content/progressive/pkm/Data/KnowledgeListing Modes" }
+          - { name: "FeaturedArticles", type: "Treelist", itemId: "{D1A2D4FA-DA61-4D12-865D-21B527308798}", source: "Home/Knowledge Articles" }
+        standardValues:
+          itemId: "{9E41C575-0BD2-4733-8D9C-02D7BDFC349A}"
+          linked: true
+      folder:
+        name: "KnowledgeListing Folder"
+        path: "/sitecore/templates/Project/progressive/Folders/KnowledgeListing Folder"
+        itemId: "{022015D9-520F-45BC-B581-B279D5B87DB3}"
+        standardValuesId: "{6D92647C-7C09-4618-B861-45E26F989581}"
+        insertOptionsSet: true
+      renderingParams:
+        name: "KnowledgeListing"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/KnowledgeListing"
+        itemId: "{2A3C7826-8533-40FC-8A33-B0C9EBF62411}"
+        baseTemplatesSet: true
+        standardValuesId: "{287CD1E0-4640-4364-BE5E-241C68933D6B}"
+      listingModeLookup:
+        path: "/sitecore/content/progressive/pkm/Data/KnowledgeListing Modes"
+        itemId: "{10D5BA56-2DD1-4AAC-9A64-5C9D4994D818}"
+        options:
+          - { name: "Recently Updated", itemId: "{A4AA0E40-B746-411D-85E0-6FD061DE02E4}" }
+          - { name: "Recently Viewed", itemId: "{1AFE00B0-14AD-48CE-B650-64B9636C86C9}" }
+          - { name: "Favorites", itemId: "{A6E88A3C-6CF5-4668-A152-160A9B10645E}" }
+    rendering:
+      name: "KnowledgeListing"
+      path: "/sitecore/layout/Renderings/Project/progressive/KnowledgeListing"
+      itemId: "{2F812B0F-3942-4B33-9E90-34418AC72798}"
+      componentName: "KnowledgeListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/progressive/components/KnowledgeListing"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='KnowledgeListing Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='KnowledgeListing Folder']"
+      parametersTemplateId: "{2A3C7826-8533-40FC-8A33-B0C9EBF62411}"
+      addFieldEditorButton: "1"
+      fieldEditorFields: "Title|Description|MaxItems|ListingMode|FeaturedArticles"
+      componentQuery: "query KnowledgeListing(...) { datasource { title description maxItems listingMode articles: FeaturedArticles { targetItems { ... } } } }"
+      registeredInAvailableRenderings: false
+    datasourceFolder:
+      path: "/sitecore/content/progressive/pkm/Data/KnowledgeListings"
+      itemId: "{C5FBC3D5-7031-4BDA-BBCB-1B6B8D19BB4A}"
+      exampleItems:
+        - { name: "Recently Updated Articles", itemId: "{24A6B1D2-11E8-49B2-9B57-D736DA47B1AD}" }
+        - { name: "Favorite Articles", itemId: "{9110B2E8-6B69-4D7B-802D-8F672F0BEF1E}" }
+        - { name: "Recently Viewed Articles", itemId: "{5D3062F7-34FD-44F4-B684-676A31F26314}" }
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/KnowledgeListing"
+      containerId: "{4A0F9A25-42CD-4A90-862B-6B6C6CB06A62}"
+      variants:
+        - { name: "Default", itemId: "{BAFCBB73-AE70-4C85-B66D-6480348FE01E}" }
+        - { name: "ListView", itemId: "{83519F9D-26F9-4D60-A396-A8F7CB7DBC3B}" }
+        - { name: "DetailView", itemId: "{026B3916-8D1E-40E3-AD03-5E2D5E0A71A4}" }
+    verification:
+      checkedAt: "2026-08-02T18:00:00Z"
+      passed:
+        - "ListingMode Droplist + FeaturedArticles Treelist from Knowledge Articles"
+        - "Modes adjust Featured pool: Updated / Viewed / Favorites (manual)"
+        - "Field editor includes FeaturedArticles"
+      failed: []
+      pendingManual:
+        - "Register KnowledgeListing {2F812B0F-3942-4B33-9E90-34418AC72798} in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Publish KnowledgeListing rendering + datasources for Edge"
+        - "In Pages: pick Featured Articles, set Listing Mode Droplist, confirm list order"
+
+  - name: "HeaderNavServicesRemap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-02T16:00:00Z"
+    updatedAt: "2026-08-02T17:30:00Z"
+    notes:
+      - "2026-08-02: Remapped Header Partial Design mega menu + LinkLists under /Presentation/Partial Designs/Global/Header/Data to Home Services Pages ({D7F6AC65-F7B0-4B71-AAB8-DB39D06FC6BF}). Item names kept (Speakers/Headphones/etc.); Title/Link fields and dropdown links point at Home IA."
+    relatedItems:
+      headerPartialDesignId: "{9B12C2BB-9351-444B-9A4F-1E80EF4E5A8A}"
+      headerDataFolderId: "{30CC5755-8EA2-431B-A598-9D316ADB41A7}"
+      megaMenus:
+        - { itemName: "Speakers", title: "Knowledge Articles", pageId: "{EF281E84-FF74-48C8-B64F-00933F9F0EFF}" }
+        - { itemName: "Headphones", title: "Claims", pageId: "{53C7AC2A-AD6F-42E6-84D5-10C0E891B1F1}" }
+        - { itemName: "Amps", title: "Products", pageId: "{13A395C4-599F-456D-9326-CF9789B5BA95}" }
+        - { itemName: "Pro", title: "Learning", pageId: "{0938E2E6-04AE-406B-BBAE-722D09645AA7}" }
+        - { itemName: "Artist Services", title: "Policyholder Service", pageId: "{D88D2275-85CB-489A-A47E-59BAABDEA1B8}" }
+        - { itemName: "People and Teams", itemId: "{34BAD8DE-9368-43FA-A3E5-1B2D9DAC2C81}", pageId: "{692D0C33-11A7-4F99-BF45-7FAEAA1BC583}" }
+        - { itemName: "Reports", itemId: "{E9677C33-4A8F-45B2-A602-8AEB8222A602}", pageId: "{4770FBBF-4568-4B01-B08F-52D4E267011A}" }
+        - { itemName: "Tools and Systems", itemId: "{965F8914-8C9E-49D3-8067-2DEEE12AA5FB}", pageId: "{AC233E16-0959-4A91-9910-2CBE22F9FEF1}" }
+    verification:
+      checkedAt: "2026-08-02T17:30:00Z"
+      passed:
+        - "Eight mega menus wired with Services Page internal links"
+        - "Primary LinkLists for Knowledge/Claims/Products/Learning/Policyholder/People/Reports/Tools populated with Home L2 links"
+        - "KA secondary lists retargeted (More hubs / Reports and people / Service hubs)"
+      failed: []
+      pendingManual:
+        - "Publish Header Partial Design + Header/Data for Edge"
+        - "Optional cleanup of orphan empty local DS items (Tools_and_Systems, People_and_Teams, *_Links_Nav duplicates)"
+        - "Spot-check browser: all 8 top nav labels + dropdown URLs resolve under /Home"

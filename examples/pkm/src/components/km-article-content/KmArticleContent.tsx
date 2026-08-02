@@ -17,6 +17,7 @@ import {
   getPersonaStateCode,
   readStoredDemoTaxonomy,
 } from '@/lib/demo-taxonomy';
+import { recordArticleView } from '@/lib/knowledge-preferences';
 import { cn } from '@/lib/utils';
 
 import { TopicIconChip } from '@/components/taxonomy/TopicIconChip';
@@ -249,6 +250,13 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
       window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, syncPersonaState);
     };
   }, []);
+
+  useEffect(() => {
+    const routeId = page?.layout?.sitecore?.route?.itemId;
+    if (!isEditing && routeId) {
+      recordArticleView(routeId);
+    }
+  }, [isEditing, page?.layout?.sitecore?.route?.itemId]);
 
   const fields = mergeKmArticleContentFields(props, isEditing);
   const routeFields = page?.layout?.sitecore?.route?.fields as Record<string, unknown> | undefined;

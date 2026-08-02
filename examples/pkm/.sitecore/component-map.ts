@@ -135,6 +135,9 @@ import * as locationsearchprops from 'src/components/location-search/location-se
 import * as locationsearchitemprops from 'src/components/location-search/location-search-item.props';
 import * as GoogleMapdev from 'src/components/location-search/GoogleMap.dev';
 import * as googlemapsprops from 'src/components/location-search/google-maps.props';
+import * as KnowledgeListing from 'src/components/knowledge-listing/KnowledgeListing';
+import * as knowledgelistingprops from 'src/components/knowledge-listing/knowledge-listing.props';
+import * as knowledgelistingfields from 'src/components/knowledge-listing/knowledge-listing.fields';
 import * as KnowledeVariant from 'src/components/knowlede-variant/KnowledeVariant';
 import * as knowledevariantprops from 'src/components/knowlede-variant/knowlede-variant.props';
 import * as KmArticleContent from 'src/components/km-article-content/KmArticleContent';
@@ -413,6 +416,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['location-search-item', { ...locationsearchitemprops }],
   ['GoogleMap', { ...GoogleMapdev }],
   ['google-maps', { ...googlemapsprops }],
+  ['KnowledgeListing', { ...KnowledgeListing, componentType: 'client' }],
+  ['knowledge-listing', { ...knowledgelistingprops, ...knowledgelistingfields }],
   ['KnowledeVariant', { ...KnowledeVariant, componentType: 'client' }],
   ['knowlede-variant', { ...knowledevariantprops }],
   ['KmArticleContent', { ...KmArticleContent, componentType: 'client' }],
