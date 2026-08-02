@@ -18,19 +18,19 @@ describe('demo-persona-profiles', () => {
     expect(new Set(identifierIds).size).toBe(identifierIds.length);
   });
 
-  it('returns stable identity fields for College Student', () => {
-    const profile = getDemoPersonaProfile('College Student');
+  it('returns stable identity fields for Internal Agent licensed in FL', () => {
+    const profile = getDemoPersonaProfile('Internal Agent licensed in FL');
 
     expect(profile).toEqual({
-      persona: 'College Student',
-      firstName: 'Taylor',
-      lastName: 'Brooks',
-      email: 'taylor.brooks@demo.rocklandtrust.com',
-      identifierId: 'rockland-demo-cs',
+      persona: 'Internal Agent licensed in FL',
+      firstName: 'Morgan',
+      lastName: 'Ellis',
+      email: 'morgan.ellis@demo.progressive.com',
+      identifierId: 'progressive-demo-ia-fl',
     });
   });
 
-  it('uses the rockland demo identifier provider', () => {
-    expect(DEMO_PERSONA_IDENTIFIER_PROVIDER).toBe('rockland-demo');
+  it('uses the progressive demo identifier provider', () => {
+    expect(DEMO_PERSONA_IDENTIFIER_PROVIDER).toBe('progressive-demo');
   });
 });

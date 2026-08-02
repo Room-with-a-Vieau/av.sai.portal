@@ -2,17 +2,13 @@ export const DEMO_TAXONOMY_STORAGE_KEY = 'demo-user-taxonomy';
 export const DEMO_TAXONOMY_CHANGE_EVENT = 'demo-taxonomy-change';
 
 export const DEMO_USER_PERSONAS = [
-  'Young Professional',
-  'First-Time Homebuyer',
-  'Growing Family',
-  'Small Business Owner',
-  'Digital-First Consumer',
-  'College Student',
+  'Internal Agent licensed in FL',
+  'Claims Specialist licensed in NC',
 ] as const;
 
 export type DemoUserTaxonomy = (typeof DEMO_USER_PERSONAS)[number];
 
-export const DEFAULT_DEMO_TAXONOMY: DemoUserTaxonomy = 'College Student';
+export const DEFAULT_DEMO_TAXONOMY: DemoUserTaxonomy = 'Internal Agent licensed in FL';
 
 /** Sentinel value for the persona switcher logout action (not stored in localStorage). */
 export const DEMO_TAXONOMY_LOGOUT_VALUE = '__demo_logout__';
@@ -26,12 +22,8 @@ export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserT
 
 export function getPersonaCode(persona: DemoUserTaxonomy): string {
   const codes: Record<DemoUserTaxonomy, string> = {
-    'Young Professional': 'yp',
-    'First-Time Homebuyer': 'fth',
-    'Growing Family': 'gf',
-    'Small Business Owner': 'sbo',
-    'Digital-First Consumer': 'dfc',
-    'College Student': 'cs',
+    'Internal Agent licensed in FL': 'ia-fl',
+    'Claims Specialist licensed in NC': 'cs-nc',
   };
 
   return codes[persona];

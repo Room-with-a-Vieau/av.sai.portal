@@ -120,21 +120,21 @@ describe('demo-analytics-identity', () => {
     process.env.NODE_ENV = 'production';
     mockGetClientId.mockReturnValueOnce('').mockReturnValue('new-client-id');
 
-    await identifyDemoPersona('Young Professional');
+    await identifyDemoPersona('Internal Agent licensed in FL');
 
     expect(mockSetClientId).toHaveBeenCalledTimes(1);
     expect(mockSetProfileId).toHaveBeenCalledTimes(1);
     expect(mockIdentity).toHaveBeenCalledWith({
       channel: 'WEB',
       currency: 'USD',
-      firstName: 'Jordan',
-      lastName: 'Mitchell',
-      email: 'jordan.mitchell@demo.rocklandtrust.com',
-      identifiers: [{ id: 'jordan.mitchell@demo.rocklandtrust.com', provider: 'email' }],
+      firstName: 'Morgan',
+      lastName: 'Ellis',
+      email: 'morgan.ellis@demo.progressive.com',
+      identifiers: [{ id: 'morgan.ellis@demo.progressive.com', provider: 'email' }],
       extensionData: {
-        demoPersona: 'Young Professional',
-        demoPersonaCode: 'yp',
-        demoPersonaId: 'rockland-demo-yp',
+        demoPersona: 'Internal Agent licensed in FL',
+        demoPersonaCode: 'ia-fl',
+        demoPersonaId: 'progressive-demo-ia-fl',
       },
     });
   });
@@ -142,13 +142,13 @@ describe('demo-analytics-identity', () => {
   it('can identify without resetting the session on page reload', async () => {
     process.env.NODE_ENV = 'production';
 
-    await identifyDemoPersona('College Student', { resetSession: false });
+    await identifyDemoPersona('Claims Specialist licensed in NC', { resetSession: false });
 
     expect(mockSetClientId).not.toHaveBeenCalled();
     expect(mockIdentity).toHaveBeenCalledWith(
       expect.objectContaining({
-        email: 'taylor.brooks@demo.rocklandtrust.com',
-        identifiers: [{ id: 'taylor.brooks@demo.rocklandtrust.com', provider: 'email' }],
+        email: 'casey.nguyen@demo.progressive.com',
+        identifiers: [{ id: 'casey.nguyen@demo.progressive.com', provider: 'email' }],
       })
     );
   });

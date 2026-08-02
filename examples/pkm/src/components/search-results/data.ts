@@ -263,196 +263,72 @@ export function relevanceScore(
 
 export function supplementalResultsForDemoUserTaxonomy(persona: DemoUserTaxonomy): SearchResultItem[] {
   const code = getPersonaCode(persona);
-  const rocklandBase = 'https://www.rocklandtrust.com/';
+  const kbBase = '/Knowledge%20Articles/';
 
   const rowsByPersona: Record<
     DemoUserTaxonomy,
     Omit<SearchResultItem, 'id' | 'demoUserTaxonomy'>[]
   > = {
-    'Young Professional': [
+    'Internal Agent licensed in FL': [
       {
-        title: 'Advantage Checking for early-career banking',
+        title: 'Florida FNOL intake — Personal Auto and Homeowners',
         description:
-          'A checking option for professionals balancing direct deposit, digital tools, and everyday spending with fewer fees.',
-        href: `${rocklandBase}personal/banking/checking-products/advantage-checking`,
-        contentType: 'service',
-        categories: ['builderServices', 'digitalTools'],
+          'State-specific Progressive intake guidance for FL-licensed internal agents covering PIP, comparative negligence cues, and HO water/wind triage.',
+        href: `${kbBase}PersonalLines/Auto/KB-AU-1001-FNOL`,
+        contentType: 'content',
+        categories: ['resources'],
         brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'mybldr'],
-        dateLabel: 'Personalized checking',
-        breadcrumb: ['Personal', 'Checking', 'Advantage Checking'],
-        matchTerms: ['young professional', 'checking', 'direct deposit', 'everyday banking'],
+        searchBuckets: ['services'],
+        dateLabel: 'FL agent playbook',
+        breadcrumb: ['Knowledge Articles', 'Personal Lines', 'Auto FNOL'],
+        matchTerms: ['florida', 'internal agent', 'fnol', 'pip', 'licensed fl'],
         imageSrc: catalogDemoImage(0),
         isNew: true,
       },
       {
-        title: 'Online & Mobile Banking for on-the-go account control',
+        title: 'FL regulatory and claims timeline checkpoints',
         description:
-          'Manage balances, transfers, and alerts from your phone — built for customers who bank between meetings and commutes.',
-        href: `${rocklandBase}personal/services/online-and-mobile-banking`,
+          'Quick reference for Florida licensing context, notice timing, and Progressive escalation paths used by internal agents.',
+        href: `${kbBase}PersonalLines/Homeowners/KB-HO-1001-WaterDamage`,
         contentType: 'content',
-        categories: ['digitalTools'],
-        brands: ['mybldr'],
-        searchBuckets: ['mybldr', 'services'],
-        dateLabel: 'Digital banking',
-        breadcrumb: ['Personal', 'Services', 'Online & Mobile Banking'],
-        matchTerms: ['mobile banking', 'online banking', 'alerts', 'transfers'],
+        categories: ['resources'],
+        brands: ['buildersFirstSource'],
+        searchBuckets: ['services'],
+        dateLabel: 'FL compliance',
+        breadcrumb: ['Knowledge Articles', 'Personal Lines', 'Homeowners'],
+        matchTerms: ['florida', 'regulatory', 'timeline', 'internal agent'],
         imageSrc: catalogDemoImage(1),
       },
     ],
-    'First-Time Homebuyer': [
+    'Claims Specialist licensed in NC': [
       {
-        title: 'First-time homebuyer guidance and mortgage programs',
+        title: 'North Carolina UM/UIM and liability triage',
         description:
-          'Resources for buyers navigating pre-approval, down payment planning, and choosing the right mortgage product.',
-        href: `${rocklandBase}personal/loans/mortgage-products/first-time-homebuyers`,
+          'NC-licensed claims specialist guidance for uninsured motorist intake, liability facts, and Progressive severity routing.',
+        href: `${kbBase}PersonalLines/Auto/KB-AU-1005-UMUIMIntake`,
         contentType: 'content',
-        categories: ['resources', 'builderServices'],
+        categories: ['resources'],
         brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'products'],
-        dateLabel: 'Homebuyer guide',
-        breadcrumb: ['Personal', 'Loans', 'First-Time Homebuyers'],
-        matchTerms: ['first-time homebuyer', 'mortgage', 'pre-approval', 'down payment'],
+        searchBuckets: ['services'],
+        dateLabel: 'NC claims playbook',
+        breadcrumb: ['Knowledge Articles', 'Personal Lines', 'UM/UIM'],
+        matchTerms: ['north carolina', 'claims specialist', 'um', 'uim', 'licensed nc'],
         imageSrc: catalogDemoImage(2),
         isNew: true,
       },
       {
-        title: 'Home loan pre-approval to shop with confidence',
+        title: 'NC wind and hail storm handling',
         description:
-          'Understand borrowing power before you tour homes and make offers in competitive Massachusetts and Rhode Island markets.',
-        href: `${rocklandBase}personal/loans/mortgage-products/home-loan-pre-approval`,
-        contentType: 'service',
-        categories: ['builderServices'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['services'],
-        dateLabel: 'Mortgage service',
-        breadcrumb: ['Personal', 'Loans', 'Pre-Approval'],
-        matchTerms: ['pre-approval', 'home loan', 'first home', 'mortgage rates'],
-        imageSrc: catalogDemoImage(3),
-      },
-    ],
-    'Growing Family': [
-      {
-        title: 'Savings and money market options for family goals',
-        description:
-          'Compare savings, CDs, and money market accounts for emergency funds, education, and long-term family planning.',
-        href: `${rocklandBase}personal/banking/savings-products`,
-        contentType: 'service',
-        categories: ['buildingMaterials', 'resources'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['products', 'services'],
-        dateLabel: 'Family savings',
-        breadcrumb: ['Personal', 'Banking', 'Savings Products'],
-        matchTerms: ['growing family', 'savings', 'money market', 'cds', 'education'],
-        imageSrc: catalogDemoImage(4),
-        isNew: true,
-      },
-      {
-        title: 'Home equity lines and loans for renovation or tuition',
-        description:
-          'Tap home equity for kitchen upgrades, room additions, or tuition with guidance from Rockland Trust lending specialists.',
-        href: `${rocklandBase}personal/loans/home-equity-products`,
-        contentType: 'service',
-        categories: ['builderServices'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'products'],
-        dateLabel: 'Home equity',
-        breadcrumb: ['Personal', 'Loans', 'Home Equity'],
-        matchTerms: ['home equity', 'heloc', 'renovation', 'family', 'tuition'],
-        imageSrc: catalogDemoImage(5),
-      },
-    ],
-    'Small Business Owner': [
-      {
-        title: 'Business checking built for owner-operators',
-        description:
-          'Business banking accounts with tools for deposits, payments, and cash flow visibility for small and mid-sized companies.',
-        href: `${rocklandBase}business/banking/business-checking`,
-        contentType: 'service',
-        categories: ['builderServices'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['services'],
-        dateLabel: 'Business banking',
-        breadcrumb: ['Business', 'Banking', 'Business Checking'],
-        matchTerms: ['small business', 'business checking', 'cash flow', 'owner'],
-        imageSrc: catalogDemoImage(6),
-        isNew: true,
-      },
-      {
-        title: 'Business credit cards and treasury support',
-        description:
-          'Separate business spending, manage payables, and explore treasury services as your company scales.',
-        href: `${rocklandBase}business/banking/business-credit-cards`,
-        contentType: 'service',
-        categories: ['builderServices', 'digitalTools'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'mybldr'],
-        dateLabel: 'Business credit',
-        breadcrumb: ['Business', 'Banking', 'Credit Cards'],
-        matchTerms: ['business credit card', 'treasury', 'payables', 'small business owner'],
-        imageSrc: catalogDemoImage(7),
-      },
-    ],
-    'Digital-First Consumer': [
-      {
-        title: 'Rockland Trust mobile app: banking in your pocket',
-        description:
-          'Deposit checks, pay bills, and monitor accounts with biometric login and real-time alerts — no branch visit required.',
-        href: `${rocklandBase}personal/services/online-and-mobile-banking`,
-        contentType: 'content',
-        categories: ['digitalTools'],
-        brands: ['mybldr'],
-        searchBuckets: ['mybldr', 'services'],
-        dateLabel: 'Mobile app',
-        breadcrumb: ['Personal', 'Services', 'Mobile Banking'],
-        matchTerms: ['digital-first', 'mobile app', 'biometric', 'alerts', 'remote deposit'],
-        imageSrc: catalogDemoImage(8),
-        isNew: true,
-      },
-      {
-        title: 'Rockland Complete Checking with digital perks',
-        description:
-          'A checking package for customers who prefer self-service tools, fee rebates, and integrated money management.',
-        href: `${rocklandBase}personal/banking/checking-products/rockland-complete-checking`,
-        contentType: 'service',
-        categories: ['digitalTools', 'builderServices'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['mybldr', 'services'],
-        dateLabel: 'Digital checking',
-        breadcrumb: ['Personal', 'Checking', 'Rockland Complete'],
-        matchTerms: ['digital consumer', 'complete checking', 'self-service', 'online'],
-        imageSrc: catalogDemoImage(9),
-      },
-    ],
-    'College Student': [
-      {
-        title: 'Free Student Checking with no monthly maintenance fee',
-        description:
-          'Student-friendly checking with mobile tools, debit card access, and budgeting features while you are in school.',
-        href: `${rocklandBase}personal/banking/checking-products/free-student-checking`,
-        contentType: 'service',
-        categories: ['builderServices', 'digitalTools'],
-        brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'mybldr'],
-        dateLabel: 'Student checking',
-        breadcrumb: ['Personal', 'Checking', 'Free Student Checking'],
-        matchTerms: ['college student', 'student checking', 'no fee', 'campus banking'],
-        imageSrc: catalogDemoImage(10),
-        isNew: true,
-      },
-      {
-        title: 'NH Student Loans and education financing resources',
-        description:
-          'Explore student loan options, repayment guidance, and tools to compare borrowing before the semester starts.',
-        href: `${rocklandBase}personal/services/nh-student-loans`,
+          'Progressive homeowners wind/hail documentation standards and deductible checks for specialists licensed in North Carolina.',
+        href: `${kbBase}PersonalLines/Homeowners/KB-HO-1002-WindHail`,
         contentType: 'content',
         categories: ['resources'],
         brands: ['buildersFirstSource'],
-        searchBuckets: ['services', 'products'],
-        dateLabel: 'Student loans',
-        breadcrumb: ['Personal', 'Services', 'NH Student Loans'],
-        matchTerms: ['student loans', 'college', 'education financing', 'repayment'],
-        imageSrc: catalogDemoImage(11),
+        searchBuckets: ['services'],
+        dateLabel: 'NC storm claims',
+        breadcrumb: ['Knowledge Articles', 'Personal Lines', 'Wind Hail'],
+        matchTerms: ['north carolina', 'wind', 'hail', 'claims specialist'],
+        imageSrc: catalogDemoImage(3),
       },
     ],
   };
@@ -986,18 +862,10 @@ export function selectAiSearchInsight(query: string, user: DemoUserTaxonomy | nu
   const key = insightKey(buckets, user);
 
   const personaHint: Record<DemoUserTaxonomy, string> = {
-    'Young Professional':
-      'Prioritize checking, direct deposit, and mobile tools that fit an early-career schedule.',
-    'First-Time Homebuyer':
-      'Start with pre-approval, first-time buyer programs, and mortgage education before you shop.',
-    'Growing Family':
-      'Compare savings, CDs, and home equity options that support household and education goals.',
-    'Small Business Owner':
-      'Look for business checking, credit, and treasury services that scale with your company.',
-    'Digital-First Consumer':
-      'Favor mobile banking, alerts, and self-service account tools over branch-only workflows.',
-    'College Student':
-      'Focus on no-fee student checking, debit access, and education loan resources.',
+    'Internal Agent licensed in FL':
+      'Prioritize Florida FNOL, PIP cues, and Progressive personal-lines articles for FL-licensed agents.',
+    'Claims Specialist licensed in NC':
+      'Focus on North Carolina UM/UIM, liability triage, and storm-handling playbooks for NC-licensed specialists.',
   };
 
   const personaGuidance = user ? personaHint[user] : 'Use facets to compare products, services, blogs, and content by need.';

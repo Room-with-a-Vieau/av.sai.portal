@@ -57,10 +57,13 @@ export function DemoUserSwitcher() {
 
   return (
     <Select value={taxonomy ?? undefined} onValueChange={handleValueChange}>
-      <SelectTrigger className="h-10 w-[15rem]" aria-label={isLoggedIn ? 'Demo persona' : 'Login as demo persona'}>
-        <SelectValue placeholder="Login" />
+      <SelectTrigger
+        className="h-10 w-[min(100%,18.5rem)]"
+        aria-label={isLoggedIn ? 'Demo persona' : 'Login as demo persona'}
+      >
+        <SelectValue placeholder="Login / Logout" />
       </SelectTrigger>
-      <SelectContent align="end">
+      <SelectContent align="end" className="min-w-[18.5rem]">
         {isLoggedIn && (
           <>
             <SelectItem value={DEMO_TAXONOMY_LOGOUT_VALUE} className="font-medium text-primary">
@@ -68,6 +71,11 @@ export function DemoUserSwitcher() {
             </SelectItem>
             <SelectSeparator />
           </>
+        )}
+        {!isLoggedIn && (
+          <SelectItem value="__demo_login_hint__" disabled className="text-muted-foreground">
+            Login / Logout
+          </SelectItem>
         )}
         {DEMO_USER_PERSONAS.map((persona) => (
           <SelectItem key={persona} value={persona}>

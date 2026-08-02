@@ -7,10 +7,23 @@ import {
   RedirectsProxy,
   LocaleProxy,
 } from '@sitecore-content-sdk/nextjs/proxy';
-import sites from '.sitecore/sites.json';
+import sitesAll from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 import client from './lib/sitecore-client';
+
+/**
+ * Edge publishes many sites with hostName "*". SiteResolver picks the first match,
+ * so rockland (listed first in sites.json) wins on localhost unless we prefer
+ * NEXT_PUBLIC_DEFAULT_SITE_NAME.
+ */
+const sites = (() => {
+  const defaultSite = scConfig.defaultSite?.trim();
+  if (!defaultSite) return sitesAll;
+  const preferred = sitesAll.filter((site) => site.name === defaultSite);
+  if (preferred.length === 0) return sitesAll;
+  return [...preferred, ...sitesAll.filter((site) => site.name !== defaultSite)];
+})();
 
 const locale = new LocaleProxy({
   /**

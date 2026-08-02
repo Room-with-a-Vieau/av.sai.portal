@@ -19,18 +19,20 @@ describe('DemoPersonaAnalytics', () => {
   });
 
   it('identifies a stored persona on mount without resetting the session', async () => {
-    window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, 'Growing Family');
+    window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, 'Internal Agent licensed in FL');
 
     render(<DemoPersonaAnalytics />);
 
     await waitFor(() => {
-      expect(mockIdentifyDemoPersona).toHaveBeenCalledWith('Growing Family', { resetSession: false });
+      expect(mockIdentifyDemoPersona).toHaveBeenCalledWith('Internal Agent licensed in FL', {
+        resetSession: false,
+      });
     });
   });
 
   it('does nothing when analytics is disabled', async () => {
     mockIsDemoAnalyticsEnabled.mockReturnValue(false);
-    window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, 'College Student');
+    window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, 'Claims Specialist licensed in NC');
 
     render(<DemoPersonaAnalytics />);
 
