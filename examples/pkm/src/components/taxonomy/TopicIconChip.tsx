@@ -1,4 +1,4 @@
-import type React from 'react';
+import { createElement, type ReactElement } from 'react';
 
 import { cn } from '@/lib/utils';
 import { iconForTopic, topicLabel, type TaxonomyTopicReference } from '@/lib/taxonomy-topic';
@@ -9,9 +9,8 @@ type TopicIconChipProps = {
   size?: 'sm' | 'md';
 };
 
-export function TopicIconChip({ topic, className, size = 'md' }: TopicIconChipProps): React.ReactElement {
+export function TopicIconChip({ topic, className, size = 'md' }: TopicIconChipProps): ReactElement {
   const label = topicLabel(topic);
-  const Icon = iconForTopic(label);
   const isSm = size === 'sm';
 
   return (
@@ -28,7 +27,10 @@ export function TopicIconChip({ topic, className, size = 'md' }: TopicIconChipPr
           isSm ? 'size-5' : 'size-7'
         )}
       >
-        <Icon className={isSm ? 'size-3' : 'size-4'} aria-hidden />
+        {createElement(iconForTopic(label), {
+          className: isSm ? 'size-3' : 'size-4',
+          'aria-hidden': true,
+        })}
       </span>
       {label}
     </span>
