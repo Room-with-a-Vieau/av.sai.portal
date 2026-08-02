@@ -2,6 +2,7 @@ import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
 
 import type { ComponentProps } from '@/lib/component-props';
 import type { TaxonomyTopicReference } from '@/lib/taxonomy-topic';
+import type { ReferenceField } from '@/types/ReferenceField.props';
 
 export type KmTopicReference = TaxonomyTopicReference;
 
@@ -24,6 +25,9 @@ export type KmArticleContentFields = {
   'Baseline Reserve Guidelines'?: RichTextField;
   'General Payment Triggers'?: RichTextField;
   'Common Scenarios'?: RichTextField;
+  /** Treelist of KnowledgeChunks shared / state-specific content */
+  sharedContent?: ReferenceField[];
+  SharedContent?: ReferenceField[];
   /** Helpfulness thumbs-up total */
   PositiveCount?: Field<string | number>;
   /** Helpfulness thumbs-down total */

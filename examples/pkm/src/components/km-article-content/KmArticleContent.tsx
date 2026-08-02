@@ -1,10 +1,22 @@
 'use client';
 
 import type React from 'react';
+import { useEffect, useState } from 'react';
 import { RichText, Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import type { RichTextField } from '@sitecore-content-sdk/nextjs';
-import { Star, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { Layers2, Star, ThumbsDown, ThumbsUp } from 'lucide-react';
 
+import {
+  filterChunksByPersonaState,
+  resolveVariantChunks,
+  type ResolvedVariantChunk,
+} from '@/components/variant-content/variant-content.fields';
+import type { VariantContentFields } from '@/components/variant-content/variant-content.props';
+import {
+  DEMO_TAXONOMY_CHANGE_EVENT,
+  getPersonaStateCode,
+  readStoredDemoTaxonomy,
+} from '@/lib/demo-taxonomy';
 import { cn } from '@/lib/utils';
 
 import { TopicIconChip } from '@/components/taxonomy/TopicIconChip';
@@ -30,6 +42,8 @@ type SectionDef = {
   blocks: ContentBlock[];
 };
 
+const VARIANT_CONTENT_ANCHOR = 'variant-content';
+
 const KmArticleContentEmpty: React.FC = () => (
   <div className="border-border bg-muted/30 text-muted-foreground mx-auto max-w-4xl rounded-2xl border border-dashed p-8 text-sm">
     Knowledge Article fields are empty. Edit page fields (Title, Purpose, workflows, etc.) to populate
@@ -42,7 +56,7 @@ function SectionNav({ sections }: { sections: { id: string; title: string; numbe
   return (
     <nav
       aria-label="Article sections"
-      className="border-border bg-muted/40 sticky top-4 hidden rounded-2xl border p-4 lg:block"
+      className="border-border bg-muted/40 rounded-2xl border p-4"
     >
       <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wide uppercase">
         On this page
@@ -63,6 +77,70 @@ function SectionNav({ sections }: { sections: { id: string; title: string; numbe
         ))}
       </ol>
     </nav>
+  );
+}
+
+function VariantsExistNav({ variants }: { variants: ResolvedVariantChunk[] }) {
+  if (variants.length === 0) return null;
+  return (
+    <nav
+      aria-label="Shared content variants"
+      className="rounded-2xl border border-teal-800/20 bg-gradient-to-br from-teal-50 via-cyan-50/70 to-slate-50 p-4 shadow-[0_8px_24px_-16px_rgba(15,118,110,0.4)]"
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <span
+          className="inline-flex size-7 shrink-0 items-center justify-center rounded-md bg-teal-800 text-teal-50"
+          aria-hidden
+        >
+          <Layers2 className="size-3.5" strokeWidth={2} />
+        </span>
+        <p className="text-teal-900 text-xs font-semibold tracking-wide uppercase">
+          Variants Exist
+        </p>
+      </div>
+      <ul className="space-y-2">
+        {variants.map((variant) => (
+          <li key={variant.id}>
+            <a
+              href={`#${VARIANT_CONTENT_ANCHOR}`}
+              className="hover:bg-teal-900/5 group flex items-start gap-2 rounded-lg px-1 py-1 text-sm leading-snug transition-colors"
+            >
+              {variant.stateCode ? (
+                <span className="mt-0.5 inline-flex shrink-0 items-center rounded bg-teal-800 px-1.5 py-0.5 font-mono text-[0.65rem] font-semibold tracking-wide text-teal-50">
+                  {variant.stateCode}
+                </span>
+              ) : (
+                <span className="text-teal-700/50 mt-0.5 font-mono text-[0.65rem]">—</span>
+              )}
+              <span className="min-w-0">
+                <span className="text-teal-950 group-hover:text-teal-800 block font-medium">
+                  {variant.sectionLabel !== 'Shared' ? variant.sectionLabel : variant.name}
+                </span>
+                {variant.sectionLabel !== 'Shared' && (
+                  <span className="text-teal-800/65 block truncate text-xs">{variant.name}</span>
+                )}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function ArticleAside({
+  sections,
+  variants,
+}: {
+  sections: { id: string; title: string; number: string }[];
+  variants: ResolvedVariantChunk[];
+}) {
+  if (sections.length === 0 && variants.length === 0) return null;
+  return (
+    <div className="sticky top-4 hidden space-y-4 lg:block">
+      <SectionNav sections={sections} />
+      <VariantsExistNav variants={variants} />
+    </div>
   );
 }
 
@@ -157,7 +235,32 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
   const { page } = useSitecore();
   const isEditing = propIsEditing !== undefined ? propIsEditing : page.mode.isEditing;
 
+  const [personaStateCode, setPersonaStateCode] = useState<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    const syncPersonaState = () => {
+      const persona = readStoredDemoTaxonomy();
+      setPersonaStateCode(persona ? getPersonaStateCode(persona) : null);
+    };
+
+    syncPersonaState();
+    window.addEventListener(DEMO_TAXONOMY_CHANGE_EVENT, syncPersonaState);
+    return () => {
+      window.removeEventListener(DEMO_TAXONOMY_CHANGE_EVENT, syncPersonaState);
+    };
+  }, []);
+
   const fields = mergeKmArticleContentFields(props, isEditing);
+  const routeFields = page?.layout?.sitecore?.route?.fields as Record<string, unknown> | undefined;
+  const allVariants = resolveVariantChunks(
+    props.fields as VariantContentFields | undefined,
+    routeFields
+  );
+  const visibleVariants =
+    isEditing || personaStateCode === undefined
+      ? allVariants
+      : filterChunksByPersonaState(allVariants, personaStateCode);
+
   const kbId = fields['KB-ID'];
   const title = fields.Title;
   const lob = fields.LOB || [];
@@ -395,8 +498,9 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
           </div>
 
           <aside className="mt-10 lg:mt-0">
-            <SectionNav
+            <ArticleAside
               sections={visibleSections.map(({ id, title, number }) => ({ id, title, number }))}
+              variants={visibleVariants}
             />
           </aside>
         </div>

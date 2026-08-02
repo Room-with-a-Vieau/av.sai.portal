@@ -29,6 +29,16 @@ export function getPersonaCode(persona: DemoUserTaxonomy): string {
   return codes[persona];
 }
 
+/** US state code for licensed demo personas (used to filter state-specific shared content). */
+export function getPersonaStateCode(persona: DemoUserTaxonomy): string {
+  const states: Record<DemoUserTaxonomy, string> = {
+    'Internal Agent licensed in FL': 'FL',
+    'Claims Specialist licensed in NC': 'NC',
+  };
+
+  return states[persona];
+}
+
 export function clearStoredDemoTaxonomy(): void {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(DEMO_TAXONOMY_STORAGE_KEY);

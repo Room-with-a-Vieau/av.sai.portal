@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-07-29T16:20:00Z"
+lastUpdatedAt: "2026-08-02T15:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3640,6 +3640,76 @@ ia:
         - "Add Services Page / branch to Home (and Services Page) insert options if authors need CE insert"
         - "Fill Detail/image content and publish when ready"
 
+  - name: "VariantContent"
+    kind: "context-only"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-08-02T15:00:00Z"
+    updatedAt: "2026-08-02T15:15:00Z"
+    siteName: "pkm"
+    siteCollection: "progressive"
+    notes: >
+      Context component for Knowledge Article.sharedContent Treelist (KnowledgeChunks
+      {BDF6C974-…}). Groups by Shared Content section folder and renders Content Rich Text
+      in teal callout cards contrasting KmArticleContent. ComponentQuery expands
+      MultilistField targetItems with path + Content. Placed on Final layout headless-main
+      below KmArticleContent for all 20 KA items + Knowledge Article page branch $name.
+    react:
+      filePath: "src/components/variant-content/VariantContent.tsx"
+      componentMapKey: "VariantContent"
+      variants:
+        - "Default"
+    pageTemplate:
+      name: "Knowledge Article"
+      path: "/sitecore/templates/Project/progressive/Knowledge Article"
+      itemId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+      reusedExisting: true
+      fieldsUsed: ["sharedContent"]
+    templates:
+      renderingParams:
+        name: "VariantContent"
+        path: "/sitecore/templates/Project/progressive/Rendering Parameters/VariantContent"
+        itemId: "{4E808F52-2632-4701-A08D-5976E22CCE5A}"
+        baseTemplatesSet: true
+        standardValuesId: "{15E9DC2C-B87C-4C0F-BB92-69D434086E96}"
+    rendering:
+      name: "VariantContent"
+      path: "/sitecore/layout/Renderings/Project/progressive/VariantContent"
+      itemId: "{88D43837-24CA-45A7-9171-FEAD8AE89702}"
+      componentName: "VariantContent"
+      datasourceTemplatePath: ""
+      datasourceLocationQuery: ""
+      parametersTemplateId: "{4E808F52-2632-4701-A08D-5976E22CCE5A}"
+      addFieldEditorButton: "1"
+      fieldEditorFields: "sharedContent"
+      componentQuery: "query VariantContent($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { sharedContent: field(name: \"sharedContent\") { ... on MultilistField { targetItems { id name path content: field(name: \"Content\") { jsonValue } } } } } }"
+      registeredInAvailableRenderings: false
+    headlessVariants:
+      containerPath: "/sitecore/content/progressive/pkm/Presentation/Headless Variants/VariantContent"
+      containerId: "{E1E389B6-2086-416F-8760-37F631AC7922}"
+      variants:
+        - { name: "Default", itemId: "{5E0CEF20-DC70-4922-A183-E6ADB987AF60}" }
+    placement:
+      placeholder: "headless-main"
+      insertRelativeTo: "KmArticleContent"
+      knowledgeArticleCount: 20
+      pageBranchUpdated: true
+      pageBranchId: "{DC3CB448-CAE9-4129-ADF8-3EC3C2D7A9C6}"
+    verification:
+      checkedAt: "2026-08-02T15:15:00Z"
+      passed:
+        - "JSON Rendering VariantContent created; get_component confirms no datasource required"
+        - "Parameters Template linked; ComponentQuery expands sharedContent MultilistField"
+        - "Default Headless Variant created"
+        - "React VariantContent registered via sitecore-tools:generate-map"
+        - "Verified KB-AU-1001-FNOL Final layout: KmArticleContent then VariantContent on headless-main"
+        - "Verified KB-CA-1001 Final layout includes VariantContent after KmArticleContent"
+        - "Added VariantContent to Knowledge Article page branch $name Final layout"
+      failed: []
+      pendingManual:
+        - "Register VariantContent in Presentation/Available Renderings/Page Content (needs current Renderings field value from user)"
+        - "Publish Knowledge Articles + VariantContent rendering for Edge"
+
   - name: "KmArticleContent"
     kind: "context-only"
     category: "Page Content"
@@ -3716,6 +3786,102 @@ ia:
         - "Place KmArticleContent on Knowledge Article page designs / partial designs"
         - "Publish Knowledge Articles after rating seed for Edge"
         - "Wire interactive thumbs/stars to persist increments (display-only today)"
+        - "Publish Knowledge Articles after Final layout KmArticleContent copy (2026-08-02)"
+
+  - name: "pkm-kb-final-layout-kmarticlecontent"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-02T14:20:00Z"
+    updatedAt: "2026-08-02T14:30:00Z"
+    siteName: "pkm"
+    notes: >
+      Copied Final presentation from Knowledge Article page branch $name
+      {DC3CB448-CAE9-4129-ADF8-3EC3C2D7A9C6} onto Knowledge Article items by adding
+      KmArticleContent {F44005E1-…} to headless-main Final layout (via add_component_on_page).
+      Shared Layout already had a non-editable KmArticleContent instance; Final adds an editable
+      headless-main instance matching the page branch. Skipped items that already had headless-main
+      (KB-AU-1001-FNOL, KB-AU-1002-CoverageDetermination-FL).
+    sourceItemId: "{DC3CB448-CAE9-4129-ADF8-3EC3C2D7A9C6}"
+    sourcePath: "/sitecore/content/progressive/pkm/Presentation/Page Branches/Knowledge Article/$name"
+    renderingId: "{F44005E1-CCBB-4B27-9598-5EF43FB60A46}"
+    placeholder: "headless-main"
+    itemCount: 18
+    verification:
+      checkedAt: "2026-08-02T14:30:00Z"
+      passed:
+        - "Source Final layout contains KmArticleContent on headless-main"
+        - "Verified KB-CA-1001, KB-CA-1002, KB-HO-1005 now have editable KmArticleContent on headless-main"
+      failed: []
+      pendingManual:
+        - "Publish Knowledge Articles for Edge"
+
+  - name: "pkm-ka-sharedcontent-treelist-backfill"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-02T14:42:00Z"
+    updatedAt: "2026-08-02T14:45:00Z"
+    siteName: "pkm"
+    notes: >
+      Populated Knowledge Article.sharedContent Treelist from reverse lookup of
+      Shared Content KnowledgeChunks.sourceDocumentLink. 20 KAs scanned; 15 chunks
+      with source links mapped to 4 master articles; KnowledeVariant Example skipped
+      (no sourceDocumentLink). Articles with no supplemental chunks left empty.
+    knowledgeArticleTemplateId: "{42F8929A-83CD-48FE-92F0-8AAC46E6CC62}"
+    knowledgeChunksTemplateId: "{BDF6C974-E68C-46A2-A0A9-D382FD0927EB}"
+    fieldName: "sharedContent"
+    itemCount: 20
+    updatedWithLinks: 4
+    items:
+      - { name: "KB-AU-1001-FNOL", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", sharedContentCount: 4 }
+      - { name: "KB-AU-1002-CoverageDetermination", itemId: "{BC70A3A2-56ED-4798-AC9F-A28B7531A205}", sharedContentCount: 4 }
+      - { name: "KB-HO-1001-WaterDamage", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", sharedContentCount: 3 }
+      - { name: "KB-HO-1002-WindHail", itemId: "{02878C46-F3A7-4034-A056-9CEBBF9BCA11}", sharedContentCount: 4 }
+    verification:
+      checkedAt: "2026-08-02T14:45:00Z"
+      passed:
+        - "KB-AU-1001-FNOL sharedContent resolves to 4 state KnowledgeChunks"
+        - "KB-AU-1002 / KB-HO-1001 / KB-HO-1002 similarly populated"
+        - "Remaining 16 Knowledge Articles correctly left with empty sharedContent"
+      failed: []
+      pendingManual:
+        - "Publish updated Knowledge Articles for Edge"
+
+  - name: "pkm-shared-content-state-suffix-rename"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-02T14:35:00Z"
+    updatedAt: "2026-08-02T14:40:00Z"
+    siteName: "pkm"
+    notes: >
+      Renamed KnowledgeChunks items under Shared Content/*/StateSpecific/{FL,NC,TX}
+      by appending -{STATE} to the item name (IDs preserved via authoring renameItem).
+      Example: KB-AU-1001-FNOL → KB-AU-1001-FNOL-FL. Empty state folders under other
+      sections had no children. FL/NC/TX folder items themselves were not renamed.
+    itemCount: 15
+    items:
+      - { name: "KB-AU-1001-FNOL-NC", itemId: "{C0460247-DED2-4F89-B3B5-4932D7993D0A}", section: "06-CoverageDetermination", state: "NC", previousName: "KB-AU-1001-FNOL" }
+      - { name: "KB-AU-1001-FNOL-FL", itemId: "{69F3074A-AC8C-407E-B9FF-3BD55F1FB742}", section: "07-ClaimsTimelines", state: "FL", previousName: "KB-AU-1001-FNOL" }
+      - { name: "KB-HO-1001-WaterDamage-FL", itemId: "{814F9F31-DC06-4BD7-ADBD-DFE5C0B16B95}", section: "07-ClaimsTimelines", state: "FL", previousName: "KB-HO-1001-WaterDamage" }
+      - { name: "KB-AU-1002-CoverageDetermination-NC", itemId: "{67F0D83D-83BC-4057-8AB3-1E7F688B6258}", section: "07-ClaimsTimelines", state: "NC", previousName: "KB-AU-1002-CoverageDetermination" }
+      - { name: "KB-HO-1002-WindHail-NC", itemId: "{93087160-D085-4A0C-A148-CB206A7BB095}", section: "07-ClaimsTimelines", state: "NC", previousName: "KB-HO-1002-WindHail" }
+      - { name: "KB-AU-1001-FNOL-TX", itemId: "{FB479F0D-8FE8-411D-ACF2-1225B122C0A7}", section: "07-ClaimsTimelines", state: "TX", previousName: "KB-AU-1001-FNOL" }
+      - { name: "KB-HO-1001-WaterDamage-TX", itemId: "{1E573687-CB62-47C9-B7DB-F58796D7A86B}", section: "07-ClaimsTimelines", state: "TX", previousName: "KB-HO-1001-WaterDamage" }
+      - { name: "KB-HO-1002-WindHail-TX", itemId: "{E2C6E203-5211-4651-A970-1D76AC7F22FC}", section: "07-ClaimsTimelines", state: "TX", previousName: "KB-HO-1002-WindHail" }
+      - { name: "KB-AU-1002-CoverageDetermination-FL", itemId: "{3D353949-CBBB-4922-B56B-84F1B538B991}", section: "08-RegulatoryAndCompliance", state: "FL", previousName: "KB-AU-1002-CoverageDetermination" }
+      - { name: "KB-HO-1002-WindHail-FL", itemId: "{279CDF81-5DA3-4C0C-804A-EA01A9DA78FE}", section: "08-RegulatoryAndCompliance", state: "FL", previousName: "KB-HO-1002-WindHail" }
+      - { name: "KB-AU-1001-FNOL-NC", itemId: "{6D5FB648-7873-4E75-AA4F-82CD1A07A640}", section: "08-RegulatoryAndCompliance", state: "NC", previousName: "KB-AU-1001-FNOL" }
+      - { name: "KB-AU-1002-CoverageDetermination-NC", itemId: "{E8A36D83-AC3C-4365-8C33-4385B566EC15}", section: "08-RegulatoryAndCompliance", state: "NC", previousName: "KB-AU-1002-CoverageDetermination" }
+      - { name: "KB-HO-1001-WaterDamage-NC", itemId: "{A843C525-812F-4194-A791-437478987E58}", section: "08-RegulatoryAndCompliance", state: "NC", previousName: "KB-HO-1001-WaterDamage" }
+      - { name: "KB-AU-1002-CoverageDetermination-TX", itemId: "{2271D425-4F14-4D7E-BB50-8E11C0795953}", section: "08-RegulatoryAndCompliance", state: "TX", previousName: "KB-AU-1002-CoverageDetermination" }
+      - { name: "KB-HO-1002-WindHail-TX", itemId: "{CD8FB6A3-14AF-4AD8-B65B-0AE2715DA684}", section: "08-RegulatoryAndCompliance", state: "TX", previousName: "KB-HO-1002-WindHail" }
+    verification:
+      checkedAt: "2026-08-02T14:40:00Z"
+      passed:
+        - "All 15 StateSpecific KnowledgeChunks renamed with -FL/-NC/-TX suffix"
+        - "Verified FL folder under 07-ClaimsTimelines shows KB-AU-1001-FNOL-FL and KB-HO-1001-WaterDamage-FL"
+      failed: []
+      pendingManual:
+        - "Publish Shared Content state chunks for Edge if paths are resolved by name"
 
   - name: "pkm-personal-lines-kb-articles"
     kind: "ia"
