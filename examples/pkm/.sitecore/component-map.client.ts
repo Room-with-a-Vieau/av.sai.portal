@@ -36,6 +36,7 @@ import * as SearchResults from 'src/components/search-results/SearchResults';
 import * as SearchExperienceLoadMore from 'src/components/search-experience/SearchExperience.LoadMore';
 import * as SearchExperience from 'src/components/search-experience/SearchExperience';
 import * as SitecoreSearchResults from 'src/components/search/SitecoreSearchResults';
+import * as PulseAssistant from 'src/components/pulse-assistant/PulseAssistant';
 import * as PromoAnimatedImageRightdev from 'src/components/promo-animated/PromoAnimatedImageRight.dev';
 import * as PromoAnimatedDefaultdev from 'src/components/promo-animated/PromoAnimatedDefault.dev';
 import * as PromoAnimated from 'src/components/promo-animated/PromoAnimated';
@@ -152,6 +153,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['SearchResults', { ...SearchResults }],
   ['SearchExperience', { ...SearchExperienceLoadMore, ...SearchExperience }],
   ['SitecoreSearchResults', { ...SitecoreSearchResults }],
+  ['PulseAssistant', { ...PulseAssistant }],
   ['PromoAnimatedImageRight', { ...PromoAnimatedImageRightdev }],
   ['PromoAnimatedDefault', { ...PromoAnimatedDefaultdev }],
   ['PromoAnimated', { ...PromoAnimated }],

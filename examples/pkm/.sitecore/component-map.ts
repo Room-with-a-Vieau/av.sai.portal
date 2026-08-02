@@ -77,6 +77,7 @@ import * as SearchExperience from 'src/components/search-experience/SearchExperi
 import * as SitecoreSearchResults from 'src/components/search/SitecoreSearchResults';
 import * as RichTextBlock from 'src/components/rich-text-block/RichTextBlock';
 import * as richtextblockprops from 'src/components/rich-text-block/rich-text-block.props';
+import * as PulseAssistant from 'src/components/pulse-assistant/PulseAssistant';
 import * as PromoImageTitlePartialOverlaydev from 'src/components/promo-image/PromoImageTitlePartialOverlay.dev';
 import * as PromoImageRightdev from 'src/components/promo-image/PromoImageRight.dev';
 import * as PromoImageMiddledev from 'src/components/promo-image/PromoImageMiddle.dev';
@@ -360,6 +361,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['SitecoreSearchResults', { ...SitecoreSearchResults, componentType: 'client' }],
   ['RichTextBlock', { ...RichTextBlock }],
   ['rich-text-block', { ...richtextblockprops }],
+  ['PulseAssistant', { ...PulseAssistant, componentType: 'client' }],
   ['PromoImageTitlePartialOverlay', { ...PromoImageTitlePartialOverlaydev }],
   ['PromoImageRight', { ...PromoImageRightdev }],
   ['PromoImageMiddle', { ...PromoImageMiddledev }],

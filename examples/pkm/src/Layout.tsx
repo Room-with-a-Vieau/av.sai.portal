@@ -35,6 +35,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 // multipromo-3_2
 
 import SitecoreStyles from 'components/content-sdk/SitecoreStyles';
+import { PulseAssistant } from '@/components/pulse-assistant/PulseAssistant';
 
 interface LayoutProps {
   page: Page;
@@ -135,6 +136,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                   )}
                 </div>
               </footer>
+              <PulseAssistant hidden={isEditing || page.mode.isDesignLibrary} />
             </>
           )}
         </div>
