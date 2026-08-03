@@ -11,6 +11,7 @@ import {
   readStoredDemoTaxonomy,
   type DemoUserTaxonomy,
 } from '@/lib/demo-taxonomy';
+import { PULSE_DEMO_STARTER_PROMPTS } from '@/lib/pulse-demo-playbook';
 import { cn } from '@/lib/utils';
 import type { PulseAskResponse, PulseSource, PulseStateCode } from '@/lib/pulse-types';
 
@@ -24,11 +25,7 @@ type ChatMessage = {
   stateCallout?: string | null;
 };
 
-const STARTER_PROMPTS = [
-  'What are the shared claim intake standards?',
-  'Water damage guidance for homeowners',
-  'Who covers commercial auto products?',
-];
+const STARTER_PROMPTS = [...PULSE_DEMO_STARTER_PROMPTS];
 
 const TYPE_BADGE: Record<PulseSource['type'], string> = {
   'knowledge-article': 'Knowledge',

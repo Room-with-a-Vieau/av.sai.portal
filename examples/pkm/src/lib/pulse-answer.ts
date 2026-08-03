@@ -24,7 +24,7 @@ function sentenceFromExcerpt(excerpt?: string): string {
 
 /**
  * Build a demoworthy, citation-backed answer from retrieved sources only.
- * Does not invent facts beyond titles/excerpts returned from the index/Edge.
+ * Prefers Knowledge Article citations; layers state Shared Content when present.
  */
 export function composePulseAnswer(
   question: string,
@@ -44,51 +44,75 @@ export function composePulseAnswer(
     };
   }
 
+  const knowledgeHits = sources.filter((s) => s.type === 'knowledge-article');
   const stateHits = personaState
     ? sources.filter((s) => s.stateCode === personaState)
     : [];
   const sharedHits = sources.filter((s) => s.type === 'shared-content');
-  const primary = stateHits[0] || sources[0];
-  const supporting = sources.filter((s) => s.id !== primary.id).slice(0, 3);
+
+  // Prefer Knowledge Article as the primary citation so demos always link to a KA page
+  const primary =
+    knowledgeHits[0] ||
+    stateHits[0] ||
+    sources[0];
+  const stateShared = stateHits.find((s) => s.type === 'shared-content');
+  const supporting = sources
+    .filter((s) => s.id !== primary.id)
+    .slice(0, 3);
 
   const lines: string[] = [];
 
   lines.push(
-    `Based on indexed site content, here’s what applies to your question about “${question.trim()}”.`
+    `Based on indexed Progressive Knowledge content, here’s what applies to “${question.trim()}”.`
   );
 
   const primaryBit = sentenceFromExcerpt(primary.excerpt);
   lines.push(
     primaryBit
-      ? `**${primary.title}** (${TYPE_LABEL[primary.type]}) is the strongest match. ${primaryBit}`
-      : `**${primary.title}** (${TYPE_LABEL[primary.type]}) is the strongest match from the knowledge index.`
+      ? `See **${primary.title}** (${TYPE_LABEL[primary.type]}). ${primaryBit}`
+      : `See **${primary.title}** (${TYPE_LABEL[primary.type]}) in the citations below.`
   );
 
-  if (supporting.length) {
+  if (stateShared && stateShared.id !== primary.id) {
+    const sharedBit = sentenceFromExcerpt(stateShared.excerpt);
+    lines.push(
+      sharedBit
+        ? `State-specific Shared Content (**${stateShared.title}**): ${sharedBit}`
+        : `State-specific Shared Content is cited as **${stateShared.title}**.`
+    );
+  }
+
+  if (supporting.length && !stateShared) {
     const names = supporting.map((s) => `**${s.title}** (${TYPE_LABEL[s.type]})`).join('; ');
     lines.push(`Related indexed sources: ${names}.`);
   }
 
   if (personaState && stateHits.length) {
     lines.push(
-      `Because you’re licensed in ${STATE_NAME[personaState]}, Pulse prioritized Shared Content under StateSpecific/${personaState}.`
+      `Because you’re licensed in ${STATE_NAME[personaState]}, Pulse prioritized Shared Content under StateSpecific/${personaState}. Open the Knowledge Article link below to read the full guidance with that state’s variant.`
     );
   } else if (personaState && sharedHits.length === 0) {
     lines.push(
-      `You’re licensed in ${STATE_NAME[personaState]}; open the cited articles for any state-specific Shared Content variants on those pages.`
+      `You’re licensed in ${STATE_NAME[personaState]}; open the cited Knowledge Article for any state-specific Shared Content on that page.`
     );
   }
 
-  lines.push('Open the sources below to verify details in the published content.');
+  lines.push('Use the citation cards below to open the Knowledge Article.');
 
   let stateCallout: string | null = null;
   if (personaState && stateHits.length) {
     stateCallout = `Highlighted for ${STATE_NAME[personaState]} (Shared Content)`;
   }
 
+  // Ensure Knowledge Articles appear first in the citation list for clickable demos
+  const ordered = [
+    ...knowledgeHits,
+    ...sources.filter((s) => s.type !== 'knowledge-article'),
+  ].filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
+
   return {
     answer: lines.join('\n\n'),
-    sources,
+    sources: ordered,
     stateCallout,
     personaState,
   };

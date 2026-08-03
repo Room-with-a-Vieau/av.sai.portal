@@ -4226,3 +4226,35 @@ ia:
         - "Publish Header Partial Design + Header/Data for Edge"
         - "Optional cleanup of orphan empty local DS items (Tools_and_Systems, People_and_Teams, *_Links_Nav duplicates)"
         - "Spot-check browser: all 8 top nav labels + dropdown URLs resolve under /Home"
+
+  - name: "pkm-ka-sharedcontent-fl-nc-tx-backfill"
+    kind: "ia"
+    status: "complete"
+    createdAt: "2026-08-03T04:00:00Z"
+    updatedAt: "2026-08-03T04:30:00Z"
+    siteName: "pkm"
+    notes: >
+      Ensured every Knowledge Article has FL/NC/TX Shared Content KnowledgeChunks and
+      sharedContent Treelist populated. New chunks created under Shared Content/
+      05-CommonScenarios/StateSpecific/{FL,NC,TX}. Existing AU-1001/1002 and HO-1001/1002
+      already had multi-state chunks; AU-1004 gained FL+TX (already had NC).
+    knowledgeChunksTemplateId: "{BDF6C974-E68C-46A2-A0A9-D382FD0927EB}"
+    parentFolders:
+      FL: "{681C3225-F42E-4708-9B09-DEE191926F9E}"
+      NC: "{166E31E8-2538-4641-A25B-B60EC0CB1EE4}"
+      TX: "{DF8E06B0-3C44-46D9-B27D-DE8F8F83DEBD}"
+    newChunksCreated: 44
+    articlesUpdated: 15
+    articlesAlreadyCovered:
+      - "KB-AU-1001-FNOL"
+      - "KB-AU-1002-CoverageDetermination"
+      - "KB-HO-1001-WaterDamage"
+      - "KB-HO-1002-WindHail"
+    verification:
+      checkedAt: "2026-08-03T04:30:00Z"
+      passed:
+        - "Created FL/NC/TX KnowledgeChunks for 15 KAs missing full state coverage"
+        - "Updated sharedContent Treelist on those 15 Knowledge Articles"
+      failed: []
+      pendingManual:
+        - "Publish Shared Content + Knowledge Articles for Edge"

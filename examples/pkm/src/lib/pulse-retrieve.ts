@@ -5,6 +5,7 @@ import {
   isSitecoreSearchConfigured,
   SEARCH_WIDGET_ID,
 } from '@/lib/search-customizations';
+import { buildDemoPlaybookSources } from '@/lib/pulse-demo-playbook';
 import type { PulseSource, PulseSourceType, PulseStateCode } from '@/lib/pulse-types';
 
 const DEFAULT_HOME_PATH = '/sitecore/content/progressive/pkm/Home';
@@ -467,6 +468,7 @@ function rankAndCap(
 
 /**
  * Retrieve trusted content hits for Pulse.
+ * Demo playbook intents (FNOL / water damage) always win for reliable KA citations.
  * Prefer Sitecore Search when configured; fall back to Experience Edge GraphQL.
  */
 export async function retrievePulseSources(
@@ -474,12 +476,27 @@ export async function retrievePulseSources(
   stateCode?: PulseStateCode | null,
   language = 'en'
 ): Promise<PulseSource[]> {
+  const playbook = buildDemoPlaybookSources(question, stateCode);
   const keywords = extractKeywords(question);
 
+  let dynamic: PulseSource[] = [];
   if (isSitecoreSearchConfigured()) {
-    const fromSearch = await retrieveFromSitecoreSearch(question, keywords, stateCode);
-    if (fromSearch.length) return fromSearch;
+    dynamic = await retrieveFromSitecoreSearch(question, keywords, stateCode);
+  }
+  if (!dynamic.length) {
+    dynamic = await retrieveFromEdge(question, keywords, stateCode, language);
   }
 
-  return retrieveFromEdge(question, keywords, stateCode, language);
+  if (!playbook.length) return dynamic;
+
+  // Playbook first; append unique dynamic hits that add variety
+  const seen = new Set(playbook.map((s) => s.id.toLowerCase().replace(/[{}]/g, '')));
+  const extras = dynamic.filter((s) => {
+    const key = s.id.toLowerCase().replace(/[{}]/g, '');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  return [...playbook, ...extras].slice(0, MAX_SOURCES);
 }
