@@ -36,7 +36,7 @@ const INTENTS: PulseDemoIntent[] = [
     article: {
       id: '{8134326F-FF16-4B77-8D34-9EDB10353DA1}',
       title: 'Personal Auto FNOL — First Notice of Loss Intake',
-      url: '/Knowledge Articles/PersonalLines/Auto/KB-AU-1001-FNOL',
+      url: '/Knowledge-Articles/PersonalLines/Auto/KB-AU-1001-FNOL',
       path: '/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Auto/KB-AU-1001-FNOL',
       excerpt:
         'Guide Progressive Claims Advisors through accurate, complete Personal Auto FNOL so the claim is set up correctly the first time.',
@@ -72,7 +72,7 @@ const INTENTS: PulseDemoIntent[] = [
     article: {
       id: '{8EB3B901-6561-463B-B09B-012F7EB4FC2D}',
       title: 'Homeowners Water Damage — Intake to Mitigation',
-      url: '/Knowledge Articles/PersonalLines/Homeowners/KB-HO-1001-WaterDamage',
+      url: '/Knowledge-Articles/PersonalLines/Homeowners/KB-HO-1001-WaterDamage',
       path: '/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Homeowners/KB-HO-1001-WaterDamage',
       excerpt:
         'Equip Progressive Claims Advisors to handle Personal Home water damage claims with accurate intake, rapid mitigation, and clear coverage framing.',

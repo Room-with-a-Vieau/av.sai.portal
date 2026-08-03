@@ -2,7 +2,7 @@
 
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowUpRight,
@@ -10,10 +10,9 @@ import {
   ChevronDown,
   FileText,
   Loader2,
-  Package,
+  MessageSquareText,
   Search,
   Sparkles,
-  Wrench,
   X,
 } from 'lucide-react';
 
@@ -25,15 +24,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
+import { getPersonaCode } from '@/lib/demo-taxonomy';
+
 import {
-  brands,
-  categories,
-  contentTypes,
-  getDefaultCardImage,
+  applyLiveKnowledgeHrefs,
+  buildKnowledgeHrefIndex,
   itemMatchesQuery,
   itemMetadataLine,
   itemVisibleForDemoUser,
+  lobs,
   normalizeQuery,
+  perils,
   popularSearches,
   relevanceScore,
   RESULTS_PAGE_SIZE,
@@ -41,10 +42,12 @@ import {
   searchFacetLabels,
   selectAiSearchInsight,
   supplementalResultsForDemoUserTaxonomy,
-  type SearchBrand,
-  type SearchCategory,
-  type SearchContentType,
+  topics,
+  type AiSearchInsight,
+  type SearchLob,
+  type SearchPeril,
   type SearchResultItem,
+  type SearchTopic,
 } from './data';
 
 export type SearchResultsProps = {
@@ -55,59 +58,35 @@ export type SearchResultsProps = {
 
 type SortMode = 'relevance' | 'az';
 
-/** Construction-themed fallback imagery for product cards */
-const BLDR_PRODUCT_IMAGES: readonly string[] = [
-  'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
-];
-
-function productImageForResultId(id: string): string {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) {
-    h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  }
-  return BLDR_PRODUCT_IMAGES[h % BLDR_PRODUCT_IMAGES.length]!;
-}
-
-function resolveResultCardImage(item: SearchResultItem): string {
-  if (item.contentType === 'product') {
-    return productImageForResultId(item.id);
-  }
-  return item.imageSrc ?? getDefaultCardImage();
-}
-
 function SearchFacetsPanel({
-  selectedTypes,
-  selectedCategories,
-  selectedBrands,
-  countsTypes,
-  countsCategories,
-  countsBrands,
-  onToggleType,
-  onToggleCategory,
-  onToggleBrand,
+  selectedLobs,
+  selectedPerils,
+  selectedTopics,
+  countsLobs,
+  countsPerils,
+  countsTopics,
+  onToggleLob,
+  onTogglePeril,
+  onToggleTopic,
   activeFilterCount,
   clearFilters,
 }: {
-  selectedTypes: Set<SearchContentType>;
-  selectedCategories: Set<SearchCategory>;
-  selectedBrands: Set<SearchBrand>;
-  countsTypes: Record<SearchContentType, number>;
-  countsCategories: Record<SearchCategory, number>;
-  countsBrands: Record<SearchBrand, number>;
-  onToggleType: (key: SearchContentType) => void;
-  onToggleCategory: (key: SearchCategory) => void;
-  onToggleBrand: (key: SearchBrand) => void;
+  selectedLobs: Set<SearchLob>;
+  selectedPerils: Set<SearchPeril>;
+  selectedTopics: Set<SearchTopic>;
+  countsLobs: Record<SearchLob, number>;
+  countsPerils: Record<SearchPeril, number>;
+  countsTopics: Record<SearchTopic, number>;
+  onToggleLob: (key: SearchLob) => void;
+  onTogglePeril: (key: SearchPeril) => void;
+  onToggleTopic: (key: SearchTopic) => void;
   activeFilterCount: number;
   clearFilters: () => void;
 }) {
   return (
     <div className="rounded-2xl border border-border/70 bg-card/95 shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm dark:ring-white/[0.06]">
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3.5">
-        <span className="text-sm font-semibold tracking-tight text-foreground">Refine results</span>
+        <span className="text-sm font-semibold tracking-tight text-foreground">Refine articles</span>
         {activeFilterCount > 0 ? (
           <Button type="button" variant="ghost" size="sm" className="h-8 text-primary" onClick={clearFilters}>
             Clear all
@@ -115,61 +94,52 @@ function SearchFacetsPanel({
         ) : null}
       </div>
       <div className="max-h-[min(70vh,40rem)] overflow-y-auto px-2">
-        <FacetSection title="Content type">
+        <FacetSection title="Line of business">
           <div className="flex flex-col gap-2.5">
-            {contentTypes.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
+            {lobs.map((key) => (
+              <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
                 <Checkbox
-                  checked={selectedTypes.has(key)}
-                  onCheckedChange={() => onToggleType(key)}
+                  checked={selectedLobs.has(key)}
+                  onCheckedChange={() => onToggleLob(key)}
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.contentType[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsTypes[key]})</span>
+                  <span>{searchFacetLabels.lob[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsLobs[key]})</span>
                 </span>
               </label>
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Product family">
+        <FacetSection title="Peril / loss type">
           <div className="flex flex-col gap-2.5">
-            {categories.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
+            {perils.map((key) => (
+              <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
                 <Checkbox
-                  checked={selectedCategories.has(key)}
-                  onCheckedChange={() => onToggleCategory(key)}
+                  checked={selectedPerils.has(key)}
+                  onCheckedChange={() => onTogglePeril(key)}
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.category[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsCategories[key]})</span>
+                  <span>{searchFacetLabels.peril[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsPerils[key]})</span>
                 </span>
               </label>
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Brand" defaultOpen={false}>
+        <FacetSection title="Claim stage" defaultOpen={false}>
           <div className="flex flex-col gap-2.5">
-            {brands.map((key) => (
-              <label
-                key={key}
-                className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90"
-              >
+            {topics.map((key) => (
+              <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
                 <Checkbox
-                  checked={selectedBrands.has(key)}
-                  onCheckedChange={() => onToggleBrand(key)}
+                  checked={selectedTopics.has(key)}
+                  onCheckedChange={() => onToggleTopic(key)}
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.brand[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsBrands[key]})</span>
+                  <span>{searchFacetLabels.topic[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsTopics[key]})</span>
                 </span>
               </label>
             ))}
@@ -200,94 +170,132 @@ function FacetSection({
   );
 }
 
-const contentTypeIcons: Record<SearchContentType, typeof Package> = {
-  product: Package,
-  blog: BookOpen,
-  service: Wrench,
-  content: FileText,
-};
-
-function ctaLabel(item: SearchResultItem): string {
-  switch (item.contentType) {
-    case 'product':
-      return 'View product';
-    case 'blog':
-      return 'Read article';
-    case 'service':
-      return 'View service';
-    case 'content':
-      return 'Open content';
-    default:
-      return 'Open';
-  }
-}
-
-const BLDR_CARD_PILL =
-  'border border-white/20 bg-[#292670] px-2.5 py-1 text-[11px] font-medium text-white shadow-md backdrop-blur-sm';
-
-function resultStatusLabel(item: SearchResultItem, isDemoUserSelected: boolean): string {
-  if (item.priceLabel) return item.priceLabel;
-  if (item.contentType === 'product') return isDemoUserSelected ? 'Request quote' : 'Login for quote';
-  return item.dateLabel ?? searchFacetLabels.contentType[item.contentType];
-}
-
-function ResultCard({ item, isDemoUserSelected }: { item: SearchResultItem; isDemoUserSelected: boolean }) {
-  const img = resolveResultCardImage(item);
-  const Icon = contentTypeIcons[item.contentType];
+function ResultCard({ item }: { item: SearchResultItem }) {
   const meta = itemMetadataLine(item);
-  const brandLine = item.brands.map((b) => searchFacetLabels.brand[b]).join(' · ');
+  const perilLabels = item.perils.map((p) => searchFacetLabels.peril[p]).slice(0, 2);
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md dark:ring-white/[0.05]">
-      <a
-        href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex flex-1 flex-col text-inherit no-underline"
-      >
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
-          <Image
-            src={img}
-            alt=""
-            fill
-            unoptimized
-            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
-          {item.isNew ? (
-            <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary-foreground shadow">
-              New
-            </span>
-          ) : null}
-          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2">
-            <span className={cn('inline-flex items-center gap-1.5', BLDR_CARD_PILL)}>
-              <Icon className="size-3.5 shrink-0 text-white/95" aria-hidden />
-              {searchFacetLabels.contentType[item.contentType]}
-            </span>
-            <span className={cn('max-w-[min(100%,11rem)] text-right font-semibold leading-tight', BLDR_CARD_PILL)}>
-              {resultStatusLabel(item, isDemoUserSelected)}
-            </span>
-          </div>
+    <article className="group rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:border-primary/30 hover:shadow-md dark:ring-white/[0.05]">
+      <Link href={item.href} className="flex flex-col gap-3 p-4 text-inherit no-underline sm:flex-row sm:items-start sm:gap-4 sm:p-5">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <BookOpen className="size-5" aria-hidden />
         </div>
-        <div className="flex flex-1 flex-col px-4 pb-4 pt-3.5">
-          <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{meta}</p>
-          <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="secondary" className="rounded-md font-mono text-[10px] uppercase tracking-wide">
+              {item.kbId}
+            </Badge>
+            <span className="text-xs font-medium text-muted-foreground">{searchFacetLabels.lob[item.lob]}</span>
+            {item.isNew ? (
+              <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-foreground">
+                New
+              </span>
+            ) : null}
+          </div>
+          <h3 className="mt-2 text-base font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary">
             {item.title}
           </h3>
-          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-          <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-            <span className="rounded-md bg-secondary/80 px-2 py-0.5 font-medium text-secondary-foreground">
-              {brandLine}
-            </span>
+          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+          <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">{meta}</p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {perilLabels.map((label) => (
+              <span
+                key={label}
+                className="rounded-md border border-border/70 bg-secondary/60 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
+              >
+                {label}
+              </span>
+            ))}
           </div>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            {ctaLabel(item)}
+          <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+            Open Knowledge Article
             <ArrowUpRight className="size-3.5" aria-hidden />
           </span>
         </div>
-      </a>
+      </Link>
     </article>
+  );
+}
+
+function AiQaPanel({
+  insight,
+}: {
+  insight: AiSearchInsight;
+}) {
+  return (
+    <section
+      className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/[0.07] via-background to-secondary/40 p-5 shadow-sm ring-1 ring-primary/10"
+      aria-labelledby="ai-qa-heading"
+    >
+      <div className="pointer-events-none absolute -right-20 -top-20 size-56 rounded-full bg-primary/10 blur-3xl" />
+      <div className="relative space-y-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
+            <Sparkles className="size-5" aria-hidden />
+          </div>
+          <div className="min-w-0 flex-1 space-y-2">
+            <p
+              id="ai-qa-heading"
+              className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary"
+            >
+              AI search answer
+            </p>
+            <div className="flex items-start gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-2.5">
+              <MessageSquareText className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
+              <p className="text-sm font-medium leading-snug text-foreground">
+                <span className="sr-only">Question: </span>
+                {insight.question}
+              </p>
+            </div>
+            <h2 className="text-lg font-semibold leading-snug tracking-tight text-foreground">{insight.headline}</h2>
+            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{insight.answer}</p>
+            {insight.stateCallout ? (
+              <p className="inline-flex rounded-lg border border-primary/25 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary">
+                {insight.stateCallout}
+              </p>
+            ) : null}
+            <ul className="list-inside list-disc space-y-1 text-sm text-foreground/90 marker:text-primary">
+              {insight.bullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {insight.citations.length ? (
+          <div className="space-y-2 border-t border-border/50 pt-4">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              Cited Knowledge Articles
+            </p>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {insight.citations.map((c) => (
+                <li key={c.href}>
+                  <Link
+                    href={c.href}
+                    className="flex h-full flex-col rounded-xl border border-border/70 bg-card px-3 py-3 text-inherit no-underline transition-colors hover:border-primary/35 hover:bg-primary/[0.03]"
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                      <FileText className="size-3" aria-hidden />
+                      {c.kbId ?? 'Knowledge Article'}
+                    </span>
+                    <span className="mt-1 text-sm font-semibold leading-snug text-foreground">{c.title}</span>
+                    {c.excerpt ? (
+                      <span className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                        {c.excerpt}
+                      </span>
+                    ) : null}
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                      Open article
+                      <ArrowUpRight className="size-3" aria-hidden />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    </section>
   );
 }
 
@@ -308,11 +316,12 @@ export const SearchResults: FC<SearchResultsProps> = ({
   const [sort, setSort] = useState<SortMode>('relevance');
   const [isSearching, setIsSearching] = useState(false);
 
-  const [selectedTypes, setSelectedTypes] = useState<Set<SearchContentType>>(new Set());
-  const [selectedCategories, setSelectedCategories] = useState<Set<SearchCategory>>(new Set());
-  const [selectedBrands, setSelectedBrands] = useState<Set<SearchBrand>>(new Set());
+  const [selectedLobs, setSelectedLobs] = useState<Set<SearchLob>>(new Set());
+  const [selectedPerils, setSelectedPerils] = useState<Set<SearchPeril>>(new Set());
+  const [selectedTopics, setSelectedTopics] = useState<Set<SearchTopic>>(new Set());
   const [resultsPage, setResultsPage] = useState(1);
   const [demoTaxonomyRaw, setDemoTaxonomyRaw] = useState('');
+  const [liveHrefIndex, setLiveHrefIndex] = useState<Map<string, string>>(() => new Map());
 
   useEffect(() => {
     const readTaxonomy = () => {
@@ -325,14 +334,46 @@ export const SearchResults: FC<SearchResultsProps> = ({
     };
   }, []);
 
+  // Resolve real Knowledge Article urls from Edge (same source as KnowledgeListing)
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch(
+          '/api/knowledge-listing/articles?mode=recently-updated&maxItems=48&language=en'
+        );
+        if (!res.ok) return;
+        const body = (await res.json()) as { articles?: Array<Record<string, unknown>> };
+        if (cancelled || !body.articles?.length) return;
+        setLiveHrefIndex(
+          buildKnowledgeHrefIndex(
+            body.articles as Array<{
+              name?: string;
+              path?: string;
+              url?: string | { path?: string };
+              kbId?: unknown;
+            }>
+          )
+        );
+      } catch {
+        // Keep static /Knowledge-Articles/... fallbacks when Edge is unavailable
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const activeDemoUserTaxonomy = useMemo(() => parseDemoUserTaxonomy(demoTaxonomyRaw), [demoTaxonomyRaw]);
 
   const activeCatalog = useMemo(() => {
     const merged = activeDemoUserTaxonomy
       ? [...supplementalResultsForDemoUserTaxonomy(activeDemoUserTaxonomy), ...searchCatalog]
       : searchCatalog;
-    return merged.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy));
-  }, [activeDemoUserTaxonomy]);
+    const visible = merged.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy));
+    return applyLiveKnowledgeHrefs(visible, liveHrefIndex);
+  }, [activeDemoUserTaxonomy, liveHrefIndex]);
 
   const toggle = useCallback(<T extends string>(set: Dispatch<SetStateAction<Set<T>>>, v: T) => {
     set((prev) => {
@@ -353,62 +394,63 @@ export const SearchResults: FC<SearchResultsProps> = ({
     setIsSearching(true);
     const t = window.setTimeout(() => setIsSearching(false), 220);
     return () => window.clearTimeout(t);
-  }, [query, selectedTypes, selectedCategories, selectedBrands, sort]);
+  }, [query, selectedLobs, selectedPerils, selectedTopics, sort]);
 
   useEffect(() => {
     setResultsPage(1);
-  }, [query, selectedTypes, selectedCategories, selectedBrands, sort]);
+  }, [query, selectedLobs, selectedPerils, selectedTopics, sort]);
 
   const queryMatched = useMemo(
     () => activeCatalog.filter((item) => itemMatchesQuery(item, query)),
     [activeCatalog, query]
   );
 
-  const countsTypes = useMemo(() => {
+  const countsLobs = useMemo(() => {
     const base = queryMatched.filter((item) => {
-      if (selectedCategories.size && !item.categories.some((c) => selectedCategories.has(c))) return false;
-      if (selectedBrands.size && !item.brands.some((b) => selectedBrands.has(b))) return false;
+      if (selectedPerils.size && !item.perils.some((p) => selectedPerils.has(p))) return false;
+      if (selectedTopics.size && !item.topics.some((t) => selectedTopics.has(t))) return false;
       return true;
     });
-    return Object.fromEntries(
-      contentTypes.map((k) => [k, base.filter((i) => i.contentType === k).length])
-    ) as Record<SearchContentType, number>;
-  }, [queryMatched, selectedCategories, selectedBrands]);
+    return Object.fromEntries(lobs.map((k) => [k, base.filter((i) => i.lob === k).length])) as Record<
+      SearchLob,
+      number
+    >;
+  }, [queryMatched, selectedPerils, selectedTopics]);
 
-  const countsCategories = useMemo(() => {
+  const countsPerils = useMemo(() => {
     const base = queryMatched.filter((item) => {
-      if (selectedTypes.size && !selectedTypes.has(item.contentType)) return false;
-      if (selectedBrands.size && !item.brands.some((b) => selectedBrands.has(b))) return false;
+      if (selectedLobs.size && !selectedLobs.has(item.lob)) return false;
+      if (selectedTopics.size && !item.topics.some((t) => selectedTopics.has(t))) return false;
       return true;
     });
     return Object.fromEntries(
-      categories.map((k) => [k, base.filter((i) => i.categories.includes(k)).length])
-    ) as Record<SearchCategory, number>;
-  }, [queryMatched, selectedTypes, selectedBrands]);
+      perils.map((k) => [k, base.filter((i) => i.perils.includes(k)).length])
+    ) as Record<SearchPeril, number>;
+  }, [queryMatched, selectedLobs, selectedTopics]);
 
-  const countsBrands = useMemo(() => {
+  const countsTopics = useMemo(() => {
     const base = queryMatched.filter((item) => {
-      if (selectedTypes.size && !selectedTypes.has(item.contentType)) return false;
-      if (selectedCategories.size && !item.categories.some((c) => selectedCategories.has(c))) return false;
+      if (selectedLobs.size && !selectedLobs.has(item.lob)) return false;
+      if (selectedPerils.size && !item.perils.some((p) => selectedPerils.has(p))) return false;
       return true;
     });
     return Object.fromEntries(
-      brands.map((k) => [k, base.filter((i) => i.brands.includes(k)).length])
-    ) as Record<SearchBrand, number>;
-  }, [queryMatched, selectedTypes, selectedCategories]);
+      topics.map((k) => [k, base.filter((i) => i.topics.includes(k)).length])
+    ) as Record<SearchTopic, number>;
+  }, [queryMatched, selectedLobs, selectedPerils]);
 
   const filtered = useMemo(() => {
     const q = normalizeQuery(query);
     let list = activeCatalog.filter((item) => itemMatchesQuery(item, q));
 
-    if (selectedTypes.size) {
-      list = list.filter((item) => selectedTypes.has(item.contentType));
+    if (selectedLobs.size) {
+      list = list.filter((item) => selectedLobs.has(item.lob));
     }
-    if (selectedCategories.size) {
-      list = list.filter((item) => item.categories.some((c) => selectedCategories.has(c)));
+    if (selectedPerils.size) {
+      list = list.filter((item) => item.perils.some((p) => selectedPerils.has(p)));
     }
-    if (selectedBrands.size) {
-      list = list.filter((item) => item.brands.some((b) => selectedBrands.has(b)));
+    if (selectedTopics.size) {
+      list = list.filter((item) => item.topics.some((t) => selectedTopics.has(t)));
     }
 
     const sorted = [...list];
@@ -423,7 +465,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
       });
     }
     return sorted;
-  }, [activeCatalog, activeDemoUserTaxonomy, query, selectedTypes, selectedCategories, selectedBrands, sort]);
+  }, [activeCatalog, activeDemoUserTaxonomy, query, selectedLobs, selectedPerils, selectedTopics, sort]);
 
   const resultsTotalPages = Math.max(1, Math.ceil(filtered.length / RESULTS_PAGE_SIZE));
   const safeResultsPage = Math.min(resultsPage, resultsTotalPages);
@@ -436,17 +478,30 @@ export const SearchResults: FC<SearchResultsProps> = ({
     if (resultsPage > resultsTotalPages) setResultsPage(resultsTotalPages);
   }, [resultsPage, resultsTotalPages]);
 
-  const aiInsight = useMemo(
-    () => selectAiSearchInsight(query, activeDemoUserTaxonomy),
-    [query, activeDemoUserTaxonomy]
-  );
+  const aiInsight = useMemo(() => {
+    const insight = selectAiSearchInsight(query, activeDemoUserTaxonomy);
+    if (!insight || !liveHrefIndex.size) return insight;
+    return {
+      ...insight,
+      learnMoreHref: liveHrefIndex.get(
+        insight.citations[0]?.kbId?.toLowerCase() || ''
+      ) || insight.learnMoreHref,
+      citations: insight.citations.map((c) => {
+        const byKb = c.kbId ? liveHrefIndex.get(c.kbId.toLowerCase()) : undefined;
+        const slug = c.href.split('/').pop()?.toLowerCase() || '';
+        const bySlug = slug ? liveHrefIndex.get(slug) : undefined;
+        const live = byKb || bySlug;
+        return live ? { ...c, href: live } : c;
+      }),
+    };
+  }, [query, activeDemoUserTaxonomy, liveHrefIndex]);
 
-  const activeFilterCount = selectedTypes.size + selectedCategories.size + selectedBrands.size;
+  const activeFilterCount = selectedLobs.size + selectedPerils.size + selectedTopics.size;
 
   const clearFilters = () => {
-    setSelectedTypes(new Set());
-    setSelectedCategories(new Set());
-    setSelectedBrands(new Set());
+    setSelectedLobs(new Set());
+    setSelectedPerils(new Set());
+    setSelectedTopics(new Set());
   };
 
   const syncUrl = useCallback(
@@ -481,21 +536,22 @@ export const SearchResults: FC<SearchResultsProps> = ({
   };
 
   const facetPanelProps = {
-    selectedTypes,
-    selectedCategories,
-    selectedBrands,
-    countsTypes,
-    countsCategories,
-    countsBrands,
-    onToggleType: (key: SearchContentType) => toggle(setSelectedTypes, key),
-    onToggleCategory: (key: SearchCategory) => toggle(setSelectedCategories, key),
-    onToggleBrand: (key: SearchBrand) => toggle(setSelectedBrands, key),
+    selectedLobs,
+    selectedPerils,
+    selectedTopics,
+    countsLobs,
+    countsPerils,
+    countsTopics,
+    onToggleLob: (key: SearchLob) => toggle(setSelectedLobs, key),
+    onTogglePeril: (key: SearchPeril) => toggle(setSelectedPerils, key),
+    onToggleTopic: (key: SearchTopic) => toggle(setSelectedTopics, key),
     activeFilterCount,
     clearFilters,
   };
 
   const displayHeading = draft.trim() || qFromUrl.trim();
   const personaLabel = activeDemoUserTaxonomy ?? 'All personas';
+  const personaCode = activeDemoUserTaxonomy ? getPersonaCode(activeDemoUserTaxonomy) : null;
 
   return (
     <section
@@ -503,7 +559,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
         'min-h-[60vh] bg-gradient-to-b from-background via-background to-secondary/25 pb-16 pt-6 sm:pt-8',
         className
       )}
-      aria-label="Search results"
+      aria-label="Knowledge article search results"
     >
       <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm ring-1 ring-black/[0.04] backdrop-blur-md dark:bg-card/50 dark:ring-white/[0.06] sm:p-5">
@@ -523,7 +579,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search products, blogs, services, and content..."
+                placeholder="Ask a question or search Knowledge Articles (FNOL, water damage, UM/UIM…)"
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -543,7 +599,9 @@ export const SearchResults: FC<SearchResultsProps> = ({
             </Button>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/50 pt-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Popular</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              Try asking
+            </span>
             {popularSearches.map((term) => (
               <button
                 key={term}
@@ -560,23 +618,26 @@ export const SearchResults: FC<SearchResultsProps> = ({
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Builders FirstSource</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">
+                Progressive Knowledge
+              </p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Builder search'
+                  'Knowledge Article search'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Faceted navigation mirrors a Builder FirstSource experience: filter by content type,
-                solution area, and brand family. Switch the demo user to see personalized rows and AI guidance.
+                Built for insurance agents: ask a question for an AI answer with Knowledge Article citations,
+                then refine by line of business, peril, and claim stage. Every result opens a Knowledge Article.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
               <span className="font-semibold text-foreground">Demo persona:</span> {personaLabel}
+              {personaCode ? <span className="ml-1 text-primary">({personaCode})</span> : null}
             </div>
           </div>
         </header>
@@ -605,40 +666,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
           </aside>
 
           <main className="min-w-0 flex-1">
-            {aiInsight ? (
-              <section
-                className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.08] via-background to-cyan-500/[0.06] p-5 shadow-sm ring-1 ring-violet-500/10"
-                aria-labelledby="ai-insight-heading"
-              >
-                <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-gradient-to-br from-violet-500/20 to-transparent blur-2xl" />
-                <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-cyan-600 text-white shadow-md">
-                    <Sparkles className="size-5" aria-hidden />
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <p id="ai-insight-heading" className="text-[11px] font-bold uppercase tracking-[0.2em] text-violet-700 dark:text-violet-300">
-                      AI suggestion
-                    </p>
-                    <h2 className="text-lg font-semibold leading-snug tracking-tight text-foreground">{aiInsight.headline}</h2>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{aiInsight.body}</p>
-                    <ul className="list-inside list-disc space-y-1 text-sm text-foreground/90 marker:text-primary">
-                      {aiInsight.bullets.map((b) => (
-                        <li key={b}>{b}</li>
-                      ))}
-                    </ul>
-                    <a
-                      href={aiInsight.learnMoreHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-                    >
-                      {aiInsight.learnMoreLabel ?? 'Learn more'}
-                      <ArrowUpRight className="size-3.5" aria-hidden />
-                    </a>
-                  </div>
-                </div>
-              </section>
-            ) : null}
+            {aiInsight ? <AiQaPanel insight={aiInsight} /> : null}
 
             <div
               className={cn(
@@ -650,14 +678,14 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 {isSearching ? <Loader2 className="size-4 shrink-0 animate-spin text-primary" aria-hidden /> : null}
                 <span>
                   <strong className="font-semibold text-foreground">{filtered.length}</strong>{' '}
-                  {filtered.length === 1 ? 'result' : 'results'}
+                  {filtered.length === 1 ? 'Knowledge Article' : 'Knowledge Articles'}
                   {normalizeQuery(query) ? (
                     <>
                       {' '}
                       for &ldquo;<span className="text-foreground">{displayHeading}</span>&rdquo;
                     </>
                   ) : (
-                    ' — search or pick a popular term'
+                    ' — ask a question or pick a starter prompt'
                   )}
                 </span>
               </div>
@@ -677,36 +705,36 @@ export const SearchResults: FC<SearchResultsProps> = ({
 
             {activeFilterCount > 0 ? (
               <div className="mt-4 flex flex-wrap gap-2">
-                {[...selectedTypes].map((key) => (
+                {[...selectedLobs].map((key) => (
                   <Badge
-                    key={`t-${key}`}
+                    key={`lob-${key}`}
                     variant="secondary"
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedTypes, key)}
+                    onClick={() => toggle(setSelectedLobs, key)}
                   >
-                    {searchFacetLabels.contentType[key]}
+                    {searchFacetLabels.lob[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
-                {[...selectedCategories].map((key) => (
+                {[...selectedPerils].map((key) => (
                   <Badge
-                    key={`c-${key}`}
+                    key={`peril-${key}`}
                     variant="secondary"
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedCategories, key)}
+                    onClick={() => toggle(setSelectedPerils, key)}
                   >
-                    {searchFacetLabels.category[key]}
+                    {searchFacetLabels.peril[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
-                {[...selectedBrands].map((key) => (
+                {[...selectedTopics].map((key) => (
                   <Badge
-                    key={`b-${key}`}
+                    key={`topic-${key}`}
                     variant="secondary"
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
-                    onClick={() => toggle(setSelectedBrands, key)}
+                    onClick={() => toggle(setSelectedTopics, key)}
                   >
-                    {searchFacetLabels.brand[key]}
+                    {searchFacetLabels.topic[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
@@ -715,9 +743,9 @@ export const SearchResults: FC<SearchResultsProps> = ({
 
             {filtered.length > 0 ? (
               <>
-                <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="mt-6 flex flex-col gap-4">
                   {pagedResults.map((item) => (
-                    <ResultCard key={item.id} item={item} isDemoUserSelected={Boolean(activeDemoUserTaxonomy)} />
+                    <ResultCard key={item.id} item={item} />
                   ))}
                 </div>
                 {filtered.length > RESULTS_PAGE_SIZE ? (
@@ -766,10 +794,10 @@ export const SearchResults: FC<SearchResultsProps> = ({
               </>
             ) : (
               <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
-                <p className="text-sm font-medium text-secondary-foreground">No matches for that combination.</p>
+                <p className="text-sm font-medium text-secondary-foreground">No Knowledge Articles for that combination.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try clearing filters or a phrase like &ldquo;Pressure regulators&rdquo;, &ldquo;Data loggers&rdquo;, or
-                  &ldquo;IIoT&rdquo;.
+                  Try clearing filters or ask something like &ldquo;Personal Auto FNOL Florida requirements&rdquo; or
+                  &ldquo;How should I handle homeowners water damage mitigation?&rdquo;
                 </p>
                 <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
                   Clear filters
