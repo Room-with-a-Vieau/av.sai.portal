@@ -94,6 +94,7 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
   const [persona, setPersona] = useState<DemoUserTaxonomy | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const latestTurnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const sync = () => setPersona(readStoredDemoTaxonomy());
@@ -108,9 +109,31 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
 
   useEffect(() => {
     if (!open) return;
-    const el = listRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
     inputRef.current?.focus();
+  }, [open]);
+
+  /**
+   * Keep the start of the latest turn visible at the top of the panel so long
+   * answers are read top-down (scroll down), instead of jumping to the bottom.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const container = listRef.current;
+    if (!container) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const target = latestTurnRef.current;
+      if (!target) {
+        container.scrollTop = 0;
+        return;
+      }
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const nextTop = container.scrollTop + (targetRect.top - containerRect.top) - 4;
+      container.scrollTop = Math.max(0, nextTop);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [open, messages, busy]);
 
   if (hidden) return null;
@@ -230,40 +253,53 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
               </div>
             ) : null}
 
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
-              >
+            {messages.map((msg, index) => {
+              const isLatestAssistant =
+                msg.role === 'assistant' &&
+                messages.slice(index + 1).every((m) => m.role !== 'assistant');
+              const isLatestUserWhileBusy =
+                busy && msg.role === 'user' && index === messages.length - 1;
+              const anchorLatest = isLatestAssistant || isLatestUserWhileBusy;
+
+              return (
                 <div
-                  className={cn(
-                    'max-w-[92%] rounded-2xl px-3 py-2 text-sm leading-relaxed',
-                    msg.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'border border-border bg-muted/40 text-foreground'
-                  )}
+                  key={msg.id}
+                  ref={anchorLatest ? latestTurnRef : undefined}
+                  className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
                 >
-                  {msg.role === 'assistant' && msg.stateCallout ? (
-                    <p className="mb-2 rounded-lg bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                      {msg.stateCallout}
-                    </p>
-                  ) : null}
-                  <div className="whitespace-pre-wrap">
-                    {msg.role === 'assistant' ? renderAnswerText(msg.text) : msg.text}
+                  <div
+                    className={cn(
+                      'max-w-[92%] rounded-2xl px-3 py-2 text-sm leading-relaxed',
+                      msg.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'border border-border bg-muted/40 text-foreground'
+                    )}
+                  >
+                    {msg.role === 'assistant' && msg.stateCallout ? (
+                      <p className="mb-2 rounded-lg bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+                        {msg.stateCallout}
+                      </p>
+                    ) : null}
+                    <div className="whitespace-pre-wrap">
+                      {msg.role === 'assistant' ? renderAnswerText(msg.text) : msg.text}
+                    </div>
+                    {msg.role === 'assistant' && msg.sources?.length ? (
+                      <SourceCards sources={msg.sources} />
+                    ) : null}
+                    {msg.role === 'assistant' && msg.sources && msg.sources.length === 0 ? (
+                      <p className="mt-2 text-xs">
+                        <Link
+                          href="/search"
+                          className="font-medium text-primary underline-offset-2 hover:underline"
+                        >
+                          Open site search
+                        </Link>
+                      </p>
+                    ) : null}
                   </div>
-                  {msg.role === 'assistant' && msg.sources?.length ? (
-                    <SourceCards sources={msg.sources} />
-                  ) : null}
-                  {msg.role === 'assistant' && msg.sources && msg.sources.length === 0 ? (
-                    <p className="mt-2 text-xs">
-                      <Link href="/search" className="font-medium text-primary underline-offset-2 hover:underline">
-                        Open site search
-                      </Link>
-                    </p>
-                  ) : null}
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {busy ? (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
