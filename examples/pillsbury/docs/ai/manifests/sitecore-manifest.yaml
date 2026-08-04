@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-04T17:45:00Z"
+lastUpdatedAt: "2026-08-04T18:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3081,6 +3081,49 @@ demoContent: []
 
 # Information architecture / page creation batches
 ia:
+  - name: "pillsburylaw-footer-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-04T17:55:00Z"
+    updatedAt: "2026-08-04T18:00:00Z"
+    siteName: "pillsburylaw"
+    notes: >
+      Remapped Footer Partial Design under /Presentation/Partial Designs/Global/Footer/Data
+      for a professional legal-firm footer aligned to Home IA. Replaced SYNC product/commerce
+      copy (Speakers/Headphones/Warranty/Shipping/Returns) with Lawyers/Capabilities/Insights
+      primary links and About/Contact/Offices utility links. Updated copyright + LinkedIn.
+    relatedItems:
+      footerPartialDesignId: "{5B5C1342-65B1-49CC-B94A-7D300E6B02D3}"
+      footerDataFolderId: "{41A2011D-45A3-4C16-9C5D-57CD5B009EB0}"
+      footerSTId: "{5DF38B0D-6C45-44AE-A4CC-1B1B151F06BB}"
+      branding:
+        title: "Client-focused counsel."
+        copyright: "© 2001–2026 Pillsbury Winthrop Shaw Pittman LLP. Attorney Advertising."
+        linkedIn: "https://www.linkedin.com/company/pillsbury-winthrop-shaw-pittman"
+      primaryLinks:
+        - { text: "Lawyers", pageId: "{28CDB0B8-594B-4FBE-97E2-8F224740EE79}" }
+        - { text: "Capabilities", pageId: "{95A249F3-4539-4F55-8F0C-3F4D6CFA3EDF}" }
+        - { text: "Insights", pageId: "{C966373D-2596-47B3-B2C6-E8322F3FB444}" }
+        - { text: "Careers", pageId: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}" }
+      secondaryLinks:
+        - { text: "About Us", pageId: "{B2F2F374-B64F-44D0-980E-AD26F0BF463B}" }
+        - { text: "Contact", pageId: "{EDAE745F-E44D-436D-A2C3-147DE6203E2F}" }
+        - { text: "Offices", pageId: "{B9B2F762-37FD-4922-BDFC-014AF9043EE1}" }
+        - { text: "Connect", pageId: "{45B22262-6A63-4634-AD85-18DC652E0DA5}" }
+        - { text: "Press", pageId: "{F42D64DF-5C45-4E04-8E67-00B368C65196}" }
+    verification:
+      checkedAt: "2026-08-04T18:00:00Z"
+      passed:
+        - "FooterST Title/Copyright/LinkedIn updated for legal brand"
+        - "Primary Links remapped to Lawyers/Capabilities/Insights/Careers"
+        - "Secondary Links remapped to About Us/Contact/Offices/Connect/Press"
+      failed: []
+      pendingManual:
+        - "Publish Footer Partial Design + Footer/Data for Edge"
+        - "Optional: replace FB/IG placeholders with real firm social URLs or clear them"
+        - "Optional: add Legal Notices / Attorney Advertising pages to IA if needed as dedicated footer links"
+
   - name: "pillsburylaw-header-nav-remap"
     kind: "content-update"
     category: "Navigation"

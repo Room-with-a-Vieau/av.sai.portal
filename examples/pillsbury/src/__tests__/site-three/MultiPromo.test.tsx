@@ -10,6 +10,15 @@ import {
   TopTabsNoImage as MultiPromoTopTabsNoImage,
 } from '@/components/site-three/MultiPromo';
 
+// Mock lucide-react
+jest.mock('lucide-react', () => ({
+  ChevronRight: ({ className, ...props }: any) => (
+    <span data-testid="chevron-right" className={className} {...props}>
+      →
+    </span>
+  ),
+}));
+
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
@@ -35,6 +44,34 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       },
     },
   }),
+}));
+
+jest.mock('shadcd/components/ui/carousel', () => ({
+  Carousel: ({ children, ...props }: any) => (
+    <div data-testid="multi-promo-carousel" {...props}>
+      {children}
+    </div>
+  ),
+  CarouselContent: ({ children, ...props }: any) => (
+    <div data-testid="carousel-content" {...props}>
+      {children}
+    </div>
+  ),
+  CarouselItem: ({ children, ...props }: any) => (
+    <div data-testid="multi-promo-carousel-item" {...props}>
+      {children}
+    </div>
+  ),
+  CarouselNext: (props: any) => (
+    <button type="button" data-testid="multi-promo-carousel-next" {...props}>
+      Next
+    </button>
+  ),
+  CarouselPrevious: (props: any) => (
+    <button type="button" data-testid="multi-promo-carousel-prev" {...props}>
+      Previous
+    </button>
+  ),
 }));
 
 // Mock NoDataFallback
@@ -180,6 +217,24 @@ describe('MultiPromo', () => {
       expect(links[1]).toHaveAttribute('href', '/product2');
     });
 
+    it('renders items in a single-row carousel', () => {
+      render(<MultiPromoDefault {...mockProps} />);
+      expect(screen.getByTestId('multi-promo-carousel')).toBeInTheDocument();
+      expect(screen.getAllByTestId('multi-promo-carousel-item')).toHaveLength(2);
+      expect(screen.getByTestId('multi-promo-carousel-prev')).toBeInTheDocument();
+      expect(screen.getByTestId('multi-promo-carousel-next')).toBeInTheDocument();
+    });
+
+    it('applies white hover styles to promo cards', () => {
+      render(<MultiPromoDefault {...mockProps} />);
+      const links = screen.getAllByRole('link');
+      links.forEach((link) => {
+        expect(link).toHaveClass('hover:bg-white');
+        expect(link).toHaveClass('hover:text-neutral-950');
+        expect(link).toHaveClass('group');
+      });
+    });
+
     it('applies custom styles from params', () => {
       const { container } = render(<MultiPromoDefault {...mockProps} />);
       const section = container.querySelector('section');
@@ -201,6 +256,7 @@ describe('MultiPromo', () => {
       };
       const { container } = render(<MultiPromoDefault {...emptyProps} />);
       expect(container.firstChild).toBeInTheDocument();
+      expect(screen.queryByTestId('multi-promo-carousel')).not.toBeInTheDocument();
     });
 
     it('renders NoDataFallback when fields are missing', () => {

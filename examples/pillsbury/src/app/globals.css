@@ -183,11 +183,11 @@ html[data-theme='pkm'] {
   --font-weight-heading: 700;
 }
 
-/* Pillsbury Law — McKinsey-inspired: Source Serif 4 (Bower substitute) headings, Inter body (Theinhardt substitute). */
+/* Pillsbury Law — modern BigLaw digital: Montserrat headings + Open Sans body (most common legal-web pairing, sans-first). */
 html[data-theme='pillsburylaw'] {
-  --font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-source-serif-4), 'Source Serif 4', Georgia, 'Times New Roman', serif;
-  --font-accent: var(--font-source-serif-4), 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: var(--font-open-sans), 'Open Sans', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), 'Montserrat', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-montserrat), 'Montserrat', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-weight-heading: 600;
   color: var(--color-foreground);
   background-color: var(--color-background);

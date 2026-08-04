@@ -33,12 +33,12 @@ colors:
     - { name: "deepRoyal", value: "#0032A0" }
 
 typography:
-  headingFamily: "'Source Serif 4', Georgia, serif"
+  headingFamily: "'Montserrat', Helvetica, Arial, sans-serif"
   headingWeight: "600"
-  bodyFamily: "'Inter', ui-sans-serif, system-ui, sans-serif"
+  bodyFamily: "'Open Sans', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif"
   bodyWeight: "400"
   monoFamily: "'ui-monospace', monospace"
-  googleFontsUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"
+  googleFontsUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap"
   scale:
     hero: "3.5rem"
     h1: "2.5rem"
@@ -80,8 +80,8 @@ tailwind:
       secondary: "#051C2C"
       accent: "#0032A0"
   fontFamily:
-    heading: ["Source Serif 4", "Georgia", "serif"]
-    body: ["Inter", "sans-serif"]
+    heading: ["Montserrat", "Helvetica", "Arial", "sans-serif"]
+    body: ["Open Sans", "Helvetica", "Arial", "sans-serif"]
   borderRadius:
     DEFAULT: "0"
     button: "0"
@@ -105,8 +105,8 @@ cssVariables: |
     --brand-footer-fg: #9AABBA;
     --brand-border: #1A4055;
     --brand-ring: #0055FF;
-    --brand-heading-font: 'Source Serif 4', Georgia, serif;
-    --brand-body-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --brand-heading-font: 'Montserrat', Helvetica, Arial, sans-serif;
+    --brand-body-font: 'Open Sans', Helvetica, Arial, sans-serif;
     --brand-radius: 0;
     --brand-button-radius: 0;
     --brand-card-radius: 0;
@@ -117,7 +117,7 @@ extraction:
   method: "screenshot-analysis"
   notes:
     - "Playwright scraper failed (ERR_HTTP2_PROTOCOL_ERROR). Theme extracted from user homepage screenshot + brand research."
-    - "McKinsey uses proprietary Bower (serif) and Theinhardt/McKinsey Sans — substituted with Source Serif 4 and Inter (Google Fonts)."
+    - "Typography shifted off McKinsey Bower substitutes toward modern law-firm web norms: Montserrat headings + Open Sans body (Open Sans/Roboto dominate legal websites; Montserrat adds a more current display feel)."
     - "Dark-first palette: deep navy #051C2C surfaces with white type; vivid royal blue #0055FF for CTAs."
     - "McKinsey also uses light (#F0F0F0 / white) section breaks — mapped to --color-light for alternating bands."
     - "Sharp rectangular buttons (border-radius 0) match McKinsey CTA style."

@@ -7,7 +7,6 @@ import {
   Open_Sans,
   Roboto_Condensed,
   Source_Sans_3,
-  Source_Serif_4,
 } from 'next/font/google';
 import { resolveAppTheme } from '@/lib/app-theme';
 
@@ -48,18 +47,10 @@ const robotoCondensed = Roboto_Condensed({
   display: 'swap',
 });
 
-/** Rockland Trust — Montserrat display headings, Open Sans body (reused above) */
+/** Rockland Trust + Pillsbury Law headings — Montserrat */
 const montserrat = Montserrat({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-montserrat',
-  weight: ['500', '600', '700'],
-  display: 'swap',
-});
-
-/** Pillsbury Law — Source Serif 4 substitutes for proprietary McKinsey Bower display serif */
-const sourceSerif4 = Source_Serif_4({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-source-serif-4',
   weight: ['500', '600', '700'],
   display: 'swap',
 });
@@ -71,7 +62,6 @@ const fontVariables = [
   openSans.variable,
   robotoCondensed.variable,
   montserrat.variable,
-  sourceSerif4.variable,
 ].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

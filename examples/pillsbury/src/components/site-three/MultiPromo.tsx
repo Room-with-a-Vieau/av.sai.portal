@@ -7,6 +7,14 @@ import {
   Image as ContentSdkEditableImage,
   useSitecore,
 } from '@sitecore-content-sdk/nextjs';
+import { ChevronRight } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from 'shadcd/components/ui/carousel';
 import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
@@ -65,6 +73,47 @@ const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
   );
 };
 
+/** Default-variant card: McKinsey-style hover (white surface, dark text, blue chevron). */
+const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
+  const { image, heading, description, link } = promo ?? {};
+  const linkField = link?.jsonValue;
+
+  const cardClassName = cn(
+    'group flex h-full flex-col p-5 no-underline transition-colors duration-300',
+    // White hover surface always uses dark type (McKinsey-style), independent of theme foreground
+    'hover:bg-white hover:text-neutral-950'
+  );
+
+  const content = (
+    <>
+      <ContentSdkImage
+        field={image?.jsonValue}
+        className="mb-5 aspect-[4/3] w-full object-cover"
+      />
+      <h3 className="mb-3 flex items-center gap-1 text-xl font-semibold lg:text-2xl">
+        <ContentSdkText field={heading?.jsonValue} />
+        <ChevronRight
+          aria-hidden
+          className="size-5 shrink-0 transition-colors duration-300 group-hover:text-primary"
+        />
+      </h3>
+      <p className="text-sm leading-relaxed lg:text-base">
+        <ContentSdkText field={description?.jsonValue} />
+      </p>
+    </>
+  );
+
+  if (linkField) {
+    return (
+      <TrackedCtaLink field={linkField} className={cardClassName}>
+        {content}
+      </TrackedCtaLink>
+    );
+  }
+
+  return <div className={cardClassName}>{content}</div>;
+};
+
 const parentBasedGridClasses =
   'grid lg:[.multipromo-2-3_&]:grid-cols-[2fr_3fr] lg:[.multipromo-3-2_&]:grid-cols-[3fr_2fr] lg:grid-cols-[1fr_1fr] gap-14';
 const parentBasedGridItemClasses =
@@ -79,11 +128,16 @@ export const Default = (props: MultiPromoProps) => {
     [props.fields?.data?.datasource]
   );
 
+  const promos = useMemo(
+    () => datasource?.children?.results?.filter(Boolean) ?? [],
+    [datasource?.children?.results]
+  );
+
   if (props.fields) {
     return (
       <section className={`relative ${props.params?.styles || ''}`} data-class-change>
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="mx-auto max-w-2xl text-center">
             <h2 className="mb-6 text-2xl lg:text-5xl">
               <ContentSdkText field={datasource?.title?.jsonValue} />
             </h2>
@@ -91,11 +145,36 @@ export const Default = (props: MultiPromoProps) => {
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
           </div>
-          <div className={`${parentBasedGridClasses} ${parentBasedGridItemClasses} mt-12`}>
-            {datasource?.children?.results?.filter(Boolean).map((promo) => {
-              return <PromoItem key={promo?.id} {...promo} />;
-            }) || null}
-          </div>
+
+          {promos.length > 0 && (
+            <div className="relative mt-12 px-0 sm:px-12">
+              <Carousel
+                opts={{ align: 'start', loop: false }}
+                className="w-full"
+                data-testid="multi-promo-carousel"
+              >
+                <CarouselContent className="-ml-4">
+                  {promos.map((promo) => (
+                    <CarouselItem
+                      key={promo.id}
+                      className="basis-full pl-4 sm:basis-1/2 lg:basis-1/3"
+                      data-testid="multi-promo-carousel-item"
+                    >
+                      <DefaultPromoCard promo={promo} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious
+                  className="disabled:hidden left-0 h-10 w-10 border-0 bg-secondary text-secondary-foreground hover:bg-secondary-hover sm:left-2"
+                  data-testid="multi-promo-carousel-prev"
+                />
+                <CarouselNext
+                  className="disabled:hidden right-0 h-10 w-10 border-0 bg-secondary text-secondary-foreground hover:bg-secondary-hover sm:right-2"
+                  data-testid="multi-promo-carousel-next"
+                />
+              </Carousel>
+            </div>
+          )}
         </div>
       </section>
     );
