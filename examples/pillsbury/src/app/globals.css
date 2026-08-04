@@ -183,6 +183,32 @@ html[data-theme='pkm'] {
   --font-weight-heading: 700;
 }
 
+/* Pillsbury Law — McKinsey-inspired: Source Serif 4 (Bower substitute) headings, Inter body (Theinhardt substitute). */
+html[data-theme='pillsburylaw'] {
+  --font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-source-serif-4), 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-accent: var(--font-source-serif-4), 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-weight-heading: 600;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+}
+
+html[data-theme='pillsburylaw'] body {
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+}
+
+html[data-theme='pillsburylaw'] .btn.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-radius: 0;
+}
+
+html[data-theme='pillsburylaw'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}
+
 /* BUTTONS END */
 
 main {

@@ -434,3 +434,57 @@
 [data-theme='pkm'] .bg-secondary {
   color: var(--color-secondary-foreground);
 }
+
+/*
+ * Pillsbury Law — McKinsey-inspired dark theme.
+ * Deep navy surfaces, white type, vivid royal-blue CTAs.
+ * Source: https://www.mckinsey.com/ (screenshot + brand research).
+ */
+[data-theme='pillsburylaw'] {
+  --background-image-gradient: linear-gradient(180deg, #0032a0 0%, #051c2c 100%);
+  --background-image-gradient-secondary: linear-gradient(90deg, #051c2c 0%, #0032a0 50%, #0055ff 100%);
+  --color-background: #051c2c;
+  --color-foreground: #f5f7fa;
+  --color-card: #0a2a3c;
+  --color-card-foreground: #f5f7fa;
+  --color-popover: #0a2a3c;
+  --color-popover-foreground: #f5f7fa;
+  --color-primary: #0055ff;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #0044cc;
+  --color-secondary: #0a2a3c;
+  --color-secondary-foreground: #f5f7fa;
+  --color-secondary-hover: #071f2d;
+  --color-muted: #0d3347;
+  --color-muted-foreground: #9aabba;
+  --color-accent: #0032a0;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #1a4055;
+  --color-input: #1a4055;
+  --color-ring: #0055ff;
+  --color-tertiary-foreground: #f5f7fa;
+  --color-tertiary-hover: #071f2d;
+  --color-tertiary: #0a2a3c;
+  --color-dark-foreground: #f5f7fa;
+  --color-dark-hover: #051018;
+  --color-dark: #030f18;
+  --color-light: #f0f0f0;
+  --color-light-hover: #e4e4e4;
+  --color-light-foreground: #051c2c;
+  --color-overlay: rgb(5 28 44 / 0.55);
+}
+
+[data-theme='pillsburylaw'] .bg-primary {
+  color: var(--color-primary-foreground);
+}
+
+[data-theme='pillsburylaw'] .bg-secondary {
+  color: var(--color-secondary-foreground);
+}
+
+[data-theme='pillsburylaw'] .bg-dark {
+  color: var(--color-dark-foreground);
+}

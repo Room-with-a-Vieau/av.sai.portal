@@ -7,6 +7,7 @@ import {
   Open_Sans,
   Roboto_Condensed,
   Source_Sans_3,
+  Source_Serif_4,
 } from 'next/font/google';
 import { resolveAppTheme } from '@/lib/app-theme';
 
@@ -55,6 +56,14 @@ const montserrat = Montserrat({
   display: 'swap',
 });
 
+/** Pillsbury Law — Source Serif 4 substitutes for proprietary McKinsey Bower display serif */
+const sourceSerif4 = Source_Serif_4({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-source-serif-4',
+  weight: ['500', '600', '700'],
+  display: 'swap',
+});
+
 const fontVariables = [
   inter.variable,
   sourceSans3.variable,
@@ -62,6 +71,7 @@ const fontVariables = [
   openSans.variable,
   robotoCondensed.variable,
   montserrat.variable,
+  sourceSerif4.variable,
 ].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

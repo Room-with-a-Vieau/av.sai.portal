@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-02T17:45:00Z"
+lastUpdatedAt: "2026-08-04T17:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3081,6 +3081,89 @@ demoContent: []
 
 # Information architecture / page creation batches
 ia:
+  - name: "pillsburylaw-header-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-04T17:35:00Z"
+    updatedAt: "2026-08-04T17:45:00Z"
+    siteName: "pillsburylaw"
+    notes: >
+      Remapped Header Partial Design mega menu + LinkLists under
+      /Presentation/Partial Designs/Global/Header/Data to pillsburylaw Home IA.
+      Sitecore item names kept (Speakers/Headphones/Amps/Pro/Artist Services);
+      Title/Link fields and dropdown links point at IA pages.
+    relatedItems:
+      headerPartialDesignId: "{3878F5AB-328C-4E2D-BAE4-504AD4E3A4B5}"
+      headerDataFolderId: "{75DD10E1-5082-45B9-A912-DBAE4D4F4C32}"
+      megaMenus:
+        - { itemName: "Speakers", title: "Lawyers", pageId: "{28CDB0B8-594B-4FBE-97E2-8F224740EE79}" }
+        - { itemName: "Headphones", title: "Capabilities", pageId: "{95A249F3-4539-4F55-8F0C-3F4D6CFA3EDF}" }
+        - { itemName: "Amps", title: "Insights", pageId: "{C966373D-2596-47B3-B2C6-E8322F3FB444}" }
+        - { itemName: "Pro", title: "Connect", pageId: "{45B22262-6A63-4634-AD85-18DC652E0DA5}" }
+        - { itemName: "Artist Services", title: "Contact", pageId: "{EDAE745F-E44D-436D-A2C3-147DE6203E2F}" }
+      primaryLinkLists:
+        - { itemName: "Speakers Primary Links", links: ["About Us", "Careers", "Offices", "Bios"] }
+        - { itemName: "Headphones Primary Links", links: ["Our Approach", "Services", "Technology", "Litigation"] }
+        - { itemName: "Amps Primary Links", links: ["Events", "Blogs", "Press", "Thought Leadership", "Alert"] }
+      secondaryLinkLists:
+        - { itemName: "Loud for less", title: "Offices", links: ["All offices"] }
+        - { itemName: "By feature", title: "Services", links: ["Technology", "Litigation"] }
+        - { itemName: "More speakers", title: "Insights", links: ["Events", "Thought Leadership"] }
+    verification:
+      checkedAt: "2026-08-04T17:45:00Z"
+      passed:
+        - "Five mega menus Title/Link remapped to Lawyers/Capabilities/Insights/Connect/Contact"
+        - "Primary LinkLists remapped to L2/L3 IA pages"
+        - "Secondary LinkLists retitled and pointed at Offices/Services/Insights"
+        - "Header SupportLink → Contact; Image 1 TargetUrl → Lawyers"
+      failed: []
+      pendingManual:
+        - "Publish Header Partial Design + Header/Data for Edge"
+        - "Optional: set isSimpleLink on Connect/Contact MegaMenuItems (Pro/Artist Services) to avoid empty dropdowns"
+        - "Spot-check browser nav labels + dropdown URLs under /Home"
+
+  - name: "pillsburylaw-site-ia"
+    status: "complete"
+    createdAt: "2026-08-04T17:00:00Z"
+    updatedAt: "2026-08-04T17:30:00Z"
+    siteName: "pillsburylaw"
+    contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Home"
+    contentRootItemId: "{104EEF4C-9D53-45BA-B447-C09560EF5359}"
+    pageBranchId: "{70BAA693-7AF4-48F7-9690-195685B0D73D}"
+    pageBranchName: "Services Page"
+    pageTemplateId: "{B08EC32B-F183-474B-93F7-07512168DD6E}"
+    pageTemplateName: "Services Page"
+    language: "en"
+    fullTreePath: "docs/ai/manifests/pillsburylaw-ia-tree.yaml"
+    iaSpecPath: "docs/ai/ia/pillsburylaw-ia.md"
+    sourceUrl: "https://www.pillsburylaw.com/en/"
+    totalCreated: 81
+    notes: >
+      3-level IA from pillsburylaw.com mega-nav + utility. All pages use Services Page template
+      (Detail + image fields). create_page with branch ID created items named "name" — used
+      create_content_item with template {B08EC32B-...} instead. Services L3 uses sector/practice
+      categories (not full A–Z index). Top-level Careers utility folded under Lawyers/Careers.
+      Workflow: Draft. Home/Speakers and Home/Video pre-existed and were left alone.
+    pages:
+      - { displayName: "Lawyers", name: "Lawyers", itemId: "{28CDB0B8-594B-4FBE-97E2-8F224740EE79}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers" }
+      - { displayName: "Capabilities", name: "Capabilities", itemId: "{95A249F3-4539-4F55-8F0C-3F4D6CFA3EDF}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Capabilities" }
+      - { displayName: "Insights", name: "Insights", itemId: "{C966373D-2596-47B3-B2C6-E8322F3FB444}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights" }
+      - { displayName: "Connect", name: "Connect", itemId: "{45B22262-6A63-4634-AD85-18DC652E0DA5}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Connect" }
+      - { displayName: "Contact", name: "Contact", itemId: "{EDAE745F-E44D-436D-A2C3-147DE6203E2F}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Contact" }
+    verification:
+      checkedAt: "2026-08-04T17:30:00Z"
+      passed:
+        - "Home children include Lawyers/Capabilities/Insights/Connect/Contact"
+        - "Services has 12 sector/practice children"
+        - "create_content_item used Services Page template with Detail field populated"
+      failed: []
+      pendingManual:
+        - "Publish new pages for Edge"
+        - "Populate image fields and richer Detail content"
+        - "Optionally add Services Page to Home insert options / use branch correctly"
+        - "Header nav remapped (see pillsburylaw-header-nav-remap) — publish Header Partial Design"
+
   - name: "dwyeromega-featured-manufacturing-articles"
     status: "complete"
     createdAt: "2026-07-15T16:50:00Z"
