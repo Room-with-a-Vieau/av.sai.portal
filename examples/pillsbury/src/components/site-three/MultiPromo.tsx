@@ -17,7 +17,7 @@ import {
   CarouselPrevious,
 } from 'shadcd/components/ui/carousel';
 import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
+import { IGQLImageField, IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
@@ -25,7 +25,7 @@ interface Fields {
   data: {
     datasource: {
       title?: IGQLTextField;
-      description?: IGQLTextField;
+      description?: IGQLRichTextField;
       children: {
         results: SimplePromoFields[];
       };
@@ -36,7 +36,7 @@ interface Fields {
 interface SimplePromoFields {
   id: string;
   heading: IGQLTextField;
-  description: IGQLTextField;
+  description: IGQLRichTextField;
   slug?: IGQLTextField;
   Slug?: IGQLTextField;
   image: IGQLImageField;
