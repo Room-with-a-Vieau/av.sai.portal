@@ -6,29 +6,36 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowUpRight,
-  BookOpen,
+  Briefcase,
+  Building2,
   ChevronDown,
   FileText,
+  Globe2,
   Loader2,
+  MapPin,
   MessageSquareText,
+  Newspaper,
+  Scale,
   Search,
   Sparkles,
+  UserRound,
   X,
 } from 'lucide-react';
 
 import type { ComponentProps } from '@/lib/component-props';
-import { DEMO_TAXONOMY_CHANGE_EVENT, parseDemoUserTaxonomy, readStoredDemoTaxonomy } from '@/lib/demo-taxonomy';
+import {
+  DEMO_TAXONOMY_CHANGE_EVENT,
+  getPersonaCode,
+  parseDemoUserTaxonomy,
+  readStoredDemoTaxonomy,
+} from '@/lib/demo-taxonomy';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
-import { getPersonaCode } from '@/lib/demo-taxonomy';
-
 import {
-  applyLiveKnowledgeHrefs,
-  buildKnowledgeHrefIndex,
   itemMatchesQuery,
   itemMetadataLine,
   itemVisibleForDemoUser,
@@ -41,7 +48,6 @@ import {
   searchCatalog,
   searchFacetLabels,
   selectAiSearchInsight,
-  supplementalResultsForDemoUserTaxonomy,
   topics,
   type AiSearchInsight,
   type SearchLob,
@@ -57,6 +63,36 @@ export type SearchResultsProps = {
 };
 
 type SortMode = 'relevance' | 'az';
+
+function resultIcon(lob: SearchLob) {
+  switch (lob) {
+    case 'lawyer':
+      return UserRound;
+    case 'insight':
+      return Newspaper;
+    case 'capability':
+      return Scale;
+    case 'office':
+      return Building2;
+    default:
+      return FileText;
+  }
+}
+
+function resultCta(lob: SearchLob): string {
+  switch (lob) {
+    case 'lawyer':
+      return 'View bio';
+    case 'insight':
+      return 'Read insights';
+    case 'capability':
+      return 'Explore practice';
+    case 'office':
+      return 'View office';
+    default:
+      return 'Open page';
+  }
+}
 
 function SearchFacetsPanel({
   selectedLobs,
@@ -86,7 +122,7 @@ function SearchFacetsPanel({
   return (
     <div className="rounded-2xl border border-border/70 bg-card/95 shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm dark:ring-white/[0.06]">
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3.5">
-        <span className="text-sm font-semibold tracking-tight text-foreground">Refine articles</span>
+        <span className="text-sm font-semibold tracking-tight text-foreground">Refine results</span>
         {activeFilterCount > 0 ? (
           <Button type="button" variant="ghost" size="sm" className="h-8 text-primary" onClick={clearFilters}>
             Clear all
@@ -94,7 +130,7 @@ function SearchFacetsPanel({
         ) : null}
       </div>
       <div className="max-h-[min(70vh,40rem)] overflow-y-auto px-2">
-        <FacetSection title="Line of business">
+        <FacetSection title="Content type">
           <div className="flex flex-col gap-2.5">
             {lobs.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -111,7 +147,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Peril / loss type">
+        <FacetSection title="Practice area">
           <div className="flex flex-col gap-2.5">
             {perils.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -128,7 +164,7 @@ function SearchFacetsPanel({
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Claim stage" defaultOpen={false}>
+        <FacetSection title="Office / region" defaultOpen={false}>
           <div className="flex flex-col gap-2.5">
             {topics.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -172,13 +208,28 @@ function FacetSection({
 
 function ResultCard({ item }: { item: SearchResultItem }) {
   const meta = itemMetadataLine(item);
-  const perilLabels = item.perils.map((p) => searchFacetLabels.peril[p]).slice(0, 2);
+  const practiceLabels = item.perils.map((p) => searchFacetLabels.peril[p]).slice(0, 2);
+  const Icon = resultIcon(item.lob);
+  const isLawyer = item.lob === 'lawyer';
 
   return (
-    <article className="group rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:border-primary/30 hover:shadow-md dark:ring-white/[0.05]">
-      <Link href={item.href} className="flex flex-col gap-3 p-4 text-inherit no-underline sm:flex-row sm:items-start sm:gap-4 sm:p-5">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-          <BookOpen className="size-5" aria-hidden />
+    <article
+      className={cn(
+        'group rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:border-primary/30 hover:shadow-md dark:ring-white/[0.05]',
+        isLawyer && 'border-l-[3px] border-l-primary/70'
+      )}
+    >
+      <Link
+        href={item.href}
+        className="flex flex-col gap-3 p-4 text-inherit no-underline sm:flex-row sm:items-start sm:gap-4 sm:p-5"
+      >
+        <div
+          className={cn(
+            'flex size-11 shrink-0 items-center justify-center rounded-xl',
+            isLawyer ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
+          )}
+        >
+          <Icon className="size-5" aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -188,17 +239,20 @@ function ResultCard({ item }: { item: SearchResultItem }) {
             <span className="text-xs font-medium text-muted-foreground">{searchFacetLabels.lob[item.lob]}</span>
             {item.isNew ? (
               <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-foreground">
-                New
+                Featured
               </span>
             ) : null}
           </div>
           <h3 className="mt-2 text-base font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary">
             {item.title}
           </h3>
+          {item.subtitle ? (
+            <p className="mt-0.5 text-sm font-medium text-primary/90">{item.subtitle}</p>
+          ) : null}
           <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
           <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">{meta}</p>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {perilLabels.map((label) => (
+            {practiceLabels.map((label) => (
               <span
                 key={label}
                 className="rounded-md border border-border/70 bg-secondary/60 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
@@ -208,7 +262,7 @@ function ResultCard({ item }: { item: SearchResultItem }) {
             ))}
           </div>
           <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            Open Knowledge Article
+            {resultCta(item.lob)}
             <ArrowUpRight className="size-3.5" aria-hidden />
           </span>
         </div>
@@ -217,11 +271,7 @@ function ResultCard({ item }: { item: SearchResultItem }) {
   );
 }
 
-function AiQaPanel({
-  insight,
-}: {
-  insight: AiSearchInsight;
-}) {
+function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
   return (
     <section
       className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/[0.07] via-background to-secondary/40 p-5 shadow-sm ring-1 ring-primary/10"
@@ -234,11 +284,8 @@ function AiQaPanel({
             <Sparkles className="size-5" aria-hidden />
           </div>
           <div className="min-w-0 flex-1 space-y-2">
-            <p
-              id="ai-qa-heading"
-              className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary"
-            >
-              AI search answer
+            <p id="ai-qa-heading" className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+              Matter-aware guidance
             </p>
             <div className="flex items-start gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-2.5">
               <MessageSquareText className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -259,13 +306,22 @@ function AiQaPanel({
                 <li key={b}>{b}</li>
               ))}
             </ul>
+            {insight.learnMoreHref ? (
+              <Link
+                href={insight.learnMoreHref}
+                className="inline-flex items-center gap-1 text-sm font-semibold text-primary no-underline hover:underline"
+              >
+                {insight.learnMoreLabel ?? 'Continue'}
+                <ArrowUpRight className="size-3.5" aria-hidden />
+              </Link>
+            ) : null}
           </div>
         </div>
 
         {insight.citations.length ? (
           <div className="space-y-2 border-t border-border/50 pt-4">
             <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              Cited Knowledge Articles
+              Recommended people &amp; pages
             </p>
             <ul className="grid gap-2 sm:grid-cols-2">
               {insight.citations.map((c) => (
@@ -275,8 +331,8 @@ function AiQaPanel({
                     className="flex h-full flex-col rounded-xl border border-border/70 bg-card px-3 py-3 text-inherit no-underline transition-colors hover:border-primary/35 hover:bg-primary/[0.03]"
                   >
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
-                      <FileText className="size-3" aria-hidden />
-                      {c.kbId ?? 'Knowledge Article'}
+                      <Briefcase className="size-3" aria-hidden />
+                      {c.kbId ?? 'Resource'}
                     </span>
                     <span className="mt-1 text-sm font-semibold leading-snug text-foreground">{c.title}</span>
                     {c.excerpt ? (
@@ -285,7 +341,7 @@ function AiQaPanel({
                       </span>
                     ) : null}
                     <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                      Open article
+                      Open
                       <ArrowUpRight className="size-3" aria-hidden />
                     </span>
                   </Link>
@@ -296,6 +352,38 @@ function AiQaPanel({
         ) : null}
       </div>
     </section>
+  );
+}
+
+function SearchTips() {
+  return (
+    <div className="mt-4 grid gap-3 border-t border-border/50 pt-4 sm:grid-cols-3">
+      {[
+        {
+          icon: UserRound,
+          title: 'People first',
+          body: 'Name a lawyer, practice, or city to land on Bios and offices in the content tree.',
+        },
+        {
+          icon: Globe2,
+          title: 'Situation search',
+          body: 'Describe the matter—“Japanese acquisition,” “export control,” “coverage fight”—for AI routing.',
+        },
+        {
+          icon: MapPin,
+          title: 'Filter flexibly',
+          body: 'Narrow by content type, practice, and office so bios, blogs, and capabilities stay discoverable together.',
+        },
+      ].map((tip) => (
+        <div key={tip.title} className="flex gap-2.5 rounded-xl bg-background/60 px-3 py-2.5">
+          <tip.icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+          <div>
+            <p className="text-xs font-semibold text-foreground">{tip.title}</p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tip.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -321,7 +409,6 @@ export const SearchResults: FC<SearchResultsProps> = ({
   const [selectedTopics, setSelectedTopics] = useState<Set<SearchTopic>>(new Set());
   const [resultsPage, setResultsPage] = useState(1);
   const [demoTaxonomyRaw, setDemoTaxonomyRaw] = useState('');
-  const [liveHrefIndex, setLiveHrefIndex] = useState<Map<string, string>>(() => new Map());
 
   useEffect(() => {
     const readTaxonomy = () => {
@@ -334,46 +421,12 @@ export const SearchResults: FC<SearchResultsProps> = ({
     };
   }, []);
 
-  // Resolve real Knowledge Article urls from Edge (same source as KnowledgeListing)
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      try {
-        const res = await fetch(
-          '/api/knowledge-listing/articles?mode=recently-updated&maxItems=48&language=en'
-        );
-        if (!res.ok) return;
-        const body = (await res.json()) as { articles?: Array<Record<string, unknown>> };
-        if (cancelled || !body.articles?.length) return;
-        setLiveHrefIndex(
-          buildKnowledgeHrefIndex(
-            body.articles as Array<{
-              name?: string;
-              path?: string;
-              url?: string | { path?: string };
-              kbId?: unknown;
-            }>
-          )
-        );
-      } catch {
-        // Keep static /Knowledge-Articles/... fallbacks when Edge is unavailable
-      }
-    };
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const activeDemoUserTaxonomy = useMemo(() => parseDemoUserTaxonomy(demoTaxonomyRaw), [demoTaxonomyRaw]);
 
-  const activeCatalog = useMemo(() => {
-    const merged = activeDemoUserTaxonomy
-      ? [...supplementalResultsForDemoUserTaxonomy(activeDemoUserTaxonomy), ...searchCatalog]
-      : searchCatalog;
-    const visible = merged.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy));
-    return applyLiveKnowledgeHrefs(visible, liveHrefIndex);
-  }, [activeDemoUserTaxonomy, liveHrefIndex]);
+  const activeCatalog = useMemo(
+    () => searchCatalog.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy)),
+    [activeDemoUserTaxonomy]
+  );
 
   const toggle = useCallback(<T extends string>(set: Dispatch<SetStateAction<Set<T>>>, v: T) => {
     set((prev) => {
@@ -478,23 +531,10 @@ export const SearchResults: FC<SearchResultsProps> = ({
     if (resultsPage > resultsTotalPages) setResultsPage(resultsTotalPages);
   }, [resultsPage, resultsTotalPages]);
 
-  const aiInsight = useMemo(() => {
-    const insight = selectAiSearchInsight(query, activeDemoUserTaxonomy);
-    if (!insight || !liveHrefIndex.size) return insight;
-    return {
-      ...insight,
-      learnMoreHref: liveHrefIndex.get(
-        insight.citations[0]?.kbId?.toLowerCase() || ''
-      ) || insight.learnMoreHref,
-      citations: insight.citations.map((c) => {
-        const byKb = c.kbId ? liveHrefIndex.get(c.kbId.toLowerCase()) : undefined;
-        const slug = c.href.split('/').pop()?.toLowerCase() || '';
-        const bySlug = slug ? liveHrefIndex.get(slug) : undefined;
-        const live = byKb || bySlug;
-        return live ? { ...c, href: live } : c;
-      }),
-    };
-  }, [query, activeDemoUserTaxonomy, liveHrefIndex]);
+  const aiInsight = useMemo(
+    () => selectAiSearchInsight(query, activeDemoUserTaxonomy),
+    [query, activeDemoUserTaxonomy]
+  );
 
   const activeFilterCount = selectedLobs.size + selectedPerils.size + selectedTopics.size;
 
@@ -550,7 +590,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
   };
 
   const displayHeading = draft.trim() || qFromUrl.trim();
-  const personaLabel = activeDemoUserTaxonomy ?? 'All personas';
+  const personaLabel = activeDemoUserTaxonomy ?? 'All visitors';
   const personaCode = activeDemoUserTaxonomy ? getPersonaCode(activeDemoUserTaxonomy) : null;
 
   return (
@@ -559,7 +599,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
         'min-h-[60vh] bg-gradient-to-b from-background via-background to-secondary/25 pb-16 pt-6 sm:pt-8',
         className
       )}
-      aria-label="Knowledge article search results"
+      aria-label="Site search results"
     >
       <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm ring-1 ring-black/[0.04] backdrop-blur-md dark:bg-card/50 dark:ring-white/[0.06] sm:p-5">
@@ -579,7 +619,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Ask a question or search Knowledge Articles (FNOL, water damage, UM/UIM…)"
+                placeholder="Search lawyers, practices, offices, insights… or describe your matter"
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -600,7 +640,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/50 pt-4">
             <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              Try asking
+              Try searching
             </span>
             {popularSearches.map((term) => (
               <button
@@ -613,30 +653,30 @@ export const SearchResults: FC<SearchResultsProps> = ({
               </button>
             ))}
           </div>
+          <SearchTips />
         </div>
 
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">
-                Progressive Knowledge
-              </p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Pillsbury search</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Knowledge Article search'
+                  'Find lawyers, insights & practices'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Built for insurance agents: ask a question for an AI answer with Knowledge Article citations,
-                then refine by line of business, peril, and claim stage. Every result opens a Knowledge Article.
+                Built for a global firm: search by person, practice, office, or matter narrative. Results link into
+                Bios, capabilities, offices, and insight hubs already in the content tree—then refine by type,
+                practice area, and region.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Demo persona:</span> {personaLabel}
+              <span className="font-semibold text-foreground">Demo context:</span> {personaLabel}
               {personaCode ? <span className="ml-1 text-primary">({personaCode})</span> : null}
             </div>
           </div>
@@ -678,14 +718,14 @@ export const SearchResults: FC<SearchResultsProps> = ({
                 {isSearching ? <Loader2 className="size-4 shrink-0 animate-spin text-primary" aria-hidden /> : null}
                 <span>
                   <strong className="font-semibold text-foreground">{filtered.length}</strong>{' '}
-                  {filtered.length === 1 ? 'Knowledge Article' : 'Knowledge Articles'}
+                  {filtered.length === 1 ? 'result' : 'results'}
                   {normalizeQuery(query) ? (
                     <>
                       {' '}
                       for &ldquo;<span className="text-foreground">{displayHeading}</span>&rdquo;
                     </>
                   ) : (
-                    ' — ask a question or pick a starter prompt'
+                    ' — try a starter search or describe your matter'
                   )}
                 </span>
               </div>
@@ -794,10 +834,10 @@ export const SearchResults: FC<SearchResultsProps> = ({
               </>
             ) : (
               <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
-                <p className="text-sm font-medium text-secondary-foreground">No Knowledge Articles for that combination.</p>
+                <p className="text-sm font-medium text-secondary-foreground">No results for that combination.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try clearing filters or ask something like &ldquo;Personal Auto FNOL Florida requirements&rdquo; or
-                  &ldquo;How should I handle homeowners water damage mitigation?&rdquo;
+                  Try &ldquo;Mark Abate intellectual property,&rdquo; &ldquo;Japanese company acquisition,&rdquo; or
+                  &ldquo;Policyholder Pulse.&rdquo;
                 </p>
                 <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
                   Clear filters
