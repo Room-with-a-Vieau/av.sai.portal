@@ -10,6 +10,10 @@ import * as verticalimageaccordionprops from 'src/components/vertical-image-acco
 import * as VariantContent from 'src/components/variant-content/VariantContent';
 import * as variantcontentprops from 'src/components/variant-content/variant-content.props';
 import * as variantcontentfields from 'src/components/variant-content/variant-content.fields';
+import * as BioListing from 'src/components/uiim/lawyers/BioListing';
+import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
+import * as biolistingprops from 'src/components/uiim/lawyers/bio-listing.props';
+import * as biodetailprops from 'src/components/uiim/lawyers/bio-detail.props';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
 import * as topiclistingprops from 'src/components/topic-listing/topic-listing.props';
@@ -295,6 +299,10 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['vertical-image-accordion', { ...verticalimageaccordionprops }],
   ['VariantContent', { ...VariantContent, componentType: 'client' }],
   ['variant-content', { ...variantcontentprops, ...variantcontentfields }],
+  ['BioListing', { ...BioListing, componentType: 'client' }],
+  ['BioDetail', { ...BioDetail, componentType: 'client' }],
+  ['bio-listing', { ...biolistingprops }],
+  ['bio-detail', { ...biodetailprops }],
   ['TopicListing', { ...TopicListing }],
   ['TopicItem', { ...TopicItemdev }],
   ['topic-listing', { ...topiclistingprops }],

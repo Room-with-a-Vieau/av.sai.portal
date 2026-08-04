@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-04T18:00:00Z"
+lastUpdatedAt: "2026-08-04T19:50:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3081,6 +3081,348 @@ demoContent: []
 
 # Information architecture / page creation batches
 ia:
+  - name: "pillsburylaw-blogs-content-update"
+    kind: "content-update"
+    category: "Insights"
+    status: "complete"
+    createdAt: "2026-08-04T19:45:00Z"
+    updatedAt: "2026-08-04T19:55:00Z"
+    siteName: "pillsburylaw"
+    contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Blogs"
+    contentRootItemId: "{612AE84F-C0C8-451A-859B-1712FB3149D2}"
+    notes: >
+      Updated all 12 blog hubs + parent Blogs page with Pillsbury-relevant Detail HTML,
+      pageTitle/pageHeaderTitle/pageShortTitle/pageSubtitle/pageSummary, metadata* and og*
+      fields. MCP update responses only echo Services Page local fields (Detail/image);
+      inherited Page Content / Metadata / Open Graph fields are silent in MCP responses —
+      verify in Content Editor. ogImage left empty (no DAM assets assigned).
+    items:
+      - { name: "Blogs", itemId: "{612AE84F-C0C8-451A-859B-1712FB3149D2}" }
+      - { name: "Comm-Law-Center", itemId: "{3C524D65-4504-483C-A24E-1B1220301DFE}" }
+      - { name: "Consumer-Protection-Dispatch", itemId: "{E400E808-4CA5-4659-B2C3-82619277FD1E}" }
+      - { name: "Global-Trade-and-Sanctions-Law", itemId: "{293854C1-4AC7-4A62-BC52-D3A5AD626B39}" }
+      - { name: "Gravel2Gavel", itemId: "{7C03D29D-AED3-4915-B82C-B5894AF9D4B4}" }
+      - { name: "Internet-and-Social-Media-Law", itemId: "{3127BE64-41EA-486A-A9F4-AC5C04808A24}" }
+      - { name: "Investment-Fund-Law", itemId: "{007CB33D-DC67-4768-8C37-ABE43F67BF02}" }
+      - { name: "PFAS-Observer", itemId: "{D68A9782-8C8B-4968-9813-E087FCA1A6C4}" }
+      - { name: "Policyholder-Pulse", itemId: "{43ECC8DD-9FDE-479F-82C0-A9EA54E4FE12}" }
+      - { name: "SeeSalt-Blog", itemId: "{373936CE-8FCB-4BD4-81E9-D3C44CF753F9}" }
+      - { name: "Sourcing-Speak", itemId: "{091E54C9-4CC9-4891-99A4-FA9F27D88497}" }
+      - { name: "The-Bid-Protest-Debrief", itemId: "{8C9D86D3-84A3-40E5-8A76-834351768AB8}" }
+      - { name: "Unmanned-Aircraft-Systems-LAW", itemId: "{85041201-2587-443F-AAD7-786090D28014}" }
+    fieldsUpdated:
+      - Detail
+      - pageTitle
+      - pageHeaderTitle
+      - pageShortTitle
+      - pageSubtitle
+      - pageSummary
+      - metadataTitle
+      - metadataDescription
+      - metadataKeywords
+      - metadataAuthor
+      - ogTitle
+      - ogDescription
+    verification:
+      checkedAt: "2026-08-04T19:55:00Z"
+      passed:
+        - "Detail rich text confirmed via MCP updatedFields for all 13 items"
+      failed: []
+      pendingManual:
+        - "Verify pageTitle/pageSummary/metadata*/og* in Content Editor (MCP silent for inherited fields)"
+        - "Publish Insights/Blogs tree for Edge when ready"
+        - "Optional: assign ogImage assets in DAM"
+
+  - name: "pillsburylaw-bio-content-model"
+    kind: "page-template"
+    category: "Page Types"
+    status: "complete"
+    createdAt: "2026-08-04T19:25:00Z"
+    updatedAt: "2026-08-04T19:40:00Z"
+    siteName: "pillsburylaw"
+    notes: >
+      Extended Bio page template {D9ED4A26-1B44-4F52-9EAE-61E1EB193671} (inherits Base Page)
+      with attorney profile fields. Created Data/Taxonomy folders + Tag seed items. Office Droplink
+      sources Home/Lawyers/Offices. Multilists source Taxonomy/*. DownloadVCard uses File (Sitecore
+      media field; closest to Media Link). Insert options set on Lawyers/Bios for Bio template
+      (silent-write — verify in Content Editor).
+    templates:
+      pageTemplate:
+        name: "Bio"
+        path: "/sitecore/templates/Project/pillsbury/Bio"
+        itemId: "{D9ED4A26-1B44-4F52-9EAE-61E1EB193671}"
+        baseTemplate: "{47151711-26CA-434E-8132-D3E0B7D26683}"
+        standardValues:
+          itemId: "{6F12FFF9-82AE-4B02-B276-D170B0AA6954}"
+          linked: true
+        sections:
+          - name: "Profile"
+            itemId: "{9419C021-C575-4F45-998D-B0207A03A8C2}"
+            fields:
+              - { name: "FullName", type: "Single-Line Text", itemId: "{19B27DF3-A169-420A-A648-7D766FF1CE33}", required: true }
+              - { name: "PreferredName", type: "Single-Line Text", itemId: "{1BCD45B4-983E-4549-A1F0-8C69ED67E2AD}" }
+              - { name: "JobTitle", type: "Single-Line Text", itemId: "{DFCAA3D1-E572-4289-9111-2324AFA8EE5F}", required: true }
+              - { name: "Office", type: "Droplink", itemId: "{4E0E2A6D-DE8F-4156-AB56-E0AD0A7824FA}", source: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Offices", required: true }
+              - { name: "Headshot", type: "Image", itemId: "{7ABDD52D-64A7-443B-BC39-4A20CB7DEE8E}", required: true }
+              - { name: "Summary", type: "Single-Line Text", itemId: "{DF24E0B6-C373-4ADD-B339-034C64452A38}", required: true }
+              - { name: "YearsOfExperience", type: "Integer", itemId: "{05C42A40-D1E5-4A0C-BEF1-FD5AAAE283D9}" }
+          - name: "Expertise"
+            itemId: "{B82C2CCF-E033-492F-9F1E-706D821FD428}"
+            fields:
+              - { name: "BarAdmissions", type: "Multilist", itemId: "{E653BEFC-026A-4333-8B42-13D7CA3BF88A}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Bar Admissions" }
+              - { name: "PracticeAreas", type: "Multilist", itemId: "{DC46C43E-781C-4388-B53F-A1D8A083F2D9}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Practice Areas", required: true }
+              - { name: "Industries", type: "Multilist", itemId: "{8E86BAE1-7F7A-4E3E-A916-BA2E2EAFEA5A}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Industries" }
+              - { name: "Education", type: "Multilist", itemId: "{A18C18EF-21EF-4198-AE8C-33E00AFC24BC}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Education" }
+              - { name: "Languages", type: "Multilist", itemId: "{52F1468A-1AA4-4444-B474-C119D1439E37}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Languages" }
+              - { name: "Certifications", type: "Multilist", itemId: "{69A84BE7-9EC6-488C-A354-7EB9B2B31A85}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Certifications" }
+          - name: "Credentials"
+            itemId: "{DFDFB236-F755-442A-AF95-B03ACD241649}"
+            fields:
+              - { name: "Awards", type: "Multilist", itemId: "{CBBDF308-46A2-4AA8-B1A9-CD53C520CD98}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Awards" }
+              - { name: "Publications", type: "Multilist", itemId: "{46C37B19-54F9-489B-9ACB-A87C9BE94FD6}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Publications" }
+              - { name: "SpeakingEngagements", type: "Multilist", itemId: "{0DB0AF5B-2FF8-4D4B-BF9C-A55A735B0DD0}", source: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy/Speaking Engagements" }
+          - name: "Narrative"
+            itemId: "{404F0538-5CFD-493E-AEA3-04D0D79CE07F}"
+            fields:
+              - { name: "Biography", type: "Rich Text", itemId: "{E854DCE0-3A20-40DB-B32E-9E223E599310}", required: true }
+              - { name: "RepresentativeMatters", type: "Rich Text", itemId: "{9C4E9BDE-87BC-4ACA-9A37-89CD73B4B2DA}" }
+              - { name: "CommunityInvolvement", type: "Rich Text", itemId: "{7218D1DF-C687-455F-A6C4-9F845757E11C}" }
+          - name: "Contact"
+            itemId: "{6883B467-A90E-4A88-BE27-2E25BF2EF196}"
+            fields:
+              - { name: "Email", type: "Single-Line Text", itemId: "{D83BBBEE-B5FF-4713-AA0E-9E59FDC7563F}" }
+              - { name: "Phone", type: "Single-Line Text", itemId: "{F9F1C6C2-6A9E-4F91-8B8C-084FEAB583DB}" }
+              - { name: "LinkedIn", type: "General Link", itemId: "{EC854332-DC86-4822-A34C-BB87340D3270}" }
+              - { name: "DownloadVCard", type: "File", itemId: "{5513B4B4-E681-4EF5-8156-D84CA589013E}" }
+          - name: "SEO"
+            itemId: "{3F8C94B0-C57E-496C-97CA-1BB9D8C8FBD0}"
+            fields:
+              - { name: "SeoTitle", type: "Single-Line Text", itemId: "{A3AAE655-77A7-4EC0-85BA-D1DDC3A4D34F}" }
+              - { name: "SeoDescription", type: "Multi-Line Text", itemId: "{D628B04C-71E1-416D-BFB6-EC073F1DBA6E}" }
+    taxonomy:
+      root:
+        path: "/sitecore/content/pillsbury/pillsburylaw/Data/Taxonomy"
+        itemId: "{E03BB7E4-ECA6-4095-B963-512807D7AC8E}"
+        templateId: "{25A6B824-672F-4C15-9B98-0B231C80F81C}"
+      tagTemplateId: "{6B40E84C-8785-49FC-8A10-6BCA862FF7EA}"
+      folders:
+        - { name: "Practice Areas", itemId: "{24E68EFC-FBFF-4A0B-AFD7-84C73779CF88}" }
+        - { name: "Industries", itemId: "{1A72253D-BDBF-4DB4-9FB8-A5F26BA384A8}" }
+        - { name: "Bar Admissions", itemId: "{29393A7A-0E76-491F-A143-21F4955A1094}" }
+        - { name: "Languages", itemId: "{EFF53DB9-B3AA-49AA-A1C5-DF96FD0AA0CB}" }
+        - { name: "Certifications", itemId: "{E0D4B0D0-ABCC-4EB2-9EDD-A4884E200DAA}" }
+        - { name: "Awards", itemId: "{2EC251B6-AE85-4BE5-9B94-7B3416F9AD5C}" }
+        - { name: "Publications", itemId: "{D0955EFC-92C6-4333-8852-5D657CC1A9BC}" }
+        - { name: "Speaking Engagements", itemId: "{0334EEDE-0493-4ADF-A320-726CC5226A87}" }
+        - { name: "Education", itemId: "{A5F63BE1-B5FC-4989-B344-527FB83B649C}" }
+    contentTree:
+      biosParent:
+        path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios"
+        itemId: "{5DAD4C5C-84CD-471A-80EF-C805570BE79A}"
+        insertOptions: ["Bio"]
+        insertOptionsNote: "silent-write — verify __Masters in Content Editor"
+    verification:
+      checkedAt: "2026-08-04T19:40:00Z"
+      passed:
+        - "6 Bio template sections + 25 fields created with Type/Source/Title"
+        - "Office Droplink and PracticeAreas Multilist verified via MCP"
+        - "__Standard Values created with FullName=$name"
+        - "Taxonomy root + 9 category folders + seed Tags created"
+      failed: []
+      pendingManual:
+        - "Verify Bios page insert options include Bio template"
+        - "Verify Taxonomy folder insert options allow Tag children"
+        - "Optional: add Sitecore Required validators on required fields"
+        - "Publish Bio template + Taxonomy + Bios for Edge"
+
+  - name: "pillsburylaw-bios-content-populate"
+    kind: "content-update"
+    category: "Lawyers"
+    status: "complete"
+    createdAt: "2026-08-04T20:00:00Z"
+    updatedAt: "2026-08-04T20:15:00Z"
+    siteName: "pillsburylaw"
+    notes: >
+      Populated 20 attorney Bio items under Home/Lawyers/Bios from public directory listing
+      https://www.pillsburylaw.com/en/lawyers/?v=attorney (A–A surnames). Skipped Consultant
+      Chris Albrecht. Emails are first.last@pillsburylaw.com conventions (not scraped — emails
+      not exposed in listing). Headshot left empty (no DAM assets). Added 6 Practice Area Tags
+      for practices not previously seeded.
+    source: "https://www.pillsburylaw.com/en/lawyers/?v=attorney"
+    templateId: "{D9ED4A26-1B44-4F52-9EAE-61E1EB193671}"
+    parent:
+      path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios"
+      itemId: "{5DAD4C5C-84CD-471A-80EF-C805570BE79A}"
+    practiceAreaTagsAdded:
+      - { name: "International-Trade", itemId: "{69CE4894-DC65-437A-8AF8-ABC9293D8733}" }
+      - { name: "Global-Sourcing-Technology-Transactions", itemId: "{D48C4559-F15B-44E9-AF9D-165D467D7C51}" }
+      - { name: "Insolvency-Restructuring", itemId: "{AFB78D21-1D07-46B9-B580-D1C94CC9E509}" }
+      - { name: "Environmental-Natural-Resources", itemId: "{91CC0DA3-F6B8-4FA0-AA10-0A08ED7837D8}" }
+      - { name: "Insurance-Recovery-Advisory", itemId: "{D9FA92A2-B0CC-4736-8C90-26E2BA1C1195}" }
+      - { name: "State-Local-Tax", itemId: "{8BFC36AB-C5F0-4F7B-BF22-566669E45B82}" }
+    bios:
+      - { name: "Mark-Abate", itemId: "{3359606E-DFEC-4297-910F-7F15D0540066}", fullName: "Mark Abate", jobTitle: "Partner", office: "New York" }
+      - { name: "Osama-Abu-Dehays", itemId: "{4746BD74-AC63-4ED2-8B86-A2CE1B2BA178}", fullName: "Osama Abu-Dehays", jobTitle: "Partner", office: "Doha" }
+      - { name: "Ranjini-Acharya", itemId: "{ED34EB16-C784-43E5-BE3C-FBFC6697B205}", fullName: "Ranjini Acharya", jobTitle: "Partner", office: "Silicon Valley" }
+      - { name: "Rolando-T-Acosta", itemId: "{E43A6A27-6515-4A89-8D10-67DE7DEEB925}", fullName: "Rolando T. Acosta", jobTitle: "Partner", office: "New York" }
+      - { name: "Ryan-R-Adelsperger", itemId: "{75914696-02D4-4899-ACC9-0DFDC0571F24}", fullName: "Ryan R. Adelsperger", jobTitle: "Counsel", office: "New York" }
+      - { name: "Ata-A-Akiner", itemId: "{8306EB6F-3AA2-474A-ABF0-CD35B805CE6E}", fullName: "Ata A. Akiner", jobTitle: "Senior Associate", office: "Washington, DC" }
+      - { name: "Shinya-Akiyama", itemId: "{4CF3E8A1-73B9-444F-9CBE-3E1F18A2D5D9}", fullName: "Shinya Akiyama", jobTitle: "Partner", office: "New York" }
+      - { name: "Khalid-A-AlArfaj", itemId: "{A17985F3-2812-4721-8928-6B4381768660}", fullName: "Khalid A. AlArfaj", jobTitle: "Partner", office: "Riyadh" }
+      - { name: "James-L-Alberg", itemId: "{23A5D503-916E-4212-9756-86DD4CCDEF50}", fullName: "James L. Alberg", jobTitle: "Senior Counsel", office: "Washington, DC" }
+      - { name: "Lee-Alexander", itemId: "{3EBAD457-BD66-4E6A-89FA-672531D29957}", fullName: "Lee Alexander", jobTitle: "Associate", office: "Austin" }
+      - { name: "Natalie-Alexander", itemId: "{01D5511E-3A64-40F0-AD39-31D2487E64E7}", fullName: "Natalie Alexander", jobTitle: "Associate", office: "New York" }
+      - { name: "Andrew-V-Alfano", itemId: "{2F243F36-C6AC-477C-9577-67AB86B05306}", fullName: "Andrew V. Alfano", jobTitle: "Counsel", office: "New York" }
+      - { name: "Mediha-M-Ali", itemId: "{96F1778D-D59C-4E7D-9495-42493AD3BDBA}", fullName: "Mediha M. Ali", jobTitle: "Counsel", office: "Silicon Valley" }
+      - { name: "Jennifer-Altman", itemId: "{3FACDBC5-B0E5-472F-9ED5-C16EC268C75C}", fullName: "Jennifer Altman", jobTitle: "Partner", office: "Miami" }
+      - { name: "Stephanie-Amaru", itemId: "{077BDF62-59BC-4645-8667-1E2816B0082A}", fullName: "Stephanie Amaru", jobTitle: "Counsel", office: "Los Angeles" }
+      - { name: "Stephanie-Angkadjaja", itemId: "{AF20AB9A-C6A9-4E5D-AF11-90FDD972EDBD}", fullName: "Stephanie Angkadjaja", jobTitle: "Counsel", office: "Los Angeles" }
+      - { name: "Leonie-Arendt-Cassetta", itemId: "{9CA98E7D-8137-4CBD-9F43-FD5A8BB94D12}", fullName: "Leonie Arendt-Cassetta", jobTitle: "Counsel", office: "New York" }
+      - { name: "Semma-G-Arzapalo", itemId: "{30D08BD7-7D13-4B0F-A8F4-E362FB8E01FD}", fullName: "Semma G. Arzapalo", jobTitle: "Partner", office: "Los Angeles" }
+      - { name: "Stephen-S-Asay", itemId: "{A65B716C-C64E-4F83-AC29-5BA7FAD8B503}", fullName: "Stephen S. Asay", jobTitle: "Partner", office: "Washington, DC" }
+      - { name: "Stephen-C-Ashley", itemId: "{086C41B4-BDFF-409C-8669-3A747C7FF313}", fullName: "Stephen C. Ashley", jobTitle: "Partner", office: "New York" }
+    fieldsPopulated:
+      - FullName
+      - PreferredName
+      - JobTitle
+      - Office
+      - Summary
+      - PracticeAreas
+      - Biography
+      - Email
+      - Phone
+      - SeoTitle
+      - SeoDescription
+    verification:
+      checkedAt: "2026-08-04T20:15:00Z"
+      passed:
+        - "20 Bio children under Bios parent confirmed via MCP"
+        - "Mark-Abate FullName/JobTitle/Office/PracticeAreas/Biography/Phone verified"
+      failed: []
+      pendingManual:
+        - "Add Headshot media assets (currently empty)"
+        - "Confirm or correct derived email addresses"
+        - "Optional: enrich Biography from individual attorney pages"
+        - "Publish Bios tree for Edge when ready"
+
+  - name: "pillsburylaw-bio-listing"
+    kind: "simple"
+    category: "Lawyers"
+    status: "complete"
+    createdAt: "2026-08-04T20:20:00Z"
+    updatedAt: "2026-08-04T20:45:00Z"
+    siteName: "pillsburylaw"
+    siteCollection: "pillsbury"
+    notes: >
+      BioListing directory component with search + practice/office filters. Datasource points
+      BiosRoot Droptree at Home/Lawyers/Bios; ComponentQuery expands LookupField children.
+      React at src/components/uiim/lawyers/BioListing.tsx.
+    react:
+      filePath: "src/components/uiim/lawyers/BioListing.tsx"
+      componentName: "BioListing"
+      propsShape: "graphql-datasource"
+    templates:
+      parent:
+        path: "/sitecore/templates/Project/pillsbury/Components/Lawyers/BioListing"
+        itemId: "{247F4201-FB4E-4B8B-821E-F94AF16709F1}"
+        standardValues: "{0860836F-C276-41E3-B190-41BCB2E09EF5}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{6D7D203F-A179-446A-9B05-9D2B6850165F}" }
+          - { name: "Intro", type: "Rich Text", itemId: "{82C601DD-590C-4554-A704-E87F16294082}" }
+          - { name: "BiosRoot", type: "Droptree", itemId: "{EEFC79B9-8D34-447A-BDA2-7EE988828070}", source: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers" }
+          - { name: "EmptyResultsText", type: "Single-Line Text", itemId: "{D619A8CF-CBEC-4DF2-A553-A44EAAA6BE56}" }
+          - { name: "ShowFilters", type: "Checkbox", itemId: "{7715D746-C8B4-49DF-8840-FE4C3A97FD5C}" }
+      folder:
+        path: "/sitecore/templates/Project/pillsbury/Folders/BioListing Folder"
+        itemId: "{6F3EC942-5926-4DB0-9604-8852622C29FF}"
+      renderingParams:
+        path: "/sitecore/templates/Project/pillsbury/Rendering Parameters/Lawyers/BioListing"
+        itemId: "{E313DF12-EC1A-427F-8178-F974B2B1DECC}"
+    rendering:
+      path: "/sitecore/layout/Renderings/Project/pillsbury/Lawyers/BioListing"
+      itemId: "{C67E942A-2EBC-43D5-88FC-DD95EDC9A77D}"
+      componentName: "BioListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/pillsbury/Components/Lawyers/BioListing"
+      useComponentQuery: true
+    datasourceFolder:
+      path: "/sitecore/content/pillsbury/pillsburylaw/Data/Bio Listings"
+      itemId: "{F4216003-C5A9-433D-8FA5-10E3D9169AA8}"
+      exampleItem:
+        name: "Lawyer Directory"
+        itemId: "{C0C9F397-DA1B-4D1E-ADAD-181EF84A8288}"
+        biosRoot: "{5DAD4C5C-84CD-471A-80EF-C805570BE79A}"
+    variants:
+      containerPath: "/sitecore/content/pillsbury/pillsburylaw/Presentation/Headless Variants/BioListing"
+      containerId: "{63D7FE8B-0CF2-42DD-A6A5-45FE685A87F0}"
+      definitions:
+        - { name: "Default", itemId: "{20F712C7-F7E1-4018-8D6D-D25F0ED7F149}" }
+        - { name: "Cards", itemId: "{F21103FC-6D54-4D97-80A1-6A51755FA9E4}" }
+    notesHover: >
+      2026-08-04: Added Cards variant (grid). Default + Cards share MultiPromo McKinsey hover
+      (hover:bg-white hover:text-neutral-950 + ChevronRight group-hover:text-primary).
+    verification:
+      checkedAt: "2026-08-04T20:45:00Z"
+      passed:
+        - "Datasource template fields + types verified"
+        - "Example Lawyer Directory datasource populated with BiosRoot"
+        - "Rendering componentName + Parameters Template + ComponentQuery set"
+        - "Default Headless Variant created"
+        - "React registered in component-map as BioListing"
+      failed: []
+      pendingManual:
+        - "Append {C67E942A-2EBC-43D5-88FC-DD95EDC9A77D} to Available Renderings/Page Content (silent-read)"
+        - "Verify Datasource Template/Location in CE (silent-write)"
+        - "Place BioListing on Lawyers/Bios with Lawyer Directory datasource"
+        - "Publish rendering + Data/Bio Listings"
+
+  - name: "pillsburylaw-bio-detail"
+    kind: "context-only"
+    category: "Lawyers"
+    status: "complete"
+    createdAt: "2026-08-04T20:20:00Z"
+    updatedAt: "2026-08-04T20:45:00Z"
+    siteName: "pillsburylaw"
+    siteCollection: "pillsbury"
+    notes: >
+      BioDetail context component reads Bio page route fields (FullName, JobTitle, Biography,
+      PracticeAreas, contact, etc.). No datasource. React at src/components/uiim/lawyers/BioDetail.tsx.
+    react:
+      filePath: "src/components/uiim/lawyers/BioDetail.tsx"
+      componentName: "BioDetail"
+      propsShape: "context-route"
+    templates:
+      renderingParams:
+        path: "/sitecore/templates/Project/pillsbury/Rendering Parameters/Lawyers/BioDetail"
+        itemId: "{2C2E9913-6D46-4036-8040-4D54F1E0F556}"
+    rendering:
+      path: "/sitecore/layout/Renderings/Project/pillsbury/Lawyers/BioDetail"
+      itemId: "{560AB1F6-8C48-4449-9E72-F29C39BA750D}"
+      componentName: "BioDetail"
+      datasourceRequired: false
+      useComponentQuery: false
+    variants:
+      containerPath: "/sitecore/content/pillsbury/pillsburylaw/Presentation/Headless Variants/BioDetail"
+      containerId: "{ABF39966-4628-4F00-9095-0BF24FD8507C}"
+      definitions:
+        - { name: "Default", itemId: "{DE212001-1A78-4E22-BE53-C148AC5AEC64}" }
+    verification:
+      checkedAt: "2026-08-04T20:45:00Z"
+      passed:
+        - "Rendering Parameters + JSON Rendering created"
+        - "componentName BioDetail + Parameters Template set"
+        - "Default Headless Variant created"
+        - "React registered in component-map as BioDetail"
+      failed: []
+      pendingManual:
+        - "Append {560AB1F6-8C48-4449-9E72-F29C39BA750D} to Available Renderings/Page Content (silent-read)"
+        - "Publish Bio pages after BioDetail placement"
+        - "Optional: create Bio Page Design so new Bio pages inherit BioDetail automatically"
+    placement:
+      placeholder: "headless-main"
+      layoutEditingKind: "FINAL"
+      pagesUpdated: 20
+      note: "BioDetail placed on all 20 existing Bio pages via add_component_on_page (2026-08-04). Bio __Standard Values not API-editable (no site root)."
+
   - name: "pillsburylaw-footer-nav-remap"
     kind: "content-update"
     category: "Navigation"
