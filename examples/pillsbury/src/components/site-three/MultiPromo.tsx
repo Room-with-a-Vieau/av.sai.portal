@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import {
   Text as ContentSdkText,
+  RichText as ContentSdkRichText,
   NextImage as ContentSdkImage,
   Image as ContentSdkEditableImage,
   useSitecore,
@@ -65,7 +66,7 @@ const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
           <ContentSdkText field={heading?.jsonValue} />
         </h3>
         <p className="lg:text-lg mb-2">
-          <ContentSdkText field={description?.jsonValue} />
+          <ContentSdkRichText field={description?.jsonValue} />
         </p>
         <TrackedCtaLink field={link?.jsonValue} className="btn btn-ghost" />
       </div>
@@ -97,9 +98,9 @@ const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
           className="size-5 shrink-0 transition-colors duration-300 group-hover:text-primary"
         />
       </h3>
-      <p className="text-sm leading-relaxed lg:text-base">
-        <ContentSdkText field={description?.jsonValue} />
-      </p>
+      <div className="text-sm leading-relaxed lg:text-base">
+        <ContentSdkRichText field={description?.jsonValue} />
+      </div>
     </>
   );
 
@@ -141,9 +142,9 @@ export const Default = (props: MultiPromoProps) => {
             <h2 className="mb-6 text-2xl lg:text-5xl">
               <ContentSdkText field={datasource?.title?.jsonValue} />
             </h2>
-            <p className="text-lg">
-              <ContentSdkText field={datasource?.description?.jsonValue} />
-            </p>
+            <div className="text-lg">
+              <ContentSdkRichText field={datasource?.description?.jsonValue} />
+            </div>
           </div>
 
           {promos.length > 0 && (
@@ -201,9 +202,9 @@ export const Stacked = (props: MultiPromoProps) => {
               <h2 className="mb-6 text-2xl lg:text-5xl">
                 <ContentSdkText field={datasource?.title?.jsonValue} />
               </h2>
-              <p className="text-lg">
-                <ContentSdkText field={datasource?.description?.jsonValue} />
-              </p>
+              <div className="text-lg">
+                <ContentSdkRichText field={datasource?.description?.jsonValue} />
+              </div>
             </div>
           </div>
           <div className={`${parentBasedGridClasses} ${parentBasedGridItemClasses} mt-30`}>
@@ -239,9 +240,9 @@ export const SingleColumn = (props: MultiPromoProps) => {
             <h2 className="mb-6 text-2xl lg:text-5xl">
               <ContentSdkText field={datasource?.title?.jsonValue} />
             </h2>
-            <p className="text-lg">
-              <ContentSdkText field={datasource?.description?.jsonValue} />
-            </p>
+            <div className="text-lg">
+              <ContentSdkRichText field={datasource?.description?.jsonValue} />
+            </div>
           </div>
           <div className="grid gap-14">
             {datasource?.children?.results?.filter(Boolean).map((promo) => {
@@ -295,9 +296,9 @@ const SideTabsPromoPanel = ({
           </h3>
         )}
         {(descriptionField?.value || isEditing) && descriptionField && (
-          <p className="font-body mb-6 max-w-prose text-base leading-relaxed text-white/95 sm:text-lg">
-            <ContentSdkText field={descriptionField} />
-          </p>
+          <div className="font-body mb-6 max-w-prose text-base leading-relaxed text-white/95 sm:text-lg">
+            <ContentSdkRichText field={descriptionField} />
+          </div>
         )}
         {(linkField?.value?.href || isEditing) && linkField && (
           <TrackedCtaLink
@@ -441,7 +442,7 @@ const TopTabsPromoPanel = ({
       )}
       {(descriptionField?.value || isEditing) && descriptionField && (
         <div className="font-body text-foreground max-w-prose text-base leading-relaxed sm:text-lg [&_p+p]:mt-4 [&_p]:mb-0 [&_strong]:font-semibold">
-          <ContentSdkText field={descriptionField} />
+          <ContentSdkRichText field={descriptionField} />
         </div>
       )}
       {(linkField?.value?.href || isEditing) && linkField && (

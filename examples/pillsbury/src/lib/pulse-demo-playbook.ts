@@ -1,99 +1,174 @@
 import type { PulseSource, PulseStateCode } from '@/lib/pulse-types';
 
 /**
- * Curated Pulse demo intents so key SE questions always cite real Knowledge Articles
- * plus FL/NC Shared Content — even when Edge Search indexing lags.
+ * Curated Pulse demo intents for the Pillsbury Law visitor demo.
+ * These scenarios are intentionally hard to solve with keyword search alone —
+ * they need multi-criteria matching (practice + industry + geography + situation).
  */
 
-export type PulseDemoIntentId = 'personal-auto-fnol' | 'homeowners-water-damage';
-
-type StateChunk = {
-  id: string;
-  title: string;
-  path: string;
-  excerpt: string;
-};
+export type PulseDemoIntentId =
+  | 'japan-us-tech-acquisition'
+  | 'distressed-portfolio-company'
+  | 'mena-trade-sanctions'
+  | 'insurance-construction-dispute';
 
 type PulseDemoIntent = {
   id: PulseDemoIntentId;
-  /** All keywords must appear somewhere in the normalized question (OR groups via nested arrays). */
+  /** All tokens in a group must appear in the normalized question; any matching group wins. */
   matchAny: string[][];
-  article: Omit<PulseSource, 'score'>;
-  sharedByState: Partial<Record<PulseStateCode, StateChunk>>;
+  /** Ordered citations (highest confidence first). */
+  sources: Omit<PulseSource, 'score'>[];
 };
 
 const INTENTS: PulseDemoIntent[] = [
   {
-    id: 'personal-auto-fnol',
+    id: 'japan-us-tech-acquisition',
     matchAny: [
-      ['fnol'],
-      ['first', 'notice'],
-      ['personal', 'auto', 'intake'],
-      ['auto', 'intake'],
-      ['florida', 'north', 'carolina', 'auto'],
-      ['requirements', 'auto'],
+      ['japanese', 'acqui'],
+      ['japan', 'us', 'tech'],
+      ['japan', 'intellectual'],
+      ['japan', 'patent'],
+      ['cross', 'border', 'japan'],
+      ['japanese', 'company'],
+      ['japan', 'practice'],
     ],
-    article: {
-      id: '{8134326F-FF16-4B77-8D34-9EDB10353DA1}',
-      title: 'Personal Auto FNOL — First Notice of Loss Intake',
-      url: '/Knowledge-Articles/PersonalLines/Auto/KB-AU-1001-FNOL',
-      path: '/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Auto/KB-AU-1001-FNOL',
-      excerpt:
-        'Guide Progressive Claims Advisors through accurate, complete Personal Auto FNOL so the claim is set up correctly the first time.',
-      type: 'knowledge-article',
-    },
-    sharedByState: {
-      FL: {
-        id: '{69F3074A-AC8C-407E-B9FF-3BD55F1FB742}',
-        title: 'KB-AU-1001-FNOL-FL (Claims Timelines)',
-        path: '/sitecore/content/progressive/pkm/Home/Shared Content/07-ClaimsTimelines/StateSpecific/FL/KB-AU-1001-FNOL-FL',
+    sources: [
+      {
+        id: '{4CF3E8A1-73B9-444F-9CBE-3E1F18A2D5D9}',
+        title: 'Shinya Akiyama — Corporate / Japan Practice',
+        url: '/Lawyers/Bios/Shinya-Akiyama',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Shinya-Akiyama',
         excerpt:
-          'In Florida, complete Personal Auto FNOL the same calendar day whenever the loss is reported before Progressive late-day cutoff, and note the report time in Eastern Time. If a Florida Traffic Crash Report is pending, schedule the follow-up within 24 hours.',
+          'Corporate partner and Japan Practice co-leader who counsels Japanese companies on starting, acquiring, and managing U.S. businesses.',
+        type: 'people-and-teams',
       },
-      NC: {
-        id: '{6D5FB648-7873-4E75-AA4F-82CD1A07A640}',
-        title: 'KB-AU-1001-FNOL-NC (Regulatory & Compliance)',
-        path: '/sitecore/content/progressive/pkm/Home/Shared Content/08-RegulatoryAndCompliance/StateSpecific/NC/KB-AU-1001-FNOL-NC',
+      {
+        id: '{3359606E-DFEC-4297-910F-7F15D0540066}',
+        title: 'Mark Abate — Intellectual Property',
+        url: '/Lawyers/Bios/Mark-Abate',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Mark-Abate',
         excerpt:
-          'For North Carolina Auto FNOL, capture loss date/time, operator identity, injury indicators, and police report status consistently. Avoid improvised coverage or liability statements at intake.',
+          'Leading IP trial lawyer recognized for patent litigation strategy and technical mastery — a natural second seat when a tech deal carries IP risk.',
+        type: 'people-and-teams',
       },
-    },
+      {
+        id: '{ED34EB16-C784-43E5-BE3C-FBFC6697B205}',
+        title: 'Ranjini Acharya — Intellectual Property',
+        url: '/Lawyers/Bios/Ranjini-Acharya',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Ranjini-Acharya',
+        excerpt:
+          'Silicon Valley IP partner covering patents, trade secrets, trademarks, and copyright enforcement across complex technology matters.',
+        type: 'people-and-teams',
+      },
+    ],
   },
   {
-    id: 'homeowners-water-damage',
+    id: 'distressed-portfolio-company',
     matchAny: [
-      ['water', 'damage'],
-      ['water', 'mitigation'],
-      ['homeowners', 'water'],
-      ['homeowner', 'water'],
-      ['licensed', 'state', 'water'],
-      ['handle', 'water'],
+      ['distress'],
+      ['insolvency'],
+      ['restructur'],
+      ['bankrupt'],
+      ['creditor'],
+      ['portfolio', 'company', 'trouble'],
+      ['financial', 'distress'],
     ],
-    article: {
-      id: '{8EB3B901-6561-463B-B09B-012F7EB4FC2D}',
-      title: 'Homeowners Water Damage — Intake to Mitigation',
-      url: '/Knowledge-Articles/PersonalLines/Homeowners/KB-HO-1001-WaterDamage',
-      path: '/sitecore/content/progressive/pkm/Home/Knowledge Articles/PersonalLines/Homeowners/KB-HO-1001-WaterDamage',
-      excerpt:
-        'Equip Progressive Claims Advisors to handle Personal Home water damage claims with accurate intake, rapid mitigation, and clear coverage framing.',
-      type: 'knowledge-article',
-    },
-    sharedByState: {
-      FL: {
-        id: '{814F9F31-DC06-4BD7-ADBD-DFE5C0B16B95}',
-        title: 'KB-HO-1001-WaterDamage-FL (Claims Timelines)',
-        path: '/sitecore/content/progressive/pkm/Home/Shared Content/07-ClaimsTimelines/StateSpecific/FL/KB-HO-1001-WaterDamage-FL',
+    sources: [
+      {
+        id: '{2F243F36-C6AC-477C-9577-67AB86B05306}',
+        title: 'Andrew V. Alfano — Insolvency & Restructuring',
+        url: '/Lawyers/Bios/Andrew-V-Alfano',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Andrew-V-Alfano',
         excerpt:
-          'For Florida water damage claims, authorize emergency mitigation the same day when materials remain wet, and document discovery versus occurrence times carefully for hurricane and tropical-storm windows.',
+          'Advises distressed companies, investors, and creditors through complex restructurings across industries including energy, aviation, and EVs.',
+        type: 'people-and-teams',
       },
-      NC: {
-        id: '{A843C525-812F-4194-A791-437478987E58}',
-        title: 'KB-HO-1001-WaterDamage-NC (Regulatory & Compliance)',
-        path: '/sitecore/content/progressive/pkm/Home/Shared Content/08-RegulatoryAndCompliance/StateSpecific/NC/KB-HO-1001-WaterDamage-NC',
+      {
+        id: '{30D08BD7-7D13-4B0F-A8F4-E362FB8E01FD}',
+        title: 'Semma G. Arzapalo — Funds / Corporate',
+        url: '/Lawyers/Bios/Semma-G-Arzapalo',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Semma-G-Arzapalo',
         excerpt:
-          'In North Carolina water claims, distinguish sudden or accidental discharge from flood and long-term seepage before confirming Homeowners coverage. When flood indicators exist, direct the customer to the flood path.',
+          'Global Funds practice leader representing institutional investors through private equity commitments — useful when LPs need coordinated counsel on a troubled portfolio company.',
+        type: 'people-and-teams',
       },
-    },
+    ],
+  },
+  {
+    id: 'mena-trade-sanctions',
+    matchAny: [
+      ['sanction'],
+      ['export', 'control'],
+      ['international', 'trade'],
+      ['national', 'security', 'trade'],
+      ['middle', 'east'],
+      ['saudi'],
+      ['qatar'],
+      ['mena'],
+      ['riyadh'],
+      ['doha'],
+    ],
+    sources: [
+      {
+        id: '{8306EB6F-3AA2-474A-ABF0-CD35B805CE6E}',
+        title: 'Ata A. Akiner — International Trade',
+        url: '/Lawyers/Bios/Ata-A-Akiner',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Ata-A-Akiner',
+        excerpt:
+          'Helps global and U.S. clients navigate complex international trade, regulatory, and national-security matters from Washington, DC.',
+        type: 'people-and-teams',
+      },
+      {
+        id: '{4746BD74-AC63-4ED2-8B86-A2CE1B2BA178}',
+        title: 'Osama Abu-Dehays — Corporate (Doha / London)',
+        url: '/Lawyers/Bios/Osama-Abu-Dehays',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Osama-Abu-Dehays',
+        excerpt:
+          'Corporate partner known across MENA for commercial, technology, media, and telecommunications matters — strong local counterpart for regional expansion.',
+        type: 'people-and-teams',
+      },
+      {
+        id: '{A17985F3-2812-4721-8928-6B4381768660}',
+        title: 'Khalid A. AlArfaj — Corporate (Riyadh)',
+        url: '/Lawyers/Bios/Khalid-A-AlArfaj',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Khalid-A-AlArfaj',
+        excerpt:
+          'Advises national and international clients on complex corporate and commercial matters across Saudi Arabia and the United States.',
+        type: 'people-and-teams',
+      },
+    ],
+  },
+  {
+    id: 'insurance-construction-dispute',
+    matchAny: [
+      ['insurance', 'recover'],
+      ['insurance', 'coverage'],
+      ['construction', 'insurance'],
+      ['construction', 'claim'],
+      ['carrier', 'dispute'],
+      ['risk', 'management', 'insurance'],
+      ['coverage', 'fight'],
+    ],
+    sources: [
+      {
+        id: '{A65B716C-C64E-4F83-AC29-5BA7FAD8B503}',
+        title: 'Stephen S. Asay — Insurance Recovery & Advisory',
+        url: '/Lawyers/Bios/Stephen-S-Asay',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Stephen-S-Asay',
+        excerpt:
+          'Advises on proactive risk management and complex commercial litigation involving insurance coverage and construction claims from Washington, DC.',
+        type: 'people-and-teams',
+      },
+      {
+        id: '{3FACDBC5-B0E5-472F-9ED5-C16EC268C75C}',
+        title: 'Jennifer Altman — Litigation (Miami)',
+        url: '/Lawyers/Bios/Jennifer-Altman',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Jennifer-Altman',
+        excerpt:
+          'Miami managing partner and Chambers-recognized commercial litigator with deep trial and arbitration experience when a coverage dispute becomes hard-fought litigation.',
+        type: 'people-and-teams',
+      },
+    ],
   },
 ];
 
@@ -109,7 +184,6 @@ export function matchPulseDemoIntent(question: string): PulseDemoIntent | null {
   const normalized = normalizeQuestion(question);
   if (!normalized) return null;
 
-  // Prefer more specific multi-token groups by scoring match group length
   let best: PulseDemoIntent | null = null;
   let bestScore = 0;
 
@@ -130,60 +204,29 @@ export function matchPulseDemoIntent(question: string): PulseDemoIntent | null {
 
 /**
  * Build high-confidence sources for a matched demo intent.
- * Knowledge Article is always first; state Shared Content is second when persona is set.
- * Shared Content cards link to the Knowledge Article page (where VariantContent renders).
+ * `stateCode` is retained for API compatibility with the Pulse ask route;
+ * Pillsbury visitor demos do not layer state Shared Content.
  */
 export function buildDemoPlaybookSources(
   question: string,
-  stateCode?: PulseStateCode | null
+  _stateCode?: PulseStateCode | null
 ): PulseSource[] {
   const intent = matchPulseDemoIntent(question);
   if (!intent) return [];
 
-  const sources: PulseSource[] = [
-    {
-      ...intent.article,
-      score: 1000,
-    },
-  ];
-
-  if (stateCode && intent.sharedByState[stateCode]) {
-    const chunk = intent.sharedByState[stateCode]!;
-    sources.push({
-      id: chunk.id,
-      title: chunk.title,
-      // Cite the Knowledge Article page — Shared Content renders there via VariantContent
-      url: intent.article.url,
-      path: chunk.path,
-      excerpt: chunk.excerpt,
-      type: 'shared-content',
-      stateCode,
-      score: 900,
-    });
-  } else {
-    // Nationwide: include both FL and NC shared excerpts as citations (still link to KA)
-    for (const code of ['FL', 'NC'] as PulseStateCode[]) {
-      const chunk = intent.sharedByState[code];
-      if (!chunk) continue;
-      sources.push({
-        id: chunk.id,
-        title: chunk.title,
-        url: intent.article.url,
-        path: chunk.path,
-        excerpt: chunk.excerpt,
-        type: 'shared-content',
-        stateCode: code,
-        score: 800,
-      });
-    }
-  }
-
-  return sources;
+  return intent.sources.map((source, index) => ({
+    ...source,
+    score: 1000 - index * 50,
+  }));
 }
 
-/** Starter prompts shown in the Pulse empty state (aligned with demo intents). */
+/**
+ * Starter prompts shown in the Pulse empty state.
+ * Each maps to a demo intent and is phrased as a visitor would ask — not as a keyword search.
+ */
 export const PULSE_DEMO_STARTER_PROMPTS = [
-  'What are the Florida or North Carolina requirements for Personal Auto FNOL intake?',
-  'How should I handle homeowners water damage mitigation for my licensed state?',
-  'Who covers commercial auto products?',
+  'A Japanese company is buying a U.S. tech business — who should lead, and who covers the IP risk?',
+  'One of our portfolio companies is in financial distress. Who should we talk to?',
+  "We're expanding into Saudi Arabia and have export-control questions. Who can help?",
+  'Our construction project is in a coverage fight with the carrier — who handles insurance recovery?',
 ] as const;

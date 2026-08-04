@@ -8,8 +8,8 @@ import {
 import { buildDemoPlaybookSources } from '@/lib/pulse-demo-playbook';
 import type { PulseSource, PulseSourceType, PulseStateCode } from '@/lib/pulse-types';
 
-const DEFAULT_HOME_PATH = '/sitecore/content/progressive/pkm/Home';
-const DEFAULT_KA_ROOT_ID = 'ef281e84-ff74-48c8-b64f-00933f9f0eff';
+const DEFAULT_HOME_PATH = '/sitecore/content/pillsbury/pillsburylaw/Home';
+const DEFAULT_KA_ROOT_ID = '5dad4c5c-84cd-471a-80ef-c805570be79a';
 const FETCH_FIRST = 36;
 const MAX_SOURCES = 5;
 
@@ -136,8 +136,10 @@ export function classifySourceType(path?: string): PulseSourceType {
   const p = (path || '').replace(/\\/g, '/');
   if (/\/Shared(?:%20| )?Content\//i.test(p)) return 'shared-content';
   if (/\/Knowledge(?:%20|-)?Articles?\//i.test(p)) return 'knowledge-article';
+  if (/\/Insights\//i.test(p) || /\/Blogs?\//i.test(p)) return 'knowledge-article';
+  if (/\/Lawyers\/Bios?\//i.test(p) || /\/Bios?\//i.test(p)) return 'people-and-teams';
   if (/\/People(?:%20|-)?and(?:%20|-)?Teams?\//i.test(p)) return 'people-and-teams';
-  if (/\/Products?\//i.test(p)) return 'product';
+  if (/\/Products?\//i.test(p) || /\/Capabilities\//i.test(p)) return 'product';
   return 'other';
 }
 
@@ -468,7 +470,7 @@ function rankAndCap(
 
 /**
  * Retrieve trusted content hits for Pulse.
- * Demo playbook intents (FNOL / water damage) always win for reliable KA citations.
+ * Demo playbook intents (multi-factor lawyer matching) always win for reliable SE demos.
  * Prefer Sitecore Search when configured; fall back to Experience Edge GraphQL.
  */
 export async function retrievePulseSources(

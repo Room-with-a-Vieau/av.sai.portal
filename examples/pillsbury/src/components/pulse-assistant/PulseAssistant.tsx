@@ -28,10 +28,10 @@ type ChatMessage = {
 const STARTER_PROMPTS = [...PULSE_DEMO_STARTER_PROMPTS];
 
 const TYPE_BADGE: Record<PulseSource['type'], string> = {
-  'knowledge-article': 'Knowledge',
-  'people-and-teams': 'People',
-  product: 'Product',
-  'shared-content': 'Shared',
+  'knowledge-article': 'Insight',
+  'people-and-teams': 'Lawyer',
+  product: 'Capability',
+  'shared-content': 'Related',
   other: 'Content',
 };
 
@@ -209,15 +209,15 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
                 <h2 className="text-base font-semibold tracking-tight">Pulse</h2>
               </div>
               <p className="mt-0.5 text-xs text-primary-foreground/80">
-                Trusted answers from indexed site content
+                Find the right lawyer from indexed site content
               </p>
               {stateCode ? (
                 <span className="mt-2 inline-flex rounded-md bg-primary-foreground/15 px-2 py-0.5 text-[11px] font-medium">
-                  Licensed in {STATE_LABEL[stateCode]}
+                  Context: {STATE_LABEL[stateCode]}
                 </span>
               ) : (
                 <span className="mt-2 inline-flex rounded-md bg-primary-foreground/10 px-2 py-0.5 text-[11px] font-medium text-primary-foreground/75">
-                  Nationwide view
+                  Visitor view
                 </span>
               )}
             </div>
@@ -235,8 +235,8 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
             {messages.length === 0 ? (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Ask about Knowledge Articles, People &amp; Teams, Products, or Shared Content.
-                  When you sign in, Pulse highlights state-specific guidance.
+                  Ask in plain language — practice, geography, and situation at once. Pulse is
+                  strongest when keyword search would force you to guess the right terms.
                 </p>
                 <div className="flex flex-col gap-2">
                   {STARTER_PROMPTS.map((prompt) => (
