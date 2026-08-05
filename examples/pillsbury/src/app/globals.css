@@ -198,15 +198,27 @@ html[data-theme='pillsburylaw'] body {
   background-color: var(--color-background);
 }
 
+/* Solid primary CTAs stay vivid on navy; text uses luminous --color-primary from theme tokens. */
 html[data-theme='pillsburylaw'] .btn.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
+  background-color: #0055ff;
+  color: #ffffff;
   border-radius: 0;
 }
 
 html[data-theme='pillsburylaw'] .btn.btn-primary:hover {
-  background-color: var(--color-primary-hover);
-  color: var(--color-primary-foreground);
+  background-color: #0044cc;
+  color: #ffffff;
+}
+
+html[data-theme='pillsburylaw'] .bg-primary {
+  background-color: #0055ff;
+  color: #ffffff;
+}
+
+html[data-theme='pillsburylaw'] .bg-primary:hover,
+html[data-theme='pillsburylaw'] .hover\:bg-primary-hover:hover {
+  background-color: #0044cc;
+  color: #ffffff;
 }
 
 /* BUTTONS END */

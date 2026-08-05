@@ -32,7 +32,8 @@ function shouldBypassOptimizer(src: string): boolean {
     return (
       hostname.endsWith('.sitecoresandbox.cloud') ||
       hostname.endsWith('.sitecorecontenthub.cloud') ||
-      hostname.includes('stylelabs.cloud')
+      hostname.includes('stylelabs.cloud') ||
+      hostname === 'images.unsplash.com'
     );
   } catch {
     return false;

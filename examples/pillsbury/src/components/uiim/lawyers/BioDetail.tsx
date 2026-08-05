@@ -1,6 +1,7 @@
 'use client';
 
 import type React from 'react';
+import Image from 'next/image';
 import {
   Link as ContentSdkLink,
   NextImage as ContentSdkImage,
@@ -18,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
 import type { BioDetailFields, BioDetailProps } from './bio-detail.props';
+import { resolveBioHeadshotSrc } from './bio-headshots';
 
 type TaxonomyLike = {
   id?: string;
@@ -138,7 +140,16 @@ export const Default: React.FC<BioDetailProps> = (props) => {
   const email = textValue(fields.Email);
   const phone = textValue(fields.Phone);
   const office = officeLabel(fields.Office);
-  const headshot = fields.Headshot as ImageField | undefined;
+  const routeName = page?.layout?.sitecore?.route?.name ?? '';
+  const headshotResolved = resolveBioHeadshotSrc({
+    itemName: routeName,
+    displayName: fullName || routeName,
+    headshotField: fields.Headshot,
+  });
+  const headshotSrc = headshotResolved.src;
+  const headshotAlt = headshotResolved.alt;
+  const bypassOptimizer =
+    headshotSrc.includes('images.unsplash.com') || headshotSrc.includes('sitecoresandbox.cloud');
   const linkedIn = fields.LinkedIn as LinkField | undefined;
 
   const practiceAreas = resolveTaxonomy(fields.PracticeAreas);
@@ -166,8 +177,20 @@ export const Default: React.FC<BioDetailProps> = (props) => {
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 lg:px-8 lg:py-14">
           <div className="flex flex-col items-start gap-4">
             <div className="bg-muted text-muted-foreground relative flex size-36 items-center justify-center overflow-hidden rounded-2xl text-2xl font-semibold tracking-wide sm:size-44">
-              {(headshot?.value?.src || isEditing) && headshot ? (
-                <ContentSdkImage field={headshot} className="size-full object-cover" />
+              {headshotSrc ? (
+                <Image
+                  src={headshotSrc}
+                  alt={headshotAlt || fullName || 'Attorney headshot'}
+                  fill
+                  sizes="176px"
+                  className="object-cover"
+                  unoptimized={bypassOptimizer}
+                />
+              ) : isEditing && fields.Headshot ? (
+                <ContentSdkImage
+                  field={fields.Headshot as ImageField}
+                  className="size-full object-cover"
+                />
               ) : (
                 <span aria-hidden>{initials(fullName || 'LA')}</span>
               )}

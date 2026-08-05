@@ -44,7 +44,7 @@ async function resolveAfterCursor(
   return after ?? undefined;
 }
 
-export function BlogListingSkeleton(): ReactElement {
+export function BlogPostListingSkeleton(): ReactElement {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-6 h-4 w-72 max-w-full rounded-md bg-muted" />
@@ -67,7 +67,7 @@ export function BlogListingSkeleton(): ReactElement {
   );
 }
 
-async function BlogListingContent(props: BlogListingProps): Promise<ReactElement> {
+async function BlogPostListingContent(props: BlogListingProps): Promise<ReactElement> {
   const pageSize = props.pageSize ?? 9;
   // TODO: When using URL `?page=` with BlogPagination, pass `currentPage` from the route (e.g. parsed `searchParams`) so the grid matches the query string.
   const currentPage = props.currentPage ?? 1;
@@ -133,10 +133,10 @@ async function BlogListingContent(props: BlogListingProps): Promise<ReactElement
   );
 }
 
-export default function BlogListing(props: BlogListingProps): ReactElement {
+export default function BlogPostListing(props: BlogListingProps): ReactElement {
   return (
-    <Suspense fallback={<BlogListingSkeleton />}>
-      <BlogListingContent {...props} />
+    <Suspense fallback={<BlogPostListingSkeleton />}>
+      <BlogPostListingContent {...props} />
     </Suspense>
   );
 }

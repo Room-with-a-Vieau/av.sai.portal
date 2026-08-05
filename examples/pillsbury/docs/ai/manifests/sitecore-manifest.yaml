@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-04T19:50:00Z"
+lastUpdatedAt: "2026-08-05T11:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3300,9 +3300,34 @@ ia:
         - "Mark-Abate FullName/JobTitle/Office/PracticeAreas/Biography/Phone verified"
       failed: []
       pendingManual:
-        - "Add Headshot media assets (currently empty)"
         - "Confirm or correct derived email addresses"
         - "Optional: enrich Biography from individual attorney pages"
+        - "Publish Bios tree for Edge when ready"
+
+  - name: "pillsburylaw-bio-headshots-unsplash"
+    kind: "content-update"
+    category: "Lawyers"
+    status: "complete"
+    createdAt: "2026-08-05T12:55:00Z"
+    updatedAt: "2026-08-05T12:55:00Z"
+    siteName: "pillsburylaw"
+    notes: >
+      Populated Headshot Image fields on 18 Bio pages with external Unsplash professional
+      portraits (square crop). Left Andrew-V-Alfano and Ata-A-Akiner DAM headshots unchanged.
+      BioListing/BioDetail render Unsplash via next/image (unoptimized); DAM via ContentSdkImage.
+      2026-08-05: Edge GraphQL does not return external Image src — added bio-headshots.ts
+      fallback map (same pattern as blog-listing.taxonomy) so listing + detail always resolve URLs.
+    skipped:
+      - { name: "Andrew-V-Alfano", reason: "existing Content Hub DAM headshot" }
+      - { name: "Ata-A-Akiner", reason: "existing Content Hub DAM headshot" }
+    fieldFormat: '<image src="https://images.unsplash.com/photo-...?auto=format&fit=crop&w=800&h=800&q=80" alt="..." width="800" height="800" />'
+    verification:
+      checkedAt: "2026-08-05T12:55:00Z"
+      passed:
+        - "18 Bio Headshot fields updated via MCP"
+        - "Alfano DAM Headshot unchanged"
+      failed: []
+      pendingManual:
         - "Publish Bios tree for Edge when ready"
 
   - name: "pillsburylaw-bio-listing"
@@ -4726,3 +4751,78 @@ ia:
       failed: []
       pendingManual:
         - "Publish Shared Content + Knowledge Articles for Edge"
+
+  - name: "pillsburylaw-blog-listing"
+    kind: "simple"
+    category: "Insights"
+    status: "complete"
+    createdAt: "2026-08-05T11:00:00Z"
+    updatedAt: "2026-08-05T11:30:00Z"
+    siteName: "pillsburylaw"
+    siteCollection: "pillsbury"
+    notes: >
+      BlogListing mirrors BioListing: datasource Droptree BlogsRoot expands children of
+      Insights/Blogs (Services Page blogs). Variants Default (rows) and Cards (grid).
+      React at src/components/uiim/insights/BlogListing.tsx. Placed on Insights/Blogs
+      headless-main with local datasource BlogsRoot={612AE84F-C0C8-451A-859B-1712FB3149D2}.
+      Component-map uses UIIM BlogListing; legacy src/components/BlogListing remapped to BlogListingLegacy.
+    react:
+      filePath: "src/components/uiim/insights/BlogListing.tsx"
+      componentName: "BlogListing"
+      propsShape: "graphql-datasource"
+    templates:
+      parent:
+        path: "/sitecore/templates/Project/pillsbury/Components/Insights/BlogListing"
+        itemId: "{3D0988CB-43ED-4892-96A4-F9F44FC399CB}"
+        standardValues: "{62284FDC-46C6-49F8-BD1C-117A0CE8C311}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{2301C73F-11B3-47FB-ADEC-5A9D401B149A}" }
+          - { name: "Intro", type: "Rich Text", itemId: "{92626BFA-ADD4-40C0-ADF3-C9487083B135}" }
+          - { name: "BlogsRoot", type: "Droptree", itemId: "{DB3D4528-7FD1-4618-8BE5-32AC3097A4E7}", source: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights" }
+          - { name: "EmptyResultsText", type: "Single-Line Text", itemId: "{56F25315-06E2-4E16-9BC5-61E94D810F2F}" }
+          - { name: "ShowFilters", type: "Checkbox", itemId: "{D3030CE1-71A7-4819-9D42-3552F2A315F2}" }
+      folder:
+        path: "/sitecore/templates/Project/pillsbury/Folders/BlogListing Folder"
+        itemId: "{FADF27CB-F64D-4406-B1E2-09DAAED54D82}"
+      renderingParams:
+        path: "/sitecore/templates/Project/pillsbury/Rendering Parameters/Insights/BlogListing"
+        itemId: "{997C10E5-BDE4-47B5-B178-AD6DCBCB5C08}"
+    rendering:
+      path: "/sitecore/layout/Renderings/Project/pillsbury/Insights/BlogListing"
+      itemId: "{8278F36C-8492-4641-A401-9C19AA69D08A}"
+      componentName: "BlogListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/pillsbury/Components/Insights/BlogListing"
+      useComponentQuery: true
+    datasourceFolder:
+      path: "/sitecore/content/pillsbury/pillsburylaw/Data/Blog Listings"
+      itemId: "{0828EB46-51F7-4BB5-AFE6-225F15CA3FAA}"
+      exampleItem:
+        name: "Insights Blogs"
+        itemId: "{87815B12-79A7-43EB-AAEF-14E6492A01E1}"
+        blogsRoot: "{612AE84F-C0C8-451A-859B-1712FB3149D2}"
+    pagePlacement:
+      pagePath: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Blogs"
+      pageId: "{612AE84F-C0C8-451A-859B-1712FB3149D2}"
+      placeholder: "headless-main"
+      instanceId: "{F3B3BC0A-552B-4C64-9B96-A347B55576C4}"
+      localDatasource: "{DC2E60A9-58FA-4918-B0DD-A2C49EA77536}"
+    variants:
+      containerPath: "/sitecore/content/pillsbury/pillsburylaw/Presentation/Headless Variants/BlogListing"
+      containerId: "{F3F549EB-E8D6-4753-A2E6-D11F3DDF4835}"
+      definitions:
+        - { name: "Default", itemId: "{512CADB0-9613-40C7-9BC7-F5F78DB1E228}" }
+        - { name: "Cards", itemId: "{A9BBF78A-4D9F-4AFE-A871-966CE7E0721C}" }
+    verification:
+      checkedAt: "2026-08-05T11:30:00Z"
+      passed:
+        - "Datasource template fields + types verified (BlogsRoot Droptree)"
+        - "Local page datasource BlogsRoot points at Insights/Blogs"
+        - "Rendering componentName + Parameters Template + ComponentQuery set"
+        - "Default + Cards Headless Variants created"
+        - "React registered in component-map as BlogListing (UIIM)"
+        - "Component placed on Insights/Blogs headless-main"
+      failed: []
+      pendingManual:
+        - "Append {8278F36C-8492-4641-A401-9C19AA69D08A} to Available Renderings/Page Content (silent-read)"
+        - "Verify Datasource Template/Location in CE (silent-write)"
+        - "Publish BlogListing rendering + Insights/Blogs page"

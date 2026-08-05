@@ -35,6 +35,15 @@ export default defineCliConfig({
       'src/components/search-experience/search-components/**',
       'src/components/site-three/non-sitecore/**',
       'src/components/search-results/SearchResults copy.tsx',
+      // Legacy GraphQL blog grid — name collides with UIIM Insights BlogListing
+      'src/components/BlogListing/**',
+      // BlogListing helper modules (not Sitecore renderings)
+      'src/components/uiim/insights/blog-listing.taxonomy.ts',
+      'src/components/uiim/insights/blog-listing.props.ts',
+      // BioListing / BioDetail helpers
+      'src/components/uiim/lawyers/bio-headshots.ts',
+      'src/components/uiim/lawyers/bio-listing.props.ts',
+      'src/components/uiim/lawyers/bio-detail.props.ts',
     ],
   },
 });

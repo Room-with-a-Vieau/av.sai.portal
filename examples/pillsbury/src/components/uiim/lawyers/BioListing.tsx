@@ -2,10 +2,10 @@
 
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Field,
-  NextImage as ContentSdkImage,
   RichText as ContentSdkRichText,
   Text,
   useSitecore,
@@ -22,6 +22,7 @@ import type {
   BioListingProps,
   BioListingTaxonomyItem,
 } from './bio-listing.props';
+import { resolveBioHeadshotSrc } from './bio-headshots';
 
 /** McKinsey-style hover shared with MultiPromo Default cards. */
 const hoverSurfaceClassName =
@@ -64,6 +65,7 @@ function initials(name: string): string {
 
 type ResolvedAttorney = {
   key: string;
+  itemName: string;
   name: string;
   title: string;
   summary: string;
@@ -72,13 +74,21 @@ type ResolvedAttorney = {
   officeName: string;
   practices: string[];
   href: string;
-  headshot: BioListingAttorney['headshot'];
+  headshotSrc: string;
+  headshotAlt: string;
 };
 
 function resolveAttorney(attorney: BioListingAttorney): ResolvedAttorney {
   const name = fieldValue(attorney.fullName) || attorney.name || 'Attorney';
+  const itemName = attorney.name || '';
+  const headshot = resolveBioHeadshotSrc({
+    itemName,
+    displayName: name,
+    headshotField: attorney.headshot,
+  });
   return {
     key: attorney.id || name,
+    itemName,
     name,
     title: fieldValue(attorney.jobTitle),
     summary: fieldValue(attorney.summary),
@@ -87,7 +97,8 @@ function resolveAttorney(attorney: BioListingAttorney): ResolvedAttorney {
     officeName: officeLabel(attorney),
     practices: (attorney.practiceAreas?.targetItems ?? []).map(practiceLabel).filter(Boolean),
     href: attorneyHref(attorney),
-    headshot: attorney.headshot,
+    headshotSrc: headshot.src,
+    headshotAlt: headshot.alt,
   };
 }
 
@@ -111,14 +122,18 @@ function HoverChevron({ className }: { className?: string }) {
 
 function Headshot({
   name,
-  headshot,
+  src,
+  alt,
   className,
 }: {
   name: string;
-  headshot: BioListingAttorney['headshot'];
+  src: string;
+  alt: string;
   className?: string;
 }) {
-  const field = headshot?.jsonValue;
+  const bypassOptimizer =
+    src.includes('images.unsplash.com') || src.includes('sitecoresandbox.cloud');
+
   return (
     <div
       className={cn(
@@ -126,8 +141,15 @@ function Headshot({
         className
       )}
     >
-      {field?.value?.src ? (
-        <ContentSdkImage field={field} className="size-full object-cover" />
+      {src ? (
+        <Image
+          src={src}
+          alt={alt || name}
+          fill
+          sizes="128px"
+          className="object-cover"
+          unoptimized={bypassOptimizer}
+        />
       ) : (
         <span aria-hidden>{initials(name)}</span>
       )}
@@ -147,7 +169,8 @@ function RowItem({ attorney }: { attorney: ResolvedAttorney }) {
       >
         <Headshot
           name={attorney.name}
-          headshot={attorney.headshot}
+          src={attorney.headshotSrc}
+          alt={attorney.headshotAlt}
           className="size-16 rounded-full"
         />
 
@@ -217,7 +240,8 @@ function CardItem({ attorney }: { attorney: ResolvedAttorney }) {
       >
         <Headshot
           name={attorney.name}
-          headshot={attorney.headshot}
+          src={attorney.headshotSrc}
+          alt={attorney.headshotAlt}
           className="mb-5 aspect-[4/3] w-full rounded-none text-2xl"
         />
 

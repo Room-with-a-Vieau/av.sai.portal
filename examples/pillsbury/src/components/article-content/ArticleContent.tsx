@@ -286,7 +286,7 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
                   id={headingId}
                   tag="h1"
                   field={primaryHeadline}
-                  className="font-heading text-secondary text-balance text-3xl font-bold leading-[1.12] tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-[1.1]"
+                  className="font-heading text-foreground text-balance text-3xl font-bold leading-[1.12] tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-[1.1]"
                 />
               )}
 
@@ -309,7 +309,7 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
 
             {(hasPageSummary || isEditing) && pageSummary && (
               <aside className="border-primary/30 bg-background max-w-3xl rounded-r-lg border-l-4 py-4 pl-5 pr-4 shadow-sm md:py-5 md:pl-6">
-                <p className="text-secondary mb-1.5 font-body text-xs font-semibold uppercase tracking-wider">
+                <p className="text-muted-foreground mb-1.5 font-body text-xs font-semibold uppercase tracking-wider">
                   Summary
                 </p>
                 <Text
@@ -329,8 +329,8 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
             className={cn(
               'article-content__detail content-sdk-rich-text text-foreground not-prose w-full max-w-3xl min-w-0',
               'font-body text-base leading-[1.75] md:text-[1.0625rem] md:leading-[1.75]',
-              '[&_h2]:font-heading [&_h2]:text-secondary [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight',
-              '[&_h3]:font-heading [&_h3]:text-secondary [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:text-xl [&_h3]:font-semibold',
+              '[&_h2]:font-heading [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight',
+              '[&_h3]:font-heading [&_h3]:text-foreground [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:text-xl [&_h3]:font-semibold',
               '[&_p]:mb-4 [&_p]:text-pretty',
               '[&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6',
               '[&_li]:mb-1.5 [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline',
