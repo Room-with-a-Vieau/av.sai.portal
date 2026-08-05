@@ -8,12 +8,14 @@ import {
   ArrowUpRight,
   Briefcase,
   Building2,
+  CalendarDays,
   ChevronDown,
   FileText,
   Globe2,
   Loader2,
   MapPin,
   MessageSquareText,
+  Mic2,
   Newspaper,
   Scale,
   Search,
@@ -70,6 +72,10 @@ function resultIcon(lob: SearchLob) {
       return UserRound;
     case 'insight':
       return Newspaper;
+    case 'event':
+      return CalendarDays;
+    case 'podcast':
+      return Mic2;
     case 'capability':
       return Scale;
     case 'office':
@@ -85,6 +91,10 @@ function resultCta(lob: SearchLob): string {
       return 'View bio';
     case 'insight':
       return 'Read insights';
+    case 'event':
+      return 'View event';
+    case 'podcast':
+      return 'Listen / open';
     case 'capability':
       return 'Explore practice';
     case 'office':
@@ -367,12 +377,12 @@ function SearchTips() {
         {
           icon: Globe2,
           title: 'Situation search',
-          body: 'Describe the matter—“Japanese acquisition,” “export control,” “coverage fight”—for AI routing.',
+          body: 'Describe the matter—“expanding into Saudi Arabia,” “export-control questions”—for AI routing to people + events.',
         },
         {
-          icon: MapPin,
-          title: 'Filter flexibly',
-          body: 'Narrow by content type, practice, and office so bios, blogs, and capabilities stay discoverable together.',
+          icon: CalendarDays,
+          title: 'Learn while you connect',
+          body: 'Filter webinars, CLE, podcasts, and alerts alongside bios so the right content supports the right counsel.',
         },
       ].map((tip) => (
         <div key={tip.title} className="flex gap-2.5 rounded-xl bg-background/60 px-3 py-2.5">

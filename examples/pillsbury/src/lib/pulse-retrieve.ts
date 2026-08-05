@@ -11,7 +11,8 @@ import type { PulseSource, PulseSourceType, PulseStateCode } from '@/lib/pulse-t
 const DEFAULT_HOME_PATH = '/sitecore/content/pillsbury/pillsburylaw/Home';
 const DEFAULT_KA_ROOT_ID = '5dad4c5c-84cd-471a-80ef-c805570be79a';
 const FETCH_FIRST = 36;
-const MAX_SOURCES = 5;
+/** Enough room for demo playbook people + webinars / podcasts / guides. */
+const MAX_SOURCES = 8;
 
 type EdgeJsonField = { jsonValue?: unknown };
 

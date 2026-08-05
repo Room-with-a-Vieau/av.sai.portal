@@ -35,6 +35,16 @@ const TYPE_BADGE: Record<PulseSource['type'], string> = {
   other: 'Content',
 };
 
+function sourceBadge(source: PulseSource): string {
+  const hay = `${source.title} ${source.url}`.toLowerCase();
+  if (/webinar/.test(hay)) return 'Webinar';
+  if (/podcast/.test(hay)) return 'Podcast';
+  if (/\bcle\b/.test(hay)) return 'CLE';
+  if (/checklist|white.?paper/.test(hay)) return 'Guide';
+  if (/alert/.test(hay)) return 'Alert';
+  return TYPE_BADGE[source.type];
+}
+
 const STATE_LABEL: Record<PulseStateCode, string> = {
   FL: 'Florida',
   NC: 'North Carolina',
@@ -67,7 +77,7 @@ function SourceCards({ sources }: { sources: PulseSource[] }) {
             <div className="flex items-start justify-between gap-2">
               <span className="text-sm font-medium text-foreground leading-snug">{source.title}</span>
               <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                {TYPE_BADGE[source.type]}
+                {sourceBadge(source)}
               </span>
             </div>
             {source.excerpt ? (

@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-05T11:30:00Z"
+lastUpdatedAt: "2026-08-05T20:55:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3573,6 +3573,39 @@ ia:
         - "Populate image fields and richer Detail content"
         - "Optionally add Services Page to Home insert options / use branch correctly"
         - "Header nav remapped (see pillsburylaw-header-nav-remap) — publish Header Partial Design"
+
+  - name: "pillsburylaw-saudi-expansion-search-demo"
+    status: "complete"
+    createdAt: "2026-08-05T20:30:00Z"
+    updatedAt: "2026-08-05T20:55:00Z"
+    siteName: "pillsburylaw"
+    contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights"
+    pageTemplateId: "{B08EC32B-F183-474B-93F7-07512168DD6E}"
+    pageTemplateName: "Services Page"
+    language: "en"
+    notes: >
+      Saudi expansion + export-control demo journey content for on-site search / AI agent.
+      create_page failed (field name); used create_content_item with Detail only.
+      Search catalog + AI rules updated in examples/pillsbury/src/components/search-results/.
+      Workflow: Draft — publish for Edge when ready.
+    pages:
+      - { displayName: "Expanding into Saudi Arabia: Export Controls 101", name: "Expanding-into-Saudi-Arabia-Export-Controls-101", itemId: "{FC3F756B-EF7C-4A68-9CD6-97FD0202EE72}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101" }
+      - { displayName: "MENA Corporate Setup and US Export Compliance", name: "MENA-Corporate-Setup-and-US-Export-Compliance", itemId: "{021363E1-C472-4752-878D-55C455EA8BB5}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance" }
+      - { displayName: "International Trade Briefing: Riyadh and DC", name: "International-Trade-Briefing-Riyadh-and-DC", itemId: "{CC0936CE-7B39-4755-A1FF-D7E80563CB07}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/CLE/International-Trade-Briefing-Riyadh-and-DC" }
+      - { displayName: "Trade Talks: Saudi Vision 2030 Export Controls", name: "Trade-Talks-Saudi-Vision-2030-Export-Controls", itemId: "{77C55548-522D-46D9-9367-536CE5163AC4}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Podcast/Trade-Talks-Saudi-Vision-2030-Export-Controls" }
+      - { displayName: "Gulf Expansion EAR OFAC Update", name: "Gulf-Expansion-EAR-OFAC-Update", itemId: "{68460E98-8ADA-4788-9921-EFD5270CAC89}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Alert/Gulf-Expansion-EAR-OFAC-Update" }
+      - { displayName: "Checklist: US Companies Entering KSA", name: "Checklist-US-Companies-Entering-KSA", itemId: "{0579D7FB-48F2-4036-A8EE-E279E67958D4}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/White-Paper/Checklist-US-Companies-Entering-KSA" }
+      - { displayName: "Export Control Diligence for MENA Deals", name: "Export-Control-Diligence-for-MENA-Deals", itemId: "{54B23AD1-7151-47BF-91B8-E005268353B9}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Presentation/Export-Control-Diligence-for-MENA-Deals" }
+      - { displayName: "Who to Talk To: Saudi Expansion Export Controls", name: "Who-to-Talk-To-Saudi-Expansion-Export-Controls", itemId: "{C6AD0AF7-0CCB-4109-B74D-E207ECB78A35}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls" }
+    verification:
+      checkedAt: "2026-08-05T20:55:00Z"
+      passed:
+        - "MCP authenticated; webinar item FC3F756B… readable with Detail HTML"
+        - "SearchResults event/podcast icons + CTAs; popular search led by demo question"
+      failed: []
+      pendingManual:
+        - "Publish new pages for Edge so live routes resolve"
+        - "Optional: add hero images on Services Page items"
 
   - name: "dwyeromega-featured-manufacturing-articles"
     status: "complete"

@@ -9,6 +9,7 @@ import type { PulseSource, PulseStateCode } from '@/lib/pulse-types';
 export type PulseDemoIntentId =
   | 'japan-us-tech-acquisition'
   | 'distressed-portfolio-company'
+  | 'saudi-expansion-export-controls'
   | 'mena-trade-sanctions'
   | 'insurance-construction-dispute';
 
@@ -95,6 +96,94 @@ const INTENTS: PulseDemoIntent[] = [
     ],
   },
   {
+    id: 'saudi-expansion-export-controls',
+    matchAny: [
+      ['expanding', 'saudi'],
+      ['expand', 'saudi'],
+      ['saudi', 'export'],
+      ['ksa', 'export'],
+      ['vision', '2030', 'export'],
+      ['who', 'talk', 'saudi'],
+      ['saudi', 'arabia', 'export'],
+      ['export', 'control', 'questions'],
+      ['saudi', 'arabia', 'talk'],
+    ],
+    sources: [
+      {
+        id: '{8306EB6F-3AA2-474A-ABF0-CD35B805CE6E}',
+        title: 'Ata A. Akiner — International Trade (Washington, DC)',
+        url: '/Lawyers/Bios/Ata-A-Akiner',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Ata-A-Akiner',
+        excerpt:
+          'EAR / OFAC and national-security trade counsel for U.S. companies expanding into the Kingdom — start here on export-control questions.',
+        type: 'people-and-teams',
+      },
+      {
+        id: '{A17985F3-2812-4721-8928-6B4381768660}',
+        title: 'Khalid A. AlArfaj — Corporate (Riyadh)',
+        url: '/Lawyers/Bios/Khalid-A-AlArfaj',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Khalid-A-AlArfaj',
+        excerpt:
+          'Riyadh corporate partner for entity setup, commercial contracting, and local coordination alongside U.S. trade counsel.',
+        type: 'people-and-teams',
+      },
+      {
+        id: '{FC3F756B-EF7C-4A68-9CD6-97FD0202EE72}',
+        title: 'Webinar: Expanding into Saudi Arabia — Export Controls 101',
+        url: '/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101',
+        excerpt:
+          'Client webinar with Akiner and AlArfaj on sequencing EAR/OFAC review with KSA corporate setup before the first intake call.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{77C55548-522D-46D9-9367-536CE5163AC4}',
+        title: 'Podcast: Trade Talks — Saudi Vision 2030 & Export Controls',
+        url: '/Insights/Thought-Leadership/Podcast/Trade-Talks-Saudi-Vision-2030-Export-Controls',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Podcast/Trade-Talks-Saudi-Vision-2030-Export-Controls',
+        excerpt:
+          'Short briefing episode on when to involve DC trade counsel vs Riyadh corporate counsel during Gulf expansion.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{C6AD0AF7-0CCB-4109-B74D-E207ECB78A35}',
+        title: 'Guide: Who to Talk To — Saudi Expansion & Export Controls',
+        url: '/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls',
+        excerpt:
+          'Recommended lawyer pairing plus webinars, CLE, alert, and checklist for expansion teams.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{0579D7FB-48F2-4036-A8EE-E279E67958D4}',
+        title: 'Checklist: U.S. Companies Entering KSA',
+        url: '/Insights/Thought-Leadership/White-Paper/Checklist-US-Companies-Entering-KSA',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/White-Paper/Checklist-US-Companies-Entering-KSA',
+        excerpt:
+          'Practical market-entry checklist covering corporate setup, trade diligence, and counsel handoffs.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{68460E98-8ADA-4788-9921-EFD5270CAC89}',
+        title: 'Alert: Gulf Expansion — EAR / OFAC Update',
+        url: '/Insights/Alert/Gulf-Expansion-EAR-OFAC-Update',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Alert/Gulf-Expansion-EAR-OFAC-Update',
+        excerpt:
+          'Current EAR and OFAC points of focus for U.S. companies expanding across the Gulf.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{CC0936CE-7B39-4755-A1FF-D7E80563CB07}',
+        title: 'CLE: International Trade Briefing — Riyadh & DC',
+        url: '/Insights/Events/CLE/International-Trade-Briefing-Riyadh-and-DC',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/CLE/International-Trade-Briefing-Riyadh-and-DC',
+        excerpt:
+          'In-person / CLE-style briefing bridging Riyadh commercial realities with Washington trade compliance.',
+        type: 'knowledge-article',
+      },
+    ],
+  },
+  {
     id: 'mena-trade-sanctions',
     matchAny: [
       ['sanction'],
@@ -102,11 +191,11 @@ const INTENTS: PulseDemoIntent[] = [
       ['international', 'trade'],
       ['national', 'security', 'trade'],
       ['middle', 'east'],
-      ['saudi'],
       ['qatar'],
       ['mena'],
       ['riyadh'],
       ['doha'],
+      ['saudi'],
     ],
     sources: [
       {
@@ -135,6 +224,24 @@ const INTENTS: PulseDemoIntent[] = [
         excerpt:
           'Advises national and international clients on complex corporate and commercial matters across Saudi Arabia and the United States.',
         type: 'people-and-teams',
+      },
+      {
+        id: '{021363E1-C472-4752-878D-55C455EA8BB5}',
+        title: 'Webinar: MENA Corporate Setup & U.S. Export Compliance',
+        url: '/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance',
+        excerpt:
+          'How entity formation across MENA intersects with U.S. export-compliance obligations.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{54B23AD1-7151-47BF-91B8-E005268353B9}',
+        title: 'Presentation: Export-Control Diligence for MENA Deals',
+        url: '/Insights/Thought-Leadership/Presentation/Export-Control-Diligence-for-MENA-Deals',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Presentation/Export-Control-Diligence-for-MENA-Deals',
+        excerpt:
+          'Deal-team diligence framework for export controls on MENA transactions.',
+        type: 'knowledge-article',
       },
     ],
   },
@@ -227,6 +334,6 @@ export function buildDemoPlaybookSources(
 export const PULSE_DEMO_STARTER_PROMPTS = [
   'A Japanese company is buying a U.S. tech business — who should lead, and who covers the IP risk?',
   'One of our portfolio companies is in financial distress. Who should we talk to?',
-  "We're expanding into Saudi Arabia and have export-control questions. Who can help?",
+  "We're expanding into Saudi Arabia and have export-control questions. Who should we talk to?",
   'Our construction project is in a coverage fight with the carrier — who handles insurance recovery?',
 ] as const;

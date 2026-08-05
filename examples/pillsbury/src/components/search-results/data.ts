@@ -1,6 +1,6 @@
 /**
- * Pillsbury Law search catalog — lawyers, insights, capabilities, offices, and pages.
- * Every href maps to a path under the pillsburylaw content tree / published routes.
+ * Pillsbury Law search catalog — lawyers, insights, webinars, events, podcasts,
+ * capabilities, offices, and pages. Every href maps to the pillsburylaw content tree.
  * UI lives in SearchResults.tsx.
  */
 
@@ -13,6 +13,8 @@ export { parseDemoUserTaxonomy };
 export type SearchLob =
   | 'lawyer'
   | 'insight'
+  | 'event'
+  | 'podcast'
   | 'capability'
   | 'office'
   | 'page';
@@ -59,11 +61,15 @@ export type SearchBucket =
   | 'corporate'
   | 'mena'
   | 'construction'
-  | 'tech';
+  | 'tech'
+  | 'expansion'
+  | 'webinar'
+  | 'podcast'
+  | 'event';
 
 export type SearchResultItem = {
   id: string;
-  /** Short type code shown on cards (e.g. BIO, INSIGHT, OFFICE) */
+  /** Short type code shown on cards (e.g. BIO, WEBINAR, PODCAST) */
   kbId: string;
   title: string;
   description: string;
@@ -106,7 +112,9 @@ export const RESULTS_PAGE_SIZE = 8;
 export const searchFacetLabels = {
   lob: {
     lawyer: 'Lawyers',
-    insight: 'Insights & blogs',
+    insight: 'Insights & alerts',
+    event: 'Webinars & events',
+    podcast: 'Podcasts',
     capability: 'Capabilities',
     office: 'Offices',
     page: 'Site pages',
@@ -141,16 +149,16 @@ export const lobs = Object.keys(searchFacetLabels.lob) as SearchLob[];
 export const perils = Object.keys(searchFacetLabels.peril) as SearchPeril[];
 export const topics = Object.keys(searchFacetLabels.topic) as SearchTopic[];
 
-/** Popular chips — each returns real catalog hits */
+/** Popular chips — lead with the Saudi expansion demo narrative */
 export const popularSearches = [
-  'Mark Abate intellectual property',
+  "We're expanding into Saudi Arabia and have export-control questions. Who should we talk to?",
+  'Saudi Arabia export control webinar',
+  'MENA corporate setup',
+  'Trade Talks podcast Vision 2030',
   'Japanese company acquisition',
   'financial distress restructuring',
-  'Saudi Arabia export control',
   'insurance recovery construction',
   'New York corporate lawyers',
-  'Policyholder Pulse',
-  'Silicon Valley IP',
 ];
 
 export const QUERY_BUCKET_SYNONYMS: Record<SearchBucket, readonly string[]> = {
@@ -159,16 +167,41 @@ export const QUERY_BUCKET_SYNONYMS: Record<SearchBucket, readonly string[]> = {
   patent: ['patent', 'patent litigation', 'ip trial'],
   distress: ['distress', 'distressed', 'troubled', 'financial distress'],
   insolvency: ['insolvency', 'restructuring', 'bankruptcy', 'creditor'],
-  sanctions: ['sanction', 'sanctions', 'export control', 'export-control', 'national security'],
+  sanctions: [
+    'sanction',
+    'sanctions',
+    'export control',
+    'export-control',
+    'export controls',
+    'ofac',
+    'ear',
+    'national security',
+  ],
   trade: ['international trade', 'trade', 'customs'],
   insurance: ['insurance', 'coverage', 'carrier', 'policyholder', 'insurance recovery'],
   funds: ['funds', 'private equity', 'institutional investor', 'lp ', 'limited partner'],
   litigation: ['litigation', 'trial', 'dispute', 'arbitration'],
   miami: ['miami', 'florida'],
-  corporate: ['corporate', 'm&a', 'securities', 'capital markets', 'venture'],
-  mena: ['mena', 'middle east', 'saudi', 'qatar', 'doha', 'riyadh'],
+  corporate: ['corporate', 'm&a', 'securities', 'capital markets', 'venture', 'entity', 'jv'],
+  mena: [
+    'mena',
+    'middle east',
+    'saudi',
+    'saudi arabia',
+    'kingdom',
+    'ksa',
+    'qatar',
+    'doha',
+    'riyadh',
+    'vision 2030',
+    'gulf',
+  ],
   construction: ['construction', 'builder', 'project claim'],
   tech: ['tech', 'technology', 'software', 'silicon valley'],
+  expansion: ['expand', 'expanding', 'expansion', 'market entry', 'entering', 'enter'],
+  webinar: ['webinar', 'webcast', 'virtual briefing'],
+  podcast: ['podcast', 'trade talks', 'episode', 'listen'],
+  event: ['event', 'cle', 'briefing', 'conference', 'seminar', 'workshop'],
 };
 
 const QUERY_STOP_WORDS = new Set([
@@ -426,9 +459,9 @@ export const searchCatalog: SearchResultItem[] = [
     lob: 'lawyer',
     perils: ['internationalTrade', 'regulatory'],
     topics: ['washingtonDc'],
-    searchBuckets: ['sanctions', 'trade', 'mena'],
+    searchBuckets: ['sanctions', 'trade', 'mena', 'expansion'],
     breadcrumb: ['Lawyers', 'Bios', 'Ata Akiner'],
-    matchTerms: ['ata', 'akiner', 'export', 'sanctions', 'trade'],
+    matchTerms: ['ata', 'akiner', 'export', 'sanctions', 'trade', 'export-control', 'talk to'],
   }),
   entry({
     id: 'bio-osama-abu-dehays',
@@ -441,7 +474,7 @@ export const searchCatalog: SearchResultItem[] = [
     lob: 'lawyer',
     perils: ['corporate', 'technology'],
     topics: ['doha', 'london', 'global'],
-    searchBuckets: ['mena', 'corporate', 'tech'],
+    searchBuckets: ['mena', 'corporate', 'tech', 'expansion'],
     breadcrumb: ['Lawyers', 'Bios', 'Osama Abu-Dehays'],
     matchTerms: ['osama', 'abu-dehays', 'qatar', 'doha', 'middle east'],
   }),
@@ -456,9 +489,9 @@ export const searchCatalog: SearchResultItem[] = [
     lob: 'lawyer',
     perils: ['corporate'],
     topics: ['riyadh', 'global'],
-    searchBuckets: ['mena', 'corporate'],
+    searchBuckets: ['mena', 'corporate', 'expansion', 'trade'],
     breadcrumb: ['Lawyers', 'Bios', 'Khalid AlArfaj'],
-    matchTerms: ['khalid', 'alarfaj', 'saudi', 'riyadh'],
+    matchTerms: ['khalid', 'alarfaj', 'saudi', 'riyadh', 'expanding', 'who should we talk'],
   }),
   entry({
     id: 'bio-stephen-asay',
@@ -782,6 +815,203 @@ export const searchCatalog: SearchResultItem[] = [
     matchTerms: ['saudi office', 'riyadh office'],
   }),
 
+  // —— Webinars & events (Saudi expansion / export-control journey) ——
+  entry({
+    id: 'webinar-saudi-export-controls-101',
+    kbId: 'WEBINAR',
+    title: 'Expanding into Saudi Arabia: Export Controls 101',
+    subtitle: 'Webinar · International Trade & Corporate',
+    description:
+      'EAR, OFAC, and practical diligence for U.S. companies entering the Kingdom—with Ata Akiner (DC) and Khalid AlArfaj (Riyadh).',
+    href: '/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101',
+    lob: 'event',
+    perils: ['internationalTrade', 'corporate', 'regulatory'],
+    topics: ['riyadh', 'washingtonDc', 'global'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion', 'webinar', 'event'],
+    dateLabel: 'Upcoming webinar',
+    breadcrumb: ['Insights', 'Events', 'Webinar', 'Export Controls 101'],
+    matchTerms: [
+      'webinar',
+      'saudi',
+      'export',
+      'export control',
+      'expanding',
+      'arabia',
+      'ear',
+      'ofac',
+      'who should we talk',
+    ],
+    isNew: true,
+  }),
+  entry({
+    id: 'webinar-mena-corporate-export',
+    kbId: 'WEBINAR',
+    title: 'MENA Corporate Setup & U.S. Export Compliance',
+    subtitle: 'Webinar · Corporate & International Trade',
+    description:
+      'Standing up a Saudi or Qatar entity without missing U.S. trade controls—Riyadh, Doha, and Washington together.',
+    href: '/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance',
+    lob: 'event',
+    perils: ['corporate', 'internationalTrade', 'regulatory'],
+    topics: ['riyadh', 'doha', 'washingtonDc', 'global'],
+    searchBuckets: ['mena', 'corporate', 'sanctions', 'trade', 'expansion', 'webinar', 'event'],
+    dateLabel: 'On demand',
+    breadcrumb: ['Insights', 'Events', 'Webinar', 'MENA Corporate Setup'],
+    matchTerms: ['mena', 'corporate setup', 'entity', 'qatar', 'saudi', 'webinar', 'export'],
+    isNew: true,
+  }),
+  entry({
+    id: 'cle-riyadh-dc-trade',
+    kbId: 'CLE',
+    title: 'International Trade Briefing: Riyadh & DC',
+    subtitle: 'CLE Event · Live',
+    description:
+      'Half-day CLE for in-house teams managing Saudi expansion and export-control risk—with AlArfaj and Akiner.',
+    href: '/Insights/Events/CLE/International-Trade-Briefing-Riyadh-and-DC',
+    lob: 'event',
+    perils: ['internationalTrade', 'corporate', 'regulatory'],
+    topics: ['riyadh', 'washingtonDc'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion', 'event'],
+    dateLabel: 'CLE · Live',
+    breadcrumb: ['Insights', 'Events', 'CLE', 'Riyadh & DC Briefing'],
+    matchTerms: ['cle', 'briefing', 'riyadh', 'export', 'saudi', 'event', 'talk to'],
+    isNew: true,
+  }),
+  entry({
+    id: 'hub-events',
+    kbId: 'HUB',
+    title: 'Insights · Events',
+    subtitle: 'Webinars, CLE & speaking',
+    description: 'Browse Pillsbury webinars, CLE programs, and speaking engagements.',
+    href: '/Insights/Events',
+    lob: 'event',
+    perils: ['corporate', 'internationalTrade'],
+    topics: ['global'],
+    searchBuckets: ['event', 'webinar', 'expansion'],
+    breadcrumb: ['Insights', 'Events'],
+    matchTerms: ['events hub', 'webinars', 'cle calendar'],
+  }),
+  entry({
+    id: 'hub-webinars',
+    kbId: 'HUB',
+    title: 'Webinars',
+    subtitle: 'Events · Webinar',
+    description:
+      'Client webinars including Saudi Arabia expansion and U.S. export-control briefings.',
+    href: '/Insights/Events/Webinar',
+    lob: 'event',
+    perils: ['internationalTrade', 'corporate'],
+    topics: ['global'],
+    searchBuckets: ['webinar', 'event', 'mena', 'sanctions'],
+    breadcrumb: ['Insights', 'Events', 'Webinar'],
+    matchTerms: ['webinar list', 'virtual events'],
+  }),
+
+  // —— Podcasts & thought leadership (Saudi / export journey) ——
+  entry({
+    id: 'podcast-trade-talks-vision-2030',
+    kbId: 'PODCAST',
+    title: 'Trade Talks: Saudi Vision 2030 & Export Controls',
+    subtitle: 'Podcast episode',
+    description:
+      'When to involve DC trade counsel vs Riyadh corporate counsel—and how webinars/CLE complement intake.',
+    href: '/Insights/Thought-Leadership/Podcast/Trade-Talks-Saudi-Vision-2030-Export-Controls',
+    lob: 'podcast',
+    perils: ['internationalTrade', 'corporate', 'regulatory'],
+    topics: ['riyadh', 'washingtonDc', 'global'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion', 'podcast'],
+    dateLabel: 'Listen now',
+    breadcrumb: ['Insights', 'Thought Leadership', 'Podcast', 'Trade Talks'],
+    matchTerms: ['podcast', 'vision 2030', 'trade talks', 'saudi', 'export', 'listen'],
+    isNew: true,
+  }),
+  entry({
+    id: 'hub-podcasts',
+    kbId: 'HUB',
+    title: 'Podcasts',
+    subtitle: 'Thought Leadership · Podcast',
+    description: 'Pillsbury podcasts on international trade, Vision 2030, and export-control readiness.',
+    href: '/Insights/Thought-Leadership/Podcast',
+    lob: 'podcast',
+    perils: ['internationalTrade'],
+    topics: ['global'],
+    searchBuckets: ['podcast', 'trade', 'mena'],
+    breadcrumb: ['Insights', 'Thought Leadership', 'Podcast'],
+    matchTerms: ['podcast series', 'audio'],
+  }),
+  entry({
+    id: 'alert-gulf-ear-ofac',
+    kbId: 'ALERT',
+    title: 'Gulf Expansion: EAR & OFAC Update',
+    subtitle: 'Legal alert',
+    description:
+      'Recent EAR and OFAC developments for U.S. companies expanding into Saudi Arabia and the Gulf.',
+    href: '/Insights/Thought-Leadership/Alert/Gulf-Expansion-EAR-OFAC-Update',
+    lob: 'insight',
+    perils: ['internationalTrade', 'regulatory'],
+    topics: ['riyadh', 'washingtonDc', 'global'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion'],
+    dateLabel: 'Alert',
+    breadcrumb: ['Insights', 'Thought Leadership', 'Alert', 'Gulf Expansion'],
+    matchTerms: ['alert', 'ofac', 'ear', 'gulf', 'saudi', 'export'],
+    isNew: true,
+  }),
+  entry({
+    id: 'whitepaper-ksa-checklist',
+    kbId: 'PAPER',
+    title: 'Checklist: U.S. Companies Entering KSA',
+    subtitle: 'White paper',
+    description:
+      'Corporate setup, contracting, and U.S. export-control diligence for Saudi market entry—built for GCs and expansion leads.',
+    href: '/Insights/Thought-Leadership/White-Paper/Checklist-US-Companies-Entering-KSA',
+    lob: 'insight',
+    perils: ['corporate', 'internationalTrade', 'regulatory'],
+    topics: ['riyadh', 'global'],
+    searchBuckets: ['mena', 'corporate', 'sanctions', 'expansion', 'trade'],
+    dateLabel: 'White paper',
+    breadcrumb: ['Insights', 'Thought Leadership', 'White Paper', 'KSA Checklist'],
+    matchTerms: ['checklist', 'white paper', 'ksa', 'entering', 'saudi', 'market entry'],
+    isNew: true,
+  }),
+  entry({
+    id: 'presentation-mena-diligence',
+    kbId: 'DECK',
+    title: 'Export-Control Diligence for MENA Deals',
+    subtitle: 'Presentation',
+    description:
+      'Workshop outline: deal screening, technology classification, and RACI for DC trade vs MENA corporate counsel.',
+    href: '/Insights/Thought-Leadership/Presentation/Export-Control-Diligence-for-MENA-Deals',
+    lob: 'insight',
+    perils: ['internationalTrade', 'corporate'],
+    topics: ['global', 'riyadh', 'washingtonDc'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion', 'event'],
+    breadcrumb: ['Insights', 'Thought Leadership', 'Presentation', 'MENA Diligence'],
+    matchTerms: ['presentation', 'diligence', 'mena deals', 'workshop', 'raci'],
+  }),
+  entry({
+    id: 'article-who-to-talk-to-saudi',
+    kbId: 'GUIDE',
+    title: 'Who Should We Talk To? Saudi Expansion & Export Controls',
+    subtitle: 'Client guide',
+    description:
+      'Recommended lawyer pairing (Akiner + AlArfaj) plus webinars, podcast, alert, and checklist for expansion teams.',
+    href: '/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls',
+    lob: 'insight',
+    perils: ['internationalTrade', 'corporate'],
+    topics: ['riyadh', 'washingtonDc'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion', 'webinar', 'podcast'],
+    breadcrumb: ['Insights', 'Thought Leadership', 'Article', 'Who to Talk To'],
+    matchTerms: [
+      'who should we talk',
+      'who to talk',
+      'talk to',
+      'expanding into saudi',
+      'export-control questions',
+      'guide',
+    ],
+    isNew: true,
+  }),
+
   // —— Hub pages ——
   entry({
     id: 'page-lawyers',
@@ -925,33 +1155,64 @@ const AI_INSIGHT_RULES: InsightRule[] = [
   },
   {
     id: 'sanctions',
-    matchAny: [['sanction'], ['export'], ['saudi'], ['qatar'], ['mena'], ['riyadh']],
+    matchAny: [
+      ['saudi', 'export'],
+      ['expanding', 'saudi'],
+      ['saudi', 'talk'],
+      ['export-control'],
+      ['export control'],
+      ['sanction'],
+      ['ofac'],
+      ['mena'],
+      ['riyadh', 'export'],
+      ['qatar'],
+    ],
     insight: {
-      id: 'ai-sanctions',
-      headline: 'MENA expansion with trade and sanctions risk',
+      id: 'ai-saudi-expansion-export',
+      headline: 'Saudi expansion with export-control questions',
       answer:
-        'Combine Washington trade counsel with MENA corporate partners so export-control and local commercial issues are handled together.',
+        'Start with a two-lawyer team—Washington international trade for EAR/OFAC, and Riyadh corporate for local entity and commercial setup—then use webinars, a CLE briefing, and a short podcast to brief the business side before the first intake call.',
       bullets: [
-        'Ata Akiner for international trade and export controls (DC).',
-        'Osama Abu-Dehays (Doha) or Khalid AlArfaj (Riyadh) for regional corporate.',
-        'Also see the Global Trade and Sanctions Law blog hub.',
+        'Talk to Ata A. Akiner (International Trade, Washington, DC) for export controls and sanctions.',
+        'Talk to Khalid A. AlArfaj (Corporate, Riyadh) for Kingdom entity and commercial issues.',
+        'Optional MENA corporate coverage: Osama Abu-Dehays (Doha).',
+        'Brief the team with the Export Controls 101 webinar, Trade Talks podcast, Gulf EAR/OFAC alert, and KSA entry checklist.',
       ],
       citations: [
         {
           title: 'Ata A. Akiner',
           href: '/Lawyers/Bios/Ata-A-Akiner',
           kbId: 'BIO',
-          excerpt: 'International Trade, Washington, DC.',
+          excerpt: 'International Trade — export controls & national security (Washington, DC).',
         },
         {
-          title: 'Global Trade and Sanctions Law',
-          href: '/Insights/Blogs/Global-Trade-and-Sanctions-Law',
-          kbId: 'BLOG',
-          excerpt: 'Insights hub for sanctions and export controls.',
+          title: 'Khalid A. AlArfaj',
+          href: '/Lawyers/Bios/Khalid-A-AlArfaj',
+          kbId: 'BIO',
+          excerpt: 'Corporate counsel for Saudi Arabia and cross-border matters (Riyadh).',
+        },
+        {
+          title: 'Expanding into Saudi Arabia: Export Controls 101',
+          href: '/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101',
+          kbId: 'WEBINAR',
+          excerpt: 'Webinar featuring Akiner and AlArfaj on EAR/OFAC + market entry.',
+        },
+        {
+          title: 'Trade Talks: Saudi Vision 2030 & Export Controls',
+          href: '/Insights/Thought-Leadership/Podcast/Trade-Talks-Saudi-Vision-2030-Export-Controls',
+          kbId: 'PODCAST',
+          excerpt: 'Podcast for expansion teams balancing growth and U.S. trade rules.',
+        },
+        {
+          title: 'Who Should We Talk To? Saudi Expansion & Export Controls',
+          href: '/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls',
+          kbId: 'GUIDE',
+          excerpt: 'Client guide pairing people + learning assets for this exact question.',
         },
       ],
-      learnMoreHref: '/Lawyers/Bios/Ata-A-Akiner',
-      learnMoreLabel: 'Open trade bio',
+      learnMoreHref: '/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls',
+      learnMoreLabel: 'Open the who-to-talk-to guide',
+      stateCallout: 'Demo journey: people first, then webinar / podcast / alert / checklist.',
     },
   },
   {

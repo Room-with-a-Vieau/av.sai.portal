@@ -22,9 +22,18 @@ function sentenceFromExcerpt(excerpt?: string): string {
   return `${(lastSpace > 80 ? cut.slice(0, lastSpace) : cut).trim()}…`;
 }
 
+function isLearningAsset(source: PulseSource): boolean {
+  if (source.type !== 'knowledge-article') return false;
+  const hay = `${source.title} ${source.url} ${source.path || ''}`.toLowerCase();
+  return /webinar|podcast|cle|checklist|alert|white.?paper|presentation|guide|who.to.talk/i.test(
+    hay
+  );
+}
+
 /**
  * Build a demoworthy, citation-backed answer from retrieved sources only.
- * Prefers lawyer bios for Pillsbury visitor demos; falls back to insights/other content.
+ * Prefers lawyer bios for Pillsbury visitor demos; surfaces webinars and related
+ * learning assets when the playbook includes them.
  */
 export function composePulseAnswer(
   question: string,
@@ -46,12 +55,14 @@ export function composePulseAnswer(
 
   const peopleHits = sources.filter((s) => s.type === 'people-and-teams');
   const insightHits = sources.filter((s) => s.type === 'knowledge-article');
+  const learningHits = insightHits.filter(isLearningAsset);
+  const otherInsightHits = insightHits.filter((s) => !isLearningAsset(s));
   const stateHits = personaState
     ? sources.filter((s) => s.stateCode === personaState)
     : [];
 
   const primary = peopleHits[0] || insightHits[0] || stateHits[0] || sources[0];
-  const supporting = sources.filter((s) => s.id !== primary.id).slice(0, 3);
+  const otherPeople = peopleHits.filter((s) => s.id !== primary.id);
 
   const lines: string[] = [];
 
@@ -66,26 +77,43 @@ export function composePulseAnswer(
       : `**${primary.title}** (${TYPE_LABEL[primary.type]}) is the strongest match in the citations below.`
   );
 
-  if (supporting.length) {
-    const names = supporting
+  if (otherPeople.length) {
+    const names = otherPeople
+      .slice(0, 3)
       .map((s) => `**${s.title}** (${TYPE_LABEL[s.type]})`)
       .join('; ');
-    lines.push(
-      peopleHits.length > 1
-        ? `Also consider bringing in: ${names}.`
-        : `Related indexed sources: ${names}.`
-    );
-
-    for (const extra of supporting.slice(0, 2)) {
+    lines.push(`Also bring in: ${names}.`);
+    for (const extra of otherPeople.slice(0, 2)) {
       const bit = sentenceFromExcerpt(extra.excerpt);
-      if (bit) {
-        lines.push(`${bit}`);
-      }
+      if (bit) lines.push(bit);
     }
   }
 
+  if (learningHits.length) {
+    const assetNames = learningHits
+      .slice(0, 5)
+      .map((s) => `**${s.title}**`)
+      .join('; ');
+    lines.push(
+      `To brief the business side before intake, use these learning assets: ${assetNames}.`
+    );
+    const webinar = learningHits.find((s) => /webinar/i.test(s.title));
+    if (webinar) {
+      const bit = sentenceFromExcerpt(webinar.excerpt);
+      if (bit) lines.push(bit);
+    }
+  } else if (otherInsightHits.length) {
+    const names = otherInsightHits
+      .slice(0, 3)
+      .map((s) => `**${s.title}** (${TYPE_LABEL[s.type]})`)
+      .join('; ');
+    lines.push(`Related indexed insights: ${names}.`);
+  }
+
   lines.push(
-    'Keyword search is weaker for multi-factor asks like this — Pulse can connect practice, geography, and situation in one step. Open a citation card to view the full bio.'
+    learningHits.length
+      ? 'Keyword search rarely surfaces this people + webinar + guide path together — open the citation cards below for bios and learning assets.'
+      : 'Keyword search is weaker for multi-factor asks like this — Pulse can connect practice, geography, and situation in one step. Open a citation card to view the full bio.'
   );
 
   if (personaState && stateHits.length) {
@@ -101,7 +129,8 @@ export function composePulseAnswer(
 
   const ordered = [
     ...peopleHits,
-    ...insightHits,
+    ...learningHits,
+    ...otherInsightHits,
     ...sources.filter((s) => s.type !== 'people-and-teams' && s.type !== 'knowledge-article'),
   ].filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
 
