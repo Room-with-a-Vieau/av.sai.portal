@@ -4,6 +4,10 @@
  * (common for external Unsplash Image field XML without mediaid).
  */
 
+import { extractImageSrc } from '@/lib/sitecore-image-field';
+
+export { extractImageSrc };
+
 function unsplash(photoId: string): string {
   return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=800&h=800&q=80`;
 }
@@ -103,39 +107,6 @@ export const BIO_HEADSHOT_BY_NAME: Record<string, { src: string; alt: string }> 
 export function bioHeadshotFallback(itemName?: string | null): { src: string; alt: string } | undefined {
   if (!itemName) return undefined;
   return BIO_HEADSHOT_BY_NAME[itemName];
-}
-
-/**
- * Pull a usable URL from Sitecore Image field shapes (layout, ComponentQuery jsonValue,
- * DAM, or raw external XML string).
- */
-export function extractImageSrc(raw: unknown): string {
-  if (!raw) return '';
-
-  // Layout / route ImageField: { value: { src } } or { value: "<image src=...>" }
-  if (typeof raw === 'object' && raw !== null && 'value' in raw) {
-    return extractImageSrc((raw as { value?: unknown }).value);
-  }
-
-  // ComponentQuery: { jsonValue: ImageField }
-  if (typeof raw === 'object' && raw !== null && 'jsonValue' in raw) {
-    return extractImageSrc((raw as { jsonValue?: unknown }).jsonValue);
-  }
-
-  if (typeof raw === 'string') {
-    const trimmed = raw.trim();
-    const fromAttr = trimmed.match(/\bsrc=["']([^"']+)["']/i)?.[1];
-    if (fromAttr) return fromAttr.trim();
-    if (/^https?:\/\//i.test(trimmed)) return trimmed;
-    return '';
-  }
-
-  if (typeof raw === 'object' && raw !== null) {
-    const v = raw as { src?: string; href?: string; url?: string };
-    return (v.src || v.href || v.url || '').trim();
-  }
-
-  return '';
 }
 
 export function resolveBioHeadshotSrc(options: {
