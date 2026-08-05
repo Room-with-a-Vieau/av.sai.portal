@@ -12,6 +12,7 @@ import sitesJson from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 import client from './lib/sitecore-client';
+import { tryScrunchAxp } from './lib/scrunch-axp';
 
 /** Sites JSON may be empty at build time; cast so site.name is typed correctly. */
 const sitesAll = sitesJson as SiteInfo[];
@@ -91,7 +92,15 @@ const preview = new PreviewProxy({
   client,
 });
 
-export default function proxy(req: NextRequest) {
+/**
+ * Edge entry (Next.js 16 `proxy` convention).
+ * Scrunch AXP runs first for AI bots only; everyone else (and Scrunch miss/error)
+ * continues through the Sitecore Content SDK proxy chain unchanged.
+ */
+export default async function proxy(req: NextRequest) {
+  const axp = await tryScrunchAxp(req);
+  if (axp) return axp;
+
   return defineProxy(locale, preview, multisite, redirects, personalize).exec(req);
 }
 
@@ -104,6 +113,9 @@ export const config = {
    * 4. /- (Sitecore media)
    * 5. /healthz (Health check)
    * 7. all root files inside /public
+   *
+   * Kept Sitecore exclusions (do not replace with Scrunch’s broader matcher)
+   * so editing, APIs, and media stay on the Sitecore/origin path.
    */
   matcher: [
     '/',
