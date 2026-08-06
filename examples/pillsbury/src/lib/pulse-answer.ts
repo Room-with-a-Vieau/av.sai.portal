@@ -5,7 +5,7 @@ const TYPE_LABEL: Record<PulseSource['type'], string> = {
   'people-and-teams': 'Lawyer',
   product: 'Capability',
   'shared-content': 'Related',
-  other: 'Content',
+  other: 'Career',
 };
 
 const STATE_NAME: Record<PulseStateCode, string> = {
@@ -30,10 +30,19 @@ function isLearningAsset(source: PulseSource): boolean {
   );
 }
 
+function isCareerSource(source: PulseSource): boolean {
+  const hay = `${source.title} ${source.url} ${source.path || ''}`.toLowerCase();
+  return (
+    source.type === 'other' ||
+    /\/careers/i.test(hay) ||
+    /career|open role|summer associate|how to apply|legal operations|lateral partner/i.test(hay)
+  );
+}
+
 /**
  * Build a demoworthy, citation-backed answer from retrieved sources only.
  * Prefers lawyer bios for Pillsbury visitor demos; surfaces webinars and related
- * learning assets when the playbook includes them.
+ * learning assets when the playbook includes them. Career intents use openings-first framing.
  */
 export function composePulseAnswer(
   question: string,
@@ -51,6 +60,13 @@ export function composePulseAnswer(
       stateCallout: null,
       personaState,
     };
+  }
+
+  const careerHits = sources.filter(isCareerSource);
+  const isCareerJourney = careerHits.length >= 2 || (careerHits.length >= 1 && careerHits[0] === sources[0]);
+
+  if (isCareerJourney) {
+    return composeCareerAnswer(question, sources, personaState);
   }
 
   const peopleHits = sources.filter((s) => s.type === 'people-and-teams');
@@ -138,6 +154,83 @@ export function composePulseAnswer(
     answer: lines.join('\n\n'),
     sources: ordered,
     stateCallout,
+    personaState,
+  };
+}
+
+function composeCareerAnswer(
+  question: string,
+  sources: PulseSource[],
+  personaState: PulseStateCode | null
+): PulseAskResponse {
+  const openings = sources.filter(
+    (s) =>
+      isCareerSource(s) &&
+      !/how to apply/i.test(s.title) &&
+      !/^careers at pillsbury$/i.test(s.title.trim())
+  );
+  const hub = sources.find((s) => /^careers at pillsbury$/i.test(s.title.trim()));
+  const howToApply = sources.find((s) => /how to apply/i.test(s.title));
+  const people = sources.filter((s) => s.type === 'people-and-teams');
+  const primary = openings[0] || hub || sources[0];
+  const otherOpenings = openings.filter((s) => s.id !== primary.id);
+
+  const lines: string[] = [];
+
+  lines.push(
+    `Here’s how I’d find openings for “${question.trim()}” — based on indexed career listings and apply guidance.`
+  );
+
+  const primaryBit = sentenceFromExcerpt(primary.excerpt);
+  lines.push(
+    primaryBit
+      ? `**${primary.title}** (${TYPE_LABEL[primary.type] || 'Career'}). ${primaryBit}`
+      : `**${primary.title}** is the strongest career match in the citations below.`
+  );
+
+  if (otherOpenings.length) {
+    const names = otherOpenings
+      .slice(0, 4)
+      .map((s) => `**${s.title}**`)
+      .join('; ');
+    lines.push(`Also browse: ${names}.`);
+  }
+
+  if (howToApply) {
+    const bit = sentenceFromExcerpt(howToApply.excerpt);
+    lines.push(
+      bit
+        ? `Next step: **${howToApply.title}**. ${bit}`
+        : `Next step: open **${howToApply.title}** for resume and cover-letter guidance.`
+    );
+  } else if (hub) {
+    lines.push(`Start from **${hub.title}** to browse every open track.`);
+  }
+
+  if (people.length) {
+    const names = people
+      .slice(0, 2)
+      .map((s) => `**${s.title}**`)
+      .join('; ');
+    lines.push(`Optional practice contact while you explore: ${names}.`);
+  }
+
+  lines.push(
+    'Describing the career you want beats hunting keywords alone — Pulse and site search surface the same openings in one step. Open a citation card to view the role.'
+  );
+
+  const ordered = [
+    ...openings,
+    ...(hub ? [hub] : []),
+    ...(howToApply ? [howToApply] : []),
+    ...people,
+    ...sources,
+  ].filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
+
+  return {
+    answer: lines.join('\n\n'),
+    sources: ordered,
+    stateCallout: 'Demo journey: career ask → openings + how to apply.',
     personaState,
   };
 }

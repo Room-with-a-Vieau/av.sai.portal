@@ -80,6 +80,8 @@ function resultIcon(lob: SearchLob) {
       return Scale;
     case 'office':
       return Building2;
+    case 'career':
+      return Briefcase;
     default:
       return FileText;
   }
@@ -99,6 +101,8 @@ function resultCta(lob: SearchLob): string {
       return 'Explore practice';
     case 'office':
       return 'View office';
+    case 'career':
+      return 'View role';
     default:
       return 'Open page';
   }

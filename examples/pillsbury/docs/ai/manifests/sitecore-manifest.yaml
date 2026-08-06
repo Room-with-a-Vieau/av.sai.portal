@@ -3639,6 +3639,114 @@ ia:
         - "Publish MultiPromo for Edge"
         - "Wire homepage personalization to swap MultiPromo datasource"
 
+  - name: "pillsburylaw-careers-search-demo"
+    status: "complete"
+    createdAt: "2026-08-06T16:45:00Z"
+    updatedAt: "2026-08-06T16:45:00Z"
+    siteName: "pillsburylaw"
+    contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers"
+    contentRootItemId: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}"
+    pageTemplateId: "{B08EC32B-F183-474B-93F7-07512168DD6E}"
+    pageTemplateName: "Services Page"
+    language: "en"
+    notes: >
+      Career discovery demo: Sitecore job listings under Lawyers/Careers plus search catalog,
+      AI insight, and Pulse playbook intent careers-find-opening. Canonical ask:
+      "I'm looking for a career in international trade. What openings do you have?"
+      Code: search-results/data.ts (career lob + bucket), SearchResults CTAs, pulse-demo-playbook.ts,
+      pulse-answer.ts career framing. Careers hub Detail enriched. Workflow: Draft — publish for Edge.
+    pages:
+      - { displayName: "Careers", name: "Careers", itemId: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers" }
+      - { displayName: "Associate International Trade Washington DC", name: "Associate-International-Trade-Washington-DC", itemId: "{F03B5B2C-D343-4C6B-9635-D876CD81150A}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Associate-International-Trade-Washington-DC" }
+      - { displayName: "Associate Corporate New York", name: "Associate-Corporate-New-York", itemId: "{9EDB3C29-87F7-475B-B960-41791D29EA0D}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Associate-Corporate-New-York" }
+      - { displayName: "Summer Associate Program", name: "Summer-Associate-Program", itemId: "{B323778A-790A-4DAB-A820-08DCD8C3F256}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Summer-Associate-Program" }
+      - { displayName: "Lateral Partner Intellectual Property", name: "Lateral-Partner-Intellectual-Property", itemId: "{3CFF2A06-690B-471A-8877-4D74D78BAEEE}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Lateral-Partner-Intellectual-Property" }
+      - { displayName: "Legal Operations Specialist", name: "Legal-Operations-Specialist", itemId: "{883337F3-7C1C-4FE8-A342-55471F1355C0}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Legal-Operations-Specialist" }
+      - { displayName: "How to Apply", name: "How-to-Apply", itemId: "{B3852AD7-B1EC-4BAD-88F6-ECD2D7A349DD}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/How-to-Apply" }
+    verification:
+      checkedAt: "2026-08-06T16:45:00Z"
+      passed:
+        - "Six career listing pages + How-to-Apply created under Careers; hub Detail updated"
+        - "Search catalog career lob/bucket + AI insight ai-careers-find-opening"
+        - "Pulse intent careers-find-opening + starter prompt + career answer framing"
+      failed: []
+      pendingManual:
+        - "Publish Careers hub + children for Edge so live routes resolve on Vercel"
+        - "Optional: populate pageTitle/pageHeaderTitle on listings (MCP silent for inherited fields)"
+
+  - name: "pillsburylaw-career-listing"
+    kind: "simple"
+    category: "Lawyers"
+    status: "complete"
+    createdAt: "2026-08-06T17:00:00Z"
+    updatedAt: "2026-08-06T17:00:00Z"
+    siteName: "pillsburylaw"
+    siteCollection: "pillsbury"
+    notes: >
+      CareerListing directory component (BioListing-style cards without images). Datasource
+      CareersRoot Droptree expands children of Home/Lawyers/Careers. Search + track/location filters.
+      Placed on Careers final layout headless-main after ArticleContent. Local DS under Careers/Data
+      plus shared Open Roles under Data/Career Listings.
+    react:
+      filePath: "src/components/uiim/lawyers/CareerListing.tsx"
+      componentName: "CareerListing"
+      propsShape: "graphql-datasource"
+    templates:
+      parent:
+        path: "/sitecore/templates/Project/pillsbury/Components/Lawyers/CareerListing"
+        itemId: "{4EFC4068-14A6-4B66-81DE-2DFAF1559137}"
+        standardValues: "{1AB6B850-B23D-405A-9AE4-C6DE172E5AD6}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{FBD93418-91D8-4EB1-91F3-AEB90C27BCED}" }
+          - { name: "Intro", type: "Rich Text", itemId: "{03D8F0DB-0A51-40F0-A21A-F2A3D1C86E91}" }
+          - { name: "CareersRoot", type: "Droptree", itemId: "{D80C4398-4E0D-4693-BB24-CE24ED194199}", source: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers" }
+          - { name: "EmptyResultsText", type: "Single-Line Text", itemId: "{9C915538-BB9B-4A80-BE95-6A00B54DBED7}" }
+          - { name: "ShowFilters", type: "Checkbox", itemId: "{A5F5DCE4-FA87-4EE9-88C8-CD93EA7C9BCB}" }
+      folder:
+        path: "/sitecore/templates/Project/pillsbury/Folders/CareerListing Folder"
+        itemId: "{F21CC17E-55BB-435F-9FA3-60481FC63CDC}"
+      renderingParams:
+        path: "/sitecore/templates/Project/pillsbury/Rendering Parameters/Lawyers/CareerListing"
+        itemId: "{85C48EF5-B368-4098-81BA-B4F13EF0D75D}"
+    rendering:
+      path: "/sitecore/layout/Renderings/Project/pillsbury/Lawyers/CareerListing"
+      itemId: "{903BEE64-4E35-4956-BBE2-29F492AB247F}"
+      componentName: "CareerListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/pillsbury/Components/Lawyers/CareerListing"
+      useComponentQuery: true
+    datasourceFolder:
+      path: "/sitecore/content/pillsbury/pillsburylaw/Data/Career Listings"
+      itemId: "{4420DC07-D433-4AB8-B916-155D91735575}"
+      exampleItem:
+        name: "Open Roles"
+        itemId: "{84550224-646B-4C7F-8B07-7C2F92F90FAA}"
+        careersRoot: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}"
+    pagePlacement:
+      pagePath: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers"
+      pageId: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}"
+      placeholder: "headless-main"
+      layoutKind: "FINAL"
+      renderingInstanceId: "{A28857D2-72F4-4D83-AE89-62902C07111C}"
+      localDatasourceId: "{FEFA76A7-A161-482A-8A4A-DF30FB980757}"
+    variants:
+      containerPath: "/sitecore/content/pillsbury/pillsburylaw/Presentation/Headless Variants/CareerListing"
+      containerId: "{E647F7CB-ECA8-4132-AF08-FA4C5EFD606E}"
+      definitions:
+        - { name: "Default", itemId: "{A60F9395-FACA-42D2-83FF-58C068679E34}" }
+    verification:
+      checkedAt: "2026-08-06T17:00:00Z"
+      passed:
+        - "Datasource template fields + types verified"
+        - "Rendering componentName + Parameters Template + ComponentQuery set"
+        - "Default Headless Variant created"
+        - "React CareerListing card grid with search/track/location filters"
+        - "CareerListing on Careers final layout headless-main; CareersRoot set on local DS"
+      failed: []
+      pendingManual:
+        - "Append {903BEE64-4E35-4956-BBE2-29F492AB247F} to Available Renderings/Page Content (silent-read)"
+        - "Publish rendering + Careers page + career children for Edge"
+        - "Confirm page* fields resolve on career children via ComponentQuery after publish"
+
   - name: "dwyeromega-featured-manufacturing-articles"
     status: "complete"
     createdAt: "2026-07-15T16:50:00Z"

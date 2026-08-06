@@ -11,7 +11,8 @@ export type PulseDemoIntentId =
   | 'distressed-portfolio-company'
   | 'saudi-expansion-export-controls'
   | 'mena-trade-sanctions'
-  | 'insurance-construction-dispute';
+  | 'insurance-construction-dispute'
+  | 'careers-find-opening';
 
 type PulseDemoIntent = {
   id: PulseDemoIntentId;
@@ -22,6 +23,99 @@ type PulseDemoIntent = {
 };
 
 const INTENTS: PulseDemoIntent[] = [
+  {
+    id: 'careers-find-opening',
+    matchAny: [
+      ['looking', 'career'],
+      ['career', 'international', 'trade'],
+      ['career', 'trade'],
+      ['career', 'opening'],
+      ['job', 'opening'],
+      ['summer', 'associate'],
+      ['how', 'apply'],
+      ['lateral', 'partner'],
+      ['find', 'career'],
+      ['looking', 'job'],
+      ['open', 'role'],
+      ['careers', 'pillsbury'],
+      ['business', 'professional'],
+      ['work', 'at', 'pillsbury'],
+    ],
+    sources: [
+      {
+        id: '{F03B5B2C-D343-4C6B-9635-D876CD81150A}',
+        title: 'Associate — International Trade (Washington, DC)',
+        url: '/Lawyers/Careers/Associate-International-Trade-Washington-DC',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Associate-International-Trade-Washington-DC',
+        excerpt:
+          'Open associate role on EAR, OFAC, customs, and national-security trade matters — the strongest match for a career in international trade.',
+        type: 'other',
+      },
+      {
+        id: '{C30AB91F-550F-4452-8725-5BCCAF1B674B}',
+        title: 'Careers at Pillsbury',
+        url: '/Lawyers/Careers',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers',
+        excerpt:
+          'Hub for associate, summer associate, lateral, and business professional openings across the firm.',
+        type: 'other',
+      },
+      {
+        id: '{B3852AD7-B1EC-4BAD-88F6-ECD2D7A349DD}',
+        title: 'How to Apply',
+        url: '/Lawyers/Careers/How-to-Apply',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/How-to-Apply',
+        excerpt:
+          'Application steps for students, associates, laterals, and business professionals.',
+        type: 'knowledge-article',
+      },
+      {
+        id: '{B323778A-790A-4DAB-A820-08DCD8C3F256}',
+        title: 'Summer Associate Program',
+        url: '/Lawyers/Careers/Summer-Associate-Program',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Summer-Associate-Program',
+        excerpt:
+          'Law-student summer experience with mentoring and a clear path toward full-time offers.',
+        type: 'other',
+      },
+      {
+        id: '{9EDB3C29-87F7-475B-B960-41791D29EA0D}',
+        title: 'Associate — Corporate (New York)',
+        url: '/Lawyers/Careers/Associate-Corporate-New-York',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Associate-Corporate-New-York',
+        excerpt:
+          'Open corporate associate role in New York for M&A, capital markets, and governance.',
+        type: 'other',
+      },
+      {
+        id: '{3CFF2A06-690B-471A-8877-4D74D78BAEEE}',
+        title: 'Lateral Partner — Intellectual Property',
+        url: '/Lawyers/Careers/Lateral-Partner-Intellectual-Property',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Lateral-Partner-Intellectual-Property',
+        excerpt:
+          'Lateral partner conversations for IP litigators and counselors joining the IP platform.',
+        type: 'other',
+      },
+      {
+        id: '{883337F3-7C1C-4FE8-A342-55471F1355C0}',
+        title: 'Legal Operations Specialist',
+        url: '/Lawyers/Careers/Legal-Operations-Specialist',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Legal-Operations-Specialist',
+        excerpt:
+          'Business professional career supporting legal operations, workflow, and lawyer enablement.',
+        type: 'other',
+      },
+      {
+        id: '{8306EB6F-3AA2-474A-ABF0-CD35B805CE6E}',
+        title: 'Ata A. Akiner — International Trade (practice contact)',
+        url: '/Lawyers/Bios/Ata-A-Akiner',
+        path: '/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios/Ata-A-Akiner',
+        excerpt:
+          'Washington, DC International Trade partner — useful practice contact when exploring a trade associate path.',
+        type: 'people-and-teams',
+      },
+    ],
+  },
   {
     id: 'japan-us-tech-acquisition',
     matchAny: [
@@ -332,8 +426,8 @@ export function buildDemoPlaybookSources(
  * Each maps to a demo intent and is phrased as a visitor would ask — not as a keyword search.
  */
 export const PULSE_DEMO_STARTER_PROMPTS = [
+  "I'm looking for a career in international trade. What openings do you have?",
   'A Japanese company is buying a U.S. tech business — who should lead, and who covers the IP risk?',
   'One of our portfolio companies is in financial distress. Who should we talk to?',
   "We're expanding into Saudi Arabia and have export-control questions. Who should we talk to?",
-  'Our construction project is in a coverage fight with the carrier — who handles insurance recovery?',
 ] as const;

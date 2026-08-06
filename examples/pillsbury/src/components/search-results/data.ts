@@ -17,6 +17,7 @@ export type SearchLob =
   | 'podcast'
   | 'capability'
   | 'office'
+  | 'career'
   | 'page';
 
 /** Practice / capability facet */
@@ -65,7 +66,8 @@ export type SearchBucket =
   | 'expansion'
   | 'webinar'
   | 'podcast'
-  | 'event';
+  | 'event'
+  | 'careers';
 
 export type SearchResultItem = {
   id: string;
@@ -117,6 +119,7 @@ export const searchFacetLabels = {
     podcast: 'Podcasts',
     capability: 'Capabilities',
     office: 'Offices',
+    career: 'Careers & openings',
     page: 'Site pages',
   },
   peril: {
@@ -149,15 +152,15 @@ export const lobs = Object.keys(searchFacetLabels.lob) as SearchLob[];
 export const perils = Object.keys(searchFacetLabels.peril) as SearchPeril[];
 export const topics = Object.keys(searchFacetLabels.topic) as SearchTopic[];
 
-/** Popular chips — lead with the Saudi expansion demo narrative */
+/** Popular chips — lead with careers + Saudi expansion demo narratives */
 export const popularSearches = [
+  "I'm looking for a career in international trade. What openings do you have?",
+  'Summer associate program',
   "We're expanding into Saudi Arabia and have export-control questions. Who should we talk to?",
   'Saudi Arabia export control webinar',
   'MENA corporate setup',
-  'Trade Talks podcast Vision 2030',
   'Japanese company acquisition',
   'financial distress restructuring',
-  'insurance recovery construction',
   'New York corporate lawyers',
 ];
 
@@ -202,6 +205,22 @@ export const QUERY_BUCKET_SYNONYMS: Record<SearchBucket, readonly string[]> = {
   webinar: ['webinar', 'webcast', 'virtual briefing'],
   podcast: ['podcast', 'trade talks', 'episode', 'listen'],
   event: ['event', 'cle', 'briefing', 'conference', 'seminar', 'workshop'],
+  careers: [
+    'career',
+    'careers',
+    'job',
+    'jobs',
+    'opening',
+    'openings',
+    'hiring',
+    'apply',
+    'application',
+    'summer associate',
+    'lateral',
+    'recruiting',
+    'business professional',
+    'open role',
+  ],
 };
 
 const QUERY_STOP_WORDS = new Set([
@@ -1037,6 +1056,134 @@ export const searchCatalog: SearchResultItem[] = [
     isNew: true,
   }),
 
+  // —— Careers & openings ——
+  entry({
+    id: 'career-hub',
+    kbId: 'CAREERS',
+    title: 'Careers at Pillsbury',
+    description:
+      'Explore open roles for associates, summer associates, laterals, and business professionals—or ask Pulse where you fit.',
+    href: '/Lawyers/Careers',
+    lob: 'career',
+    perils: ['corporate', 'internationalTrade', 'intellectualProperty'],
+    topics: ['global'],
+    searchBuckets: ['careers', 'corporate', 'trade'],
+    breadcrumb: ['Lawyers', 'Careers'],
+    matchTerms: ['careers', 'jobs', 'openings', 'hiring', 'work at pillsbury'],
+    isNew: true,
+  }),
+  entry({
+    id: 'career-associate-trade-dc',
+    kbId: 'ROLE',
+    title: 'Associate — International Trade (Washington, DC)',
+    description:
+      'Open associate role advising on EAR, OFAC, customs, and national-security trade matters from Washington, DC.',
+    href: '/Lawyers/Careers/Associate-International-Trade-Washington-DC',
+    lob: 'career',
+    perils: ['internationalTrade', 'regulatory'],
+    topics: ['washingtonDc'],
+    searchBuckets: ['careers', 'trade', 'sanctions'],
+    breadcrumb: ['Lawyers', 'Careers', 'Open Role'],
+    matchTerms: [
+      'associate',
+      'international trade career',
+      'trade job',
+      'export control career',
+      'washington dc associate',
+      'openings',
+    ],
+    subtitle: 'Washington, DC · Open role',
+    dateLabel: 'Open',
+    isNew: true,
+  }),
+  entry({
+    id: 'career-associate-corporate-ny',
+    kbId: 'ROLE',
+    title: 'Associate — Corporate (New York)',
+    description:
+      'Corporate associate opening in New York for M&A, capital markets, and governance deal experience.',
+    href: '/Lawyers/Careers/Associate-Corporate-New-York',
+    lob: 'career',
+    perils: ['corporate'],
+    topics: ['newYork'],
+    searchBuckets: ['careers', 'corporate'],
+    breadcrumb: ['Lawyers', 'Careers', 'Open Role'],
+    matchTerms: ['corporate associate', 'new york job', 'm&a associate', 'career'],
+    subtitle: 'New York · Open role',
+    dateLabel: 'Open',
+    isNew: true,
+  }),
+  entry({
+    id: 'career-summer-associate',
+    kbId: 'PROGRAM',
+    title: 'Summer Associate Program',
+    description:
+      'Law-student summer program with real matter experience, mentoring, and a path to full-time offers.',
+    href: '/Lawyers/Careers/Summer-Associate-Program',
+    lob: 'career',
+    perils: ['corporate', 'litigation', 'internationalTrade', 'intellectualProperty'],
+    topics: ['global'],
+    searchBuckets: ['careers'],
+    breadcrumb: ['Lawyers', 'Careers', 'Students'],
+    matchTerms: ['summer associate', 'law student', '2L', '3L', 'recruiting', 'internship'],
+    subtitle: 'Law students',
+    isNew: true,
+  }),
+  entry({
+    id: 'career-lateral-ip',
+    kbId: 'ROLE',
+    title: 'Lateral Partner — Intellectual Property',
+    description:
+      'Lateral partner opportunity for IP litigators and counselors joining Pillsbury’s Intellectual Property platform.',
+    href: '/Lawyers/Careers/Lateral-Partner-Intellectual-Property',
+    lob: 'career',
+    perils: ['intellectualProperty'],
+    topics: ['global'],
+    searchBuckets: ['careers', 'ip', 'patent'],
+    breadcrumb: ['Lawyers', 'Careers', 'Lateral'],
+    matchTerms: ['lateral', 'partner opening', 'ip career', 'patent partner'],
+    subtitle: 'Lateral · IP',
+    dateLabel: 'Open',
+    isNew: true,
+  }),
+  entry({
+    id: 'career-legal-ops',
+    kbId: 'ROLE',
+    title: 'Legal Operations Specialist',
+    description:
+      'Business professional role supporting matter workflow, technology adoption, and practice enablement.',
+    href: '/Lawyers/Careers/Legal-Operations-Specialist',
+    lob: 'career',
+    perils: ['technology'],
+    topics: ['global'],
+    searchBuckets: ['careers', 'tech'],
+    breadcrumb: ['Lawyers', 'Careers', 'Business Professionals'],
+    matchTerms: [
+      'business professional',
+      'legal operations',
+      'non-lawyer career',
+      'staff career',
+    ],
+    subtitle: 'Business professionals',
+    dateLabel: 'Open',
+    isNew: true,
+  }),
+  entry({
+    id: 'career-how-to-apply',
+    kbId: 'GUIDE',
+    title: 'How to Apply',
+    description:
+      'Short guide to applying for associate, summer, lateral, and business professional roles—and how search or Pulse finds the right opening.',
+    href: '/Lawyers/Careers/How-to-Apply',
+    lob: 'career',
+    perils: ['corporate'],
+    topics: ['global'],
+    searchBuckets: ['careers'],
+    breadcrumb: ['Lawyers', 'Careers', 'Guide'],
+    matchTerms: ['how to apply', 'application', 'submit resume', 'recruiting'],
+    isNew: true,
+  }),
+
   // —— Hub pages ——
   entry({
     id: 'page-lawyers',
@@ -1047,7 +1194,7 @@ export const searchCatalog: SearchResultItem[] = [
     lob: 'page',
     perils: ['corporate', 'litigation'],
     topics: ['global'],
-    searchBuckets: ['corporate', 'litigation'],
+    searchBuckets: ['corporate', 'litigation', 'careers'],
     breadcrumb: ['Lawyers'],
     matchTerms: ['attorney directory', 'find a lawyer'],
   }),
@@ -1112,6 +1259,71 @@ type InsightRule = {
 };
 
 const AI_INSIGHT_RULES: InsightRule[] = [
+  {
+    id: 'careers',
+    matchAny: [
+      ['career', 'international', 'trade'],
+      ['looking', 'career'],
+      ['career', 'trade'],
+      ['career', 'opening'],
+      ['job', 'opening'],
+      ['summer', 'associate'],
+      ['how', 'apply'],
+      ['lateral', 'partner'],
+      ['business', 'professional'],
+      ['careers', 'pillsbury'],
+      ['find', 'career'],
+      ['looking', 'job'],
+      ['open', 'role'],
+    ],
+    insight: {
+      id: 'ai-careers-find-opening',
+      headline: 'Find a career at Pillsbury',
+      answer:
+        'Start at Careers, open the role that matches your practice and city, then follow How to Apply. For international trade in Washington, DC, the Associate — International Trade posting is the clearest next step—Pulse and search surface the same path from a natural-language ask.',
+      bullets: [
+        'Open role: Associate — International Trade (Washington, DC).',
+        'Also browse: Corporate associate (New York), Summer Associate Program, Lateral IP, and Legal Operations.',
+        'Use How to Apply for resume / cover-letter steps.',
+        'Optional practice contact for trade: Ata A. Akiner (Washington, DC).',
+      ],
+      citations: [
+        {
+          title: 'Associate — International Trade (Washington, DC)',
+          href: '/Lawyers/Careers/Associate-International-Trade-Washington-DC',
+          kbId: 'ROLE',
+          excerpt: 'Open associate role in EAR / OFAC / trade compliance.',
+        },
+        {
+          title: 'Careers at Pillsbury',
+          href: '/Lawyers/Careers',
+          kbId: 'CAREERS',
+          excerpt: 'Hub for lawyer and business professional openings.',
+        },
+        {
+          title: 'How to Apply',
+          href: '/Lawyers/Careers/How-to-Apply',
+          kbId: 'GUIDE',
+          excerpt: 'Application steps for students, associates, laterals, and staff.',
+        },
+        {
+          title: 'Summer Associate Program',
+          href: '/Lawyers/Careers/Summer-Associate-Program',
+          kbId: 'PROGRAM',
+          excerpt: 'Law-student summer path into full-time offers.',
+        },
+        {
+          title: 'Ata A. Akiner',
+          href: '/Lawyers/Bios/Ata-A-Akiner',
+          kbId: 'BIO',
+          excerpt: 'International Trade practice contact (Washington, DC).',
+        },
+      ],
+      learnMoreHref: '/Lawyers/Careers',
+      learnMoreLabel: 'Browse all careers',
+      stateCallout: 'Demo journey: natural-language career ask → openings + how to apply.',
+    },
+  },
   {
     id: 'japan-deal',
     matchAny: [
