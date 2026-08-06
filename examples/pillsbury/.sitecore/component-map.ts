@@ -12,12 +12,8 @@ import * as variantcontentprops from 'src/components/variant-content/variant-con
 import * as variantcontentfields from 'src/components/variant-content/variant-content.fields';
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
-import * as biolistingprops from 'src/components/uiim/lawyers/bio-listing.props';
-import * as bioheadshots from 'src/components/uiim/lawyers/bio-headshots';
-import * as biodetailprops from 'src/components/uiim/lawyers/bio-detail.props';
+import * as biorelatedcontent from 'src/components/uiim/lawyers/bio-related-content';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
-import * as bloglistingtaxonomy from 'src/components/uiim/insights/blog-listing.taxonomy';
-import * as bloglistingprops from 'src/components/uiim/insights/blog-listing.props';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
 import * as topiclistingprops from 'src/components/topic-listing/topic-listing.props';
@@ -270,11 +266,6 @@ import * as Carddev from 'src/components/card/Card.dev';
 import * as ButtonComponent from 'src/components/button-component/ButtonComponent';
 import * as Breadcrumbs from 'src/components/breadcrumbs/Breadcrumbs';
 import * as breadcrumbsprops from 'src/components/breadcrumbs/breadcrumbs.props';
-import * as types from 'src/components/BlogListing/types';
-import * as BlogPostListing from 'src/components/BlogListing/BlogPostListing';
-import * as BlogPagination from 'src/components/BlogListing/BlogPagination';
-import * as BlogCard from 'src/components/BlogListing/BlogCard';
-import * as bloglistingquery from 'src/components/BlogListing/blog-listing.query';
 import * as BackgroundThumbnaildev from 'src/components/background-thumbnail/BackgroundThumbnail.dev';
 import * as AuthPanel from 'src/components/auth-panel/AuthPanel';
 import * as authpanelprops from 'src/components/auth-panel/auth-panel.props';
@@ -305,11 +296,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['variant-content', { ...variantcontentprops, ...variantcontentfields }],
   ['BioListing', { ...BioListing, componentType: 'client' }],
   ['BioDetail', { ...BioDetail, componentType: 'client' }],
-  ['bio-listing', { ...biolistingprops }],
-  ['bio-headshots', { ...bioheadshots }],
-  ['bio-detail', { ...biodetailprops }],
+  ['bio-related-content', { ...biorelatedcontent }],
   ['BlogListing', { ...BlogListing, componentType: 'client' }],
-  ['blog-listing', { ...bloglistingtaxonomy, ...bloglistingprops }],
   ['TopicListing', { ...TopicListing }],
   ['TopicItem', { ...TopicItemdev }],
   ['topic-listing', { ...topiclistingprops }],
@@ -549,11 +537,6 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ButtonComponent', { ...ButtonComponent }],
   ['Breadcrumbs', { ...Breadcrumbs }],
   ['breadcrumbs', { ...breadcrumbsprops }],
-  ['types', { ...types }],
-  ['BlogPostListing', { ...BlogPostListing }],
-  ['BlogPagination', { ...BlogPagination, componentType: 'client' }],
-  ['BlogCard', { ...BlogCard }],
-  ['blog-listing', { ...bloglistingquery }],
   ['BackgroundThumbnail', { ...BackgroundThumbnaildev }],
   ['AuthPanel', { ...AuthPanel, componentType: 'client' }],
   ['auth-panel', { ...authpanelprops }],

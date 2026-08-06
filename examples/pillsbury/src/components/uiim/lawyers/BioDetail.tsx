@@ -2,6 +2,7 @@
 
 import type React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Link as ContentSdkLink,
   NextImage as ContentSdkImage,
@@ -13,13 +14,33 @@ import {
   type LinkField,
   type RichTextField,
 } from '@sitecore-content-sdk/nextjs';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BookOpen,
+  CalendarDays,
+  FileText,
+  Headphones,
+  Mail,
+  MapPin,
+  Mic2,
+  Newspaper,
+  Phone,
+  Presentation,
+  type LucideIcon,
+} from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
 import type { BioDetailFields, BioDetailProps } from './bio-detail.props';
 import { resolveBioHeadshotSrc } from './bio-headshots';
+import {
+  relatedContentBadge,
+  resolveBioRelatedContent,
+  type BioRelatedContentItem,
+  type BioRelatedContentProfile,
+  type BioRelatedContentType,
+} from './bio-related-content';
 
 type TaxonomyLike = {
   id?: string;
@@ -123,6 +144,83 @@ function RichSection({
   );
 }
 
+const RELATED_TYPE_ICON: Record<BioRelatedContentType, LucideIcon> = {
+  blog: Newspaper,
+  webinar: CalendarDays,
+  podcast: Mic2,
+  cle: Headphones,
+  alert: FileText,
+  guide: BookOpen,
+  'white-paper': BookOpen,
+  presentation: Presentation,
+};
+
+function RelatedContentCard({ item }: { item: BioRelatedContentItem }) {
+  const Icon = RELATED_TYPE_ICON[item.type];
+  const badge = relatedContentBadge(item);
+
+  return (
+    <li>
+      <Link
+        href={item.href}
+        className={cn(
+          'group border-border bg-card flex h-full flex-col gap-3 rounded-2xl border p-5',
+          'shadow-sm ring-1 ring-black/3 transition-all duration-200',
+          'hover:border-primary/30 hover:shadow-md dark:ring-white/5'
+        )}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <span className="bg-muted text-muted-foreground inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[10px] font-semibold tracking-wide uppercase">
+            <Icon className="size-3.5 shrink-0" aria-hidden />
+            {badge}
+          </span>
+          {item.dateLabel ? (
+            <span className="text-muted-foreground text-xs">{item.dateLabel}</span>
+          ) : null}
+        </div>
+        <h3 className="font-heading text-foreground text-base leading-snug font-semibold tracking-tight group-hover:text-primary">
+          {item.title}
+        </h3>
+        <p className="text-muted-foreground flex-1 text-sm leading-relaxed">{item.description}</p>
+        <span className="text-primary inline-flex items-center gap-1 text-sm font-medium">
+          Open
+          <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+        </span>
+      </Link>
+    </li>
+  );
+}
+
+function RelatedContentSection({ profile }: { profile: BioRelatedContentProfile }) {
+  if (!profile.items.length) return null;
+
+  return (
+    <section
+      aria-labelledby="bio-related-content-heading"
+      className="border-border border-t"
+    >
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="max-w-2xl">
+          <h2
+            id="bio-related-content-heading"
+            className="font-heading text-foreground text-2xl font-semibold tracking-tight sm:text-3xl"
+          >
+            {profile.sectionTitle}
+          </h2>
+          <p className="text-muted-foreground mt-3 text-base leading-relaxed sm:text-lg">
+            {profile.sectionIntro}
+          </p>
+        </div>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {profile.items.map((item) => (
+            <RelatedContentCard key={item.id} item={item} />
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 export const Default: React.FC<BioDetailProps> = (props) => {
   const { fields: propFields, params, isPageEditing: propEditing } = props;
   const { page } = useSitecore();
@@ -158,6 +256,7 @@ export const Default: React.FC<BioDetailProps> = (props) => {
   const languages = resolveTaxonomy(fields.Languages);
   const education = resolveTaxonomy(fields.Education);
   const awards = resolveTaxonomy(fields.Awards);
+  const relatedContent = resolveBioRelatedContent(routeName);
 
   const hasProfile = Boolean(fullName || jobTitle || summary || isEditing);
 
@@ -297,9 +396,39 @@ export const Default: React.FC<BioDetailProps> = (props) => {
                   Add taxonomy multilists on this Bio page to populate expertise.
                 </p>
               )}
+            {relatedContent && relatedContent.items.length > 0 ? (
+              <div className="border-border border-t pt-6">
+                <h3 className="font-heading text-foreground text-sm font-semibold tracking-wide uppercase">
+                  Featured content
+                </h3>
+                <ul className="mt-3 space-y-2">
+                  {relatedContent.items.slice(0, 4).map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        href={item.href}
+                        className="text-foreground hover:text-primary group flex items-start gap-2 text-sm leading-snug transition-colors"
+                      >
+                        <ArrowUpRight
+                          className="text-muted-foreground mt-0.5 size-3.5 shrink-0 group-hover:text-primary"
+                          aria-hidden
+                        />
+                        <span>
+                          <span className="text-muted-foreground block text-[10px] font-semibold tracking-wide uppercase">
+                            {relatedContentBadge(item)}
+                          </span>
+                          {item.title}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
         </aside>
       </div>
+
+      {relatedContent ? <RelatedContentSection profile={relatedContent} /> : null}
     </article>
   );
 };

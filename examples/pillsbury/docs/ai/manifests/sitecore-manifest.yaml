@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-05T20:55:00Z"
+lastUpdatedAt: "2026-08-06T13:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3405,12 +3405,14 @@ ia:
     category: "Lawyers"
     status: "complete"
     createdAt: "2026-08-04T20:20:00Z"
-    updatedAt: "2026-08-04T20:45:00Z"
+    updatedAt: "2026-08-06T13:30:00Z"
     siteName: "pillsburylaw"
     siteCollection: "pillsbury"
     notes: >
       BioDetail context component reads Bio page route fields (FullName, JobTitle, Biography,
       PracticeAreas, contact, etc.). No datasource. React at src/components/uiim/lawyers/BioDetail.tsx.
+      2026-08-06: Related insights & speaking cards via bio-related-content.ts (Ata A. Akiner first).
+      Sidebar Featured content + full-width card grid. Ata Summary/Biography enriched for Saudi/export demo.
     react:
       filePath: "src/components/uiim/lawyers/BioDetail.tsx"
       componentName: "BioDetail"
@@ -3577,17 +3579,21 @@ ia:
   - name: "pillsburylaw-saudi-expansion-search-demo"
     status: "complete"
     createdAt: "2026-08-05T20:30:00Z"
-    updatedAt: "2026-08-05T20:55:00Z"
+    updatedAt: "2026-08-06T13:30:00Z"
     siteName: "pillsburylaw"
     contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights"
     pageTemplateId: "{B08EC32B-F183-474B-93F7-07512168DD6E}"
     pageTemplateName: "Services Page"
     language: "en"
     notes: >
-      Saudi expansion + export-control demo journey content for on-site search / AI agent.
+      Saudi expansion + export-control demo journey content for on-site search / AI agent / BioDetail.
       create_page failed (field name); used create_content_item with Detail only.
       Search catalog + AI rules updated in examples/pillsbury/src/components/search-results/.
-      Workflow: Draft — publish for Edge when ready.
+      2026-08-06: Added Global Trade blog post Saudi-Expansion-and-US-Export-Controls; Ata bio
+      related-content cards in BioDetail. Workflow: Draft — publish for Edge when ready.
+      2026-08-06: Populated pageTitle/pageHeaderTitle/pageShortTitle/pageSubtitle/pageSummary +
+      metadata/og on all 9 Saudi demo Services Pages (MCP silent for inherited fields; verified
+      via get_page_html preview — titles present; publish required for Vercel Edge).
     pages:
       - { displayName: "Expanding into Saudi Arabia: Export Controls 101", name: "Expanding-into-Saudi-Arabia-Export-Controls-101", itemId: "{FC3F756B-EF7C-4A68-9CD6-97FD0202EE72}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101" }
       - { displayName: "MENA Corporate Setup and US Export Compliance", name: "MENA-Corporate-Setup-and-US-Export-Compliance", itemId: "{021363E1-C472-4752-878D-55C455EA8BB5}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance" }
@@ -3597,15 +3603,41 @@ ia:
       - { displayName: "Checklist: US Companies Entering KSA", name: "Checklist-US-Companies-Entering-KSA", itemId: "{0579D7FB-48F2-4036-A8EE-E279E67958D4}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/White-Paper/Checklist-US-Companies-Entering-KSA" }
       - { displayName: "Export Control Diligence for MENA Deals", name: "Export-Control-Diligence-for-MENA-Deals", itemId: "{54B23AD1-7151-47BF-91B8-E005268353B9}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Presentation/Export-Control-Diligence-for-MENA-Deals" }
       - { displayName: "Who to Talk To: Saudi Expansion Export Controls", name: "Who-to-Talk-To-Saudi-Expansion-Export-Controls", itemId: "{C6AD0AF7-0CCB-4109-B74D-E207ECB78A35}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Thought-Leadership/Article/Who-to-Talk-To-Saudi-Expansion-Export-Controls" }
+      - { displayName: "Saudi Expansion and US Export Controls", name: "Saudi-Expansion-and-US-Export-Controls", itemId: "{A1C94608-0387-4E51-B253-A2E97AD2948B}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Blogs/Global-Trade-and-Sanctions-Law/Saudi-Expansion-and-US-Export-Controls" }
     verification:
-      checkedAt: "2026-08-05T20:55:00Z"
+      checkedAt: "2026-08-06T13:30:00Z"
       passed:
         - "MCP authenticated; webinar item FC3F756B… readable with Detail HTML"
         - "SearchResults event/podcast icons + CTAs; popular search led by demo question"
+        - "Ata bio related-content cards + new Global Trade blog post"
       failed: []
       pendingManual:
         - "Publish new pages for Edge so live routes resolve"
         - "Optional: add hero images on Services Page items"
+
+  - name: "pillsburylaw-saudi-expansion-multipromo"
+    status: "complete"
+    createdAt: "2026-08-06T13:40:00Z"
+    updatedAt: "2026-08-06T13:40:00Z"
+    siteName: "pillsburylaw"
+    contentRootPath: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos"
+    notes: >
+      MultiPromo datasource for homepage personalization aligned to the Saudi expansion /
+      export-control search demo (Ata Akiner journey). Parent + 3 SimplePromo children.
+      Personalization rules not wired — content only per request.
+    pages:
+      - { displayName: "Saudi Expansion Export Controls", name: "Saudi-Expansion-Export-Controls", itemId: "{6B3B01D5-0DCE-4AEB-AC18-44D19977D9F7}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls" }
+      - { displayName: "Ata A. Akiner", name: "Ata-A-Akiner", itemId: "{79483B92-D9B9-4494-834B-4FC4E65F4D02}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls/Ata-A-Akiner" }
+      - { displayName: "Khalid A. AlArfaj", name: "Khalid-A-AlArfaj", itemId: "{B9E75FEC-6574-441A-9F2F-E0918F865422}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls/Khalid-A-AlArfaj" }
+      - { displayName: "Export Controls 101 Webinar", name: "Export-Controls-101-Webinar", itemId: "{6A152AEE-38EB-490C-9A42-697B85BC9577}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls/Export-Controls-101-Webinar" }
+    verification:
+      checkedAt: "2026-08-06T13:40:00Z"
+      passed:
+        - "MultiPromo parent + 3 SimplePromo children created under Data/MultiPromos"
+      failed: []
+      pendingManual:
+        - "Publish MultiPromo for Edge"
+        - "Wire homepage personalization to swap MultiPromo datasource"
 
   - name: "dwyeromega-featured-manufacturing-articles"
     status: "complete"

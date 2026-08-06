@@ -817,6 +817,31 @@ export const searchCatalog: SearchResultItem[] = [
 
   // —— Webinars & events (Saudi expansion / export-control journey) ——
   entry({
+    id: 'blog-saudi-expansion-export-controls',
+    kbId: 'BLOG',
+    title: 'Saudi Expansion and U.S. Export Controls',
+    subtitle: 'Global Trade & Sanctions Law · Ata A. Akiner',
+    description:
+      'EAR/OFAC diligence for Vision 2030 market entry—pairing DC trade counsel with Riyadh corporate counsel.',
+    href: '/Insights/Blogs/Global-Trade-and-Sanctions-Law/Saudi-Expansion-and-US-Export-Controls',
+    lob: 'insight',
+    perils: ['internationalTrade', 'regulatory'],
+    topics: ['washingtonDc', 'riyadh', 'global'],
+    searchBuckets: ['mena', 'sanctions', 'trade', 'expansion'],
+    dateLabel: 'Blog post',
+    breadcrumb: ['Insights', 'Blogs', 'Global Trade', 'Saudi Expansion'],
+    matchTerms: [
+      'saudi expansion',
+      'export',
+      'akiner',
+      'vision 2030',
+      'blog',
+      'ear',
+      'ofac',
+    ],
+    isNew: true,
+  }),
+  entry({
     id: 'webinar-saudi-export-controls-101',
     kbId: 'WEBINAR',
     title: 'Expanding into Saudi Arabia: Export Controls 101',
