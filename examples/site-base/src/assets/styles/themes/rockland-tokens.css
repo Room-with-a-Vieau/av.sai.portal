@@ -1,6 +1,6 @@
 /**
  * Rockland Trust official brand tokens (light + dark).
- * Scoped to [data-theme='rockland'] — activate via NEXT_PUBLIC_APP_THEME=rockland.
+ * Scoped to [data-theme='rockland'] — Skin key `rockland` (see src/lib/theme/).
  */
 [data-theme='rockland'] {
   --color-background: #ffffff;

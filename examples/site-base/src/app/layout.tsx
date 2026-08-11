@@ -8,7 +8,7 @@ import {
   Roboto_Condensed,
   Source_Sans_3,
 } from 'next/font/google';
-import { resolveAppTheme } from '@/lib/app-theme';
+import { DEFAULT_THEME } from '@/lib/theme';
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
@@ -64,14 +64,17 @@ const fontVariables = [
   montserrat.variable,
 ].join(' ');
 
+/**
+ * Root HTML shell. Site-specific Skin is applied in `[site]/layout.tsx`
+ * (Sitecore Site definition Skin → data-theme). Default theme is a safe
+ * fallback for routes outside `/[site]/…` (editing shell, 404, etc.).
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const appTheme = resolveAppTheme();
-
   return (
     <html
       lang="en"
       className={fontVariables}
-      data-theme={appTheme}
+      data-theme={DEFAULT_THEME}
       suppressHydrationWarning
     >
       <head>

@@ -1,6 +1,6 @@
 /**
  * Progressive Knowledge Management (PKM) brand tokens.
- * Scoped to [data-theme='pkm'] — activate via NEXT_PUBLIC_APP_THEME=pkm.
+ * Scoped to [data-theme='pkm'] — Skin key `pkm` (see src/lib/theme/).
  *
  * Colors from Progressive Brand Guidelines (design.progressive.com):
  * Progressive Blue #0077B3, Steel Blue 900 #0A3360, Gray 900 #2D2D2D, plus extended UI scales.

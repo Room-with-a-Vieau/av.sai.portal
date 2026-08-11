@@ -1,7 +1,12 @@
-/* Same @import order as examples/portal/src/app/globals.css */
+/* Theme packages — one CSS file per Skin / data-theme key */
 @import '../assets/styles/globals.css';
-@import '../assets/styles/themes/rockland-tokens.css';
-@import '../assets/styles/themes/pkm-tokens.css';
+@import '../assets/styles/themes/bcbst.css';
+@import '../assets/styles/themes/dwyeromega.css';
+@import '../assets/styles/themes/builderfs.css';
+@import '../assets/styles/themes/rockland.css';
+@import '../assets/styles/themes/pkm.css';
+@import '../assets/styles/themes/pillsburylaw.css';
+@import '../assets/styles/themes/fonts.css';
 @import '../assets/styles/tailwind-bootstrap-grid.css';
 @import '../assets/styles/column-splitter.css';
 @import 'tailwindcss';
@@ -129,98 +134,6 @@
   }
 }
 
-/*
- * Per-theme typography (`NEXT_PUBLIC_APP_THEME` → <html data-theme>).
- * Unlayered `html[data-theme]` overrides `@layer base` html defaults.
- */
-html[data-theme='dwyeromega'] {
-  --font-body: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-barlow-condensed), 'Barlow Condensed', ui-sans-serif, system-ui,
-    sans-serif;
-  --font-accent: var(--font-barlow-condensed), 'Barlow Condensed', ui-sans-serif, system-ui,
-    sans-serif;
-  --font-weight-heading: 700;
-}
-
-/* bldr.com: Open Sans body / nav; Roboto Condensed for industrial display type & buttons */
-html[data-theme='builderfs'] {
-  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-roboto-condensed), 'Roboto Condensed', ui-sans-serif, system-ui,
-    sans-serif;
-  --font-accent: var(--font-roboto-condensed), 'Roboto Condensed', ui-sans-serif, system-ui,
-    sans-serif;
-  --font-weight-heading: 700;
-}
-
-html[data-theme='builderfs'] :where(h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6) {
-  letter-spacing: 0.03em;
-}
-
-html[data-theme='builderfs'] .btn.btn-primary {
-  background-color: var(--color-accent);
-  color: var(--color-accent-foreground);
-  border-radius: 0;
-}
-
-html[data-theme='builderfs'] .btn.btn-primary:hover {
-  background-color: var(--color-destructive-hover);
-  color: var(--color-accent-foreground);
-}
-
-/* rocklandtrust.com: Montserrat display headings, Open Sans body (Google Fonts substitutes for the brand type). */
-html[data-theme='rockland'] {
-  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  --font-accent: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  --font-weight-heading: 700;
-}
-
-/* Progressive PKM: Source Sans 3 substitutes for proprietary 96 Sans (trustworthy, friendly, readable). */
-html[data-theme='pkm'] {
-  --font-body: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
-  --font-accent: var(--font-source-sans-3), 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
-  --font-weight-heading: 700;
-}
-
-/* Pillsbury Law — modern BigLaw digital: Montserrat headings + Open Sans body (most common legal-web pairing, sans-first). */
-html[data-theme='pillsburylaw'] {
-  --font-body: var(--font-open-sans), 'Open Sans', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-montserrat), 'Montserrat', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
-  --font-accent: var(--font-montserrat), 'Montserrat', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
-  --font-weight-heading: 600;
-  color: var(--color-foreground);
-  background-color: var(--color-background);
-}
-
-html[data-theme='pillsburylaw'] body {
-  color: var(--color-foreground);
-  background-color: var(--color-background);
-}
-
-/* Solid primary CTAs stay vivid on navy; text uses luminous --color-primary from theme tokens. */
-html[data-theme='pillsburylaw'] .btn.btn-primary {
-  background-color: #0055ff;
-  color: #ffffff;
-  border-radius: 0;
-}
-
-html[data-theme='pillsburylaw'] .btn.btn-primary:hover {
-  background-color: #0044cc;
-  color: #ffffff;
-}
-
-html[data-theme='pillsburylaw'] .bg-primary {
-  background-color: #0055ff;
-  color: #ffffff;
-}
-
-html[data-theme='pillsburylaw'] .bg-primary:hover,
-html[data-theme='pillsburylaw'] .hover\:bg-primary-hover:hover {
-  background-color: #0044cc;
-  color: #ffffff;
-}
-
 /* BUTTONS END */
 
 main {
@@ -331,14 +244,3 @@ main {
   @apply static mb-0 overflow-hidden;
 }
 
-/* BCBS palette overrides; other named themes are defined in src/assets/styles/globals.css. */
-html[data-theme='bcbst'] {
-  --color-primary: #328ac9;
-  --color-primary-foreground: #ffffff;
-  --color-primary-hover: #2b78b3;
-  --color-secondary: #e3eef6;
-  --color-secondary-foreground: #133454;
-  --color-secondary-hover: #d2e4f2;
-  --color-accent: #328ac9;
-  --color-accent-foreground: #ffffff;
-}
