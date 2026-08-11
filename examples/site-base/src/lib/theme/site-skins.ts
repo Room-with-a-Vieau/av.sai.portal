@@ -31,6 +31,9 @@ export const SITE_SKINS: Readonly<Record<string, AppTheme>> = {
   rockland: 'rockland',
   pkm: 'pkm',
   pillsburylaw: 'pillsburylaw',
+  quanex: 'quanex',
+  amesburytruth: 'amesburytruth',
+  era: 'era',
 
   // Example: site name differs from skin
   // 'acme-demo': 'rockland',

@@ -5,6 +5,7 @@ import {
   Inter,
   Montserrat,
   Open_Sans,
+  Roboto,
   Roboto_Condensed,
   Source_Sans_3,
 } from 'next/font/google';
@@ -47,6 +48,14 @@ const robotoCondensed = Roboto_Condensed({
   display: 'swap',
 });
 
+/** Quanex body — Roboto (site uses Roboto + Roboto Condensed) */
+const roboto = Roboto({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-roboto',
+  weight: ['400', '500', '700'],
+  display: 'swap',
+});
+
 /** Rockland Trust + Pillsbury Law headings — Montserrat */
 const montserrat = Montserrat({
   subsets: ['latin', 'latin-ext'],
@@ -61,6 +70,7 @@ const fontVariables = [
   barlowCondensed.variable,
   openSans.variable,
   robotoCondensed.variable,
+  roboto.variable,
   montserrat.variable,
 ].join(' ');
 

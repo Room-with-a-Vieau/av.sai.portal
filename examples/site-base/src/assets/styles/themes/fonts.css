@@ -94,3 +94,68 @@ html[data-theme='pillsburylaw'] .hover\:bg-primary-hover:hover {
   background-color: #0044cc;
   color: #ffffff;
 }
+
+/* quanex.com: Roboto body, Roboto Condensed display (uppercase section titles). */
+html[data-theme='quanex'] {
+  --font-body: var(--font-roboto), 'Roboto', Arial, Helvetica, ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-roboto-condensed), 'Roboto Condensed', Arial, Helvetica, ui-sans-serif,
+    system-ui, sans-serif;
+  --font-accent: var(--font-roboto-condensed), 'Roboto Condensed', Arial, Helvetica, ui-sans-serif,
+    system-ui, sans-serif;
+  --font-weight-heading: 700;
+}
+
+html[data-theme='quanex'] :where(h1, .h1, h2, .h2) {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-theme='quanex'] .btn.btn-primary {
+  border-radius: 0;
+}
+
+html[data-theme='quanex'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}
+
+/* amesburytruth.com: Inter everywhere; square CTAs; green primary / navy chrome. */
+html[data-theme='amesburytruth'] {
+  --font-body: var(--font-inter), 'Inter', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), 'Inter', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-inter), 'Inter', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 600;
+}
+
+html[data-theme='amesburytruth'] .btn.btn-primary {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+html[data-theme='amesburytruth'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}
+
+/* eraeverywhere.com: Helvetica Neue body → Inter; BlissMedium headings → Montserrat. */
+html[data-theme='era'] {
+  --font-body: var(--font-inter), 'Inter', 'Helvetica Neue', Helvetica, Arial, ui-sans-serif,
+    system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), 'Montserrat', 'Helvetica Neue', Helvetica, Arial,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-montserrat), 'Montserrat', 'Helvetica Neue', Helvetica, Arial,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 600;
+}
+
+html[data-theme='era'] .btn.btn-primary {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+html[data-theme='era'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}

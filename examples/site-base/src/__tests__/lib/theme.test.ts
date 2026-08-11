@@ -25,6 +25,9 @@ describe('resolveTheme', () => {
     delete process.env.NEXT_PUBLIC_APP_THEME;
     expect(resolveTheme({ site: 'rockland' })).toBe('rockland');
     expect(resolveTheme({ site: 'pillsburylaw' })).toBe(SITE_SKINS.pillsburylaw);
+    expect(resolveTheme({ site: 'quanex' })).toBe('quanex');
+    expect(resolveTheme({ site: 'amesburytruth' })).toBe('amesburytruth');
+    expect(resolveTheme({ site: 'era' })).toBe('era');
   });
 
   it('treats site name as theme when registered', () => {
@@ -58,7 +61,13 @@ describe('theme registry', () => {
   it('lists registered themes', () => {
     expect(APP_THEMES).toContain('bcbst');
     expect(APP_THEMES).toContain('rockland');
+    expect(APP_THEMES).toContain('quanex');
+    expect(APP_THEMES).toContain('amesburytruth');
+    expect(APP_THEMES).toContain('era');
     expect(isAppTheme('rockland')).toBe(true);
+    expect(isAppTheme('quanex')).toBe(true);
+    expect(isAppTheme('amesburytruth')).toBe(true);
+    expect(isAppTheme('era')).toBe(true);
     expect(isAppTheme('nope')).toBe(false);
   });
 });

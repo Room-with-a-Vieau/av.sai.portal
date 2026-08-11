@@ -19,6 +19,9 @@ export const APP_THEMES = [
   'rockland',
   'pkm',
   'pillsburylaw',
+  'quanex',
+  'amesburytruth',
+  'era',
 ] as const;
 
 export type AppTheme = (typeof APP_THEMES)[number];
