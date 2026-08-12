@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { composePulseAnswer } from '@/lib/pulse-answer';
+import { getPulsePack } from '@/lib/pulse-packs';
 import { retrievePulseSources } from '@/lib/pulse-retrieve';
 import type { PulseAskRequest, PulseStateCode } from '@/lib/pulse-types';
 
@@ -13,6 +14,12 @@ function parseStateCode(value: unknown): PulseStateCode | null {
     if (upper === 'FL' || upper === 'NC') return upper;
   }
   return null;
+}
+
+function parseSiteName(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
 }
 
 export async function POST(request: Request) {
@@ -31,16 +38,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'question is too long' }, { status: 400 });
   }
 
-  const stateCode = parseStateCode(body.stateCode);
+  const siteName = parseSiteName(body.siteName);
+  const pack = getPulsePack(siteName);
+  const stateCode = pack.enableStatePersona ? parseStateCode(body.stateCode) : null;
 
   try {
-    const sources = await retrievePulseSources(question, stateCode, 'en');
-    const payload = composePulseAnswer(question, sources, stateCode);
+    const sources = await retrievePulseSources(question, {
+      siteName: pack.siteName,
+      stateCode,
+      language: 'en',
+    });
+    const payload = composePulseAnswer(question, sources, {
+      stateCode,
+      pack,
+    });
     return NextResponse.json(payload);
   } catch (error) {
     console.error('[api/pulse/ask]', error);
     return NextResponse.json(
-      { error: 'Pulse could not retrieve indexed content right now.' },
+      { error: 'Pulse could not retrieve published content right now.' },
       { status: 500 }
     );
   }

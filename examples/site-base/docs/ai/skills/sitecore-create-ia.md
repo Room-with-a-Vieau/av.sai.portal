@@ -8,12 +8,14 @@ Docs: [Sitecore Marketer MCP server](https://doc.sitecore.com/sai/en/users/sitec
 Use this skill when the user asks to:
 - "create IA", "create information architecture", "build the site tree", "create pages from IA"
 - create a hierarchy of page/content items under a Sitecore site
-- populate a content tree from a markdown tree spec (e.g. `docs/ai/rockland-ia.md`)
+- populate a content tree from a markdown tree spec (e.g. `docs/ai/ia/rockland-ia.md`)
+
+To **extract** IA from a live website into that markdown file first, use **`get-site-ia`**.
 
 ## Do not use this skill when
 - the user wants to create page **templates** or **components** (use `sitecore-create-page-template`, `sitecore-create-simple-component`, etc.)
 - the user wants to add components to an existing page (use page/component skills)
-- the user only wants to **analyze** a website's nav without creating items (provide IA as markdown only)
+- the user only wants to **analyze** a website's nav without creating items → use **`get-site-ia`** (writes `docs/ai/ia/<client>-ia.md`)
 
 ---
 
@@ -73,6 +75,7 @@ Rules:
 - Nodes marked `[folder]` or under a `shared` parent use the **folder template** unless the user says otherwise.
 
 Save large specs to `docs/ai/ia/<client>-ia.md` and reference the file path as input.
+Produce new specs from a live site with the **`get-site-ia`** skill (same path + format).
 
 ---
 
@@ -173,13 +176,15 @@ For each node:
 
 3. **Check insert options**
    - Call `list_avail_insertopts` on the parent ID.
-   - Confirm the intended template ID is allowed. If not, stop and report — do not force-create.
+   - Prefer templates listed in insert options.
+   - **If the user explicitly supplies a page template ID that is missing from insert options:** attempt **one** `create_content_item` with that template. Quanex (2026-08-11) showed Services Page `{274FC64E-...}` was absent from Home insert options but `create_content_item` still succeeded. If create fails, stop and report — do not keep force-creating. Warn in the summary that insert options should be updated for authors.
 
 4. **Create the item**
    - **Page (preferred):** `create_content_item({ templateId, parentId, name: itemName, language, fields })` with `fields` as `[{ name, value }]`.
    - **Page (alternate):** `create_page` — pass `fields` as a single object in the array: `[{ pageTitle: "...", pageShortTitle: "...", ... }]`. Do **not** use `{ name, value }` pairs with `create_page` (API error: "Cannot find a field with the name name").
    - **Folder:** `create_content_item({ templateId: folderTemplateId, parentId, name: itemName, language, fields })`
    - Merge **default fields** + any **per-node field overrides** into the `fields` array.
+   - Populate content from the **client website** when asked (see [Content population from live site](#content-population-from-live-site)).
 
 5. **Verify**
    - Call `get_content_item_by_id` on the returned ID.
@@ -243,6 +248,70 @@ defaultFields:
 ```
 
 If `Title` or `NavigationTitle` is empty, set it to the node's display label after create via `update_fields_on_item`.
+
+**Services Page / Base Page field map** (template `{274FC64E-530F-457E-BD04-8B195DF94646}` and relatives):
+
+| User phrasing | Actual field name |
+|---------------|-------------------|
+| Title / page title | `pageTitle` (there is **no** `Title` field — updates with `Title` fail) |
+| Header title | `pageHeaderTitle` |
+| Short title | `pageShortTitle` |
+| Subtitle | `pageSubtitle` |
+| Summary | `pageSummary` |
+| Detail / body | `Detail` (rich text HTML) |
+| Image | `image` |
+
+Also set when populating from a live site: `metadataTitle`, `metadataDescription`, `ogTitle`, `ogDescription`.
+
+### Silent MCP fields (important)
+
+For Services Page items, Marketer MCP **read/update responses typically only echo `Detail` and `image`**. Inherited Page Content / Metadata / Open Graph fields (`pageTitle`, `pageHeaderTitle`, `pageShortTitle`, `pageSubtitle`, `pageSummary`, `metadata*`, `og*`) are often **silent** — they may still be written. Always:
+1. Send the full field set on create/update anyway
+2. Confirm `Detail` + `image` via MCP read-back
+3. Mark `page*` / `metadata*` / `og*` as **pendingManual** in the manifest (verify in Content Editor)
+
+`update_content` requires `siteName` in addition to `itemId` + `fields`. Prefer `update_fields_on_item` when site context is already implied.
+
+### Image field without Content Hub
+
+When DAM credentials are unavailable:
+- External URL XML is accepted and returned by MCP, e.g. `<image src="https://client.example/hero.jpg" alt="Label" />`
+- Prefer page `og:image` or a known brand hero from theme extraction
+- Record pendingManual: replace with DAM `dam-id` XML when assets are uploaded
+
+---
+
+## Content population from live site
+
+When the user asks to populate fields from the client site (not empty stubs):
+
+1. Map each IA node to a best-guess URL (`/{kebab}/`, section hubs). **Validate URLs** — live sites often differ from intuition (Quanex uses `/product/` not `/products/`).
+2. Fetch each URL; extract `og:description` / meta description, `<h1>`, `<title>`, `og:image`, and a first meaningful `<p>`.
+3. Build fields:
+   - `pageTitle` / `pageHeaderTitle` ← h1 or label
+   - `pageShortTitle` ← IA label
+   - `pageSubtitle` ← short phrase from description (≤ ~120 chars)
+   - `pageSummary` ← description (≤ ~400 chars)
+   - `Detail` ← `<p>…</p>` plus optional `<p><a href="…">Learn more on …</a></p>`
+   - `image` ← og:image XML (or brand fallback)
+4. For 404s, retry alternate paths or fall back to parent-section copy + label — never invent unrelated marketing claims.
+5. Parallelize **sibling** creates after the parent ID is known (batches of ~5–6 MCP calls). Always create depth-first (parent before child).
+
+### Item naming
+
+- Prefer display-style names with spaces matching the IA label (e.g. `Hardware Solutions`) when the site already uses that pattern.
+- Sanitize: `&` → `and`, `+` → `Plus` (or spell out), strip other illegal Sitecore name chars.
+- Skip pre-existing children under Home that are not in the IA tree (e.g. starter `Speakers` / `Video` / `Data`).
+
+---
+
+## Learnings log (append-only)
+
+| Date | Site | Learning |
+|------|------|----------|
+| 2026-08-11 | quanex | Services Page create works without insert-option listing; MCP silent for page*/metadata*/og*; Detail+image confirmed; external image XML works; content from quanex.com `/product/` URLs; 64 pages created under `/sitecore/content/quanex/quanex/Home`. |
+| 2026-08-11 | era | ERA Everywhere Magento paths use `/default/{category}/...` (not bare `/{category}.html`). Fab&Fix lives at `/fabandfix/` (not `/default/fabfix/`); ERA Protect at `/era-protect/`. Always resolve site Home via `list_sites` — do not trust pasted sibling-site paths (amesburytruth vs era). 82 Services Pages under `/sitecore/content/quanex/era/Home`. |
+| 2026-08-11 | amesburytruth | Same Services Page insert-option gap + silent page*/metadata*/og*; 81 pages under `/sitecore/content/quanex/amesburytruth/Home`. Live URLs: `/products/windows|doors|weatherseals|extrusions/...` (sitemap may list `/products//…` with double slash). Sanitize `/` in item names (`Casement Awning`, `Hung Sliding`). Brand og:image fallback `https://www.amesburytruth.com/img/fb-post.png`. Soft-200 404s exist (e.g. hung/keepers) — check h1 for "404 Page Not Found" and fall back to parent copy. |
 
 ---
 

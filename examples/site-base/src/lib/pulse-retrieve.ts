@@ -5,13 +5,20 @@ import {
   isSitecoreSearchConfigured,
   SEARCH_WIDGET_ID,
 } from '@/lib/search-customizations';
-import { buildDemoPlaybookSources } from '@/lib/pulse-demo-playbook';
-import type { PulseSource, PulseSourceType, PulseStateCode } from '@/lib/pulse-types';
+import {
+  getPulsePack,
+  matchPulsePackIntent,
+  type PulseSitePack,
+} from '@/lib/pulse-packs';
+import type {
+  PulseRetrieveOptions,
+  PulseSource,
+  PulseSourceType,
+  PulseStateCode,
+} from '@/lib/pulse-types';
 
-const DEFAULT_HOME_PATH = '/sitecore/content/pillsbury/pillsburylaw/Home';
-const DEFAULT_KA_ROOT_ID = '5dad4c5c-84cd-471a-80ef-c805570be79a';
 const FETCH_FIRST = 36;
-/** Enough room for demo playbook people + webinars / podcasts / guides. */
+/** Enough room for demo intent citations + keyword supplements. */
 const MAX_SOURCES = 8;
 
 type EdgeJsonField = { jsonValue?: unknown };
@@ -25,6 +32,7 @@ type EdgeNode = {
   pageTitle?: EdgeJsonField;
   purpose?: EdgeJsonField;
   content?: EdgeJsonField;
+  detail?: EdgeJsonField;
   pageSummary?: EdgeJsonField;
 };
 
@@ -91,11 +99,28 @@ const STOP_WORDS = new Set([
   'help',
 ]);
 
+const ITEM_FIELDS_SELECTION = `
+  id
+  name
+  path
+  url { path }
+  title: field(name: "Title") { jsonValue }
+  pageTitle: field(name: "pageTitle") { jsonValue }
+  purpose: field(name: "Purpose") { jsonValue }
+  content: field(name: "Content") { jsonValue }
+  detail: field(name: "Detail") { jsonValue }
+  pageSummary: field(name: "pageSummary") { jsonValue }
+`;
+
 function edgeGuid(id: string): string {
   const raw = id.replace(/[{}]/g, '').toLowerCase();
   if (raw.includes('-')) return raw;
   if (raw.length !== 32) return raw;
   return `${raw.slice(0, 8)}-${raw.slice(8, 12)}-${raw.slice(12, 16)}-${raw.slice(16, 20)}-${raw.slice(20)}`;
+}
+
+function normalizeIdKey(id: string): string {
+  return id.replace(/[{}]/g, '').toLowerCase();
 }
 
 function readString(field?: EdgeJsonField): string {
@@ -138,9 +163,22 @@ export function classifySourceType(path?: string): PulseSourceType {
   if (/\/Shared(?:%20| )?Content\//i.test(p)) return 'shared-content';
   if (/\/Knowledge(?:%20|-)?Articles?\//i.test(p)) return 'knowledge-article';
   if (/\/Insights\//i.test(p) || /\/Blogs?\//i.test(p)) return 'knowledge-article';
+  if (/\/Resources\//i.test(p) || /\/Technical\//i.test(p)) return 'knowledge-article';
   if (/\/Lawyers\/Bios?\//i.test(p) || /\/Bios?\//i.test(p)) return 'people-and-teams';
   if (/\/People(?:%20|-)?and(?:%20|-)?Teams?\//i.test(p)) return 'people-and-teams';
-  if (/\/Products?\//i.test(p) || /\/Capabilities\//i.test(p)) return 'product';
+  if (
+    /\/Products?(?:\/|$)/i.test(p) ||
+    /\/Capabilities(?:\/|$)/i.test(p) ||
+    /\/Window(?:%20|[- ])?Hardware(?:\/|$)/i.test(p) ||
+    /\/Door(?:%20|[- ])?Hardware(?:\/|$)/i.test(p) ||
+    /\/Window(?:%20|[- ])?Components(?:\/|$)/i.test(p) ||
+    /\/Door(?:%20|[- ])?Components(?:\/|$)/i.test(p) ||
+    /\/Weatherseals(?:\/|$)/i.test(p) ||
+    /\/Extrusions?(?:\/|$)/i.test(p) ||
+    /\/Hardware(?:\/|$)/i.test(p)
+  ) {
+    return 'product';
+  }
   return 'other';
 }
 
@@ -156,7 +194,6 @@ function publicUrl(urlPath?: string, itemPath?: string): string {
     return p.startsWith('/') ? p : `/${p}`;
   }
   if (!itemPath) return '/';
-  // /sitecore/content/progressive/pkm/Home/Knowledge Articles/... → /Knowledge-Articles/...
   const homeIdx = itemPath.toLowerCase().indexOf('/home/');
   if (homeIdx >= 0) {
     const rest = itemPath.slice(homeIdx + '/home/'.length);
@@ -217,12 +254,18 @@ function createEdgeClient(): SitecoreClient {
   });
 }
 
-async function resolveHomeRootId(client: SitecoreClient, language: string): Promise<string> {
+async function resolveHomeRootId(
+  client: SitecoreClient,
+  pack: PulseSitePack,
+  language: string
+): Promise<string> {
+  if (pack.homeRootId?.trim()) return edgeGuid(pack.homeRootId);
+
   const envId = process.env.PULSE_HOME_ROOT_ID?.trim();
   if (envId) return edgeGuid(envId);
 
+  const homePath = process.env.PULSE_HOME_PATH?.trim() || pack.homePath;
   try {
-    const homePath = process.env.PULSE_HOME_PATH?.trim() || DEFAULT_HOME_PATH;
     const data = await client.getData<ItemIdResult>(
       `query PulseHome($path: String!, $language: String!) {
         item(path: $path, language: $language) { id }
@@ -234,7 +277,7 @@ async function resolveHomeRootId(client: SitecoreClient, language: string): Prom
     console.error('[pulse-retrieve] Failed to resolve Home root:', error);
   }
 
-  return edgeGuid(process.env.KNOWLEDGE_ARTICLES_ROOT_ID?.trim() || DEFAULT_KA_ROOT_ID);
+  return edgeGuid(pack.homeRootId || '');
 }
 
 function buildEdgeSearchQuery(keywordCount: number): string {
@@ -260,15 +303,7 @@ function buildEdgeSearchQuery(keywordCount: number): string {
         first: $first
       ) {
         results {
-          id
-          name
-          path
-          url { path }
-          title: field(name: "Title") { jsonValue }
-          pageTitle: field(name: "pageTitle") { jsonValue }
-          purpose: field(name: "Purpose") { jsonValue }
-          content: field(name: "Content") { jsonValue }
-          pageSummary: field(name: "pageSummary") { jsonValue }
+          ${ITEM_FIELDS_SELECTION}
         }
       }
     }
@@ -285,11 +320,12 @@ function mapEdgeNode(node: EdgeNode): Omit<PulseSource, 'score'> | null {
   const excerptRaw =
     readString(node.purpose) ||
     readString(node.pageSummary) ||
+    readString(node.detail) ||
     readString(node.content);
   const excerpt = stripHtml(excerptRaw).slice(0, 220);
   const path = node.path;
   return {
-    id: node.id,
+    id: node.id.startsWith('{') ? node.id : `{${edgeGuid(node.id).toUpperCase()}}`,
     title,
     url: publicUrl(node.url?.path, path),
     path,
@@ -299,9 +335,92 @@ function mapEdgeNode(node: EdgeNode): Omit<PulseSource, 'score'> | null {
   };
 }
 
+function mergeWithFallback(
+  edge: Omit<PulseSource, 'score'> | null,
+  id: string,
+  pack: PulseSitePack
+): Omit<PulseSource, 'score'> | null {
+  const fallbacks = pack.citationFallbacks || {};
+  const fallback =
+    fallbacks[id] ||
+    fallbacks[id.toUpperCase()] ||
+    fallbacks[`{${normalizeIdKey(id).toUpperCase()}}`];
+
+  if (!edge && !fallback) return null;
+  if (!edge) return { ...fallback! };
+  if (!fallback) return edge;
+
+  return {
+    ...fallback,
+    ...edge,
+    title: edge.title || fallback.title,
+    url: edge.url && edge.url !== '/' ? edge.url : fallback.url,
+    path: edge.path || fallback.path,
+    excerpt: edge.excerpt || fallback.excerpt,
+    type: edge.type !== 'other' ? edge.type : fallback.type,
+  };
+}
+
+/**
+ * Hydrate citation item IDs from Experience Edge (same published content as the live site).
+ */
+export async function hydrateCitationIdsFromEdge(
+  itemIds: string[],
+  pack: PulseSitePack,
+  language = 'en'
+): Promise<Omit<PulseSource, 'score'>[]> {
+  if (!itemIds.length) return [];
+
+  const client = createEdgeClient();
+  const results: Omit<PulseSource, 'score'>[] = [];
+
+  // Alias batch keeps round-trips low for demo intents (typically ≤8 IDs).
+  const aliases = itemIds.map((id, i) => {
+    const guid = edgeGuid(id);
+    return {
+      alias: `item${i}`,
+      id,
+      guid,
+    };
+  });
+
+  const query = `
+    query PulseHydrateCitations($language: String!) {
+      ${aliases
+        .map(
+          (a) => `
+        ${a.alias}: item(path: "${a.guid}", language: $language) {
+          ${ITEM_FIELDS_SELECTION}
+        }
+      `
+        )
+        .join('\n')}
+    }
+  `;
+
+  try {
+    const data = await client.getData<Record<string, EdgeNode | null>>(query, { language });
+    for (const a of aliases) {
+      const node = data?.[a.alias] ?? null;
+      const mapped = mergeWithFallback(node ? mapEdgeNode(node) : null, a.id, pack);
+      if (mapped) results.push(mapped);
+    }
+  } catch (error) {
+    console.error('[pulse-retrieve] Edge citation hydrate failed:', error);
+    // Fall back to static pack metadata when Edge is unavailable (legacy Pillsbury).
+    for (const id of itemIds) {
+      const mapped = mergeWithFallback(null, id, pack);
+      if (mapped) results.push(mapped);
+    }
+  }
+
+  return results;
+}
+
 async function retrieveFromEdge(
   question: string,
   keywords: string[],
+  pack: PulseSitePack,
   stateCode?: PulseStateCode | null,
   language = 'en'
 ): Promise<PulseSource[]> {
@@ -309,7 +428,9 @@ async function retrieveFromEdge(
   if (!kws.length) return [];
 
   const client = createEdgeClient();
-  const rootId = await resolveHomeRootId(client, language);
+  const rootId = await resolveHomeRootId(client, pack, language);
+  if (!rootId) return [];
+
   const query = buildEdgeSearchQuery(kws.length);
   const variables: Record<string, string | number> = {
     rootId,
@@ -427,7 +548,10 @@ async function retrieveFromSitecoreSearch(
           : item.url || '/',
         path,
         excerpt: item.description ? stripHtml(item.description).slice(0, 220) : undefined,
-        type: classifySourceType(path) !== 'other' ? classifySourceType(path) : inferTypeFromLabel(item.type),
+        type:
+          classifySourceType(path) !== 'other'
+            ? classifySourceType(path)
+            : inferTypeFromLabel(item.type),
         stateCode: extractStateFromPath(path),
       };
     });
@@ -457,9 +581,9 @@ function rankAndCap(
 
   for (const s of sources) {
     const scored: PulseSource = { ...s, score: scoreSource(s, keywords, stateCode) };
-    const existing = byId.get(s.id);
+    const existing = byId.get(normalizeIdKey(s.id));
     if (!existing || scored.score > existing.score) {
-      byId.set(s.id, scored);
+      byId.set(normalizeIdKey(s.id), scored);
     }
   }
 
@@ -469,37 +593,69 @@ function rankAndCap(
     .slice(0, MAX_SOURCES);
 }
 
-/**
- * Retrieve trusted content hits for Pulse.
- * Demo playbook intents (multi-factor lawyer matching) always win for reliable SE demos.
- * Prefer Sitecore Search when configured; fall back to Experience Edge GraphQL.
- */
-export async function retrievePulseSources(
-  question: string,
-  stateCode?: PulseStateCode | null,
-  language = 'en'
-): Promise<PulseSource[]> {
-  const playbook = buildDemoPlaybookSources(question, stateCode);
-  const keywords = extractKeywords(question);
-
-  let dynamic: PulseSource[] = [];
-  if (isSitecoreSearchConfigured()) {
-    dynamic = await retrieveFromSitecoreSearch(question, keywords, stateCode);
-  }
-  if (!dynamic.length) {
-    dynamic = await retrieveFromEdge(question, keywords, stateCode, language);
-  }
-
-  if (!playbook.length) return dynamic;
-
-  // Playbook first; append unique dynamic hits that add variety
-  const seen = new Set(playbook.map((s) => s.id.toLowerCase().replace(/[{}]/g, '')));
+function mergeIntentAndDynamic(
+  intentSources: PulseSource[],
+  dynamic: PulseSource[]
+): PulseSource[] {
+  const seen = new Set(intentSources.map((s) => normalizeIdKey(s.id)));
   const extras = dynamic.filter((s) => {
-    const key = s.id.toLowerCase().replace(/[{}]/g, '');
+    const key = normalizeIdKey(s.id);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+  return [...intentSources, ...extras].slice(0, MAX_SOURCES);
+}
 
-  return [...playbook, ...extras].slice(0, MAX_SOURCES);
+/**
+ * Retrieve trusted content hits for Pulse.
+ * Primary path: Experience Edge under the site pack Home root (no Sitecore Search required).
+ * Optional: Sitecore Search when isSitecoreSearchConfigured() (e.g. legacy Pillsbury).
+ * Demo intents hydrate citation IDs from Edge first, then supplement with keyword hits.
+ */
+export async function retrievePulseSources(
+  question: string,
+  options?: PulseRetrieveOptions | PulseStateCode | null,
+  languageArg = 'en'
+): Promise<PulseSource[]> {
+  // Back-compat: retrievePulseSources(question, stateCode, language)
+  const opts: PulseRetrieveOptions =
+    typeof options === 'string' || options === null || options === undefined
+      ? { stateCode: (options as PulseStateCode | null) ?? null, language: languageArg }
+      : { language: languageArg, ...options };
+
+  const pack = getPulsePack(opts.siteName);
+  const language = opts.language || 'en';
+  const stateCode = pack.enableStatePersona ? opts.stateCode ?? null : null;
+  const keywords = extractKeywords(question);
+
+  const intent = matchPulsePackIntent(question, pack);
+  let intentSources: PulseSource[] = [];
+  if (intent?.citationItemIds?.length) {
+    const hydrated = await hydrateCitationIdsFromEdge(intent.citationItemIds, pack, language);
+    intentSources = hydrated.map((source, index) => ({
+      ...source,
+      score: 1000 - index * 50,
+    }));
+  }
+
+  // Default: Edge keyword search under this site's Home (required path for Quanex family).
+  let dynamic: PulseSource[] = await retrieveFromEdge(
+    question,
+    keywords,
+    pack,
+    stateCode,
+    language
+  );
+
+  // Optional legacy path: Sitecore Search when configured (e.g. Pillsbury). Never required.
+  if (isSitecoreSearchConfigured()) {
+    const fromSearch = await retrieveFromSitecoreSearch(question, keywords, stateCode);
+    if (fromSearch.length) {
+      dynamic = mergeIntentAndDynamic(dynamic, fromSearch);
+    }
+  }
+
+  if (!intentSources.length) return dynamic;
+  return mergeIntentAndDynamic(intentSources, dynamic);
 }

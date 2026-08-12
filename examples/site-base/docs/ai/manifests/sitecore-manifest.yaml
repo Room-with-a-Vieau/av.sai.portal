@@ -1,5 +1,5 @@
-generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-06T13:30:00Z"
+﻿generatedAt: "2026-03-20T09:00:00Z"
+lastUpdatedAt: "2026-08-12T13:20:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -18,7 +18,7 @@ availableRenderings:
   lastKnownValue: "{55790BFE-783E-4FF0-BD53-F81D3857DAD4}|{C5F905F8-FD1F-444E-A9E5-AC6B774FF0DE}|{2492BAC4-DA07-4C86-87F0-9873D40E2276}|{9C6D53E3-FE57-4638-AF7B-6D68304C7A94}|{3836D951-BB14-43AC-9231-649B7F245DC5}|{E97DCF2B-8011-41E0-A605-8A379F3DF1AA}|{A41A47A5-D305-4ADC-BFC8-CCB0F301DDCF}|{EFE73752-6046-45A8-92F4-7A68430A0759}|{EAA7CC9B-4657-410E-9A25-CD33C700261B}|{58490557-5582-4B19-9E31-CE6A80F95D93}|{4281E3CD-2309-4427-9A3E-D69FDD32FCDA}|{E6D0C7C1-ACFF-4E85-8600-196649FEFFB9}|{90021266-66B3-47B6-9709-A070F56064A1}|{F6A1FA05-15FC-46C9-B921-98E79EFF5F4E}|{E194B962-0617-4A10-B4DB-2A4D19248C13}|{E1BCD607-51C4-4248-8EE2-B7F474D40B3E}|{A53006E8-C66B-419F-859D-7CFA92E7E26B}|{4E7E77EF-529C-4C28-A5D8-94C5ACA065FF}|{C739DB42-43E5-4DAC-B5FC-404EDDC9E37C}|{0F7C27E2-B960-47E9-AB85-F8A9C45D0F9C}|{D008D5FE-B27E-419F-889C-115B3D48A114}|{85CC2A41-AC6F-4C10-9C2F-44308B48C453}|{4C5C1FA5-C077-491D-9686-40D0F68EF03E}|{83BD1231-A48F-4F54-A361-20904C69A641}|{0E64EDCA-06DD-469A-B3D1-93D8700A8F41}|{505B6BB0-DEEA-46F9-9AB2-7020E386F4F0}|{C9FFEF83-C928-4346-AA68-14B3EE0B0017}|{B92A0B89-790F-4D94-89C7-B361C8688765}|{9E525B59-B9BF-4EB7-B75D-10811EF6100D}|{66E80043-36E4-48AE-8CAF-EEF4A77690BE}|{5A8724FB-D6E6-4C9D-8A4A-EFD8750B0019}|{14FCB11C-364D-4BC2-9238-B29B4C6F8145}"
   lastUpdatedAt: "2026-06-09T00:00:00Z"
   renderingCount: 32
-  warning: "MCP cannot read this field — value may be stale if modified outside this session. Also: MCP write returned empty updatedFields — silent-write. Verify in Content Editor."
+  warning: "MCP cannot read this field â€” value may be stale if modified outside this session. Also: MCP write returned empty updatedFields â€” silent-write. Verify in Content Editor."
 
 components:
   - name: "AnnouncementBar"
@@ -226,8 +226,8 @@ components:
         - "Child template with base templates"
         - "All fields with correct Types"
         - "SVs created and linked"
-        - "Parent __Masters → NavigationLink"
-        - "Folder template with __Masters → NavigationHeaderData"
+        - "Parent __Masters â†’ NavigationLink"
+        - "Folder template with __Masters â†’ NavigationHeaderData"
         - "Datasource folder under /Data"
         - "Example parent + 2 child items"
         - "Rendering with ComponentQuery (generic field access)"
@@ -446,9 +446,9 @@ components:
         - "Parent template created with base templates + HorizonDatasourceGrouping"
         - "Child template created with base templates"
         - "All fields created with correct Types"
-        - "Parent SV created with __Masters → child template"
+        - "Parent SV created with __Masters â†’ child template"
         - "Child SV created with defaults"
-        - "Folder template created with __Masters → parent template"
+        - "Folder template created with __Masters â†’ parent template"
         - "Datasource folder created with insert options on instance"
         - "Example parent + 2 child items created"
         - "Rendering Parameters template created with 4 base templates"
@@ -577,9 +577,9 @@ components:
         - "Parent template created with base templates + HorizonDatasourceGrouping"
         - "Child template created with base templates"
         - "All 8 fields created with correct Types"
-        - "Parent SV created with __Masters → child template"
+        - "Parent SV created with __Masters â†’ child template"
         - "Child SV created with defaults"
-        - "Folder template created with __Masters → parent template"
+        - "Folder template created with __Masters â†’ parent template"
         - "Datasource folder created with insert options on instance"
         - "Example parent + 3 child items created"
         - "Rendering Parameters template created with 4 base templates"
@@ -804,8 +804,8 @@ components:
         - "Parent template created with base templates + HorizonDatasourceGrouping"
         - "Child template created with base templates"
         - "All 6 fields created with correct Types"
-        - "Parent SV with __Masters → child, Child SV with defaults"
-        - "Folder template with __Masters → parent"
+        - "Parent SV with __Masters â†’ child, Child SV with defaults"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options on instance"
         - "Example parent + 3 child items created"
         - "Rendering Parameters template with 4 base templates"
@@ -927,7 +927,7 @@ components:
         - "Child template with base templates"
         - "All 6 fields with correct Types"
         - "SVs created, linked, __Masters set"
-        - "Folder template with __Masters → parent"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options"
         - "Example parent + 4 child items"
         - "Rendering Parameters with 4 base templates"
@@ -1046,7 +1046,7 @@ components:
         - "Child template with base templates"
         - "All 7 fields with correct Types"
         - "SVs created, linked, __Masters set"
-        - "Folder template with __Masters → parent"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options"
         - "Example parent + 2 child items"
         - "Rendering Parameters with 4 base templates"
@@ -1265,7 +1265,7 @@ components:
         - "Child template with base templates"
         - "All 6 fields with correct Types"
         - "SVs created, linked, __Masters set"
-        - "Folder template with __Masters → parent"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options"
         - "Example parent + 3 child items"
         - "Rendering Parameters with 4 base templates"
@@ -1475,7 +1475,7 @@ components:
         - "Child template with base templates"
         - "All 4 fields with correct Types"
         - "SVs created, linked, __Masters set"
-        - "Folder template with __Masters → parent"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options"
         - "Example parent + 3 child items"
         - "Rendering Parameters with 4 base templates"
@@ -1776,7 +1776,7 @@ components:
         - "Child template with base templates"
         - "All 4 fields with correct Types"
         - "SVs created, linked, __Masters set"
-        - "Folder template with __Masters → parent"
+        - "Folder template with __Masters â†’ parent"
         - "Datasource folder with insert options"
         - "Example parent + 3 child items"
         - "Rendering Parameters with 4 base templates"
@@ -1790,7 +1790,7 @@ components:
         - "Silent-write fields (Datasource Template, Location, __Masters, __Standard values)"
 
     notes:
-      - "shadcn/ui Accordion not available — used native HTML details/summary with chevron SVG and group-open:rotate-180 transition"
+      - "shadcn/ui Accordion not available â€” used native HTML details/summary with chevron SVG and group-open:rotate-180 transition"
 
   - name: "RichTextBlock"
     kind: "simple"
@@ -2236,7 +2236,7 @@ components:
       reactComponentExists: passed
       componentMapUpdated: passed
     notes:
-      - "2026-06-09: Created LandingHero (3 variants — Default, SplitImage, Minimal). Renders heroVideo if set else heroImage. ABM swap surface."
+      - "2026-06-09: Created LandingHero (3 variants â€” Default, SplitImage, Minimal). Renders heroVideo if set else heroImage. ABM swap surface."
 
   - name: "LandingFeatures"
     kind: "context-only"
@@ -2275,7 +2275,7 @@ components:
       reactComponentExists: passed
       componentMapUpdated: passed
     notes:
-      - "2026-06-09: Created. 3 fixed feature slots. Icons via lucide-react dynamic lookup (PascalCase icon name strings → React component)."
+      - "2026-06-09: Created. 3 fixed feature slots. Icons via lucide-react dynamic lookup (PascalCase icon name strings â†’ React component)."
 
   - name: "LandingStats"
     kind: "context-only"
@@ -2393,7 +2393,7 @@ components:
       reactComponentExists: passed
       componentMapUpdated: passed
     notes:
-      - "2026-06-09: Created. 5 fixed Q/A pairs. Custom accordion (useState) — shadcn does not ship an Accordion primitive in this repo. Marked componentType: client."
+      - "2026-06-09: Created. 5 fixed Q/A pairs. Custom accordion (useState) â€” shadcn does not ship an Accordion primitive in this repo. Marked componentType: client."
 
   - name: "LandingFinalCTA"
     kind: "context-only"
@@ -2494,7 +2494,7 @@ sharedDataTemplates:
       exampleItemExists: passed
 
     notes:
-      - "2026-05-18: Created Person data model (Issue #9). Insert options set via __Masters on folder SV and folder instance — MCP returned empty updatedFields (known silent-write behavior). Verify insert options in Content Editor if needed."
+      - "2026-05-18: Created Person data model (Issue #9). Insert options set via __Masters on folder SV and folder instance â€” MCP returned empty updatedFields (known silent-write behavior). Verify insert options in Content Editor if needed."
 
 pageTemplates:
   - name: "Article Page"
@@ -2565,7 +2565,7 @@ pageTemplates:
     notes:
       - "2026-05-18: Created Article Page template (Issue #10). Inherits from Page template. Insert options on Articles parent set via __Masters (silent-write)."
       - "2026-05-18: Template moved from /sitecore/templates/Project/fmc-custom-demo/Page Types to /sitecore/templates/Project/main/Page Types per project conventions."
-      - "2026-05-18: Created Article Layout partial design + Article page design (Issue #15). Components placed in headless-main. Page Design and Partial Design association via MCP (silent-write) — verify linkage in Content Editor."
+      - "2026-05-18: Created Article Layout partial design + Article page design (Issue #15). Components placed in headless-main. Page Design and Partial Design association via MCP (silent-write) â€” verify linkage in Content Editor."
 
   - name: "Landing Page"
     kind: "page-template"
@@ -2573,7 +2573,7 @@ pageTemplates:
     status: "complete"
     createdAt: "2026-06-09T00:00:00Z"
     updatedAt: "2026-06-09T00:00:00Z"
-    designIntent: "Agentic-Studio-fillable, ABM-ready, fixed-shape (3 features, 3 stats, 5 FAQs). All content on the page template — no datasources."
+    designIntent: "Agentic-Studio-fillable, ABM-ready, fixed-shape (3 features, 3 stats, 5 FAQs). All content on the page template â€” no datasources."
 
     baseTemplate:
       name: "Page"
@@ -2687,17 +2687,17 @@ pageTemplates:
       linkedToStandardValues: pendingManual
 
     pendingManual:
-      - "Insert options on /Home/lp (__Masters silent-write — set in Content Editor)"
-      - "Renderings on Available Renderings (silent-write — verify Renderings [shared] on Page Content includes the 6 new GUIDs)"
+      - "Insert options on /Home/lp (__Masters silent-write â€” set in Content Editor)"
+      - "Renderings on Available Renderings (silent-write â€” verify Renderings [shared] on Page Content includes the 6 new GUIDs)"
       - "6 renderings placed on Landing Page Layout's headless-main placeholder (Pages Builder)"
       - "Page Design 'Landing Page' references Partial Designs (Header + Landing Page Layout + Footer) (Content Editor)"
       - "Landing Page __Standard Values references Page Design 'Landing Page' (Content Editor)"
-      - "Validation regex + __Short description silent-write on 40 fields — verify a sample in Content Editor"
+      - "Validation regex + __Short description silent-write on 40 fields â€” verify a sample in Content Editor"
 
     notes:
       - "2026-06-09: Created via grilling session. Agentic-Studio-fillable, ABM-ready. Fixed-shape (3 features, 3 stats, 5 FAQs). 40 route fields across 6 sections with validation regexes + agent help text. __Standard Values populated with v1 SaaS-flavored defaults (marked for review before first ABM campaign)."
-      - "2026-06-09: 6 context components created (LandingHero, LandingFeatures, LandingStats, LandingSocialProof, LandingFAQ, LandingFinalCTA). 8 Variant Definitions total — Hero gets 3 (Default, SplitImage, Minimal), others get Default only (lean v1 scope)."
-      - "2026-06-09: Partial Design and Page Design items created but rendering placement and standard-values linkage are silent-write — finalize via Pages Builder / Content Editor."
+      - "2026-06-09: 6 context components created (LandingHero, LandingFeatures, LandingStats, LandingSocialProof, LandingFAQ, LandingFinalCTA). 8 Variant Definitions total â€” Hero gets 3 (Default, SplitImage, Minimal), others get Default only (lean v1 scope)."
+      - "2026-06-09: Partial Design and Page Design items created but rendering placement and standard-values linkage are silent-write â€” finalize via Pages Builder / Content Editor."
       - "2026-06-09: Registry entry in docs/ai/catalog/page-template-registry.yaml under id=landing is the canonical schema source of truth. Orchestrator skill at docs/ai/skills/sitecore-create-landing-page.md. Router updated at docs/ai/rules/01-sitecore-router.md."
 
   - name: "SearchExperience"
@@ -2828,7 +2828,7 @@ pageTemplates:
 
     notes:
       - "2026-05-20: Backfilled into manifest from live Sitecore. Created before manifest existed."
-      - "2026-05-20: React component was deleted (ADR 0003 pivot). Sitecore items remain as orphans — safe to clean up later."
+      - "2026-05-20: React component was deleted (ADR 0003 pivot). Sitecore items remain as orphans â€” safe to clean up later."
 
   - name: "SearchExperienceV2"
     kind: "simple"
@@ -2918,7 +2918,7 @@ pageTemplates:
 
     notes:
       - "2026-05-20: Created SearchExperienceV2 (Issue #34). Replaces JSON config with 7 individual template fields. ADR 0004."
-      - "2026-05-20: All 3 pendingManual items verified via get_component and get_allowed_comps_by_ph — datasource template, datasource location, and available renderings all confirmed."
+      - "2026-05-20: All 3 pendingManual items verified via get_component and get_allowed_comps_by_ph â€” datasource template, datasource location, and available renderings all confirmed."
 
 lookups:
   - path: "/sitecore/content/main/main-website/Data"
@@ -2951,7 +2951,7 @@ lookups:
   - path: "/sitecore/content/main/main-website/Presentation/Available Renderings/Page Content"
     itemId: "{2BF7E311-E3A5-4290-A043-AB97EA1DFB15}"
     lastReadAt: "2026-03-25T12:00:00Z"
-    note: "Available Renderings — NEVER replace, always concatenate"
+    note: "Available Renderings â€” NEVER replace, always concatenate"
   - path: "/sitecore/layout/Renderings/Project/fmc-custom-demo"
     itemId: "{4A1F0B51-F3F3-43D2-B184-C7A9F549154D}"
     lastReadAt: "2026-03-25T12:00:00Z"
@@ -3081,6 +3081,568 @@ demoContent: []
 
 # Information architecture / page creation batches
 ia:
+  - name: "pulse-multi-site-refactor"
+    kind: "platform-note"
+    category: "Pulse"
+    status: "complete"
+    createdAt: "2026-08-12T13:20:00Z"
+    updatedAt: "2026-08-12T13:20:00Z"
+    notes: >
+      Refactored Pulse into a multi-site pack platform (code-only; no new Sitecore items).
+      Packs: quanex, era, amesburytruth, pillsburylaw under src/lib/pulse-packs/.
+      Experience Edge GraphQL is the primary content source (Home-scoped per pack).
+      Sitecore Search remains optional via isSitecoreSearchConfigured() — not required for
+      Quanex family. Intent citationItemIds hydrate title/url/excerpt from Edge at ask-time.
+      Docs: docs/ai/demo/pulse-multi-site.md. Publish each site Home tree to Edge for Pulse.
+    relatedHomeRoots:
+      - { siteName: "quanex", homeRootId: "{E6276198-3FC7-4D8B-BD14-8669B1701536}", path: "/sitecore/content/quanex/quanex/Home" }
+      - { siteName: "era", homeRootId: "{69A414F6-9E12-48D6-92C1-215609517A83}", path: "/sitecore/content/quanex/era/Home" }
+      - { siteName: "amesburytruth", homeRootId: "{A57ED898-AA1D-46E6-B7CF-7C7804688EC8}", path: "/sitecore/content/quanex/amesburytruth/Home" }
+
+  - name: "quanex-header-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-12T00:30:00Z"
+    updatedAt: "2026-08-12T01:15:00Z"
+    siteName: "quanex"
+    notes: >
+      Remapped Header Partial Design mega menus + LinkLists under
+      /sitecore/content/quanex/quanex/Presentation/Partial Designs/Global/Header/Data
+      to Quanex Home IA. Created named MegaMenuItems and LinkLists (Products, Capabilities,
+      Service and Support, Company, Contact Us, Resources, Careers). Wired via
+      set_component_datasource. MCP get_components_on_page often still reports local:/Data
+      starter names even after successful GUID swaps — also updated starter Speakers/
+      Headphones/Amps/Pro/Artist Services Title+Link as fallback. Header SupportLink →
+      Contact Us; Image 1 TargetUrl → Products. Publish Header PD + Data for Edge.
+    relatedItems:
+      headerPartialDesignId: "{7B76C1CE-57C8-41C5-880B-BE61B8FD0F1B}"
+      headerDataFolderId: "{3A265592-9AC5-4388-8A9B-E2AC997AEF3E}"
+      megaMenus:
+        - { itemName: "Products", itemId: "{B3A7301B-D0F4-4C5E-BF33-5B09276E9B8A}", title: "Products", pageId: "{C8A3F7B0-E2C4-4D27-AA20-D4018E333B38}" }
+        - { itemName: "Capabilities", itemId: "{52A648CC-D78F-46CD-A4F0-B0E3D45FD6BC}", title: "Capabilities", pageId: "{FBAD5995-D416-453C-A8A7-DF4DDFDAE70F}" }
+        - { itemName: "Service and Support", itemId: "{BBCE71CC-19DE-4833-BDD2-BEC698A53C71}", title: "Service & Support", pageId: "{DE76695F-A5F5-40EA-B2D6-EC5E6624E08C}" }
+        - { itemName: "Company", itemId: "{3F065131-F613-416E-9598-1B0168ED318D}", title: "Company", pageId: "{9955B25E-1542-4189-A646-76B59C12C7FB}" }
+        - { itemName: "Contact Us", itemId: "{3F6F824E-AA72-48B9-96CC-807374E50046}", title: "Contact Us", pageId: "{56EA6322-F923-44F1-B0AF-2A10F9B46C04}" }
+        - { itemName: "Resources", itemId: "{884600FF-16E1-4CA7-AD67-C9C29D05C88C}", title: "Resources", pageId: "{144E8B02-E31F-4059-B389-EFC605ED093B}" }
+        - { itemName: "Careers", itemId: "{B896FC8F-6108-441E-AB20-E9B2489D9B3E}", title: "Careers", pageId: "{A508286F-88C3-4A67-9B0E-5856DED4FCB3}" }
+      primaryLinkLists:
+        - { itemName: "Products Primary Links", itemId: "{E7453D54-B10D-4FF8-BD19-ACFC101EB16F}" }
+        - { itemName: "Capabilities Primary Links", itemId: "{3E451BC0-EC1D-4A21-9DF1-5A5316420EA5}" }
+        - { itemName: "Service Support Primary Links", itemId: "{4E836197-86D3-46CD-AED6-BDEE7C4AFFF0}" }
+        - { itemName: "Company Primary Links", itemId: "{C9891652-AA21-490F-98D5-23CBB77617AF}" }
+        - { itemName: "Contact Primary Links", itemId: "{09519C62-DCE3-4DAD-89BF-EF88C686E199}" }
+        - { itemName: "Resources_Links", itemId: "{2B307AF5-CD78-4E58-903C-2A6D091A0B60}" }
+      secondaryLinkLists:
+        - { itemName: "Products Residential", itemId: "{FBDC1754-060F-4014-84B7-C20F9633DF50}" }
+        - { itemName: "Products Commercial", itemId: "{620D533B-A9E2-451C-AC08-5CBFC8408153}" }
+        - { itemName: "Products For Architects", itemId: "{9E7BFAE2-9E5D-4F9D-B79D-688A9D13F712}" }
+        - { itemName: "Capabilities More", itemId: "{5C9B42CE-8ECC-48EB-BDF3-562F2105ABC5}" }
+        - { itemName: "Equipment", itemId: "{766A9112-71B1-4D4E-B24A-0020C7E106FC}" }
+    verification:
+      checkedAt: "2026-08-12T01:15:00Z"
+      passed:
+        - "Named MegaMenuItems + LinkLists created under Header/Data"
+        - "set_component_datasource reported success for Products/Capabilities/Service/Company/Contact"
+        - "SupportLink and Image 1 TargetUrl updated"
+        - "Starter Speakers/Headphones/Amps/Pro/Artist Services Title+Link updated as fallback"
+      failed: []
+      pendingManual:
+        - "Publish Header Partial Design + Header/Data for Edge"
+        - "Confirm in Experience Editor that dropdowns use named lists (not Loud for less / By feature)"
+        - "Optional: delete unused starter datasources (Speakers, Headphones, Amps, Pro, Artist Services, Loud for less, By feature, More speakers)"
+        - "Optional: set isSimpleLink on Contact Us / Careers if empty dropdowns are unwanted"
+
+  - name: "era-header-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-12T01:20:00Z"
+    updatedAt: "2026-08-12T01:45:00Z"
+    siteName: "era"
+    notes: >
+      Remapped ERA Header/Data mega menus to Home IA. Updated starter Speakers/Headphones/Amps/Pro/
+      Artist Services Title+Link in place (layout still binds local:/Data/...). Added extra megas
+      Fab and Fix, Weatherseals, News, Clearance. Unique Door Entrance/More LinkLists swapped onto
+      Door mega secondaries. SupportLink → Contact Us. Publish Header PD + Data for Edge.
+    relatedItems:
+      headerPartialDesignId: "{05218645-2A86-4805-89AF-BA02E11E060C}"
+      headerDataFolderId: "{4D565A9F-5B20-42A1-8398-A5987954811E}"
+      megaMenus:
+        - { itemName: "Speakers (Window Components)", itemId: "{72BA703D-5403-4A06-AC1D-8540A4DC7158}", pageId: "{67799195-7BEF-493D-B16D-C5D890EF7F37}" }
+        - { itemName: "Headphones (Door Components)", itemId: "{72C0C814-1735-427F-BD31-9756113234BD}", pageId: "{205D5CB8-B1E3-4E0D-9AD8-E2FBB9326B46}" }
+        - { itemName: "Amps (Aluminium Components)", itemId: "{7FAE71F1-6478-49E2-A639-0054E7FCB490}", pageId: "{087953AB-10EE-4AD9-B633-6D8E8E337867}" }
+        - { itemName: "Pro (Home Security)", itemId: "{F0B6B5C4-3628-484F-857E-55F63D10D6F7}", pageId: "{8E4B55C2-EC73-410F-835C-91CC41470700}" }
+        - { itemName: "Artist Services (Ironmongery)", itemId: "{6CC25FC0-0681-4AA4-B629-B4DCB605E584}", pageId: "{C55EB5E7-15FB-4F94-8297-2A1799CDA7E2}" }
+        - { itemName: "Fab_and_Fix", itemId: "{E22AEFB3-FD92-43CA-A5A2-B315E73FF641}", pageId: "{012818BA-915F-4B1E-89F8-41250A1A6FC2}" }
+        - { itemName: "Weatherseals_Nav", itemId: "{5F28274E-995B-40DF-90C8-805A664CD0B3}", pageId: "{C8A4AF67-7A18-4962-BE84-4B2E7876787E}" }
+        - { itemName: "News_Nav", itemId: "{0D939A56-FDCE-4A4D-B583-9475FDC7FD4E}", pageId: "{0F1D2A7F-19A8-4EDC-9842-6F67567631DC}" }
+        - { itemName: "Clearance_Nav", itemId: "{76093B5F-8E65-4A84-9385-3117D00B38EE}", pageId: "{C5473C98-7A6F-4DFC-8F2C-02CC337CB3D6}" }
+    verification:
+      checkedAt: "2026-08-12T01:45:00Z"
+      passed:
+        - "Starter mega Title+Link remapped to Window/Door/Aluminium/Home Security/Ironmongery"
+        - "Extra megas Fab and Fix / Weatherseals / News / Clearance created"
+        - "Primary LinkLists updated; Door secondaries swapped to unique lists"
+      failed: []
+      pendingManual:
+        - "Publish ERA Header Partial Design + Header/Data for Edge"
+        - "Optional: set isSimpleLink on News / Clearance / Weatherseals if empty dropdowns are unwanted"
+
+  - name: "amesburytruth-header-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-12T01:20:00Z"
+    updatedAt: "2026-08-12T01:45:00Z"
+    siteName: "amesburytruth"
+    notes: >
+      Remapped AmesburyTruth Header/Data mega menus to Home IA. Updated starter Speakers/Headphones/
+      Amps/Pro/Artist Services Title+Link in place. Added About Us and Recall Notice megas.
+      Unique Door Sliding/Hinged LinkLists swapped onto Door mega secondaries. SupportLink → Contact Us.
+    relatedItems:
+      headerPartialDesignId: "{021A940F-0650-4FCD-9F2A-CB1B46B92803}"
+      headerDataFolderId: "{E0802197-AF95-4CD0-8864-F8F80960749C}"
+      megaMenus:
+        - { itemName: "Speakers (Window Hardware)", itemId: "{BA68A38C-718B-4FB9-9649-E2D645258CCA}", pageId: "{F88066D7-8523-449D-BA4A-B47FAD953042}" }
+        - { itemName: "Headphones (Door Hardware)", itemId: "{CF924EDC-C646-4443-8535-6F96846513FD}", pageId: "{1E363D0F-E485-489B-B358-3DE8D735B25A}" }
+        - { itemName: "Amps (Weatherseals)", itemId: "{977F000A-E957-4DB4-BB54-7236C447DEF3}", pageId: "{B692617F-621F-4C4D-BBC8-E03D3FCEB044}" }
+        - { itemName: "Pro (Extrusions)", itemId: "{7EB40626-C73B-4C10-9093-5DC81EEB6AD0}", pageId: "{F02E079E-0242-43F9-9A86-391F5687D475}" }
+        - { itemName: "Artist Services (Resources)", itemId: "{A6126D00-CCD2-46A9-9A96-EDDEDF676890}", pageId: "{5A73AE7F-B2A8-4F0E-BAEE-49B8B233DE17}" }
+        - { itemName: "About_Us", itemId: "{7249EBCD-D327-4E24-B4E3-E73EEF249DC5}", pageId: "{7FD51B92-C633-47FD-815A-E558EAAFF816}" }
+        - { itemName: "Recall_Notice", itemId: "{CDB4EB16-5F91-4231-B175-3CCDFCD26CE5}", pageId: "{36BB6D3E-7835-4D9C-919A-505FD247243D}" }
+    verification:
+      checkedAt: "2026-08-12T01:45:00Z"
+      passed:
+        - "Starter mega Title+Link remapped to Window/Door/Weatherseals/Extrusions/Resources"
+        - "Extra megas About Us / Recall Notice created"
+        - "Primary LinkLists updated; Door secondaries swapped to unique lists"
+      failed: []
+      pendingManual:
+        - "Publish AmesburyTruth Header Partial Design + Header/Data for Edge"
+        - "Optional: set isSimpleLink on Recall Notice if empty dropdown is unwanted"
+
+  - name: "quanex-family-footer-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-12T01:30:00Z"
+    updatedAt: "2026-08-12T01:45:00Z"
+    siteName: "quanex"
+    notes: >
+      Updated Footer Primary/Secondary LinkLists plus FooterST Title/Copyright/social for quanex,
+      era, and amesburytruth to match live-site footer hubs. Legal pages (Privacy/Cookies/Terms)
+      do not exist in IA — secondary columns use nearest Home pages instead.
+    relatedItems:
+      quanex:
+        footerPartialDesignId: "{5113CC1F-C7AD-4DA7-9CBA-4C539B8A9E33}"
+        footerDataFolderId: "{DEEDBBB9-BC9B-4BD7-9710-CD0FDAE83B8D}"
+        footerItemId: "{6B83BBBD-E0CD-493B-AF94-451E9D5ABB28}"
+        primaryLinksId: "{62A1AB8D-14D8-4B92-84EA-FC0EE55A2C15}"
+        secondaryLinksId: "{5418C11C-18C1-4C32-BE41-A1BB5991B781}"
+      era:
+        footerPartialDesignId: "{0589ECB8-94A9-4F8D-9CDE-BD5022E9EF16}"
+        footerDataFolderId: "{7621424A-B264-4CC8-B223-5CDCEB6E8996}"
+        footerItemId: "{B0436F1A-3555-4803-AB02-2406E04B4D6F}"
+        primaryLinksId: "{0CB52214-D4B1-4F04-A685-7001BDEB6E98}"
+        secondaryLinksId: "{73C88811-BFD0-4B3B-8BDA-6B68465D9DC0}"
+      amesburytruth:
+        footerPartialDesignId: "{DEA237EF-E505-4AB5-9624-183620E436B1}"
+        footerDataFolderId: "{8BE93BD9-9BE6-481B-8F66-40B936C3F6A2}"
+        footerItemId: "{43635E4B-A3B7-4F23-AC13-1FDF6EFC7414}"
+        primaryLinksId: "{1BEA8F70-E328-431F-98B0-78967BF8009A}"
+        secondaryLinksId: "{154A7CA2-CBC3-4850-AB1E-E0DF7DB4A01B}"
+    verification:
+      checkedAt: "2026-08-12T01:45:00Z"
+      passed:
+        - "Quanex footer primary: Products, Capabilities, About, Careers, Contact Us, Service and Support"
+        - "Quanex footer secondary: Investors, News, Locations, Sustainability, Resources, Events"
+        - "ERA footer primary: About Us, Technical, Customer Service, Contact Us"
+        - "ERA footer secondary: Careers, Company Information, Technical Downloads, Delivery, Account Forms"
+        - "AT footer primary: About, Careers, Resources, Contact Us"
+        - "AT footer secondary: Recall Notice, FAQ, Warranty Information, Patents, Sustainability"
+      failed: []
+      pendingManual:
+        - "Publish all three Footer Partial Designs + Footer/Data for Edge"
+        - "Optional: add Privacy/Cookies/Terms pages if legal footer links are required"
+
+  - name: "quanex-ia-tree"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-08-11T18:00:00Z"
+    updatedAt: "2026-08-11T19:30:00Z"
+    siteName: "quanex"
+    contentRootPath: "/sitecore/content/quanex/quanex/Home"
+    contentRootItemId: "{E6276198-3FC7-4D8B-BD14-8669B1701536}"
+    pageTemplateId: "{274FC64E-530F-457E-BD04-8B195DF94646}"
+    pageTemplateName: "Services Page"
+    iaSource: "docs/ai/ia/quanex-ia.md"
+    sourceSite: "https://www.quanex.com/"
+    createdCount: 64
+    notes: >
+      Created full Quanex IA tree (64 Services Page items) under Home from quanex-ia.md.
+      Content sourced from quanex.com (og:description / page copy). Detail + image confirmed
+      via MCP read-back. pageTitle/pageHeaderTitle/pageShortTitle/pageSubtitle/pageSummary/
+      metadata*/og* sent on create/update but are silent in MCP responses (inherited fields) â€”
+      verify in Content Editor. Image fields use external quanex.com URL XML (not DAM-uploaded).
+      Services Page was NOT in Home insert options; create_content_item still succeeded.
+      Item naming: spaces preserved; "&" -> "and"; "Screens+" -> "Screens Plus";
+      "Service & Support" -> "Service and Support". Pre-existing Speakers/Video/Data left untouched.
+    items:
+      - { name: "Products", itemId: "{C8A3F7B0-E2C4-4D27-AA20-D4018E333B38}", path: "/sitecore/content/quanex/quanex/Home/Products" }
+      - { name: "Residential", itemId: "{F57BAA07-A8BC-4859-B1DB-96E0153C4D23}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential" }
+      - { name: "Entry Door Components (Residential)", itemId: "{53CAE3B0-2166-4109-BCB4-6BE9DCFE1184}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Entry Door Components" }
+      - { name: "Insulating Glass Spacers (Residential)", itemId: "{2B002784-21DF-4113-8CCB-DCFB8B356362}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Insulating Glass Spacers" }
+      - { name: "Kitchen and Bath Components", itemId: "{452A7A3B-E4AC-44E6-ABCA-A27B027BFED5}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Kitchen and Bath Components" }
+      - { name: "Millwork (Residential)", itemId: "{A83E09E4-78DA-4902-AF17-1FA1CF177032}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Millwork" }
+      - { name: "Security Screens", itemId: "{D74BD42A-FD7F-4DE9-9D51-F229D51BB24D}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Security Screens" }
+      - { name: "Solar Panel Components", itemId: "{530AFCA4-7706-40B6-936C-05C4E27E5E17}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Solar Panel Components" }
+      - { name: "Window Components (Residential)", itemId: "{F1D393BD-6D9B-4C36-A86C-B28E6261FBAF}", path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Window Components" }
+      - { name: "Commercial", itemId: "{1573CCC9-E6D1-4610-9A38-EBFAB293F91B}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial" }
+      - { name: "Entry Door Components (Commercial)", itemId: "{64DD2760-F85F-4F66-9497-216F5C8219B4}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial/Entry Door Components" }
+      - { name: "Window Components (Commercial)", itemId: "{91445E93-B8F9-43E6-B132-3534C8185052}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial/Window Components" }
+      - { name: "Insulating Glass Spacers (Commercial)", itemId: "{FBB94D30-6988-4CEF-A9F4-B6268923B7A6}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial/Insulating Glass Spacers" }
+      - { name: "Weatherseals (Commercial)", itemId: "{2B0F74DE-529D-4800-88C7-3D50221B55F9}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial/Weatherseals" }
+      - { name: "Materials and Finishes", itemId: "{96BF6876-725A-4003-BB33-F48E7C9812D8}", path: "/sitecore/content/quanex/quanex/Home/Products/Commercial/Materials and Finishes" }
+      - { name: "Insulating Glass Spacers", itemId: "{9726E4D1-8FCD-4DD6-B5E9-BB4467655176}", path: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers" }
+      - { name: "Weatherseals", itemId: "{47DBF199-FB3B-4B43-9D50-F12D65441315}", path: "/sitecore/content/quanex/quanex/Home/Products/Weatherseals" }
+      - { name: "Solar", itemId: "{36C969E9-D8C1-4693-AA6C-B54F17B1E3DD}", path: "/sitecore/content/quanex/quanex/Home/Products/Solar" }
+      - { name: "For Architects", itemId: "{0377352D-5E48-4DAD-9516-808C09E2E86A}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects" }
+      - { name: "Warm-Edge Spacers", itemId: "{D33D7824-0D41-4A3A-AA78-EBD838EEE030}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects/Warm-Edge Spacers" }
+      - { name: "Commercial Window and Door Systems", itemId: "{759823DC-3DCB-4ADB-B1C5-E2FFB7FA9255}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects/Commercial Window and Door Systems" }
+      - { name: "Project Profiles (For Architects)", itemId: "{AB6E04A3-2525-4CD1-B68E-BFBD98D6629A}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects/Project Profiles" }
+      - { name: "Sustainability (For Architects)", itemId: "{EDE31BBC-014F-4A4E-B10F-F731D1765EF8}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects/Sustainability" }
+      - { name: "Continuing Education Resources (For Architects)", itemId: "{A7176E1D-7C1D-447E-90C9-C49D9E0E131F}", path: "/sitecore/content/quanex/quanex/Home/Products/For Architects/Continuing Education Resources" }
+      - { name: "Hardware Solutions", itemId: "{B8620C45-6876-4D82-B952-23F659BDF475}", path: "/sitecore/content/quanex/quanex/Home/Products/Hardware Solutions" }
+      - { name: "Access Solutions", itemId: "{86BDBB3E-0536-4DDD-9ADC-92CB089F7254}", path: "/sitecore/content/quanex/quanex/Home/Products/Access Solutions" }
+      - { name: "Extruded Solutions", itemId: "{FA947897-7340-4066-A011-42B5A8EAAB98}", path: "/sitecore/content/quanex/quanex/Home/Products/Extruded Solutions" }
+      - { name: "Mixing Solutions", itemId: "{D6FD78C9-DC8A-4581-AC3A-CED051C1A743}", path: "/sitecore/content/quanex/quanex/Home/Products/Mixing Solutions" }
+      - { name: "Wood Solutions", itemId: "{5628928F-AA2C-4671-9D8B-B11EE6FC848E}", path: "/sitecore/content/quanex/quanex/Home/Products/Wood Solutions" }
+      - { name: "Capabilities", itemId: "{FBAD5995-D416-453C-A8A7-DF4DDFDAE70F}", path: "/sitecore/content/quanex/quanex/Home/Capabilities" }
+      - { name: "Cabinet Components", itemId: "{63703930-8C86-456E-B281-ED2A344C96E6}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Cabinet Components" }
+      - { name: "Custom Mixing", itemId: "{48347864-D4AC-455E-A90A-A19AD340300E}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Custom Mixing" }
+      - { name: "Engineered Wood", itemId: "{A0D6ED2C-988B-424A-B0A5-BD8847C6BF03}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Engineered Wood" }
+      - { name: "Extrusion Capabilities", itemId: "{D83F6D57-2ED3-4597-B16D-D73769E7DD60}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Extrusion Capabilities" }
+      - { name: "Hardwood Residues", itemId: "{63557F72-40D3-4425-BC06-A704D09BDDF9}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Hardwood Residues" }
+      - { name: "Material and Science Design", itemId: "{F640E0A7-A45A-4CE4-A28C-1716083726B8}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Material and Science Design" }
+      - { name: "Millwork (Capabilities)", itemId: "{58E2A84E-7D58-41D1-8E77-0549B37DFAF6}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Millwork" }
+      - { name: "Performance Solutions", itemId: "{4787842D-57F3-4CF7-9CC8-D484D6B26DF6}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Performance Solutions" }
+      - { name: "Polymer Solutions", itemId: "{BE75F022-BF9A-4330-9D8E-F0B8A6A99204}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Polymer Solutions" }
+      - { name: "Roll Forming", itemId: "{3BA3C62D-A599-44FC-AC8D-51F34B8587FB}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Roll Forming" }
+      - { name: "Rolltrusion", itemId: "{F42772BE-B7C2-4F7D-9457-C5647C99B679}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Rolltrusion" }
+      - { name: "Sealant Solutions", itemId: "{AB26C458-C6D4-4569-AC5C-4DA2693E2695}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Sealant Solutions" }
+      - { name: "Silicone Foam Solutions", itemId: "{D084729D-0C0C-4FCC-BDCF-4A49C5C7C6EB}", path: "/sitecore/content/quanex/quanex/Home/Capabilities/Silicone Foam Solutions" }
+      - { name: "Service and Support", itemId: "{DE76695F-A5F5-40EA-B2D6-EC5E6624E08C}", path: "/sitecore/content/quanex/quanex/Home/Service and Support" }
+      - { name: "Account Management", itemId: "{BD42ABCC-775F-4B48-BA8B-91C6B938C92C}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Account Management" }
+      - { name: "Continuing Education Resources", itemId: "{BFD35C05-040F-4599-851A-3615B0ED58A8}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Continuing Education Resources" }
+      - { name: "Equipment", itemId: "{E8BDCE5F-1B3D-4107-9E53-B1DE29FEF771}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment" }
+      - { name: "Line Layouts", itemId: "{B9D629A4-B71C-488A-93AB-08C524926F57}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment/Line Layouts" }
+      - { name: "Secondary Sealing Equipment Solutions", itemId: "{E260F630-A148-43F3-A735-7F36E779C4CD}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment/Secondary Sealing Equipment Solutions" }
+      - { name: "High-Speed Full Automation", itemId: "{994291E1-EA10-4B0C-80A8-D2C42F5031DF}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment/High-Speed Full Automation" }
+      - { name: "Semi-Automated IG Equipment", itemId: "{D524364A-D779-4960-86D6-ECDAAAD628F3}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment/Semi-Automated IG Equipment" }
+      - { name: "Manual Spacer Application", itemId: "{6224AAF9-9499-442E-9305-B9C5FCCD89F5}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Equipment/Manual Spacer Application" }
+      - { name: "Plant Transformation", itemId: "{EE527620-7371-45DE-8A63-4857D143EFC6}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Plant Transformation" }
+      - { name: "Screens Plus", itemId: "{54889B49-D385-4ECB-A593-D6F4661B6237}", path: "/sitecore/content/quanex/quanex/Home/Service and Support/Screens Plus" }
+      - { name: "About", itemId: "{9955B25E-1542-4189-A646-76B59C12C7FB}", path: "/sitecore/content/quanex/quanex/Home/About" }
+      - { name: "Project Profiles", itemId: "{7BCBCF67-AFB6-4C79-8CFE-EDEDFBB3F612}", path: "/sitecore/content/quanex/quanex/Home/Project Profiles" }
+      - { name: "Resources", itemId: "{144E8B02-E31F-4059-B389-EFC605ED093B}", path: "/sitecore/content/quanex/quanex/Home/Resources" }
+      - { name: "Sustainability", itemId: "{353D671A-9A95-4F8E-BC7D-32FD1092A0AD}", path: "/sitecore/content/quanex/quanex/Home/Sustainability" }
+      - { name: "News", itemId: "{03AF7489-05AD-49CC-A2FD-FBB4DCAC3B05}", path: "/sitecore/content/quanex/quanex/Home/News" }
+      - { name: "Careers", itemId: "{A508286F-88C3-4A67-9B0E-5856DED4FCB3}", path: "/sitecore/content/quanex/quanex/Home/Careers" }
+      - { name: "Locations", itemId: "{E00843FB-81F0-4A32-BDB2-89E3A25E1C10}", path: "/sitecore/content/quanex/quanex/Home/Locations" }
+      - { name: "Contact Us", itemId: "{56EA6322-F923-44F1-B0AF-2A10F9B46C04}", path: "/sitecore/content/quanex/quanex/Home/Contact Us" }
+      - { name: "Investors", itemId: "{8F0B8006-0D2C-45A3-A0CF-9D2A8CEBA142}", path: "/sitecore/content/quanex/quanex/Home/Investors" }
+      - { name: "Events", itemId: "{EC97AF46-5F1A-4ACB-AFFE-AA0B5352C0B5}", path: "/sitecore/content/quanex/quanex/Home/Events" }
+    fieldsUpdated:
+      - Detail
+      - image
+      - pageTitle
+      - pageHeaderTitle
+      - pageShortTitle
+      - pageSubtitle
+      - pageSummary
+      - metadataTitle
+      - metadataDescription
+      - ogTitle
+      - ogDescription
+    verification:
+      checkedAt: "2026-08-11T19:30:00Z"
+      passed:
+        - "64 pages created under /sitecore/content/quanex/quanex/Home"
+        - "Detail + image confirmed via MCP get_content_item_by_path/by_id"
+        - "Products subtree children present"
+      failed: []
+      pendingManual:
+        - "Verify pageTitle/pageSummary/metadata*/og* in Content Editor (MCP silent for inherited fields)"
+        - "Replace external image XML with DAM assets when Content Hub credentials available"
+        - "Publish quanex Home tree for Edge"
+        - "Optionally add Services Page to Home insert options"
+
+  - name: "amesburytruth-ia-tree"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-08-11T22:00:00Z"
+    updatedAt: "2026-08-11T23:00:00Z"
+    siteName: "amesburytruth"
+    contentRootPath: "/sitecore/content/quanex/amesburytruth/Home"
+    contentRootItemId: "{A57ED898-AA1D-46E6-B7CF-7C7804688EC8}"
+    pageTemplateId: "{274FC64E-530F-457E-BD04-8B195DF94646}"
+    pageTemplateName: "Services Page"
+    iaSource: "docs/ai/ia/amesburytruth-ia.md"
+    sourceSite: "https://www.amesburytruth.com/"
+    createdCount: 81
+    skippedCount: 0
+    notes: >
+      Created full AmesburyTruth IA tree (81 Services Page items) under Home from amesburytruth-ia.md.
+      Skipped Home (exists) and pre-existing Speakers/Video/Data. Content sourced from amesburytruth.com
+      (validated product URLs under /products/windows|doors|weatherseals|extrusions; about/resources hubs).
+      Detail + image confirmed via MCP read-back. page*/metadata*/og* sent on create but silent in MCP â€”
+      pendingManual verify in Content Editor. External image XML uses https://www.amesburytruth.com/img/fb-post.png.
+      Services Page NOT in Home insert options; create_content_item still succeeded (same as quanex).
+      Item naming: spaces preserved; "/" removed from Casement Awning / Hung Sliding; "&" -> "and" (News and Events).
+      Sitemap uses double-slash /products//â€¦ â€” live paths normalize to /products/â€¦.
+    items:
+      - { name: "Window Hardware", itemId: "{F88066D7-8523-449D-BA4A-B47FAD953042}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware" }
+      - { name: "Casement Awning", itemId: "{07CD2182-CFEA-4459-A266-70C1E5C1057D}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning" }
+      - { name: "PowerLink", itemId: "{6A2D7363-BB00-4154-A7B1-86C93D80C810}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/PowerLink" }
+      - { name: "Locks (Casement)", itemId: "{DEAFA9A5-C83F-478D-97A9-6C093850AE06}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Locks" }
+      - { name: "Hinges (Casement)", itemId: "{1D8E90AC-5372-41B2-BF23-05C44C75362E}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Hinges" }
+      - { name: "Operators", itemId: "{F66C1AE3-4536-4FF5-ACF5-17167E71E562}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Operators" }
+      - { name: "Handles and Covers", itemId: "{0D2EE46F-1FE3-42BA-A61D-E5F368DE7D71}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Handles and Covers" }
+      - { name: "Push-Out Hardware", itemId: "{D153E945-6154-44D7-8CB0-34501A955879}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Push-Out Hardware" }
+      - { name: "Safety Products", itemId: "{4C5AF184-E635-4B1F-BA55-E585DE281F5A}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Safety Products" }
+      - { name: "Accessories (Casement)", itemId: "{CD72A352-A661-4311-8ADF-7915F2107DED}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Accessories" }
+      - { name: "Hung Sliding", itemId: "{9D8B5590-423E-4581-9164-B2E1265A6B1E}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding" }
+      - { name: "Balances", itemId: "{53B3FC84-0EAF-4932-81D9-9E1D1D1F973C}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Balances" }
+      - { name: "Locks (Hung)", itemId: "{445D5FE8-D6E3-4FE3-9E43-BC3DDA2168AC}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Locks" }
+      - { name: "Tilt Latches", itemId: "{D3D2346D-5946-4EBC-8562-BBA280E8BA14}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Tilt Latches" }
+      - { name: "Sash Lifts", itemId: "{14C0261D-2AF7-4283-8D2A-2B21D202674E}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Sash Lifts" }
+      - { name: "Rollers (Hung)", itemId: "{AA49A473-DC23-46B9-89E5-8653F48ADA6B}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Rollers" }
+      - { name: "Weeps", itemId: "{2E88664C-DEAC-4F46-AEBB-B118E3042F40}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Weeps" }
+      - { name: "Keepers", itemId: "{03C1980A-710E-4D88-9806-B4576650629D}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Keepers" }
+      - { name: "Vent Stops", itemId: "{057C4BB2-ED33-4335-8F99-8918BAE62025}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Vent Stops" }
+      - { name: "WOCDs", itemId: "{154FE157-8151-4F15-B4EB-BB82896EA13A}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/WOCDs" }
+      - { name: "Hole Plugs", itemId: "{C5D66969-5A61-49FF-88D4-89858249CA4F}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Hole Plugs" }
+      - { name: "Grid Clips", itemId: "{4439C580-B237-4E8D-B3D7-61E6D96C6688}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Grid Clips" }
+      - { name: "Grid Joiners", itemId: "{1C0540FD-50B4-4B17-B60F-D34663C7F5E3}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Grid Joiners" }
+      - { name: "Skylights", itemId: "{07BB6E80-CC20-4862-869B-2C0446DBE3E5}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Skylights" }
+      - { name: "Tilt-n-Turn", itemId: "{18349039-8DB0-48DF-8FF5-D72A8A8B9961}", path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Tilt-n-Turn" }
+      - { name: "Door Hardware", itemId: "{1E363D0F-E485-489B-B358-3DE8D735B25A}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware" }
+      - { name: "Sliding", itemId: "{605A7FF5-1C32-49F3-A964-4DED45B9E431}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding" }
+      - { name: "Handle Sets (Sliding)", itemId: "{C95C7630-2C11-4840-AA71-9F36E566B22D}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Handle Sets" }
+      - { name: "Mortise Locks", itemId: "{CD40C6ED-AD06-4FC9-A021-5DD527AFCDC6}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Mortise Locks" }
+      - { name: "Mortise Keepers", itemId: "{7A64DE3C-3BB8-4865-910D-3971C2BBD1CA}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Mortise Keepers" }
+      - { name: "Lift N Slide", itemId: "{2874ABE6-95B2-46F9-AAA1-2F3CA35A01F6}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Lift N Slide" }
+      - { name: "Rollers (Sliding)", itemId: "{A77FBB6C-4373-44A2-B175-3E0CEBA2B501}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Rollers" }
+      - { name: "Secondary Locks", itemId: "{5D788486-AB36-4FAB-A438-99137C3ABD83}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Secondary Locks" }
+      - { name: "Screen Rollers", itemId: "{F377605F-34D0-42D0-9593-71D9556913F0}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Screen Rollers" }
+      - { name: "Secondary Lock Keepers", itemId: "{93FEF6D2-95B6-4138-9E2C-088ADD09F2BC}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Sliding/Secondary Lock Keepers" }
+      - { name: "Hinged", itemId: "{D04D9943-2CED-4FB8-A300-97B1C83A0895}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged" }
+      - { name: "Handle Sets (Hinged)", itemId: "{FA3190C4-51DC-41C2-A32E-BB2E5A6F78E3}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Handle Sets" }
+      - { name: "Hinges (Hinged)", itemId: "{FF1DF6E6-311B-41A0-B66F-76A4DDA1D96F}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Hinges" }
+      - { name: "Locks (Hinged)", itemId: "{F2B11166-5630-47AA-9C2B-471AA9E2C5C3}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Locks" }
+      - { name: "Tru-Lock", itemId: "{63628394-5403-460C-BBBE-A5B371ED14CE}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Tru-Lock" }
+      - { name: "Handle Accessories", itemId: "{FEBD9201-562A-49C9-BA77-5FEBBA6751A0}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Handle Accessories" }
+      - { name: "Lock Accessories", itemId: "{918EA5CF-DB51-4254-89B6-EECA0AD31A91}", path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Lock Accessories" }
+      - { name: "Weatherseals", itemId: "{B692617F-621F-4C4D-BBC8-E03D3FCEB044}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals" }
+      - { name: "Pile", itemId: "{8885A099-56D9-409B-819B-D176A874F434}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Pile" }
+      - { name: "Dust Plug", itemId: "{48CE755D-A758-4E61-80A3-A95A2CE2D0C7}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Pile/Dust Plug" }
+      - { name: "Extruded Pile", itemId: "{43BE9581-256A-41A6-B497-5D5C7B02CB2E}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Pile/Extruded Pile" }
+      - { name: "Kerf Pile", itemId: "{C91F4D12-1B51-48EC-9EFF-CC6477A2503E}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Pile/Kerf Pile" }
+      - { name: "Window Seals", itemId: "{15308C63-19E5-4D16-A6F8-9602BF87046A}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Window Seals" }
+      - { name: "Compression", itemId: "{C3A6B2D9-CECA-4758-A7A5-7A9BCD140539}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Window Seals/Compression" }
+      - { name: "Surface Mount (Window)", itemId: "{3D39B5FF-AE7D-4EAC-9FD4-344D31CBB866}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Window Seals/Surface Mount" }
+      - { name: "Door Seals", itemId: "{0F8A08C5-9D14-4164-A3DA-72C9421AEBBC}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals" }
+      - { name: "Corner Pads", itemId: "{380E4081-A1FA-48D6-8EEC-AE8E73913EAA}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals/Corner Pads" }
+      - { name: "Kerf", itemId: "{CA0E6985-E217-4B8E-9A29-A723AC277CFB}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals/Kerf" }
+      - { name: "Pocket", itemId: "{56F37EC8-94CC-4D00-B197-FA120C0BA022}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals/Pocket" }
+      - { name: "Surface Mount (Door)", itemId: "{3B4BC01D-9FEB-4B11-97E0-2DABD928483D}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals/Surface Mount" }
+      - { name: "Sweeps", itemId: "{C9374692-796D-4688-A497-5B29A9A07261}", path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Door Seals/Sweeps" }
+      - { name: "Extrusions", itemId: "{F02E079E-0242-43F9-9A86-391F5687D475}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions" }
+      - { name: "Accessories (Extrusions)", itemId: "{F0AB2A6F-1DC7-4D11-99CA-5E3948250603}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Accessories" }
+      - { name: "Backer Rod", itemId: "{D0821BD8-3488-4C69-A4A5-57F9F4B5B73D}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Backer Rod" }
+      - { name: "Custom", itemId: "{BB87352A-AE0F-46BE-A363-6FEEAB7B78F7}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Custom" }
+      - { name: "Glazing Bead", itemId: "{83757372-0EFB-436B-8E51-F5AD0293A57B}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Glazing Bead" }
+      - { name: "Nailing Fin", itemId: "{051C2AFC-1F30-4D0A-A605-A90D3617BAF1}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Nailing Fin" }
+      - { name: "Services", itemId: "{25DDABBC-394A-4003-AA7C-04273108644D}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Services" }
+      - { name: "Shipping Supplies", itemId: "{3B555E0C-8A82-4070-A3CE-762C51AEFA85}", path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Shipping Supplies" }
+      - { name: "Resources", itemId: "{5A73AE7F-B2A8-4F0E-BAEE-49B8B233DE17}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources" }
+      - { name: "Associations", itemId: "{401DE82D-B525-488E-B6A4-8C60D0125B34}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/Associations" }
+      - { name: "FAQ", itemId: "{AA69CD34-CDF8-4CF3-9938-C0EB840FDE18}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/FAQ" }
+      - { name: "Patents", itemId: "{8F836D66-94E1-43D8-9BE4-12ED8DE93969}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/Patents" }
+      - { name: "Technical Notes", itemId: "{1D1F8F1C-0841-405A-B9D5-B68038759C35}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/Technical Notes" }
+      - { name: "Warranty Information", itemId: "{BA599C50-B03C-4555-AE7F-52C0302682EC}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/Warranty Information" }
+      - { name: "Videos", itemId: "{E26ED233-EC05-4E52-80A6-A864FEC38649}", path: "/sitecore/content/quanex/amesburytruth/Home/Resources/Videos" }
+      - { name: "About Us", itemId: "{7FD51B92-C633-47FD-815A-E558EAAFF816}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us" }
+      - { name: "Careers", itemId: "{05677274-FBD9-4639-85D0-830872525EAD}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Careers" }
+      - { name: "Lawrence", itemId: "{8F844363-3688-4EC4-A931-F0E20E25559B}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Lawrence" }
+      - { name: "Our Promise", itemId: "{1CB7EC5F-FBD2-47CE-B4F7-FF2C0F818BB6}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Our Promise" }
+      - { name: "History", itemId: "{4E0F16FB-BFE1-4320-A0FB-A1E1CF19D267}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/History" }
+      - { name: "News and Events", itemId: "{0D2222F0-A16D-4633-97C4-8D336218FF2C}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/News and Events" }
+      - { name: "Sustainability", itemId: "{46CEE972-2494-4599-BD60-9A2829140043}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Sustainability" }
+      - { name: "Value Proposition", itemId: "{FAE129C8-4181-401C-A1AF-98FD94FBE991}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Value Proposition" }
+      - { name: "Contact Us", itemId: "{3A818DD2-63A3-4C70-A844-5DDD980B35FA}", path: "/sitecore/content/quanex/amesburytruth/Home/About Us/Contact Us" }
+      - { name: "Recall Notice", itemId: "{36BB6D3E-7835-4D9C-919A-505FD247243D}", path: "/sitecore/content/quanex/amesburytruth/Home/Recall Notice" }
+    fieldsUpdated:
+      - Detail
+      - image
+      - pageTitle
+      - pageHeaderTitle
+      - pageShortTitle
+      - pageSubtitle
+      - pageSummary
+      - metadataTitle
+      - metadataDescription
+      - ogTitle
+      - ogDescription
+    verification:
+      checkedAt: "2026-08-11T23:00:00Z"
+      passed:
+        - "81 pages created under /sitecore/content/quanex/amesburytruth/Home"
+        - "Detail + image confirmed via MCP get_content_item_by_id (Window Hardware + L2 children)"
+        - "Home L1 children present (Window/Door/Weatherseals/Extrusions/Resources/About Us/Recall Notice)"
+      failed: []
+      pendingManual:
+        - "Verify pageTitle/pageSummary/metadata*/og* in Content Editor (MCP silent for inherited fields)"
+        - "Replace external image XML with DAM assets when Content Hub credentials available"
+        - "Publish amesburytruth Home tree for Edge"
+        - "Optionally add Services Page to Home insert options"
+        - "Refine copy for pages that fell back to parent/section text (e.g. Keepers 404, some About/Resources L2)"
+
+  - name: "era-ia-tree"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-08-11T22:45:00Z"
+    updatedAt: "2026-08-11T23:20:00Z"
+    siteName: "era"
+    contentRootPath: "/sitecore/content/quanex/era/Home"
+    contentRootItemId: "{69A414F6-9E12-48D6-92C1-215609517A83}"
+    pageTemplateId: "{274FC64E-530F-457E-BD04-8B195DF94646}"
+    pageTemplateName: "Services Page"
+    iaSource: "docs/ai/ia/era-ia.md"
+    sourceSite: "https://www.eraeverywhere.com/"
+    createdCount: 82
+    notes: >
+      Created full ERA Everywhere IA tree (82 Services Page items) under /sitecore/content/quanex/era/Home
+      from era-ia.md. Corrected user paste path (amesburytruth Home) to era Home via list_sites.
+      Content sourced from eraeverywhere.com (/default/... Magento paths; /fabandfix/; /era-protect/).
+      Detail + image confirmed via MCP. page*/metadata*/og* sent on create but silent in MCP responses.
+      Image: external ERA banner URL XML (not DAM). Services Page not in Home insert options; create_content_item
+      still succeeded. Naming: spaces OK; "&"->"and" (Fab and Fix, Spares and Accessories, Window Hinges and
+      Friction Stays, Tilt and Turn Windows). Skipped pre-existing Speakers/Video/Data. Skipped Home.
+    items:
+      - { name: "Window Components", itemId: "{67799195-7BEF-493D-B16D-C5D890EF7F37}", path: "/sitecore/content/quanex/era/Home/Window Components" }
+      - { name: "Casement Windows", itemId: "{5C16876B-73CF-44E0-B1F3-FEB511694AEC}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows" }
+      - { name: "Window Handles (Casement)", itemId: "{5055E532-B6F1-4BB4-A035-1DCD93F0E3A0}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Window Handles" }
+      - { name: "Window Locks", itemId: "{7FFFC5DB-BF47-440D-A01E-825A85859232}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Window Locks" }
+      - { name: "Window Hinges and Friction Stays (Casement)", itemId: "{7CAA26F9-3989-4F01-9455-EFC2AABC709F}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Window Hinges and Friction Stays" }
+      - { name: "Additional Window Security", itemId: "{D9D5FC9D-8468-43F2-9C6D-334EF43B2139}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Additional Window Security" }
+      - { name: "Spares and Accessories", itemId: "{106722B4-114D-454E-BFA8-D09200615B60}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Spares and Accessories" }
+      - { name: "Ventilation (Casement)", itemId: "{03EBFC9B-43ED-46E4-99C9-11C14DCB85D8}", path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Ventilation" }
+      - { name: "Sash Windows", itemId: "{89FD0CDB-99E6-41D8-8E9B-7A88EA9B4813}", path: "/sitecore/content/quanex/era/Home/Window Components/Sash Windows" }
+      - { name: "Sash Balances", itemId: "{2A381057-4D68-4241-B314-F195AC884FC6}", path: "/sitecore/content/quanex/era/Home/Window Components/Sash Windows/Sash Balances" }
+      - { name: "Sash Window Furniture", itemId: "{17D5EAF4-146B-4606-A73B-914CFC114F0F}", path: "/sitecore/content/quanex/era/Home/Window Components/Sash Windows/Sash Window Furniture" }
+      - { name: "Tilt and Turn Windows", itemId: "{D7E09D37-923F-4137-B153-01D2E82A2C06}", path: "/sitecore/content/quanex/era/Home/Window Components/Tilt and Turn Windows" }
+      - { name: "Gearing", itemId: "{5C71CB20-EB63-4364-81B1-C73C8AB58BC9}", path: "/sitecore/content/quanex/era/Home/Window Components/Tilt and Turn Windows/Gearing" }
+      - { name: "Window Handles (Tilt and Turn)", itemId: "{B068E72B-C025-47A8-883B-EAFECC0A06C9}", path: "/sitecore/content/quanex/era/Home/Window Components/Tilt and Turn Windows/Window Handles" }
+      - { name: "Door Components", itemId: "{205D5CB8-B1E3-4E0D-9AD8-E2FBB9326B46}", path: "/sitecore/content/quanex/era/Home/Door Components" }
+      - { name: "Entrance Doors", itemId: "{26E81270-ADAD-40F9-BF24-8F3338236567}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors" }
+      - { name: "Door Handles (Entrance)", itemId: "{C1604CC0-7F9A-467C-BA58-DF908AF597A0}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Door Handles" }
+      - { name: "Door Hinges (Entrance)", itemId: "{6D3867C8-01A3-443E-98D4-A8582F825C36}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Door Hinges" }
+      - { name: "Letterplates", itemId: "{C4FC3B9C-91EB-4B6A-B501-6CA437B448EC}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Letterplates" }
+      - { name: "Accessories", itemId: "{A141213B-F700-44DB-8C26-45C4EC60E498}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Accessories" }
+      - { name: "Multi-Point Door Locks", itemId: "{06B0C966-F143-4C64-B217-D7953C7E5180}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Multi-Point Door Locks" }
+      - { name: "Cylinders", itemId: "{BCB7E205-6A0B-48FF-9B54-C49F0C6020BF}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Cylinders" }
+      - { name: "Mortice Locks (Entrance)", itemId: "{5B077778-0662-4AFF-A881-2947F2D8186F}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Mortice Locks" }
+      - { name: "NightLatches", itemId: "{6DEEC22A-9EBE-422B-B2BB-C146FBE2A578}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/NightLatches" }
+      - { name: "Digital Door Locks", itemId: "{3153F016-6F46-4095-A61B-CD0B73758380}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Digital Door Locks" }
+      - { name: "Security Bolts (Entrance)", itemId: "{5BADD32F-3361-42D6-B3AD-2F57990A14AE}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Security Bolts" }
+      - { name: "Ventilation (Entrance)", itemId: "{EE92FC58-9D07-463C-BCC6-3753FD37B9E0}", path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Ventilation" }
+      - { name: "Interior Doors", itemId: "{DF81747D-835F-43DE-B778-0D21C74F5725}", path: "/sitecore/content/quanex/era/Home/Door Components/Interior Doors" }
+      - { name: "Door Handles and Knobs", itemId: "{5EE1A5A8-0C93-40BF-BE24-CC144282C767}", path: "/sitecore/content/quanex/era/Home/Door Components/Interior Doors/Door Handles and Knobs" }
+      - { name: "Mortice Locks (Interior)", itemId: "{0E34B0D8-A1A2-48AB-A74D-E5A734AEDBEB}", path: "/sitecore/content/quanex/era/Home/Door Components/Interior Doors/Mortice Locks" }
+      - { name: "Tubular Latches", itemId: "{002C3AD3-C739-4105-9632-628C0066EB18}", path: "/sitecore/content/quanex/era/Home/Door Components/Interior Doors/Tubular Latches" }
+      - { name: "French Double Doors", itemId: "{5EE853B7-B32C-49CF-9B55-99FA36B9F48A}", path: "/sitecore/content/quanex/era/Home/Door Components/French Double Doors" }
+      - { name: "Mortice Locks (French)", itemId: "{413BDB55-E4C5-40AC-9EFC-98A08EB6A459}", path: "/sitecore/content/quanex/era/Home/Door Components/French Double Doors/Mortice Locks" }
+      - { name: "Sliding Doors", itemId: "{7712A8E4-7F01-41B6-AE93-0FE15872D8D8}", path: "/sitecore/content/quanex/era/Home/Door Components/Sliding Doors" }
+      - { name: "Locks and Keeps", itemId: "{A301EE8B-45A0-4009-800A-E1CCFBEB7798}", path: "/sitecore/content/quanex/era/Home/Door Components/Sliding Doors/Locks and Keeps" }
+      - { name: "Door Handles (Sliding)", itemId: "{2B9B05FC-29BA-405A-8177-22E5CEB3B504}", path: "/sitecore/content/quanex/era/Home/Door Components/Sliding Doors/Door Handles" }
+      - { name: "Rollers and Accessories", itemId: "{C976EC7B-F07C-4631-8036-D27EFA7B1882}", path: "/sitecore/content/quanex/era/Home/Door Components/Sliding Doors/Rollers and Accessories" }
+      - { name: "Aluminium Components", itemId: "{087953AB-10EE-4AD9-B633-6D8E8E337867}", path: "/sitecore/content/quanex/era/Home/Aluminium Components" }
+      - { name: "Door Components (Aluminium)", itemId: "{43E4C785-4D01-4118-99ED-70CFD895A026}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Door Components" }
+      - { name: "Door Handles (Aluminium)", itemId: "{B9910F2F-E2B7-4A0E-A91D-58E785A5A5F1}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Door Components/Door Handles" }
+      - { name: "Door Hinges (Aluminium)", itemId: "{8520214F-9953-4DAB-8944-80A809EC80ED}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Door Components/Door Hinges" }
+      - { name: "Security Bolts (Aluminium)", itemId: "{7EB55B93-A7DF-4029-A9E3-4C3F7F95219E}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Door Components/Security Bolts" }
+      - { name: "Window Components (Aluminium)", itemId: "{F2357E5F-D07A-4783-8B8A-C36502FB2C68}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Window Components" }
+      - { name: "Window Handles (Aluminium)", itemId: "{F63F2193-814D-46C0-8197-7C838A49F722}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Window Components/Window Handles" }
+      - { name: "Window Hinges and Friction Stays (Aluminium)", itemId: "{16912B8B-FD09-4F7B-849A-8298EBE393B7}", path: "/sitecore/content/quanex/era/Home/Aluminium Components/Window Components/Window Hinges and Friction Stays" }
+      - { name: "Home Security", itemId: "{8E4B55C2-EC73-410F-835C-91CC41470700}", path: "/sitecore/content/quanex/era/Home/Home Security" }
+      - { name: "ERA Protect Ecosystem", itemId: "{A2D84554-5738-47DF-8F98-256A5CA3738A}", path: "/sitecore/content/quanex/era/Home/Home Security/ERA Protect Ecosystem" }
+      - { name: "Smart Home Alarm Systems", itemId: "{630A8BE1-05C6-41DE-9A19-130C62FFE82D}", path: "/sitecore/content/quanex/era/Home/Home Security/Smart Home Alarm Systems" }
+      - { name: "Ironmongery", itemId: "{C55EB5E7-15FB-4F94-8297-2A1799CDA7E2}", path: "/sitecore/content/quanex/era/Home/Ironmongery" }
+      - { name: "Bolts", itemId: "{D2F70B38-3333-45A1-8E00-4866A0DA5628}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Bolts" }
+      - { name: "Garage Doors", itemId: "{AB443009-D3DE-44BE-9E0E-119384E37B82}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Garage Doors" }
+      - { name: "Gate Hinges", itemId: "{6E568988-BD53-4B61-A410-01627CE69761}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Gate Hinges" }
+      - { name: "General Fittings", itemId: "{F4719CC8-C06F-489B-9C84-3E8E0A8DD8DE}", path: "/sitecore/content/quanex/era/Home/Ironmongery/General Fittings" }
+      - { name: "Hasps and Staples", itemId: "{79DFD425-4B63-40E4-84EA-806C9354ED03}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Hasps and Staples" }
+      - { name: "Pulleys", itemId: "{F70BF05C-1ED1-45E4-B8C4-19FBE7E777AA}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Pulleys" }
+      - { name: "Repair Plates and Brackets", itemId: "{CF813E83-723A-4215-BEC6-0CDB953BDF17}", path: "/sitecore/content/quanex/era/Home/Ironmongery/Repair Plates and Brackets" }
+      - { name: "Fab and Fix", itemId: "{012818BA-915F-4B1E-89F8-41250A1A6FC2}", path: "/sitecore/content/quanex/era/Home/Fab and Fix" }
+      - { name: "Classic Range", itemId: "{54011403-C279-43C0-A356-633762218CFF}", path: "/sitecore/content/quanex/era/Home/Fab and Fix/Classic Range" }
+      - { name: "Heritage Range", itemId: "{9BD39BF1-C5CD-4371-850C-145577D9BCF4}", path: "/sitecore/content/quanex/era/Home/Fab and Fix/Heritage Range" }
+      - { name: "Architectural Range", itemId: "{7D37CEC1-7F04-4A25-8B46-24C9A2E95DAE}", path: "/sitecore/content/quanex/era/Home/Fab and Fix/Architectural Range" }
+      - { name: "Forged Range", itemId: "{56BC6CCA-C380-400E-8874-2404635B80F1}", path: "/sitecore/content/quanex/era/Home/Fab and Fix/Forged Range" }
+      - { name: "Sash Window Range", itemId: "{6C83464C-F8A6-4B95-BBC5-9DDBD79DE8A7}", path: "/sitecore/content/quanex/era/Home/Fab and Fix/Sash Window Range" }
+      - { name: "Weatherseals", itemId: "{C8A4AF67-7A18-4962-BE84-4B2E7876787E}", path: "/sitecore/content/quanex/era/Home/Weatherseals" }
+      - { name: "News", itemId: "{0F1D2A7F-19A8-4EDC-9842-6F67567631DC}", path: "/sitecore/content/quanex/era/Home/News" }
+      - { name: "Clearance", itemId: "{C5473C98-7A6F-4DFC-8F2C-02CC337CB3D6}", path: "/sitecore/content/quanex/era/Home/Clearance" }
+      - { name: "About Us", itemId: "{5D782C1E-E498-4DAE-9813-386993A80DDF}", path: "/sitecore/content/quanex/era/Home/About Us" }
+      - { name: "Company Information", itemId: "{E2A55117-697A-4565-B29E-84573716DE5C}", path: "/sitecore/content/quanex/era/Home/About Us/Company Information" }
+      - { name: "Our People", itemId: "{3027A745-7FDC-486A-82D1-62BD3BBA2761}", path: "/sitecore/content/quanex/era/Home/About Us/Our People" }
+      - { name: "Careers", itemId: "{F8C16D16-07E7-405F-B548-897BF7898E7B}", path: "/sitecore/content/quanex/era/Home/About Us/Careers" }
+      - { name: "Neighbourhood Watch", itemId: "{1ADF37C4-1EE5-4F08-BE7B-9E1C52D58289}", path: "/sitecore/content/quanex/era/Home/About Us/Neighbourhood Watch" }
+      - { name: "Accreditations", itemId: "{EEADB855-5901-45F3-BAC6-1837D63DDCA3}", path: "/sitecore/content/quanex/era/Home/About Us/Accreditations" }
+      - { name: "Technical", itemId: "{2CF36081-802B-4CF7-A21E-559F5E66C004}", path: "/sitecore/content/quanex/era/Home/Technical" }
+      - { name: "Technical Downloads", itemId: "{B343BCDE-6935-4747-8F0D-4063D51A9099}", path: "/sitecore/content/quanex/era/Home/Technical/Technical Downloads" }
+      - { name: "Standards and Certification", itemId: "{09837BFC-C664-4179-B43C-07AD7DB268BD}", path: "/sitecore/content/quanex/era/Home/Technical/Standards and Certification" }
+      - { name: "UKAS Test House", itemId: "{5BB9834E-63BC-40C4-A759-65042DFFF371}", path: "/sitecore/content/quanex/era/Home/Technical/UKAS Test House" }
+      - { name: "Declaration of Performance", itemId: "{069DAF48-AB72-4000-842F-8791969EB268}", path: "/sitecore/content/quanex/era/Home/Technical/Declaration of Performance" }
+      - { name: "Service Status", itemId: "{DAEBAB36-B890-4795-8BE3-8DCBC4151FD6}", path: "/sitecore/content/quanex/era/Home/Technical/Service Status" }
+      - { name: "Customer Service", itemId: "{127F600F-3859-4AF3-A564-3F7B931A0461}", path: "/sitecore/content/quanex/era/Home/Customer Service" }
+      - { name: "Account Forms", itemId: "{AA86AF0B-625F-4901-8B73-90EC4CAB1273}", path: "/sitecore/content/quanex/era/Home/Customer Service/Account Forms" }
+      - { name: "Delivery", itemId: "{EE54CE1C-5209-4131-A6E5-2378055205B4}", path: "/sitecore/content/quanex/era/Home/Customer Service/Delivery" }
+      - { name: "Marketing Support", itemId: "{E03DF790-E47B-4304-9BB6-B518D61AEA30}", path: "/sitecore/content/quanex/era/Home/Customer Service/Marketing Support" }
+      - { name: "Contact Us", itemId: "{D7BB5D97-0E6E-4EAF-A4A6-70C75C5E1764}", path: "/sitecore/content/quanex/era/Home/Customer Service/Contact Us" }
+    fieldsUpdated:
+      - Detail
+      - image
+      - pageTitle
+      - pageHeaderTitle
+      - pageShortTitle
+      - pageSubtitle
+      - pageSummary
+      - metadataTitle
+      - metadataDescription
+      - ogTitle
+      - ogDescription
+    verification:
+      checkedAt: "2026-08-11T23:20:00Z"
+      passed:
+        - "82 pages created under /sitecore/content/quanex/era/Home"
+        - "Detail + image confirmed via MCP get_content_item_by_path/by_id"
+        - "All 12 IA L1 hubs present under Home"
+        - "Fab and Fix subtree children present"
+      failed: []
+      pendingManual:
+        - "Verify pageTitle/pageSummary/metadata*/og* in Content Editor (MCP silent for inherited fields)"
+        - "Replace external image XML with DAM assets when Content Hub credentials available"
+        - "Publish era Home tree for Edge"
+        - "Optionally add Services Page to Home insert options"
+        - "Confirm Weatherseals live URL when category is published on eraeverywhere.com"
+
   - name: "pillsburylaw-blogs-content-update"
     kind: "content-update"
     category: "Insights"
@@ -3094,7 +3656,7 @@ ia:
       Updated all 12 blog hubs + parent Blogs page with Pillsbury-relevant Detail HTML,
       pageTitle/pageHeaderTitle/pageShortTitle/pageSubtitle/pageSummary, metadata* and og*
       fields. MCP update responses only echo Services Page local fields (Detail/image);
-      inherited Page Content / Metadata / Open Graph fields are silent in MCP responses —
+      inherited Page Content / Metadata / Open Graph fields are silent in MCP responses â€”
       verify in Content Editor. ogImage left empty (no DAM assets assigned).
     items:
       - { name: "Blogs", itemId: "{612AE84F-C0C8-451A-859B-1712FB3149D2}" }
@@ -3145,7 +3707,7 @@ ia:
       with attorney profile fields. Created Data/Taxonomy folders + Tag seed items. Office Droplink
       sources Home/Lawyers/Offices. Multilists source Taxonomy/*. DownloadVCard uses File (Sitecore
       media field; closest to Media Link). Insert options set on Lawyers/Bios for Bio template
-      (silent-write — verify in Content Editor).
+      (silent-write â€” verify in Content Editor).
     templates:
       pageTemplate:
         name: "Bio"
@@ -3220,7 +3782,7 @@ ia:
         path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Bios"
         itemId: "{5DAD4C5C-84CD-471A-80EF-C805570BE79A}"
         insertOptions: ["Bio"]
-        insertOptionsNote: "silent-write — verify __Masters in Content Editor"
+        insertOptionsNote: "silent-write â€” verify __Masters in Content Editor"
     verification:
       checkedAt: "2026-08-04T19:40:00Z"
       passed:
@@ -3244,8 +3806,8 @@ ia:
     siteName: "pillsburylaw"
     notes: >
       Populated 20 attorney Bio items under Home/Lawyers/Bios from public directory listing
-      https://www.pillsburylaw.com/en/lawyers/?v=attorney (A–A surnames). Skipped Consultant
-      Chris Albrecht. Emails are first.last@pillsburylaw.com conventions (not scraped — emails
+      https://www.pillsburylaw.com/en/lawyers/?v=attorney (Aâ€“A surnames). Skipped Consultant
+      Chris Albrecht. Emails are first.last@pillsburylaw.com conventions (not scraped â€” emails
       not exposed in listing). Headshot left empty (no DAM assets). Added 6 Practice Area Tags
       for practices not previously seeded.
     source: "https://www.pillsburylaw.com/en/lawyers/?v=attorney"
@@ -3315,7 +3877,7 @@ ia:
       Populated Headshot Image fields on 18 Bio pages with external Unsplash professional
       portraits (square crop). Left Andrew-V-Alfano and Ata-A-Akiner DAM headshots unchanged.
       BioListing/BioDetail render Unsplash via next/image (unoptimized); DAM via ContentSdkImage.
-      2026-08-05: Edge GraphQL does not return external Image src — added bio-headshots.ts
+      2026-08-05: Edge GraphQL does not return external Image src â€” added bio-headshots.ts
       fallback map (same pattern as blog-listing.taxonomy) so listing + detail always resolve URLs.
     skipped:
       - { name: "Andrew-V-Alfano", reason: "existing Content Hub DAM headshot" }
@@ -3468,7 +4030,7 @@ ia:
       footerSTId: "{5DF38B0D-6C45-44AE-A4CC-1B1B151F06BB}"
       branding:
         title: "Client-focused counsel."
-        copyright: "© 2001–2026 Pillsbury Winthrop Shaw Pittman LLP. Attorney Advertising."
+        copyright: "Â© 2001â€“2026 Pillsbury Winthrop Shaw Pittman LLP. Attorney Advertising."
         linkedIn: "https://www.linkedin.com/company/pillsbury-winthrop-shaw-pittman"
       primaryLinks:
         - { text: "Lawyers", pageId: "{28CDB0B8-594B-4FBE-97E2-8F224740EE79}" }
@@ -3528,7 +4090,7 @@ ia:
         - "Five mega menus Title/Link remapped to Lawyers/Capabilities/Insights/Connect/Contact"
         - "Primary LinkLists remapped to L2/L3 IA pages"
         - "Secondary LinkLists retitled and pointed at Offices/Services/Insights"
-        - "Header SupportLink → Contact; Image 1 TargetUrl → Lawyers"
+        - "Header SupportLink â†’ Contact; Image 1 TargetUrl â†’ Lawyers"
       failed: []
       pendingManual:
         - "Publish Header Partial Design + Header/Data for Edge"
@@ -3553,9 +4115,9 @@ ia:
     totalCreated: 81
     notes: >
       3-level IA from pillsburylaw.com mega-nav + utility. All pages use Services Page template
-      (Detail + image fields). create_page with branch ID created items named "name" — used
+      (Detail + image fields). create_page with branch ID created items named "name" â€” used
       create_content_item with template {B08EC32B-...} instead. Services L3 uses sector/practice
-      categories (not full A–Z index). Top-level Careers utility folded under Lawyers/Careers.
+      categories (not full Aâ€“Z index). Top-level Careers utility folded under Lawyers/Careers.
       Workflow: Draft. Home/Speakers and Home/Video pre-existed and were left alone.
     pages:
       - { displayName: "Lawyers", name: "Lawyers", itemId: "{28CDB0B8-594B-4FBE-97E2-8F224740EE79}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers" }
@@ -3574,7 +4136,7 @@ ia:
         - "Publish new pages for Edge"
         - "Populate image fields and richer Detail content"
         - "Optionally add Services Page to Home insert options / use branch correctly"
-        - "Header nav remapped (see pillsburylaw-header-nav-remap) — publish Header Partial Design"
+        - "Header nav remapped (see pillsburylaw-header-nav-remap) â€” publish Header Partial Design"
 
   - name: "pillsburylaw-saudi-expansion-search-demo"
     status: "complete"
@@ -3590,10 +4152,10 @@ ia:
       create_page failed (field name); used create_content_item with Detail only.
       Search catalog + AI rules updated in examples/pillsbury/src/components/search-results/.
       2026-08-06: Added Global Trade blog post Saudi-Expansion-and-US-Export-Controls; Ata bio
-      related-content cards in BioDetail. Workflow: Draft — publish for Edge when ready.
+      related-content cards in BioDetail. Workflow: Draft â€” publish for Edge when ready.
       2026-08-06: Populated pageTitle/pageHeaderTitle/pageShortTitle/pageSubtitle/pageSummary +
       metadata/og on all 9 Saudi demo Services Pages (MCP silent for inherited fields; verified
-      via get_page_html preview — titles present; publish required for Vercel Edge).
+      via get_page_html preview â€” titles present; publish required for Vercel Edge).
     pages:
       - { displayName: "Expanding into Saudi Arabia: Export Controls 101", name: "Expanding-into-Saudi-Arabia-Export-Controls-101", itemId: "{FC3F756B-EF7C-4A68-9CD6-97FD0202EE72}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/Expanding-into-Saudi-Arabia-Export-Controls-101" }
       - { displayName: "MENA Corporate Setup and US Export Compliance", name: "MENA-Corporate-Setup-and-US-Export-Compliance", itemId: "{021363E1-C472-4752-878D-55C455EA8BB5}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance" }
@@ -3607,7 +4169,7 @@ ia:
     verification:
       checkedAt: "2026-08-06T13:30:00Z"
       passed:
-        - "MCP authenticated; webinar item FC3F756B… readable with Detail HTML"
+        - "MCP authenticated; webinar item FC3F756Bâ€¦ readable with Detail HTML"
         - "SearchResults event/podcast icons + CTAs; popular search led by demo question"
         - "Ata bio related-content cards + new Global Trade blog post"
       failed: []
@@ -3624,7 +4186,7 @@ ia:
     notes: >
       MultiPromo datasource for homepage personalization aligned to the Saudi expansion /
       export-control search demo (Ata Akiner journey). Parent + 3 SimplePromo children.
-      Personalization rules not wired — content only per request.
+      Personalization rules not wired â€” content only per request.
     pages:
       - { displayName: "Saudi Expansion Export Controls", name: "Saudi-Expansion-Export-Controls", itemId: "{6B3B01D5-0DCE-4AEB-AC18-44D19977D9F7}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls" }
       - { displayName: "Ata A. Akiner", name: "Ata-A-Akiner", itemId: "{79483B92-D9B9-4494-834B-4FC4E65F4D02}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Saudi-Expansion-Export-Controls/Ata-A-Akiner" }
@@ -3648,7 +4210,7 @@ ia:
     notes: >
       MultiPromo datasource for career-search personalization. Parent + 3 SimplePromo children
       linking to Careers listings (Trade associate DC, Corporate associate NY, Summer Associate).
-      Personalization rules not wired — content only per request.
+      Personalization rules not wired â€” content only per request.
     pages:
       - { displayName: "Career Searches", name: "Career-Searches", itemId: "{021E7ED4-8CE3-4236-969F-E0726DEE0390}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Career-Searches" }
       - { displayName: "Associate International Trade DC", name: "Associate-International-Trade-DC", itemId: "{C91AA520-AE3F-4A0C-B329-EB78BB83B246}", path: "/sitecore/content/pillsbury/pillsburylaw/Data/MultiPromos/Career-Searches/Associate-International-Trade-DC" }
@@ -3679,7 +4241,7 @@ ia:
       AI insight, and Pulse playbook intent careers-find-opening. Canonical ask:
       "I'm looking for a career in international trade. What openings do you have?"
       Code: search-results/data.ts (career lob + bucket), SearchResults CTAs, pulse-demo-playbook.ts,
-      pulse-answer.ts career framing. Careers hub Detail enriched. Workflow: Draft — publish for Edge.
+      pulse-answer.ts career framing. Careers hub Detail enriched. Workflow: Draft â€” publish for Edge.
     pages:
       - { displayName: "Careers", name: "Careers", itemId: "{C30AB91F-550F-4452-8725-5BCCAF1B674B}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers" }
       - { displayName: "Associate International Trade Washington DC", name: "Associate-International-Trade-Washington-DC", itemId: "{F03B5B2C-D343-4C6B-9635-D876CD81150A}", path: "/sitecore/content/pillsbury/pillsburylaw/Home/Lawyers/Careers/Associate-International-Trade-Washington-DC" }
@@ -3785,7 +4347,7 @@ ia:
     notes: "Created 10 manufacturing brand articles with ArticleBody + Page Content / metadata fields. Workflow state: Draft."
     pages:
       - { displayName: "How Rockwell Automation Is Building the Connected Factory", name: "rockwell-connected-factory", itemId: "{15AFBC43-951E-4413-B422-6EDCFBA0174D}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/rockwell-connected-factory" }
-      - { displayName: "Honeywell’s Playbook for Safer, Smarter Process Manufacturing", name: "honeywell-process-safety", itemId: "{6AEDFBBB-56C5-4CDA-A9F4-C6B061AA6CA6}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/honeywell-process-safety" }
+      - { displayName: "Honeywellâ€™s Playbook for Safer, Smarter Process Manufacturing", name: "honeywell-process-safety", itemId: "{6AEDFBBB-56C5-4CDA-A9F4-C6B061AA6CA6}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/honeywell-process-safety" }
       - { displayName: "Emerson DeltaV and the Future of Precision Process Control", name: "emerson-deltav-process-control", itemId: "{6BF04604-B5BB-4148-B343-61A79CD6152C}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/emerson-deltav-process-control" }
       - { displayName: "Schneider Electric EcoStruxure: Energy Efficiency as a Manufacturing Advantage", name: "schneider-ecostruxure-energy-plants", itemId: "{5BCE09BA-495F-499C-8E21-9E93302E16E2}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/schneider-ecostruxure-energy-plants" }
       - { displayName: "ABB Robotics: How Flexible Automation Is Reshaping Production Lines", name: "abb-robotics-flexible-automation", itemId: "{61547577-4FE3-43B8-A204-9C04AF36F15E}", path: "/sitecore/content/manufacturing/dwyeromega/Home/Resources/Featured Articles/abb-robotics-flexible-automation" }
@@ -4341,7 +4903,7 @@ ia:
     siteCollection: "progressive"
     notes: >
       Context component for Knowledge Article.sharedContent Treelist (KnowledgeChunks
-      {BDF6C974-…}). Groups by Shared Content section folder and renders Content Rich Text
+      {BDF6C974-â€¦}). Groups by Shared Content section folder and renders Content Rich Text
       in teal callout cards contrasting KmArticleContent. ComponentQuery expands
       MultilistField targetItems with path + Content. Placed on Final layout headless-main
       below KmArticleContent for all 20 KA items + Knowledge Article page branch $name.
@@ -4488,7 +5050,7 @@ ia:
     notes: >
       Copied Final presentation from Knowledge Article page branch $name
       {DC3CB448-CAE9-4129-ADF8-3EC3C2D7A9C6} onto Knowledge Article items by adding
-      KmArticleContent {F44005E1-…} to headless-main Final layout (via add_component_on_page).
+      KmArticleContent {F44005E1-â€¦} to headless-main Final layout (via add_component_on_page).
       Shared Layout already had a non-editable KmArticleContent instance; Final adds an editable
       headless-main instance matching the page branch. Skipped items that already had headless-main
       (KB-AU-1001-FNOL, KB-AU-1002-CoverageDetermination-FL).
@@ -4546,7 +5108,7 @@ ia:
     notes: >
       Renamed KnowledgeChunks items under Shared Content/*/StateSpecific/{FL,NC,TX}
       by appending -{STATE} to the item name (IDs preserved via authoring renameItem).
-      Example: KB-AU-1001-FNOL → KB-AU-1001-FNOL-FL. Empty state folders under other
+      Example: KB-AU-1001-FNOL â†’ KB-AU-1001-FNOL-FL. Empty state folders under other
       sections had no children. FL/NC/TX folder items themselves were not renamed.
     itemCount: 15
     items:
@@ -4589,7 +5151,7 @@ ia:
     iaSpecPath: "docs/ai/ia/pkm-personal-lines-kb-articles-ia.md"
     notes: >
       Created 4 Progressive SME Knowledge Articles under existing PersonalLines/Auto and
-      PersonalLines/Homeowners (Services Page parents). Populated all KA sections 01–06 plus
+      PersonalLines/Homeowners (Services Page parents). Populated all KA sections 01â€“06 plus
       pageTitle/pageShortTitle/pageHeaderTitle/pageSummary. Added Wind Hail peril taxonomy
       topic {F27BF167-...} for KB-HO-1002. Auto articles have Personal Auto LOB; HO articles
       have Personal Home LOB + Water Damage or Wind Hail peril.
@@ -4599,10 +5161,10 @@ ia:
       - { name: "KB-AU-1001-FNOL", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", hasPurpose: true, lob: "Personal Auto" }
       - { name: "KB-HO-1001-WaterDamage", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", hasPurpose: true, lob: "Personal Home", peril: "Water Damage" }
     items:
-      - { name: "KB-AU-1001-FNOL", kbId: "KB-AU-1001", title: "Personal Auto FNOL — First Notice of Loss Intake", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", parent: "Auto" }
+      - { name: "KB-AU-1001-FNOL", kbId: "KB-AU-1001", title: "Personal Auto FNOL â€” First Notice of Loss Intake", itemId: "{8134326F-FF16-4B77-8D34-9EDB10353DA1}", parent: "Auto" }
       - { name: "KB-AU-1002-CoverageDetermination", kbId: "KB-AU-1002", title: "Personal Auto Coverage Determination", itemId: "{BC70A3A2-56ED-4798-AC9F-A28B7531A205}", parent: "Auto" }
-      - { name: "KB-HO-1001-WaterDamage", kbId: "KB-HO-1001", title: "Homeowners Water Damage — Intake to Mitigation", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", parent: "Homeowners" }
-      - { name: "KB-HO-1002-WindHail", kbId: "KB-HO-1002", title: "Homeowners Wind and Hail — Storm Damage Handling", itemId: "{02878C46-F3A7-4034-A056-9CEBBF9BCA11}", parent: "Homeowners" }
+      - { name: "KB-HO-1001-WaterDamage", kbId: "KB-HO-1001", title: "Homeowners Water Damage â€” Intake to Mitigation", itemId: "{8EB3B901-6561-463B-B09B-012F7EB4FC2D}", parent: "Homeowners" }
+      - { name: "KB-HO-1002-WindHail", kbId: "KB-HO-1002", title: "Homeowners Wind and Hail â€” Storm Damage Handling", itemId: "{02878C46-F3A7-4034-A056-9CEBBF9BCA11}", parent: "Homeowners" }
     verification:
       checkedAt: "2026-07-30T19:55:00Z"
       passed:
@@ -4626,13 +5188,13 @@ ia:
     itemCount: 5
     notes: >
       Five Progressive SME Knowledge Articles across CommercialAuto (2), CommercialProperty (1),
-      Personal Auto (1), and Homeowners (1). Full sections 01–06 populated; LOB/Peril taxonomy set.
+      Personal Auto (1), and Homeowners (1). Full sections 01â€“06 populated; LOB/Peril taxonomy set.
       Commercial articles use Knowledge Domain "Commercial Claims"; personal use Personal Auto / Personal Home.
     items:
-      - { name: "KB-CA-1001-CommercialAutoFNOL", kbId: "KB-CA-1001", title: "Commercial Auto FNOL — Business Vehicle Intake", itemId: "{D99BB2BD-2AAF-4742-8620-905CCB3892C2}", parent: "CommercialAuto", lob: "Commercial Claims" }
-      - { name: "KB-CA-1002-HiredNonOwnedAuto", kbId: "KB-CA-1002", title: "Hired and Non-Owned Auto — Coverage Triage", itemId: "{6E6F8315-B910-48D9-BCD7-7CC196610CA5}", parent: "CommercialAuto", lob: "Commercial Claims" }
-      - { name: "KB-CP-1001-FireLoss", kbId: "KB-CP-1001", title: "Commercial Property Fire — Intake to Mitigation", itemId: "{8334CBA5-15F1-476D-9944-CD90BB701C76}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Fire" }
-      - { name: "KB-AU-1003-VehicleTheft", kbId: "KB-AU-1003", title: "Personal Auto Vehicle Theft — Recovery and Total Loss", itemId: "{DD437660-8828-4608-9B1D-06C6B0E73559}", parent: "Auto", lob: "Personal Auto", peril: "Theft" }
+      - { name: "KB-CA-1001-CommercialAutoFNOL", kbId: "KB-CA-1001", title: "Commercial Auto FNOL â€” Business Vehicle Intake", itemId: "{D99BB2BD-2AAF-4742-8620-905CCB3892C2}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CA-1002-HiredNonOwnedAuto", kbId: "KB-CA-1002", title: "Hired and Non-Owned Auto â€” Coverage Triage", itemId: "{6E6F8315-B910-48D9-BCD7-7CC196610CA5}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CP-1001-FireLoss", kbId: "KB-CP-1001", title: "Commercial Property Fire â€” Intake to Mitigation", itemId: "{8334CBA5-15F1-476D-9944-CD90BB701C76}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Fire" }
+      - { name: "KB-AU-1003-VehicleTheft", kbId: "KB-AU-1003", title: "Personal Auto Vehicle Theft â€” Recovery and Total Loss", itemId: "{DD437660-8828-4608-9B1D-06C6B0E73559}", parent: "Auto", lob: "Personal Auto", peril: "Theft" }
       - { name: "KB-HO-1003-KitchenFireSmoke", kbId: "KB-HO-1003", title: "Homeowners Kitchen Fire and Smoke Damage", itemId: "{13DA39AD-0778-4BEB-BECA-421106229DA0}", parent: "Homeowners", lob: "Personal Home", peril: "Fire|Smoke Damage" }
     verification:
       checkedAt: "2026-08-02T13:35:00Z"
@@ -4657,15 +5219,15 @@ ia:
     notes: >
       Ten additional Progressive SME Knowledge Articles spread across the four main LOB folders:
       CommercialAuto (3), CommercialProperty (3), Personal Auto (2), Homeowners (2).
-      Full sections 01–06 populated; LOB/Peril taxonomy set where applicable.
+      Full sections 01â€“06 populated; LOB/Peril taxonomy set where applicable.
     items:
-      - { name: "KB-CA-1003-LiabilityTriage", kbId: "KB-CA-1003", title: "Commercial Auto Liability — Third-Party Injury and PD", itemId: "{6603D085-B8AD-44B1-8656-FE5F26C41DCE}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CA-1003-LiabilityTriage", kbId: "KB-CA-1003", title: "Commercial Auto Liability â€” Third-Party Injury and PD", itemId: "{6603D085-B8AD-44B1-8656-FE5F26C41DCE}", parent: "CommercialAuto", lob: "Commercial Claims" }
       - { name: "KB-CA-1004-GlassComprehensive", kbId: "KB-CA-1004", title: "Commercial Auto Glass and Comprehensive Damage", itemId: "{C102B50B-3537-4BDB-8E62-2CFA6BCA45AC}", parent: "CommercialAuto", lob: "Commercial Claims" }
-      - { name: "KB-CA-1005-ToolsCargo", kbId: "KB-CA-1005", title: "Commercial Auto — Tools, Equipment, and Cargo After Collision", itemId: "{3E173CFE-F7A6-4CCE-9D44-64B3EA20DA76}", parent: "CommercialAuto", lob: "Commercial Claims" }
-      - { name: "KB-CP-1002-BusinessInterruption", kbId: "KB-CP-1002", title: "Commercial Property Business Interruption — After a Covered Loss", itemId: "{FC8F587F-0354-452B-AE90-E8FEE418C90B}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Business Interruption" }
+      - { name: "KB-CA-1005-ToolsCargo", kbId: "KB-CA-1005", title: "Commercial Auto â€” Tools, Equipment, and Cargo After Collision", itemId: "{3E173CFE-F7A6-4CCE-9D44-64B3EA20DA76}", parent: "CommercialAuto", lob: "Commercial Claims" }
+      - { name: "KB-CP-1002-BusinessInterruption", kbId: "KB-CP-1002", title: "Commercial Property Business Interruption â€” After a Covered Loss", itemId: "{FC8F587F-0354-452B-AE90-E8FEE418C90B}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Business Interruption" }
       - { name: "KB-CP-1003-WaterSprinkler", kbId: "KB-CP-1003", title: "Commercial Property Water and Sprinkler Damage", itemId: "{0CE5A1F4-120B-4B41-9212-DAFFD1B5B92C}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Water Damage" }
-      - { name: "KB-CP-1004-WindHail", kbId: "KB-CP-1004", title: "Commercial Property Wind and Hail — Roof and Exterior", itemId: "{65ED85FB-5915-4E87-B7BB-F46CD2C254F4}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Wind Hail" }
-      - { name: "KB-AU-1004-GlassClaims", kbId: "KB-AU-1004", title: "Personal Auto Glass Claims — ADAS and Network Handling", itemId: "{E35EE802-3082-41D5-B10D-73A1154CA238}", parent: "Auto", lob: "Personal Auto" }
+      - { name: "KB-CP-1004-WindHail", kbId: "KB-CP-1004", title: "Commercial Property Wind and Hail â€” Roof and Exterior", itemId: "{65ED85FB-5915-4E87-B7BB-F46CD2C254F4}", parent: "CommercialProperty", lob: "Commercial Claims", peril: "Wind Hail" }
+      - { name: "KB-AU-1004-GlassClaims", kbId: "KB-AU-1004", title: "Personal Auto Glass Claims â€” ADAS and Network Handling", itemId: "{E35EE802-3082-41D5-B10D-73A1154CA238}", parent: "Auto", lob: "Personal Auto" }
       - { name: "KB-AU-1005-UMUIMIntake", kbId: "KB-AU-1005", title: "Personal Auto Uninsured and Underinsured Motorist Intake", itemId: "{533E1C5F-A219-491D-BA13-F9EB069E3753}", parent: "Auto", lob: "Personal Auto" }
       - { name: "KB-HO-1004-TheftBurglary", kbId: "KB-HO-1004", title: "Homeowners Theft and Burglary Claims", itemId: "{498591A1-5845-44D9-B5EA-97C6BC2A9966}", parent: "Homeowners", lob: "Personal Home", peril: "Theft" }
       - { name: "KB-HO-1005-FallenTreeWind", kbId: "KB-HO-1005", title: "Homeowners Fallen Tree and Wind Damage", itemId: "{DE28564F-C405-4461-8793-A2923DF67115}", parent: "Homeowners", lob: "Personal Home", peril: "Wind Hail" }
@@ -4696,8 +5258,8 @@ ia:
     iaSpecPath: "docs/ai/ia/pkm-home-shared-content-ia.md"
     notes: >
       Shared Content under Home with 10 numbered section folders. Nested structure reduced to
-      StateSpecific (FL/NC/TX) only — National, LOBSpecific, and PerilSpecific removed from all
-      sections 01–09. 10-FAQs was missing and recreated as {72305A56-02E1-4D85-AC58-EB881E221CB3}
+      StateSpecific (FL/NC/TX) only â€” National, LOBSpecific, and PerilSpecific removed from all
+      sections 01â€“09. 10-FAQs was missing and recreated as {72305A56-02E1-4D85-AC58-EB881E221CB3}
       with StateSpecific/FL/NC/TX.
     updatedAt: "2026-07-31T01:30:00Z"
     nestedStructurePerSection:
@@ -4717,7 +5279,7 @@ ia:
     verification:
       checkedAt: "2026-07-31T01:30:00Z"
       passed:
-        - "Deleted National/LOBSpecific/PerilSpecific under sections 01–09"
+        - "Deleted National/LOBSpecific/PerilSpecific under sections 01â€“09"
         - "StateSpecific retained under those sections"
         - "10-FAQs recreated with StateSpecific/FL/NC/TX only"
       failed: []
@@ -4803,7 +5365,7 @@ ia:
     notes: >
       Fully dynamic selection from Home/Knowledge Articles via Edge GraphQL (no FeaturedArticles).
       ListingMode Droplist: Recently Updated (updatedDate), Recently Viewed (localStorage history),
-      Favorites (AverageRating then PositiveCount — community top-rated). MaxItems caps results.
+      Favorites (AverageRating then PositiveCount â€” community top-rated). MaxItems caps results.
       Headless variants Default (Card), ListView, DetailView.
     react:
       filePath: "src/components/knowledge-listing/KnowledgeListing.tsx"
@@ -5024,3 +5586,4 @@ ia:
         - "Append {8278F36C-8492-4641-A401-9C19AA69D08A} to Available Renderings/Page Content (silent-read)"
         - "Verify Datasource Template/Location in CE (silent-write)"
         - "Publish BlogListing rendering + Insights/Blogs page"
+

@@ -20,6 +20,7 @@ import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
 import * as topiclistingprops from 'src/components/topic-listing/topic-listing.props';
 import * as themeproviderdev from 'src/components/theme-provider/theme-provider.dev';
+import * as ApplySiteTheme from 'src/components/theme/ApplySiteTheme';
 import * as TextBannerTextTopdev from 'src/components/text-banner/TextBannerTextTop.dev';
 import * as TextBannerDefaultdev from 'src/components/text-banner/TextBannerDefault.dev';
 import * as TextBannerBlueTitleRightdev from 'src/components/text-banner/TextBannerBlueTitleRight.dev';
@@ -306,6 +307,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['TopicItem', { ...TopicItemdev }],
   ['topic-listing', { ...topiclistingprops }],
   ['theme-provider', { ...themeproviderdev }],
+  ['ApplySiteTheme', { ...ApplySiteTheme, componentType: 'client' }],
   ['TextBannerTextTop', { ...TextBannerTextTopdev }],
   ['TextBannerDefault', { ...TextBannerDefaultdev }],
   ['TextBannerBlueTitleRight', { ...TextBannerBlueTitleRightdev }],

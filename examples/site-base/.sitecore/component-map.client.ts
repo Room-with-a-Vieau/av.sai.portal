@@ -11,6 +11,7 @@ import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
 import * as themeproviderdev from 'src/components/theme-provider/theme-provider.dev';
+import * as ApplySiteTheme from 'src/components/theme/ApplySiteTheme';
 import * as TextBannerTextTopdev from 'src/components/text-banner/TextBannerTextTop.dev';
 import * as TextBannerDefaultdev from 'src/components/text-banner/TextBannerDefault.dev';
 import * as TextBannerBlueTitleRightdev from 'src/components/text-banner/TextBannerBlueTitleRight.dev';
@@ -132,6 +133,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BioDetail', { ...BioDetail }],
   ['BlogListing', { ...BlogListing }],
   ['theme-provider', { ...themeproviderdev }],
+  ['ApplySiteTheme', { ...ApplySiteTheme }],
   ['TextBannerTextTop', { ...TextBannerTextTopdev }],
   ['TextBannerDefault', { ...TextBannerDefaultdev }],
   ['TextBannerBlueTitleRight', { ...TextBannerBlueTitleRightdev }],
