@@ -7,6 +7,7 @@ import * as zipcodemodaldev from 'src/components/zipcode-modal/zipcode-modal.dev
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
 import * as VariantContent from 'src/components/variant-content/VariantContent';
 import * as ProductDetail from 'src/components/uiim/products/ProductDetail';
+import * as ProductCarousel from 'src/components/uiim/products/ProductCarousel';
 import * as CareerListing from 'src/components/uiim/lawyers/CareerListing';
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
@@ -131,6 +132,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['VerticalImageAccordion', { ...VerticalImageAccordion }],
   ['VariantContent', { ...VariantContent }],
   ['ProductDetail', { ...ProductDetail }],
+  ['ProductCarousel', { ...ProductCarousel }],
   ['CareerListing', { ...CareerListing }],
   ['BioListing', { ...BioListing }],
   ['BioDetail', { ...BioDetail }],

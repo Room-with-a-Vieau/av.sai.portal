@@ -13,9 +13,11 @@ import {
   type Field as SitecoreField,
 } from '@sitecore-content-sdk/nextjs';
 import { FileText } from 'lucide-react';
+import NextImage from 'next/image';
 
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
+import { extractImageSrc } from '@/lib/sitecore-image-field';
 
 import type { ProductDetailFields, ProductDetailProps } from './product-detail.props';
 
@@ -28,12 +30,61 @@ function richHasContent(field?: RichTextField | null): boolean {
   return field.value.replace(/<[^>]*>/g, '').trim().length > 0;
 }
 
-function imageHasSrc(field?: ImageField | null): boolean {
-  return Boolean(field?.value?.src);
-}
-
 function linkHasHref(field?: LinkField | null): boolean {
   return Boolean(field?.value?.href);
+}
+
+function resolveProductImage(options: {
+  imageField?: ImageField | null;
+  urlField?: SitecoreField<string> | null;
+  altFallback: string;
+}): { src: string; alt: string; imageField?: ImageField } {
+  const fromImage = extractImageSrc(options.imageField);
+  const fromUrl = textValue(options.urlField);
+  const src = fromImage || fromUrl;
+  const alt =
+    (typeof options.imageField?.value?.alt === 'string' && options.imageField.value.alt.trim()) ||
+    options.altFallback;
+  return { src, alt, imageField: options.imageField || undefined };
+}
+
+function ProductImage({
+  src,
+  alt,
+  imageField,
+  isEditing,
+  className,
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  imageField?: ImageField;
+  isEditing: boolean;
+  className?: string;
+  priority?: boolean;
+}) {
+  // Prefer resolved public URL (Image URL fields / extractImageSrc). Sitecore Image fields with
+  // external-only XML often have empty value.src in layout/Pages — ContentSdkImage then shows a grey placeholder.
+  if (src) {
+    const isQuanex = /quanex\.com/i.test(src);
+    return (
+      <NextImage
+        src={src}
+        alt={alt}
+        width={605}
+        height={380}
+        className={className}
+        unoptimized={isQuanex}
+        priority={priority}
+      />
+    );
+  }
+
+  if (isEditing && imageField) {
+    return <ContentSdkImage field={imageField} className={className} />;
+  }
+
+  return null;
 }
 
 function ProductDetailEmpty(): React.JSX.Element {
@@ -82,9 +133,18 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
   const descriptionField = richHasContent(fields.Description)
     ? fields.Description
     : fields.Detail;
-  const mainImage = fields.image;
-  const secondaryImage = fields.ImageSecondary;
   const specSheet = fields.SpecSheetLink;
+
+  const primaryImage = resolveProductImage({
+    imageField: fields.image,
+    urlField: fields.ImageUrl,
+    altFallback: titleText || 'Product image',
+  });
+  const secondaryImage = resolveProductImage({
+    imageField: fields.ImageSecondary,
+    urlField: fields.ImageSecondaryUrl,
+    altFallback: `${titleText || 'Product'} alternate view`,
+  });
 
   const hasContent =
     Boolean(titleText) ||
@@ -93,7 +153,8 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
     richHasContent(fields.TechnicalData) ||
     richHasContent(fields.StylesAvailable) ||
     richHasContent(fields.Benefits) ||
-    imageHasSrc(mainImage) ||
+    Boolean(primaryImage.src) ||
+    Boolean(secondaryImage.src) ||
     linkHasHref(specSheet);
 
   if (!hasContent && !isEditing) {
@@ -101,6 +162,10 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
   }
 
   const sectionId = params?.RenderingIdentifier || 'product-detail';
+  const showPrimary =
+    Boolean(primaryImage.src) || (isEditing && Boolean(primaryImage.imageField));
+  const showSecondary =
+    Boolean(secondaryImage.src) || (isEditing && Boolean(secondaryImage.imageField));
 
   return (
     <article
@@ -147,18 +212,25 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
           </div>
 
           <div className="space-y-4">
-            {(imageHasSrc(mainImage) || isEditing) && mainImage && (
+            {showPrimary && (
               <div className="bg-muted/30 overflow-hidden rounded-2xl border border-border">
-                <ContentSdkImage
-                  field={mainImage}
+                <ProductImage
+                  src={primaryImage.src}
+                  alt={primaryImage.alt}
+                  imageField={primaryImage.imageField}
+                  isEditing={Boolean(isEditing)}
                   className="h-auto w-full object-cover"
+                  priority
                 />
               </div>
             )}
-            {(imageHasSrc(secondaryImage) || isEditing) && secondaryImage && (
+            {showSecondary && (
               <div className="bg-muted/20 max-w-[12rem] overflow-hidden rounded-xl border border-border">
-                <ContentSdkImage
-                  field={secondaryImage}
+                <ProductImage
+                  src={secondaryImage.src}
+                  alt={secondaryImage.alt}
+                  imageField={secondaryImage.imageField}
+                  isEditing={Boolean(isEditing)}
                   className="h-auto w-full object-cover"
                 />
               </div>

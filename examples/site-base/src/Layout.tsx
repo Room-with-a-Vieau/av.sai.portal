@@ -65,6 +65,8 @@ export interface RouteFields {
   CategoryLabel?: Field;
   SpecSheetLink?: LinkField;
   ImageSecondary?: ImageField;
+  ImageUrl?: Field;
+  ImageSecondaryUrl?: Field;
   Description?: Field;
   TechnicalData?: Field;
   StylesAvailable?: Field;

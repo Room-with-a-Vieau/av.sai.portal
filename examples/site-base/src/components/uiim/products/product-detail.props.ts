@@ -14,6 +14,9 @@ export type ProductDetailFields = {
   SpecSheetLink?: LinkField;
   image?: ImageField;
   ImageSecondary?: ImageField;
+  /** Plain public URL — preferred for external images (layout often drops Image-field src). */
+  ImageUrl?: Field<string>;
+  ImageSecondaryUrl?: Field<string>;
   Description?: RichTextField;
   Detail?: RichTextField;
   TechnicalData?: RichTextField;

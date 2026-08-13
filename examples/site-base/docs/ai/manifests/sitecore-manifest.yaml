@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-13T19:45:00Z"
+lastUpdatedAt: "2026-08-13T21:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5980,7 +5980,10 @@ ia:
       variants:
         - { name: "Default", itemId: "{6DCB53D7-E134-4F33-B8D7-31386ABCB4AB}" }
     sampleProducts:
-      imageSource: "public quanex.com wp-content URLs (not DAM/Content Hub)"
+      imageSource: "public quanex.com URLs via ImageUrl / ImageSecondaryUrl Single-Line Text (layout drops Image-field src for external-only XML)"
+      imageUrlFields:
+        - { name: "ImageUrl", itemId: "{211D45C2-39F7-430F-8C81-14D8BA310A0F}" }
+        - { name: "ImageSecondaryUrl", itemId: "{D004B569-75AA-446D-8E28-E6D0DF434626}" }
       insulatingGlassSpacers:
         parentPath: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers"
         parentId: "{9726E4D1-8FCD-4DD6-B5E9-BB4467655176}"
@@ -6101,4 +6104,297 @@ ia:
         - "Publish the 9 sample Product Detail Page items (and related template/rendering if not already) for Edge"
         - "Optional: remove inherited ArticleContent from PDP Final layouts if ProductDetail alone is desired"
         - "Optional: replace external quanex.com image URLs with DAM assets"
+
+  - name: "ProductCarousel"
+    kind: "list"
+    category: "Products"
+    status: "complete"
+    createdAt: "2026-08-13T21:00:00Z"
+    updatedAt: "2026-08-13T21:30:00Z"
+    siteName: "quanex"
+    siteCollection: "quanex"
+    notes:
+      - "2026-08-13: List-style carousel; authors pick Product Detail Page items via Products Treelist (not child datasource items)."
+      - "Template/fields/folder/params created earlier; this pass finished HorizonDatasourceGrouping, folder Masters, Data folders, samples, JSON Rendering + ComponentQuery, variants, Available Renderings, React."
+      - "ComponentQuery expands Products MultilistField targetItems with PDP fields (pageTitle, CategoryLabel, Description, ImageUrl, etc.). Prefer ImageUrl over Image XML."
+      - "Available Renderings reconstructed from get_allowed_comps_by_ph then appended ProductCarousel on quanex (76), era (46), amesburytruth (46)."
+      - "Sample Products Treelist points at quanex PDP samples (ERA/AT have no Home/Products tree yet)."
+    react:
+      filePath: "src/components/uiim/products/ProductCarousel.tsx"
+      componentMapKey: "ProductCarousel"
+      propsShape: "graphql-datasource"
+      variants: ["Default", "ProductStrip"]
+      dataStrategy: "ComponentQuery (Title/BackgroundImageUrl/CtaLabel/ShowOptionsHint + Products Treelist targetItems)"
+    templates:
+      datasource:
+        name: "ProductCarousel"
+        path: "/sitecore/templates/Project/quanex/Components/Products/ProductCarousel"
+        itemId: "{149B23B5-B7C2-434E-826F-171AA7700BA5}"
+        sectionName: "Data"
+        sectionId: "{E2954F59-F835-4EAA-9ADB-8DCFBD75B4A9}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{3AA5AB24-0C0C-4CDB-94E7-F5E106C51D2E}" }
+          - { name: "BackgroundImageUrl", type: "Single-Line Text", itemId: "{BACE846D-7EAB-49B6-9961-9B82A2F9C9BD}" }
+          - { name: "CtaLabel", type: "Single-Line Text", itemId: "{FDC10F8A-7DF8-492C-94F4-FE1CBE80B1E7}", default: "Learn More" }
+          - { name: "ShowOptionsHint", type: "Checkbox", itemId: "{8D3EECE7-48D3-4F23-8DE7-1AB8BD74ACD1}" }
+          - { name: "Products", type: "Treelist", itemId: "{CB418CCB-EDAA-4D6C-8A28-0D62CD901331}", source: "query:$site/Home/Products&IncludeTemplatesForSelection=Product Detail Page" }
+        baseTemplatesSet: true
+        horizonDatasourceGrouping: "{D0F6BE14-2A2D-4C56-ACB5-80CAA573B8E2}"
+        standardValues:
+          itemId: "{617009B0-C639-4151-B61A-673A2504EC95}"
+          linked: true
+      folder:
+        name: "ProductCarousel Folder"
+        path: "/sitecore/templates/Project/quanex/Folders/ProductCarousel Folder"
+        itemId: "{B569B963-13F7-411B-A9E9-430BCF77B2C4}"
+        standardValues:
+          itemId: "{089C5F24-99DB-4F00-902D-104DA349E7A6}"
+          linked: true
+          masters: ["ProductCarousel"]
+      renderingParams:
+        name: "ProductCarousel"
+        path: "/sitecore/templates/Project/quanex/Rendering Parameters/Products/ProductCarousel"
+        itemId: "{BFDA8791-D822-4A6B-BC8A-56A5B3CE504B}"
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{DC966E54-DDAF-4725-A399-F12149CA56F9}"
+          linked: true
+    datasourceFolders:
+      - { siteName: "quanex", name: "ProductCarousels", itemId: "{97F77DC4-9147-4E4D-9A82-1C73CDAF3241}", path: "/sitecore/content/quanex/quanex/Data/ProductCarousels", insertOptionsSet: true }
+      - { siteName: "era", name: "ProductCarousels", itemId: "{8E4CCAF5-BB55-4DA0-A4BB-F993E69426E2}", path: "/sitecore/content/quanex/era/Data/ProductCarousels", insertOptionsSet: true }
+      - { siteName: "amesburytruth", name: "ProductCarousels", itemId: "{FAAC946D-966A-4C05-A95D-3EA40F40513D}", path: "/sitecore/content/quanex/amesburytruth/Data/ProductCarousels", insertOptionsSet: true }
+    exampleItems:
+      - name: "Featured Products"
+        itemId: "{E3FBDA31-8F0E-430D-8765-4F5E73DC788B}"
+        path: "/sitecore/content/quanex/quanex/Data/ProductCarousels/Featured Products"
+        siteName: "quanex"
+      - name: "Popular Products"
+        itemId: "{62D10A21-DBA6-4F54-8152-9E73356F759F}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/Popular Products"
+        siteName: "era"
+        note: "ShowOptionsHint=1; CtaLabel=More Information; ProductStrip variant"
+      - name: "AmesburyTruth Highlights"
+        itemId: "{35E18643-B9C6-473D-80AE-F2E910D5A562}"
+        path: "/sitecore/content/quanex/amesburytruth/Data/ProductCarousels/AmesburyTruth Highlights"
+        siteName: "amesburytruth"
+        note: "BackgroundImageUrl set; Default/Highlights variant"
+    rendering:
+      name: "ProductCarousel"
+      path: "/sitecore/layout/Renderings/Project/quanex/Products/ProductCarousel"
+      itemId: "{4A6F68B9-709B-4AA8-9444-B695EFDC7180}"
+      componentName: "ProductCarousel"
+      datasourceRequired: true
+      useComponentQuery: true
+      parametersTemplateId: "{BFDA8791-D822-4A6B-BC8A-56A5B3CE504B}"
+      datasourceTemplatePath: "/sitecore/templates/Project/quanex/Components/Products/ProductCarousel"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='ProductCarousel Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='ProductCarousel Folder']"
+      addFieldEditorButton: "1"
+      componentQuery: "query ProductCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"Title\") { jsonValue } backgroundImageUrl: field(name: \"BackgroundImageUrl\") { jsonValue } ctaLabel: field(name: \"CtaLabel\") { jsonValue } showOptionsHint: field(name: \"ShowOptionsHint\") { jsonValue } products: field(name: \"Products\") { ... on MultilistField { targetItems { id name path url { path } pageTitle: field(name: \"pageTitle\") { jsonValue } pageHeaderTitle: field(name: \"pageHeaderTitle\") { jsonValue } categoryLabel: field(name: \"CategoryLabel\") { jsonValue } description: field(name: \"Description\") { jsonValue } imageUrl: field(name: \"ImageUrl\") { jsonValue } imageSecondaryUrl: field(name: \"ImageSecondaryUrl\") { jsonValue } specSheetLink: field(name: \"SpecSheetLink\") { jsonValue } } } } } }"
+      registeredInAvailableRenderings: true
+    headlessVariants:
+      - siteName: "quanex"
+        containerPath: "/sitecore/content/quanex/quanex/Presentation/Headless Variants/ProductCarousel"
+        containerId: "{44F15966-31EC-46C7-92FE-E99C977510BF}"
+        variants:
+          - { name: "Default", itemId: "{B664B490-0F64-4BD4-890D-0CE86C7CCBC6}" }
+          - { name: "ProductStrip", itemId: "{6EA1A1FA-65D0-4A23-B7A8-7BDFF4230C3A}" }
+      - siteName: "era"
+        containerPath: "/sitecore/content/quanex/era/Presentation/Headless Variants/ProductCarousel"
+        containerId: "{75574F79-FC00-4FC6-A973-A848DEC3EEAD}"
+        variants:
+          - { name: "Default", itemId: "{89285DA9-AA2A-4AA1-A039-5800BF1A191F}" }
+          - { name: "ProductStrip", itemId: "{A0EB8358-8100-4708-907B-904FFD1781CD}" }
+      - siteName: "amesburytruth"
+        containerPath: "/sitecore/content/quanex/amesburytruth/Presentation/Headless Variants/ProductCarousel"
+        containerId: "{F236E62A-5E5C-4B11-B534-E75AB617A584}"
+        variants:
+          - { name: "Default", itemId: "{71BA90C6-4968-4A7B-920F-C860C8AF110C}" }
+          - { name: "ProductStrip", itemId: "{F0F0A4C0-D817-417E-BF36-379F30313E44}" }
+    availableRenderingsUpdated:
+      - { siteName: "quanex", itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}", renderingCount: 76 }
+      - { siteName: "era", itemId: "{5B8490CD-34BA-445E-92E2-A134CC48127D}", renderingCount: 46 }
+      - { siteName: "amesburytruth", itemId: "{A2064EC2-C155-41C6-BF47-8123D4016FBE}", renderingCount: 46 }
+    codeChanges:
+      - "src/components/uiim/products/ProductCarousel.tsx"
+      - "src/components/uiim/products/product-carousel.props.ts"
+      - "src/__tests__/product-carousel/ProductCarousel.test.tsx"
+    verification:
+      checkedAt: "2026-08-13T21:30:00Z"
+      passed:
+        - "HorizonDatasourceGrouping on ProductCarousel template base"
+        - "ProductCarousels folders on quanex/era/amesburytruth"
+        - "Sample datasources AT Highlights + ERA Popular Products + quanex Featured Products"
+        - "JSON Rendering ProductCarousel with ComponentQuery + Parameters Template"
+        - "get_component confirms datasource template/location/fields"
+        - "Default + ProductStrip variants on quanex/era/amesburytruth"
+        - "Available Renderings appended on quanex/era/amesburytruth (silent-write)"
+        - "React Default + ProductStrip exports + 4 unit tests passed"
+      failed: []
+      pendingManual:
+        - "Confirm __Masters on ProductCarousel Folder SV + folder instances in CE (silent-write)"
+        - "Confirm Datasource Template/Location on rendering in CE (silent-write; get_component OK)"
+        - "Confirm Available Renderings Raw Values include {4A6F68B9-709B-4AA8-9444-B695EFDC7180} on all 3 sites"
+        - "Publish ProductCarousel rendering, templates, Data/ProductCarousels, variants for Edge"
+        - "Place on ERA Home (ProductStrip) and AT Home (Default) with sample datasources"
+        - "Create Home/Products trees on ERA/AT (or adjust Treelist source) so authors can pick site-local PDPs"
+        - "Component map regenerates on npm run build/dev — verify ProductCarousel key present"
+        - "2026-08-13: ERA/AT now have 10 PDPs each under IA product-line folders — retarget ProductCarousel Treelists to site-local PDPs"
+
+  - name: "EraAmesburyTruthProductDetailPages"
+    kind: "content"
+    category: "Products"
+    status: "complete"
+    createdAt: "2026-08-13T21:35:00Z"
+    updatedAt: "2026-08-13T21:45:00Z"
+    siteCollection: "quanex"
+    notes:
+      - "2026-08-13: Created 20 Product Detail Pages (10 era + 10 amesburytruth) under existing IA product-line folders (not a new Home/Products tree)."
+      - "Template Product Detail Page {7629F514-E156-4543-ADC6-051453441B33}; ImageUrl/ImageSecondaryUrl Single-Line Text (not Image XML)."
+      - "ProductDetail rendering {9AFBB222-DFDC-400D-9385-E50BA119B0C0} placed on Final layout headless-main for all 20."
+      - "pageTitle/pageHeaderTitle not writable via MCP (Cannot find field) — item Display Name used as title; set pageHeaderTitle in CE if needed."
+      - "Some pages may show duplicate ProductDetail if Page Design/SV already injects one (shared rendering instance id 5c1c1af6…) — remove page-level duplicate in CE if observed."
+      - "Draft OK; publish all 20 PDPs for Edge."
+    amesburytruth:
+      siteName: "amesburytruth"
+      homeId: "{A57ED898-AA1D-46E6-B7CF-7C7804688EC8}"
+      items:
+        - name: "Maxim HP Hinge"
+          itemId: "{46A0D438-64A3-444B-AFF3-0DC4F96F7C93}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Hinges/Maxim HP Hinge"
+          title: "Maxim HP Hinge"
+          categoryLabel: "HINGES"
+          imageUrl: "https://www.amesburytruth.com/images/products/Maxim%20HP%20Casement%20Hinge_clear%20bkgr,%20no%20shadow1.png"
+        - name: "P3000 Multi-Point Lock"
+          itemId: "{8975098D-C541-48D9-A3BD-9BF69CBBA739}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Locks/P3000 Multi-Point Lock"
+          title: "P3000 Multi-Point Lock"
+          categoryLabel: "LOCKS"
+          imageUrl: "https://www.amesburytruth.com/images/products/674530021_GearBox_6.png"
+        - name: "Positive Action Lock 1965 Series"
+          itemId: "{FA06DC63-6D5F-410B-92F9-F13F8CFFFAF5}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Locks/Positive Action Lock 1965 Series"
+          title: "Positive Action Lock 19.65 Series"
+          categoryLabel: "LOCKS"
+          imageUrl: "https://www.amesburytruth.com/images/products/19.65%20Base%20Assy_PAL%20Push%20System_v2.png"
+          note: "Item name uses 1965 (no period); display title in Description/CE can use 19.65"
+        - name: "SafeGard 2"
+          itemId: "{4A22EEAB-C2F3-4EDE-85F4-38AEA2A9AC59}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/Safety Products/SafeGard 2"
+          title: "SafeGard 2"
+          categoryLabel: "SAFETY"
+          imageUrl: "https://www.amesburytruth.com/images/products/SafeGard2_from%20GBA%2024%20window_450px%20wide.png"
+        - name: "PowerLink System"
+          itemId: "{BFFCAB72-682F-4CB4-82E7-73651382DE66}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Casement Awning/PowerLink/PowerLink System"
+          title: "PowerLink"
+          categoryLabel: "OPERATORS"
+          imageUrl: "https://www.amesburytruth.com/images/products/PowerLink%20Rendering1.jpg"
+        - name: "Constant Force Balance"
+          itemId: "{6E6AFB21-ED74-425E-A69D-B78F05B862C3}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Balances/Constant Force Balance"
+          title: "Constant Force Balance"
+          categoryLabel: "BALANCES"
+          imageUrl: "https://www.amesburytruth.com/images/products/s_767-102318-50426.png"
+        - name: "Sliding Window Roller"
+          itemId: "{C6D24181-4676-45CE-B9E1-71EE96FC3F49}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Window Hardware/Hung Sliding/Rollers/Sliding Window Roller"
+          title: "Sliding Window Roller"
+          categoryLabel: "ROLLERS"
+          imageUrl: "https://www.amesburytruth.com/images/products/s_650.jpg"
+        - name: "Regency 600 Handle Set"
+          itemId: "{ACF1FAC8-7289-4B9B-B193-3EB714858E85}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Door Hardware/Hinged/Handle Sets/Regency 600 Handle Set"
+          title: "Regency 600 Handle Set"
+          categoryLabel: "HANDLE SETS"
+          imageUrl: "https://www.amesburytruth.com/images/products/s_Regency600%2012%20in%20Hinged%20Handle%20int%20and%20ext.png"
+        - name: "Extruded Pile Weatherseal"
+          itemId: "{8A084DAB-D735-4C58-9076-2017AB53456A}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Weatherseals/Pile/Extruded Pile/Extruded Pile Weatherseal"
+          title: "Extruded Pile Weatherseal"
+          categoryLabel: "WEATHERSEALS"
+          imageUrl: "https://www.amesburytruth.com/images/products/extruded-pile-configurator/flatback-iso_3b.jpg"
+        - name: "Custom Engineered Extrusion"
+          itemId: "{DE453CF3-F33B-4AA9-8DD0-D42E7AE25CF9}"
+          path: "/sitecore/content/quanex/amesburytruth/Home/Extrusions/Custom/Custom Engineered Extrusion"
+          title: "Custom Engineered Extrusion"
+          categoryLabel: "EXTRUSIONS"
+          imageUrl: "https://www.amesburytruth.com/images/products/CNF%20Custom%20Profile_Alt.png"
+    era:
+      siteName: "era"
+      homeId: "{69A414F6-9E12-48D6-92C1-215609517A83}"
+      items:
+        - name: "Classic Flag Hinge for PVCu Doors"
+          itemId: "{A32E200C-94D6-405B-8CCE-5B28DF2A19BE}"
+          path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Door Hinges/Classic Flag Hinge for PVCu Doors"
+          title: "Classic Flag Hinge for PVCu Doors"
+          categoryLabel: "HINGES"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/11099.jpg"
+        - name: "Architectural Shield TS 008 External Letterplate"
+          itemId: "{205A13A2-BBC9-4BD2-B359-9FE9F94848EB}"
+          path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Letterplates/Architectural Shield TS 008 External Letterplate"
+          title: "Architectural Shield TS 008 External Letterplate"
+          categoryLabel: "LETTERPLATES"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10811.jpg"
+        - name: "Balmoral Sprung Inline Lever Lever Door Handle"
+          itemId: "{C509E605-6BB0-4D3D-AAD6-7FC453AEAE49}"
+          path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Door Handles/Balmoral Sprung Inline Lever Lever Door Handle"
+          title: "Balmoral Sprung Inline Lever Lever Door Handle"
+          categoryLabel: "DOOR HANDLES"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10977.jpg"
+        - name: "Connoisseur Inline Locking Window Handle"
+          itemId: "{0F898B80-ED16-46D0-91D4-B6F26D474E34}"
+          path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Window Handles/Connoisseur Inline Locking Window Handle"
+          title: "Connoisseur Inline Locking Window Handle"
+          categoryLabel: "WINDOW HANDLES"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10011.jpg"
+        - name: "Monkey Tail Key Locking Window Handle Right Hand"
+          itemId: "{F2475D1A-E5F1-4355-817C-FD83AB87989E}"
+          path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Window Handles/Monkey Tail Key Locking Window Handle Right Hand"
+          title: "Monkey Tail Key Locking Window Handle Right Hand"
+          categoryLabel: "WINDOW HANDLES"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10472.jpg"
+        - name: "BS3621 Fortress 5 Lever Mortice Deadlock"
+          itemId: "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}"
+          path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Mortice Locks/BS3621 Fortress 5 Lever Mortice Deadlock"
+          title: "BS3621 Fortress 5 Lever Mortice Deadlock"
+          categoryLabel: "MORTICE LOCKS"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/variant-1500-max/261-61a-shot-05.jpg"
+        - name: "Invincible Euro Cylinder Multi-Point Lock"
+          itemId: "{FBF2801A-D424-408B-8856-50A852EE6624}"
+          path: "/sitecore/content/quanex/era/Home/Door Components/Entrance Doors/Multi-Point Door Locks/Invincible Euro Cylinder Multi-Point Lock"
+          title: "Invincible Euro Cylinder Multi-Point Lock"
+          categoryLabel: "MULTI-POINT LOCKS"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10115.jpg"
+        - name: "Window Opening Restrictor"
+          itemId: "{CEBEA933-44CD-4B53-BDCD-C1777FB52F21}"
+          path: "/sitecore/content/quanex/era/Home/Window Components/Casement Windows/Ventilation/Window Opening Restrictor"
+          title: "Window Opening Restrictor"
+          categoryLabel: "VENTILATION"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10552.jpg"
+          note: "Restrictor SKU used for trickle vent/restrictor line coverage (dedicated trickle-vent product page was JS-only / not scraped)"
+        - name: "ERA Protect Smart Handle"
+          itemId: "{9BDC0076-B5A0-439E-84DF-5AC606B332CD}"
+          path: "/sitecore/content/quanex/era/Home/Home Security/ERA Protect Ecosystem/ERA Protect Smart Handle"
+          title: "ERA Protect Smart Handle"
+          categoryLabel: "SMART SECURITY"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/era-protect/smart-handle/ep1-thumbnail-1280x720px-09.jpg"
+        - name: "Safety Hasp and Staple"
+          itemId: "{47D1CD20-6963-4FEA-99D1-4C4C9784DA2C}"
+          path: "/sitecore/content/quanex/era/Home/Ironmongery/Hasps and Staples/Safety Hasp and Staple"
+          title: "Safety Hasp and Staple"
+          categoryLabel: "IRONMONGERY"
+          imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10667.jpg"
+    verification:
+      checkedAt: "2026-08-13T21:45:00Z"
+      passed:
+        - "20 Product Detail Page items created under era + amesburytruth IA folders"
+        - "CategoryLabel, Description, ImageUrl, TechnicalData, Benefits populated on all 20"
+        - "ProductDetail on Final headless-main for all 20 (Classic Flag spot-check)"
+        - "ImageUrl uses public amesburytruth.com / eraeverywhere.com CDN URLs"
+      failed: []
+      pendingManual:
+        - "Set pageTitle/pageHeaderTitle in CE (MCP cannot write inherited Services Page title fields)"
+        - "Remove duplicate ProductDetail if Page Design already provides one"
+        - "Publish all 20 PDPs for Edge"
+        - "Optional: retarget ProductCarousel Treelists to these site-local PDPs"
 

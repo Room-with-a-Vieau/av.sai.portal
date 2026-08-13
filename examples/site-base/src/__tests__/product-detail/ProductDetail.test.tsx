@@ -30,6 +30,19 @@ const mockUseSitecore = jest.fn(() => ({
   },
 }));
 
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({
+    src,
+    alt,
+    className,
+  }: {
+    src: string;
+    alt: string;
+    className?: string;
+  }) => React.createElement('img', { src, alt, className }),
+}));
+
 jest.mock('lucide-react', () => ({
   FileText: (props: React.SVGProps<SVGSVGElement>) =>
     React.createElement('svg', { 'data-testid': 'file-text-icon', ...props }),
@@ -166,6 +179,39 @@ describe('ProductDetail', () => {
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Super Spacer');
     expect(screen.getByText('Warm-edge spacer intro.')).toBeInTheDocument();
+  });
+
+  it('renders images from ImageUrl fields when Image field src is empty', () => {
+    render(
+      <ProductDetail
+        {...productDetailProps({
+          fields: {
+            pageHeaderTitle: { value: 'Commercial Vinyl Door Systems' },
+            ImageUrl: {
+              value:
+                'https://www.quanex.com/wp-content/uploads/2022/07/Mikron-AW-Rated-Door-System-C3-11300_ProductImage_605x380.jpg',
+            },
+            ImageSecondaryUrl: {
+              value:
+                'https://www.quanex.com/wp-content/uploads/2022/07/Quanex-5400-Sliding-Patio-Door-System_ProductImage_605x380.jpg',
+            },
+          },
+        })}
+      />
+    );
+
+    expect(
+      screen.getByAltText('Commercial Vinyl Door Systems')
+    ).toHaveAttribute(
+      'src',
+      'https://www.quanex.com/wp-content/uploads/2022/07/Mikron-AW-Rated-Door-System-C3-11300_ProductImage_605x380.jpg'
+    );
+    expect(
+      screen.getByAltText('Commercial Vinyl Door Systems alternate view')
+    ).toHaveAttribute(
+      'src',
+      'https://www.quanex.com/wp-content/uploads/2022/07/Quanex-5400-Sliding-Patio-Door-System_ProductImage_605x380.jpg'
+    );
   });
 
   it('shows NoDataFallback when empty and not editing', () => {
