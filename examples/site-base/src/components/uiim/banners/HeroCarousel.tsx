@@ -164,7 +164,11 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
         {slides.map((slide, index) => {
           const intro = resolveIsIntro(slide, index, slides);
           const isActive = index === activeIndex;
-          const showImage = hasImage(slide.image) && !intro;
+          const imageField = slide.image?.jsonValue;
+          // Match MultiPromo: keep Image chrome mounted in Pages even when empty.
+          // Intro slides are brand-only (no background photo) by design.
+          const showImage =
+            !intro && Boolean(imageField) && (hasImage(slide.image) || Boolean(isEditing));
 
           return (
             <div
@@ -186,7 +190,6 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
                     ? 'bg-primary'
                     : 'bg-muted'
                 )}
-                aria-hidden="true"
               >
                 {intro && (
                   <div
@@ -197,11 +200,12 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
                       clipPath:
                         'polygon(0 0, 18% 0, 0 55%, 0 100%, 22% 100%, 0 40%, 100% 100%, 100% 60%, 78% 100%, 100% 100%, 100% 0, 82% 0, 100% 45%)',
                     }}
+                    aria-hidden="true"
                   />
                 )}
-                {showImage && slide.image?.jsonValue && (
+                {showImage && imageField && (
                   <ContentSdkImage
-                    field={slide.image.jsonValue}
+                    field={imageField}
                     className="h-full w-full object-cover"
                   />
                 )}
@@ -230,10 +234,12 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
                 </div>
               )}
 
-              {/* Image + left CTA card layout */}
+              {/* Image + left CTA card layout.
+                  pointer-events-none on the full-bleed overlay so empty background Image chrome stays clickable in Pages;
+                  re-enable on the CTA card only. */}
               {!intro && (
-                <div className="relative z-10 flex h-full min-h-[32rem] items-stretch px-4 py-10 pr-16 md:min-h-[40rem] md:px-8 md:py-14 md:pr-20 lg:min-h-[44rem] lg:px-12">
-                  <div className="bg-primary text-primary-foreground flex w-full max-w-md flex-col justify-between p-8 shadow-none md:max-w-lg md:p-10 lg:max-w-xl">
+                <div className="pointer-events-none relative z-10 flex h-full min-h-[32rem] items-stretch px-4 py-10 pr-16 md:min-h-[40rem] md:px-8 md:py-14 md:pr-20 lg:min-h-[44rem] lg:px-12">
+                  <div className="pointer-events-auto bg-primary text-primary-foreground flex w-full max-w-md flex-col justify-between p-8 shadow-none md:max-w-lg md:p-10 lg:max-w-xl">
                     <div>
                       {(hasText(slide.slideName) || isEditing) && (
                         <h2 className="text-2xl font-semibold uppercase tracking-wide md:text-3xl lg:text-4xl">
