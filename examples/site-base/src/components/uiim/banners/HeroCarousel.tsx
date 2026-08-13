@@ -199,9 +199,9 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
                     }}
                   />
                 )}
-                {showImage && (
+                {showImage && slide.image?.jsonValue && (
                   <ContentSdkImage
-                    field={slide.image?.jsonValue}
+                    field={slide.image.jsonValue}
                     className="h-full w-full object-cover"
                   />
                 )}
@@ -251,10 +251,10 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
                         </p>
                       )}
                     </div>
-                    {(hasLink(slide.link) || isEditing) && (
+                    {(hasLink(slide.link) || isEditing) && slide.link?.jsonValue && (
                       <div className="mt-10">
                         <ContentSdkLink
-                          field={slide.link?.jsonValue}
+                          field={slide.link.jsonValue}
                           className="inline-flex items-center border border-primary-foreground px-5 py-3 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary-foreground hover:text-primary"
                           prefetch={false}
                         />
@@ -269,9 +269,9 @@ export const Default: React.FC<HeroCarouselProps> = (props) => {
 
         {/* Right vertical rail: Contact + dots */}
         <div className="absolute inset-y-0 right-0 z-20 flex w-12 flex-col items-center bg-primary/95 text-primary-foreground md:w-14">
-          {(hasLink(contactLink) || isEditing) && (
+          {(hasLink(contactLink) || isEditing) && contactLink?.jsonValue && (
             <ContentSdkLink
-              field={contactLink?.jsonValue}
+              field={contactLink.jsonValue}
               className="mt-4 flex h-40 w-full items-center justify-center bg-primary text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-primary-foreground hover:bg-primary-hover"
               prefetch={false}
               style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
