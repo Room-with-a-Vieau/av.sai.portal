@@ -16,6 +16,7 @@ import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
 import * as biorelatedcontent from 'src/components/uiim/lawyers/bio-related-content';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
+import * as HeroCarousel from 'src/components/uiim/banners/HeroCarousel';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
 import * as topiclistingprops from 'src/components/topic-listing/topic-listing.props';
@@ -303,6 +304,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BioDetail', { ...BioDetail, componentType: 'client' }],
   ['bio-related-content', { ...biorelatedcontent }],
   ['BlogListing', { ...BlogListing, componentType: 'client' }],
+  ['HeroCarousel', { ...HeroCarousel, componentType: 'client' }],
   ['TopicListing', { ...TopicListing }],
   ['TopicItem', { ...TopicItemdev }],
   ['topic-listing', { ...topiclistingprops }],

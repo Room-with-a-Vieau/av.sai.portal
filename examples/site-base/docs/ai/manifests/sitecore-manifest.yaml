@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-12T13:20:00Z"
+lastUpdatedAt: "2026-08-13T13:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5586,4 +5586,126 @@ ia:
         - "Append {8278F36C-8492-4641-A401-9C19AA69D08A} to Available Renderings/Page Content (silent-read)"
         - "Verify Datasource Template/Location in CE (silent-write)"
         - "Publish BlogListing rendering + Insights/Blogs page"
+
+  - name: "HeroCarousel"
+    kind: "list"
+    category: "Banners"
+    status: "complete"
+    createdAt: "2026-08-13T12:50:00Z"
+    updatedAt: "2026-08-13T13:15:00Z"
+    siteName: "quanex"
+    siteCollection: "quanex"
+    notes:
+      - "2026-08-13: Quanex homepage hero carousel (intro brand slide + left CTA card slides + right Contact Us/dots rail). Created under Project/quanex despite docs/ai/config/project.yaml pointing at progressive/pkm — design + content tree are quanex."
+      - "AE018465-4E68-4A49-8B15-9702274FA75A is click-click-launch Hero (badge/title/image/description/bannerText/bannerCTA/searchLink), NOT a slide child template. New HeroCarouselSlide created instead (SlideName/Description/Summary + Image/Link/IsIntroSlide)."
+      - "SlideName used instead of Name (collision-prone). Display Title remains Name for authors."
+    react:
+      filePath: "src/components/uiim/banners/HeroCarousel.tsx"
+      componentMapKey: "HeroCarousel"
+      dataStrategy: "ComponentQuery (ContactLink from parent; SlideName/Description/Summary/Image/Link/IsIntroSlide children)"
+      variants:
+        - "Default"
+    templates:
+      parent:
+        name: "HeroCarousel"
+        path: "/sitecore/templates/Project/quanex/Components/Banners/HeroCarousel"
+        itemId: "{ED997A6B-FECA-4349-A58D-72535E7FEFFF}"
+        sectionName: "Data"
+        fields:
+          - { name: "ContactLink", type: "General Link", itemId: "{F94F50D4-7756-4DD8-A4CA-21F057242F56}" }
+        baseTemplatesSet: true
+        horizonDatasourceGrouping: true
+        standardValues:
+          itemId: "{90588F9E-D24E-4F0D-9D75-B820710542B7}"
+          linked: true
+          masters: ["HeroCarouselSlide"]
+      child:
+        name: "HeroCarouselSlide"
+        path: "/sitecore/templates/Project/quanex/Components/Banners/HeroCarouselSlide"
+        itemId: "{8EF3FB89-FD2F-48B9-A8CE-20F387E0AB0A}"
+        sectionName: "Data"
+        fields:
+          - { name: "SlideName", type: "Single-Line Text", title: "Name", itemId: "{C8463A04-9FC1-4D12-B4C6-B4448F0CB298}" }
+          - { name: "Description", type: "Multi-Line Text", itemId: "{48932C54-8C74-4029-BA15-1B8AF19FE457}" }
+          - { name: "Summary", type: "Single-Line Text", itemId: "{0938C532-F9BA-4658-B361-A96061553A4C}" }
+          - { name: "Image", type: "Image", itemId: "{C2442485-2C9E-47D6-85E8-509877A1D977}" }
+          - { name: "Link", type: "General Link", itemId: "{1C6ED158-EDF5-4A99-9352-EAB4A1943E03}" }
+          - { name: "IsIntroSlide", type: "Checkbox", itemId: "{9E1F36B3-3DA6-4B86-9691-2A312252392F}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{C5940C10-8085-40E9-8C26-160ECA76D8D8}"
+          linked: true
+      folder:
+        name: "HeroCarousel Folder"
+        path: "/sitecore/templates/Project/quanex/Folders/HeroCarousel Folder"
+        itemId: "{6DCC219E-2A14-4427-80A0-2621A9F6B6DD}"
+        standardValues:
+          itemId: "{0E5EDA33-9D70-4836-9957-4CF4D3967C90}"
+          linked: true
+          masters: ["HeroCarousel"]
+      renderingParams:
+        name: "HeroCarousel"
+        path: "/sitecore/templates/Project/quanex/Rendering Parameters/Banners/HeroCarousel"
+        itemId: "{1559CEB9-7624-46E8-B92A-978AAC842A83}"
+        baseTemplatesSet: true
+    datasourceFolder:
+      name: "HeroCarousels"
+      path: "/sitecore/content/quanex/quanex/Data/HeroCarousels"
+      itemId: "{9DEA8CA4-0CF8-44F4-ACE6-E993D632581A}"
+      insertOptionsSet: true
+      exampleItem:
+        name: "Homepage Hero"
+        itemId: "{259A5850-F67B-4709-A869-792013B01972}"
+      exampleChildren:
+        - { name: "Intro Brand", itemId: "{86458E46-D0AE-4913-B741-1FAF41624847}" }
+        - { name: "Extruded Solutions", itemId: "{89C7C3E2-06D2-4FB3-8EAC-BC22B724C8EF}" }
+        - { name: "Hardware Solutions", itemId: "{94D92389-6530-4B91-B093-68215B1CD757}" }
+        - { name: "Custom Solutions", itemId: "{597B5078-37CB-40EF-8542-7C00A4B17F96}" }
+    rendering:
+      name: "HeroCarousel"
+      path: "/sitecore/layout/Renderings/Project/quanex/Banners/HeroCarousel"
+      itemId: "{80E42F34-7012-491E-9E5E-8D2B241CDEFF}"
+      componentName: "HeroCarousel"
+      datasourceTemplatePath: "/sitecore/templates/Project/quanex/Components/Banners/HeroCarousel"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='HeroCarousel Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='HeroCarousel Folder']"
+      parametersTemplateId: "{1559CEB9-7624-46E8-B92A-978AAC842A83}"
+      addFieldEditorButton: "1"
+      componentQuery: "query HeroCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { contactLink: field(name: \"ContactLink\") { jsonValue } children { results { id slideName: field(name: \"SlideName\") { jsonValue } description: field(name: \"Description\") { jsonValue } summary: field(name: \"Summary\") { jsonValue } image: field(name: \"Image\") { jsonValue } link: field(name: \"Link\") { jsonValue } isIntroSlide: field(name: \"IsIntroSlide\") { jsonValue } } } } }"
+      registeredInAvailableRenderings: true
+    headlessVariants:
+      containerPath: "/sitecore/content/quanex/quanex/Presentation/Headless Variants/HeroCarousel"
+      containerId: "{EBD84130-E76A-44C7-82C9-C4C94CD1EEF4}"
+      variants:
+        - { name: "Default", itemId: "{2E63CE77-914A-417B-918C-B774F3DE6008}" }
+    relatedLookups:
+      - { path: "/sitecore/templates/Project/quanex/Components", itemId: "{4B071654-D2FC-44CE-983B-D913460C2380}" }
+      - { path: "/sitecore/templates/Project/quanex/Folders", itemId: "{89DBC649-2033-4C1A-B2C1-8CABC0E71E99}" }
+      - { path: "/sitecore/templates/Project/quanex/Rendering Parameters", itemId: "{1090E3C5-3B1B-4DFB-AAD7-E15206263EBA}" }
+      - { path: "/sitecore/templates/Project/quanex/Components/Banners", itemId: "{6800988F-F134-44B0-83A1-73BA98F13F42}" }
+      - { path: "/sitecore/layout/Renderings/Project/quanex/Banners", itemId: "{503DC531-8A44-4B41-8E9D-B6F4C6E8AC2B}" }
+      - { path: "/sitecore/content/quanex/quanex/Data", itemId: "{18BBADBB-F7FD-4848-8F74-206A5B462F8D}" }
+      - { path: "/sitecore/content/quanex/quanex/Presentation/Available Renderings/Page Content", itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}" }
+    verification:
+      checkedAt: "2026-08-13T13:15:00Z"
+      passed:
+        - "Parent + child templates with base templates (parent includes HorizonDatasourceGrouping)"
+        - "Fields created with correct Type (ContactLink; SlideName/Description/Summary/Image/Link/IsIntroSlide)"
+        - "Standard Values created; SlideName default $name on child SV"
+        - "Folder template + datasource folder HeroCarousels"
+        - "Example Homepage Hero + 4 slide children"
+        - "Rendering Parameters template with 4 base templates"
+        - "JSON Rendering componentName=HeroCarousel + ComponentQuery + Parameters Template GUID"
+        - "get_component verified Datasource Template + Location"
+        - "Default Headless Variant Definition created"
+        - "React HeroCarousel.tsx + unit tests (3 passed)"
+        - "Component map generated (HeroCarousel registered)"
+        - "list_components shows HeroCarousel under Banners for quanex"
+      failed: []
+      pendingManual:
+        - "Confirm __Masters on parent SV / folder SV / HeroCarousels folder instance in Content Editor (silent-write)"
+        - "Confirm __Standard values links on templates in Content Editor (silent-write)"
+        - "Confirm __Sortorder on example slides (Intro first) in Content Editor"
+        - "Replace placeholder external Image URLs with DAM assets if needed"
+        - "Publish HeroCarousel rendering + Homepage Hero datasource for Edge"
+        - "Place HeroCarousel on quanex Home and assign Homepage Hero datasource"
 

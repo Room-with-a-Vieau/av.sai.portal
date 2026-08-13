@@ -10,7 +10,6 @@ import {
 import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
 import { HeaderPreviewSearch } from './non-sitecore/HeaderPreviewSearch';
-import { DemoUserSwitcher } from './non-sitecore/DemoUserSwitcher';
 import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
@@ -72,9 +71,6 @@ export const Default = (props: HeaderSTProps) => {
           </Link>
 
           <ul className="flex min-h-[3.5rem] list-none flex-row items-center justify-end gap-0 p-0 lg:min-h-[4.5rem]">
-            <li className="hidden items-center px-2 lg:flex">
-              <DemoUserSwitcher />
-            </li>
             <li className="hidden lg:block">
               <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={navLinkClass} />
             </li>

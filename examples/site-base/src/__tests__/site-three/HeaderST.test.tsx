@@ -139,10 +139,6 @@ jest.mock('../../components/site-three/non-sitecore/SearchBox', () => ({
   ),
 }));
 
-jest.mock('../../components/site-three/non-sitecore/DemoUserSwitcher', () => ({
-  DemoUserSwitcher: () => <div data-testid="demo-user-switcher">Demo User Switcher</div>,
-}));
-
 // Import the hook mock to control its behavior
 const mockUseToggleWithClickOutside = require('../../hooks/useToggleWithClickOutside')
   .useToggleWithClickOutside as jest.Mock;
