@@ -49,7 +49,7 @@ function RichColumn({
   field?: RichTextField;
   isEditing: boolean;
 }) {
-  if (!richHasContent(field) && !isEditing) return null;
+  if ((!richHasContent(field) && !isEditing) || !field) return null;
 
   return (
     <section>
@@ -119,7 +119,7 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
               />
             )}
 
-            {(titleText || isEditing) && (
+            {(titleText || isEditing) && titleField && (
               <Text
                 tag="h1"
                 field={titleField}
@@ -127,19 +127,19 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
               />
             )}
 
-            {(linkHasHref(specSheet) || isEditing) && (
+            {(linkHasHref(specSheet) || isEditing) && specSheet && (
               <div className="mt-5">
                 <ContentSdkLink
                   field={specSheet}
                   className="text-primary hover:text-primary/80 inline-flex items-center gap-2 text-sm font-medium underline-offset-4 hover:underline"
                 >
                   <FileText className="size-4 shrink-0" aria-hidden />
-                  <span>{specSheet?.value?.text || 'Print a Spec Sheet'}</span>
+                  <span>{specSheet.value?.text || 'Print a Spec Sheet'}</span>
                 </ContentSdkLink>
               </div>
             )}
 
-            {(richHasContent(descriptionField) || isEditing) && (
+            {(richHasContent(descriptionField) || isEditing) && descriptionField && (
               <div className="prose prose-neutral dark:prose-invert text-foreground mt-8 max-w-none text-base leading-relaxed sm:text-lg">
                 <ContentSdkRichText field={descriptionField} />
               </div>
@@ -147,7 +147,7 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
           </div>
 
           <div className="space-y-4">
-            {(imageHasSrc(mainImage) || isEditing) && (
+            {(imageHasSrc(mainImage) || isEditing) && mainImage && (
               <div className="bg-muted/30 overflow-hidden rounded-2xl border border-border">
                 <ContentSdkImage
                   field={mainImage}
@@ -155,7 +155,7 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
                 />
               </div>
             )}
-            {(imageHasSrc(secondaryImage) || (isEditing && secondaryImage)) && (
+            {(imageHasSrc(secondaryImage) || isEditing) && secondaryImage && (
               <div className="bg-muted/20 max-w-[12rem] overflow-hidden rounded-xl border border-border">
                 <ContentSdkImage
                   field={secondaryImage}
