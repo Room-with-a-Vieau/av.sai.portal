@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-13T13:15:00Z"
+lastUpdatedAt: "2026-08-13T19:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3081,6 +3081,173 @@ demoContent: []
 
 # Information architecture / page creation batches
 ia:
+  - name: "quanex-family-hero-multipromo-datasources"
+    kind: "content-create"
+    category: "Banners"
+    status: "complete"
+    createdAt: "2026-08-13T19:15:00Z"
+    updatedAt: "2026-08-13T19:15:00Z"
+    siteCollection: "quanex"
+    siteNames: ["era", "amesburytruth", "quanex"]
+    notes: >
+      Marketing-aligned HeroCarousel + MultiPromo datasources for ERA, AmesburyTruth,
+      and Quanex. Created HeroCarousels folders on ERA/AT; reused quanex folders.
+      Homepage Hero on quanex left unchanged. ContactLink → each site Contact Us page.
+      MultiPromo parent template {775D6354-CF01-4F34-9713-D34645079C88}; SimplePromo
+      child {F94C8C17-70E8-4D8B-9D35-D0465C0E0945}. Images use public brand CDN URLs
+      (replace with DAM when available). Publish Data trees for Edge.
+    folders:
+      - { siteName: "era", name: "HeroCarousels", itemId: "{3C0B98D1-7F79-4C00-9655-C732E5A4F8D2}", path: "/sitecore/content/quanex/era/Data/HeroCarousels" }
+      - { siteName: "amesburytruth", name: "HeroCarousels", itemId: "{7FAD9903-66A3-4357-B57C-5DAD1E295416}", path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels" }
+      - { siteName: "quanex", name: "HeroCarousels", itemId: "{9DEA8CA4-0CF8-44F4-ACE6-E993D632581A}", path: "/sitecore/content/quanex/quanex/Data/HeroCarousels", preexisting: true }
+      - { siteName: "era", name: "MultiPromos", itemId: "{B9759704-6758-4324-B063-65E5439E95BC}", path: "/sitecore/content/quanex/era/Data/MultiPromos", preexisting: true }
+      - { siteName: "amesburytruth", name: "MultiPromos", itemId: "{FC6E53D1-86C5-4EED-8000-C75ACBA091B2}", path: "/sitecore/content/quanex/amesburytruth/Data/MultiPromos", preexisting: true }
+      - { siteName: "quanex", name: "MultiPromos", itemId: "{4600C0B1-78F9-43C1-B49C-B08D3C78E325}", path: "/sitecore/content/quanex/quanex/Data/MultiPromos", preexisting: true }
+    heroCarousels:
+      era:
+        - name: "Window Components Hero"
+          itemId: "{03FFF8EA-06F2-4584-879E-D26E4E814264}"
+          path: "/sitecore/content/quanex/era/Data/HeroCarousels/Window Components Hero"
+          slides:
+            - { name: "Intro Brand", itemId: "{F88953F9-4628-4361-9426-CD4DDC8DB278}" }
+            - { name: "Casement Windows", itemId: "{B4C2F175-3557-4AC9-9CF7-DC6047FDA013}" }
+            - { name: "Sash Windows", itemId: "{61C2CCC6-A4E5-4D2A-8B5E-7D3A7FAB7181}" }
+            - { name: "Door Components", itemId: "{0C72A29D-B379-464B-8914-5B008EAAE98A}" }
+        - name: "ERA Protect Home Security Hero"
+          itemId: "{6AEEC8B7-010B-440A-BD5D-5F444389CF0E}"
+          path: "/sitecore/content/quanex/era/Data/HeroCarousels/ERA Protect Home Security Hero"
+          slides:
+            - { name: "Intro Protect", itemId: "{BDD464E5-6CE1-4216-9811-BD5A685982D3}" }
+            - { name: "ERA Protect Ecosystem", itemId: "{10DA67AD-66A5-4870-ABC1-E03323937C11}" }
+            - { name: "Smart Home Alarm Systems", itemId: "{3672820E-4FD4-41C8-9C06-167D1C69E657}" }
+            - { name: "Home Security Hub", itemId: "{D3DECE5A-1EEF-4D75-A13E-BF5F6F3FF9C2}" }
+        - name: "Fab and Fix Decorative Hardware Hero"
+          itemId: "{0EF0B3AC-BE3A-4156-99BC-2D98A5209FD1}"
+          path: "/sitecore/content/quanex/era/Data/HeroCarousels/Fab and Fix Decorative Hardware Hero"
+          slides:
+            - { name: "Intro Fab and Fix", itemId: "{5A9D89AF-DD65-4C9F-B894-3FB41E31F44F}" }
+            - { name: "Classic Range", itemId: "{2F8B8DBA-9551-47CB-BFEA-94010FF04661}" }
+            - { name: "Heritage Range", itemId: "{E71A90CF-F8F4-4464-BC72-C9F8D533D05A}" }
+            - { name: "Architectural Range", itemId: "{0A5E77A1-8A67-44C5-A1E2-378B8DB5C905}" }
+      amesburytruth:
+        - name: "Window Hardware Hero"
+          itemId: "{F14D2256-DB73-40D6-8713-9D2CBB71610B}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels/Window Hardware Hero"
+          slides:
+            - { name: "Intro Window Hardware", itemId: "{BE66E15C-AA93-4C15-A57E-6939068719C1}" }
+            - { name: "Casement Awning", itemId: "{54D24A6C-89F4-425B-89EA-B4F9CD5EABD8}" }
+            - { name: "Hung Sliding", itemId: "{6D4C725E-EC3F-423E-92CB-69B0513E6A82}" }
+            - { name: "Tilt-n-Turn", itemId: "{B081D85A-559B-42BA-9EA7-1285EFC7CECD}" }
+        - name: "Door Hardware Hero"
+          itemId: "{C9527AB6-658F-4C47-AA58-3B0C6CB86A6A}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels/Door Hardware Hero"
+          slides:
+            - { name: "Intro Door Hardware", itemId: "{A17BDCBE-1790-4AB7-B3AD-A33FA41AE0A3}" }
+            - { name: "Hinged Doors", itemId: "{653D0759-3914-41FE-98D1-96B0FB1733BD}" }
+            - { name: "Sliding Doors", itemId: "{A233BDA2-D1C7-4C73-8469-767E0E6722B4}" }
+            - { name: "Door Hardware Portfolio", itemId: "{498CA8BE-A1A0-44FB-A071-14B51CC6994E}" }
+        - name: "Q-LON Weatherseals Hero"
+          itemId: "{08D16A99-563A-4DEF-A158-85619DAE1AD2}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels/Q-LON Weatherseals Hero"
+          slides:
+            - { name: "Intro Weatherseals", itemId: "{36C530B7-61C5-43F9-88DB-F8DBBE9D6419}" }
+            - { name: "Window Seals", itemId: "{506F03DC-C7FF-4ACF-8D28-4E2F8FE1DF33}" }
+            - { name: "Door Seals", itemId: "{138E25A4-A425-4A92-864A-6238051477DF}" }
+            - { name: "Pile Weatherseals", itemId: "{DD3C8ED8-241A-4B74-9A1F-69CE9E544F66}" }
+      quanexNew:
+        - name: "Solar and Extrusions Innovation Hero"
+          itemId: "{41ABA868-A71E-42EC-B32E-6CA037858AA2}"
+          path: "/sitecore/content/quanex/quanex/Data/HeroCarousels/Solar and Extrusions Innovation Hero"
+          slides:
+            - { name: "Intro Innovation", itemId: "{67F0F78E-FF06-4407-92CB-3B042BFAA92A}" }
+            - { name: "Solar Panel Components", itemId: "{30419D01-B0EE-4287-A997-DC09A48ACE02}" }
+            - { name: "Extruded Solutions", itemId: "{807CAA6A-EA36-4BBF-A43D-B239DED85A34}" }
+            - { name: "Insulating Glass Spacers", itemId: "{2B73E095-171C-4E7E-9A53-6F80BF38A7DF}" }
+        - name: "Part of Something Bigger Brand Hero"
+          itemId: "{89532CCB-ED8D-4073-893D-81CE47AEE3E2}"
+          path: "/sitecore/content/quanex/quanex/Data/HeroCarousels/Part of Something Bigger Brand Hero"
+          slides:
+            - { name: "Intro Brand Bigger", itemId: "{A12E9A97-CAAB-4DA6-905A-56916BBA602F}" }
+            - { name: "Manufacturing Capabilities", itemId: "{84832931-1F45-4F00-960B-A5F444FBAAD4}" }
+            - { name: "Sustainability", itemId: "{D43DC74B-CD3E-4C9A-B9C2-81DFF1559F7E}" }
+            - { name: "Investor Relations", itemId: "{0B2F26FC-B34C-4378-83C3-F8699D367416}" }
+    multiPromos:
+      era:
+        - name: "Window and Door Components Promo"
+          itemId: "{D3706B0C-706F-4538-8A4F-CC52AA5EF1BB}"
+          path: "/sitecore/content/quanex/era/Data/MultiPromos/Window and Door Components Promo"
+          children:
+            - { name: "Window Components", itemId: "{CFFC2D31-4E5A-4554-AF9A-09F830EC8B4E}" }
+            - { name: "Door Components", itemId: "{9B24F6EE-C529-47CF-80CD-0682264B384E}" }
+            - { name: "Weatherseals", itemId: "{1B5C51D8-EDCC-4EDF-95BC-8A9CFE8D28DC}" }
+        - name: "ERA Protect Security Promo"
+          itemId: "{82784E03-12B8-4394-93DF-80590E345E6A}"
+          path: "/sitecore/content/quanex/era/Data/MultiPromos/ERA Protect Security Promo"
+          children:
+            - { name: "ERA Protect Ecosystem", itemId: "{81255CB0-FD9D-4137-A20C-D4D1E81E82E1}" }
+            - { name: "Smart Home Alarms", itemId: "{EE738C71-E8E4-4E00-886E-BE274F2EE90D}" }
+            - { name: "Home Security Hub", itemId: "{0ADD1829-E1AF-4B4E-821E-FC96A813583A}" }
+        - name: "Fab and Fix Ranges Promo"
+          itemId: "{4D969B55-1107-4793-9EF8-6DF4EA2A01A1}"
+          path: "/sitecore/content/quanex/era/Data/MultiPromos/Fab and Fix Ranges Promo"
+          children:
+            - { name: "Classic Range", itemId: "{D6DE5E54-F07E-41A8-8EA1-B2B1990322E2}" }
+            - { name: "Heritage Range", itemId: "{F3DA624A-17C8-4625-8B61-217C168467B9}" }
+            - { name: "Architectural Range", itemId: "{4C322A1E-D27C-4024-B34E-5F44ED30769F}" }
+            - { name: "Forged Range", itemId: "{986E94C2-73B7-41C7-AAE1-36E098570CFB}" }
+      amesburytruth:
+        - name: "Window Hardware Solutions Promo"
+          itemId: "{0FBF968E-CB2D-42E3-A3BE-67DECA9086C5}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/MultiPromos/Window Hardware Solutions Promo"
+          children:
+            - { name: "Casement Awning", itemId: "{85896E06-0FEE-45E4-BFC9-563944F9BE2C}" }
+            - { name: "Hung Sliding", itemId: "{13C1AD94-A34A-424E-A47B-46795AE7F8FA}" }
+            - { name: "Tilt-n-Turn", itemId: "{C97C259E-368D-49E7-9237-40D19857422C}" }
+        - name: "Door Hardware Solutions Promo"
+          itemId: "{D4BB6D79-22B3-4629-8D2E-30F1F8D21986}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/MultiPromos/Door Hardware Solutions Promo"
+          children:
+            - { name: "Hinged Doors", itemId: "{8349070B-823E-4520-BFF6-6C0C0E6D060B}" }
+            - { name: "Sliding Doors", itemId: "{56339E5E-A2D0-487B-8942-321F4E50676C}" }
+            - { name: "Door Hardware Portfolio", itemId: "{B6C14DA7-1345-4865-AC6C-DA336593A2E3}" }
+        - name: "Q-LON Weatherseals Promo"
+          itemId: "{F8E09336-0468-47C2-920F-91B18565DD6A}"
+          path: "/sitecore/content/quanex/amesburytruth/Data/MultiPromos/Q-LON Weatherseals Promo"
+          children:
+            - { name: "Window Seals", itemId: "{1E8EEDB9-328A-4234-81CF-03D5D6394C8A}" }
+            - { name: "Door Seals", itemId: "{48EE1C13-A627-4A64-9E8A-E3769B08BEDA}" }
+            - { name: "Pile Weatherseals", itemId: "{A571FE44-E2ED-45A2-9C0F-77459268D6C4}" }
+            - { name: "Extrusions", itemId: "{6CB4C72B-2C7A-4A7A-BB25-C72790A30003}" }
+      quanexNew:
+        - name: "Solar and Extrusions Promo"
+          itemId: "{8EB55891-FCE1-4A7B-976D-B7FC2883CBBB}"
+          path: "/sitecore/content/quanex/quanex/Data/MultiPromos/Solar and Extrusions Promo"
+          children:
+            - { name: "Solar Panel Components", itemId: "{75EC7769-F5B0-44B5-986F-2B48776EE3DD}" }
+            - { name: "Extruded Solutions", itemId: "{E590995F-9597-46B6-B87F-BDB1AAC05079}" }
+            - { name: "Insulating Glass Spacers", itemId: "{9DEEF137-87FD-4B5C-B41B-73ED0D976826}" }
+        - name: "Capabilities and Sustainability Promo"
+          itemId: "{463803A5-B839-4208-8A59-15D51B1AC4C0}"
+          path: "/sitecore/content/quanex/quanex/Data/MultiPromos/Capabilities and Sustainability Promo"
+          children:
+            - { name: "Manufacturing Capabilities", itemId: "{93C0D9FE-A12D-4CDC-A704-5CC0E0E3E7C9}" }
+            - { name: "Sustainability", itemId: "{CDB9852D-1DA0-40FA-8304-01E9ED295E50}" }
+            - { name: "Investor Relations", itemId: "{192801F4-DA31-40FC-B030-F7E1217DC40F}" }
+            - { name: "Contact Quanex", itemId: "{03EEED5E-297E-4F7A-A405-9E55912A3102}" }
+    verification:
+      checkedAt: "2026-08-13T19:15:00Z"
+      passed:
+        - "ERA + AT HeroCarousels folders created"
+        - "8 HeroCarousel parents + slides verified via get_content_item_by_id"
+        - "8 MultiPromo parents + SimplePromo children created"
+        - "Homepage Hero {259A5850…} left untouched"
+      failed: []
+      pendingManual:
+        - "Publish HeroCarousels + MultiPromos Data trees on era, amesburytruth, quanex for Edge"
+        - "Optional: set __Sortorder so intro slides appear first in CE"
+        - "Optional: replace public CDN image URLs with DAM assets"
+        - "Place datasources on pages / Partial Designs as needed"
+
   - name: "pulse-multi-site-refactor"
     kind: "platform-note"
     category: "Pulse"
@@ -5592,19 +5759,24 @@ ia:
     category: "Banners"
     status: "complete"
     createdAt: "2026-08-13T12:50:00Z"
-    updatedAt: "2026-08-13T13:15:00Z"
+    updatedAt: "2026-08-13T19:20:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
       - "2026-08-13: Quanex homepage hero carousel (intro brand slide + left CTA card slides + right Contact Us/dots rail). Created under Project/quanex despite docs/ai/config/project.yaml pointing at progressive/pkm — design + content tree are quanex."
       - "AE018465-4E68-4A49-8B15-9702274FA75A is click-click-launch Hero (badge/title/image/description/bannerText/bannerCTA/searchLink), NOT a slide child template. New HeroCarouselSlide created instead (SlideName/Description/Summary + Image/Link/IsIntroSlide)."
       - "SlideName used instead of Name (collision-prone). Display Title remains Name for authors."
+      - "2026-08-13: Added FocusProduct variant (AT-style: BackgroundImage backdrop + Image product + horizontal dots). BackgroundImage field on slide. Theme tokens only (bg-dark/primary). Variants registered on quanex + amesburytruth sites."
+      - "2026-08-13: Family marketing datasources — ERA + AmesburyTruth HeroCarousels folders + 3 carousels each; Quanex +2 new carousels (Solar/Extrusions, Part of Something Bigger). Matching MultiPromos under each site Data/MultiPromos. See ia entry quanex-family-hero-multipromo-datasources."
+      - "2026-08-13: Added SplitPanel variant (ERA-style solid content panel + large image split). Layout is the variant; colors via theme tokens (bg-background/text-foreground/bg-primary). ImageOnLeft checkbox toggles Fab&Fix (image left) vs Trade Account (content left). Do NOT force ERA look into Default/FocusProduct via theme alone. Variants on quanex + amesburytruth + era (ERA container created with Default/FocusProduct/SplitPanel)."
     react:
       filePath: "src/components/uiim/banners/HeroCarousel.tsx"
       componentMapKey: "HeroCarousel"
-      dataStrategy: "ComponentQuery (ContactLink from parent; SlideName/Description/Summary/Image/Link/IsIntroSlide children)"
+      dataStrategy: "ComponentQuery (ContactLink from parent; SlideName/Description/Summary/Image/BackgroundImage/Link/IsIntroSlide/ImageOnLeft children)"
       variants:
         - "Default"
+        - "FocusProduct"
+        - "SplitPanel"
     templates:
       parent:
         name: "HeroCarousel"
@@ -5629,8 +5801,10 @@ ia:
           - { name: "Description", type: "Multi-Line Text", itemId: "{48932C54-8C74-4029-BA15-1B8AF19FE457}" }
           - { name: "Summary", type: "Single-Line Text", itemId: "{0938C532-F9BA-4658-B361-A96061553A4C}" }
           - { name: "Image", type: "Image", itemId: "{C2442485-2C9E-47D6-85E8-509877A1D977}" }
+          - { name: "BackgroundImage", type: "Image", title: "Background Image", itemId: "{E64B5A37-BE27-4001-9380-27BBB40FE1BC}" }
           - { name: "Link", type: "General Link", itemId: "{1C6ED158-EDF5-4A99-9352-EAB4A1943E03}" }
           - { name: "IsIntroSlide", type: "Checkbox", itemId: "{9E1F36B3-3DA6-4B86-9691-2A312252392F}" }
+          - { name: "ImageOnLeft", type: "Checkbox", title: "Image on left", itemId: "{0C10D953-55C9-409D-BC96-022BAEB83F02}" }
         baseTemplatesSet: true
         standardValues:
           itemId: "{C5940C10-8085-40E9-8C26-160ECA76D8D8}"
@@ -5661,6 +5835,17 @@ ia:
         - { name: "Extruded Solutions", itemId: "{89C7C3E2-06D2-4FB3-8EAC-BC22B724C8EF}" }
         - { name: "Hardware Solutions", itemId: "{94D92389-6530-4B91-B093-68215B1CD757}" }
         - { name: "Custom Solutions", itemId: "{597B5078-37CB-40EF-8542-7C00A4B17F96}" }
+      familyFolders:
+        - { siteName: "quanex", path: "/sitecore/content/quanex/quanex/Data/HeroCarousels", itemId: "{9DEA8CA4-0CF8-44F4-ACE6-E993D632581A}" }
+        - { siteName: "era", path: "/sitecore/content/quanex/era/Data/HeroCarousels", itemId: "{3C0B98D1-7F79-4C00-9655-C732E5A4F8D2}" }
+        - { siteName: "amesburytruth", path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels", itemId: "{7FAD9903-66A3-4357-B57C-5DAD1E295416}" }
+      multiPromoFolders:
+        - { siteName: "quanex", path: "/sitecore/content/quanex/quanex/Data/MultiPromos", itemId: "{4600C0B1-78F9-43C1-B49C-B08D3C78E325}", folderTemplateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}" }
+        - { siteName: "era", path: "/sitecore/content/quanex/era/Data/MultiPromos", itemId: "{B9759704-6758-4324-B063-65E5439E95BC}", folderTemplateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}" }
+        - { siteName: "amesburytruth", path: "/sitecore/content/quanex/amesburytruth/Data/MultiPromos", itemId: "{FC6E53D1-86C5-4EED-8000-C75ACBA091B2}", folderTemplateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}" }
+      multiPromoTemplates:
+        parent: { name: "MultiPromo", itemId: "{775D6354-CF01-4F34-9713-D34645079C88}", fields: ["title", "description", "Start Date", "End Date"] }
+        child: { name: "SimplePromo", itemId: "{F94C8C17-70E8-4D8B-9D35-D0465C0E0945}", fields: ["heading", "description", "image", "link", "Slug"] }
     rendering:
       name: "HeroCarousel"
       path: "/sitecore/layout/Renderings/Project/quanex/Banners/HeroCarousel"
@@ -5670,13 +5855,29 @@ ia:
       datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='HeroCarousel Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='HeroCarousel Folder']"
       parametersTemplateId: "{1559CEB9-7624-46E8-B92A-978AAC842A83}"
       addFieldEditorButton: "1"
-      componentQuery: "query HeroCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { contactLink: field(name: \"ContactLink\") { jsonValue } children { results { id slideName: field(name: \"SlideName\") { jsonValue } description: field(name: \"Description\") { jsonValue } summary: field(name: \"Summary\") { jsonValue } image: field(name: \"Image\") { jsonValue } link: field(name: \"Link\") { jsonValue } isIntroSlide: field(name: \"IsIntroSlide\") { jsonValue } } } } }"
+      componentQuery: "query HeroCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { contactLink: field(name: \"ContactLink\") { jsonValue } children { results { id slideName: field(name: \"SlideName\") { jsonValue } description: field(name: \"Description\") { jsonValue } summary: field(name: \"Summary\") { jsonValue } image: field(name: \"Image\") { jsonValue } backgroundImage: field(name: \"BackgroundImage\") { jsonValue } link: field(name: \"Link\") { jsonValue } isIntroSlide: field(name: \"IsIntroSlide\") { jsonValue } imageOnLeft: field(name: \"ImageOnLeft\") { jsonValue } } } } }"
       registeredInAvailableRenderings: true
     headlessVariants:
       containerPath: "/sitecore/content/quanex/quanex/Presentation/Headless Variants/HeroCarousel"
       containerId: "{EBD84130-E76A-44C7-82C9-C4C94CD1EEF4}"
       variants:
         - { name: "Default", itemId: "{2E63CE77-914A-417B-918C-B774F3DE6008}" }
+        - { name: "FocusProduct", itemId: "{685EB6A0-53F9-446F-B464-29D37E47E07B}" }
+        - { name: "SplitPanel", itemId: "{434BA9B5-279A-49C2-B368-F53C05CD2E3D}" }
+      amesburytruth:
+        containerPath: "/sitecore/content/quanex/amesburytruth/Presentation/Headless Variants/HeroCarousel"
+        containerId: "{F0A253FD-8D6F-4AFF-BCE9-3E0A948D5BB4}"
+        variants:
+          - { name: "Default", itemId: "{B33A4E1D-DF73-4622-AB37-0B86C08A4569}" }
+          - { name: "FocusProduct", itemId: "{6527E23A-90AF-4EA2-9C54-8BB4B5729A07}" }
+          - { name: "SplitPanel", itemId: "{5F572727-CD5E-45DA-9B52-125C35CBFFF4}" }
+      era:
+        containerPath: "/sitecore/content/quanex/era/Presentation/Headless Variants/HeroCarousel"
+        containerId: "{BEF8CD8E-61A0-4DF7-9971-2ED5C6BF9ADD}"
+        variants:
+          - { name: "Default", itemId: "{14BE8A5A-0D4F-4FD0-B8FD-BA36EFE825EA}" }
+          - { name: "FocusProduct", itemId: "{435AD6B3-A988-433C-A336-453CF59CBDCD}" }
+          - { name: "SplitPanel", itemId: "{67B0B8E9-448E-4452-84F6-3D0598E1A97F}" }
     relatedLookups:
       - { path: "/sitecore/templates/Project/quanex/Components", itemId: "{4B071654-D2FC-44CE-983B-D913460C2380}" }
       - { path: "/sitecore/templates/Project/quanex/Folders", itemId: "{89DBC649-2033-4C1A-B2C1-8CABC0E71E99}" }
@@ -5686,26 +5887,218 @@ ia:
       - { path: "/sitecore/content/quanex/quanex/Data", itemId: "{18BBADBB-F7FD-4848-8F74-206A5B462F8D}" }
       - { path: "/sitecore/content/quanex/quanex/Presentation/Available Renderings/Page Content", itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}" }
     verification:
-      checkedAt: "2026-08-13T13:15:00Z"
+      checkedAt: "2026-08-13T19:20:00Z"
       passed:
         - "Parent + child templates with base templates (parent includes HorizonDatasourceGrouping)"
-        - "Fields created with correct Type (ContactLink; SlideName/Description/Summary/Image/Link/IsIntroSlide)"
+        - "Fields created with correct Type (ContactLink; SlideName/Description/Summary/Image/BackgroundImage/Link/IsIntroSlide/ImageOnLeft)"
         - "Standard Values created; SlideName default $name on child SV"
         - "Folder template + datasource folder HeroCarousels"
         - "Example Homepage Hero + 4 slide children"
         - "Rendering Parameters template with 4 base templates"
         - "JSON Rendering componentName=HeroCarousel + ComponentQuery + Parameters Template GUID"
         - "get_component verified Datasource Template + Location"
-        - "Default Headless Variant Definition created"
-        - "React HeroCarousel.tsx + unit tests (3 passed)"
+        - "Default + FocusProduct + SplitPanel Headless Variant Definitions (quanex + amesburytruth + era)"
+        - "ImageOnLeft Checkbox on HeroCarouselSlide Data; ComponentQuery includes imageOnLeft"
+        - "React HeroCarousel.tsx named exports Default + FocusProduct + SplitPanel + unit tests"
         - "Component map generated (HeroCarousel registered)"
         - "list_components shows HeroCarousel under Banners for quanex"
       failed: []
       pendingManual:
+        - "On ERA Home: add HeroCarousel, set variant SplitPanel, author Image + ImageOnLeft per slide"
+        - "On AmesburyTruth Home: add HeroCarousel, set variant FocusProduct, author BackgroundImage + Image per slide"
+        - "Publish HeroCarousel rendering + HeroCarouselSlide template (ImageOnLeft) + variants for Edge"
         - "Confirm __Masters on parent SV / folder SV / HeroCarousels folder instance in Content Editor (silent-write)"
         - "Confirm __Standard values links on templates in Content Editor (silent-write)"
         - "Confirm __Sortorder on example slides (Intro first) in Content Editor"
         - "Replace placeholder external Image URLs with DAM assets if needed"
         - "Publish HeroCarousel rendering + Homepage Hero datasource for Edge"
         - "Place HeroCarousel on quanex Home and assign Homepage Hero datasource"
+        - "Publish ERA/AT/quanex family HeroCarousel + MultiPromo datasources (see ia quanex-family-hero-multipromo-datasources)"
+        - "Optional: set slide __Sortorder so Intro slides appear first in CE"
+
+  - name: "ProductDetail"
+    kind: "context-only"
+    category: "Products"
+    status: "complete"
+    createdAt: "2026-08-13T19:30:00Z"
+    updatedAt: "2026-08-13T21:00:00Z"
+    siteName: "quanex"
+    siteCollection: "quanex"
+    notes:
+      - "2026-08-13: Quanex PDP architecture — Product Detail Page (route template inheriting Services Page) + ProductDetail context component. Did NOT reuse starter Product Page (SYNC audio fields)."
+      - "Main product image reuses inherited Services Page `image`; title reuses pageTitle/pageHeaderTitle."
+      - "Available Renderings briefly overwritten with HeroCarousel|ProductDetail only; restored to 75 GUIDs reconstructed from list_components (includes ProductDetail)."
+      - "2026-08-13 safety check: get_allowed_comps_by_ph(headless-main) on Mikron returned 75 allowed comps including ProductDetail {9AFBB222…}, HeroCarousel, MultiPromo, HeaderST — NOT a 2-item list. Renderings field itself is silent-read (fields:{}). Status OK (proxy-verified)."
+      - "2026-08-13: ProductDetail placed on all 9 sample PDP Final layouts + Page Designs/ProductPage headless-main. Product Detail Page __Standard Values not API-editable (no site root) — wire SV/Page Design assignment manually in CE."
+      - "2026-08-13: Sample PDP Image + ImageSecondary set from public quanex.com wp-content URLs (not Content Hub/DAM). Inherited `image`/`pageTitle`/`pageHeaderTitle` silent in MCP reads but written via update_fields_on_item. ImageSecondary verified on re-read."
+    react:
+      filePath: "src/components/uiim/products/ProductDetail.tsx"
+      componentMapKey: "ProductDetail"
+      propsShape: "context-route"
+      variants: ["Default"]
+    pageTemplate:
+      name: "Product Detail Page"
+      path: "/sitecore/templates/Project/quanex/Product Detail Page"
+      itemId: "{7629F514-E156-4543-ADC6-051453441B33}"
+      inheritsFrom: "Services Page"
+      inheritsFromId: "{274FC64E-530F-457E-BD04-8B195DF94646}"
+      sectionName: "Product Data"
+      sectionId: "{ECEB15EC-309E-4993-87C9-2E5ACD1BED9B}"
+      fields:
+        - { name: "CategoryLabel", type: "Single-Line Text", itemId: "{0169DFCE-89A4-4941-821A-AB1266A1DE4A}" }
+        - { name: "SpecSheetLink", type: "General Link", itemId: "{17CBE776-D3B6-4203-A37C-30A46022BAE6}" }
+        - { name: "ImageSecondary", type: "Image", itemId: "{4E90C3B8-4BD8-4034-87E0-9E824460F7E5}" }
+        - { name: "Description", type: "Rich Text", itemId: "{77B62E2B-2F05-418E-BB41-2903FEB32E39}" }
+        - { name: "TechnicalData", type: "Rich Text", itemId: "{190E4142-E8B7-4D47-BCF7-B6BAC38CE753}" }
+        - { name: "StylesAvailable", type: "Rich Text", itemId: "{2C9CC36E-D30C-49C1-93DC-21A353045C54}" }
+        - { name: "Benefits", type: "Rich Text", itemId: "{DBD19EED-F27A-4850-9A43-512EB6176C14}" }
+      standardValues:
+        itemId: "{71D52DDD-A693-4CA6-ABDC-2AC4E6042693}"
+        linked: true
+    templates:
+      renderingParams:
+        name: "ProductDetail"
+        path: "/sitecore/templates/Project/quanex/Rendering Parameters/Products/ProductDetail"
+        itemId: "{16EC5653-EF54-4824-962B-8C48984F03E0}"
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{82203D9F-1E51-4EA6-96E9-F4D924793340}"
+          linked: true
+    rendering:
+      name: "ProductDetail"
+      path: "/sitecore/layout/Renderings/Project/quanex/Products/ProductDetail"
+      itemId: "{9AFBB222-DFDC-400D-9385-E50BA119B0C0}"
+      componentName: "ProductDetail"
+      datasourceRequired: false
+      useComponentQuery: false
+      parametersTemplateId: "{16EC5653-EF54-4824-962B-8C48984F03E0}"
+      addFieldEditorButton: "1"
+      registeredInAvailableRenderings: true
+    headlessVariants:
+      containerPath: "/sitecore/content/quanex/quanex/Presentation/Headless Variants/ProductDetail"
+      containerId: "{A0FAA792-81E2-433A-80F0-4A3491BAAB01}"
+      variants:
+        - { name: "Default", itemId: "{6DCB53D7-E134-4F33-B8D7-31386ABCB4AB}" }
+    sampleProducts:
+      imageSource: "public quanex.com wp-content URLs (not DAM/Content Hub)"
+      insulatingGlassSpacers:
+        parentPath: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers"
+        parentId: "{9726E4D1-8FCD-4DD6-B5E9-BB4467655176}"
+        items:
+          - name: "Super Spacer"
+            itemId: "{E5D63D4B-5A70-43E6-987A-9E454C99034F}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers/Super Spacer"
+            sourcePage: "https://www.quanex.com/products/dual-seal-super-spacer-standard/"
+            image: "https://www.quanex.com/wp-content/uploads/2026/04/R1_SuperSpacer_ProductRendering_Glass_Black_TopCorner.jpg"
+            imageSecondary: ""
+          - name: "Duralite"
+            itemId: "{464E91A3-C14F-4DF9-9F95-71F15993012B}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers/Duralite"
+            sourcePage: "https://www.quanex.com/products/single-seal-duralite-warm-edge-spacers/"
+            image: "https://www.quanex.com/wp-content/uploads/2026/04/R2_Duralite_ProductRendering_Glass_TopCorner_Extended.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2026/04/R2_Duralite_ProductRendering_Glass_BottomCorner.jpg"
+          - name: "Super Spacer Premium"
+            itemId: "{2B1E0840-06E9-47A0-9923-A3DD9211ECA3}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Insulating Glass Spacers/Super Spacer Premium"
+            sourcePage: "https://www.quanex.com/products/dual-seal-super-spacer-premium/"
+            image: "https://www.quanex.com/wp-content/uploads/2026/04/R1_SuperSpacer_Premium_ProductRendering_Glass_Black_TopCorner.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2026/04/SuperSpacer_Premium_ProductRendering_Glass_Black_BottomCorner.jpg"
+      extrudedSolutions:
+        parentPath: "/sitecore/content/quanex/quanex/Home/Products/Extruded Solutions"
+        parentId: "{FA947897-7340-4066-A011-42B5A8EAAB98}"
+        items:
+          - name: "Mikron 7200 Sound Control System"
+            itemId: "{E3DDC8AF-C6F9-4600-8365-A37AF8AB4758}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Extruded Solutions/Mikron 7200 Sound Control System"
+            sourcePage: "https://www.quanex.com/products/commercial-window-mikron-7200-sound-control-system/"
+            image: "https://www.quanex.com/wp-content/uploads/2022/07/Mikron-7200-Sound-Control-System_ProductImage_605x380.jpg"
+            imageSecondary: ""
+          - name: "Mikron Residential Vinyl Profiles"
+            itemId: "{C2FD1252-0EF7-4658-87D6-20CE4A177181}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Extruded Solutions/Mikron Residential Vinyl Profiles"
+            sourcePage: "https://www.quanex.com/products/residential-window-mikron/"
+            image: "https://www.quanex.com/wp-content/uploads/2022/09/mikron8500.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2022/09/mikron8500_alt1.jpg"
+          - name: "Commercial Vinyl Door Systems"
+            itemId: "{847A5329-808A-44F2-A876-4E1A835FC0E7}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Extruded Solutions/Commercial Vinyl Door Systems"
+            sourcePage: "https://www.quanex.com/products/commercial-door-mikron-aw-rated-door-system-c3-11300/"
+            image: "https://www.quanex.com/wp-content/uploads/2022/07/Mikron-AW-Rated-Door-System-C3-11300_ProductImage_605x380.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2022/07/Quanex-5400-Sliding-Patio-Door-System_ProductImage_605x380.jpg"
+      fenestrationComponents:
+        items:
+          - name: "Q-LON Weatherseals"
+            itemId: "{00B55533-00D4-425A-9D48-1A126F079857}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Weatherseals/Q-LON Weatherseals"
+            parentId: "{47DBF199-FB3B-4B43-9D50-F12D65441315}"
+            sourcePage: "https://www.quanex.com/product/weatherseals/urethane-seals/"
+            image: "https://www.quanex.com/wp-content/uploads/2026/04/U71_Frame000002.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2026/04/72611_Frame000001.jpg"
+          - name: "Threshold and Sweep Systems"
+            itemId: "{FD4CA406-D7C2-46FE-8196-E6D09098DC0B}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Weatherseals/Threshold and Sweep Systems"
+            parentId: "{47DBF199-FB3B-4B43-9D50-F12D65441315}"
+            sourcePage: "https://www.quanex.com/product/residential/entry-door-components/door-thresholds-for-exterior-doors/"
+            image: "https://www.quanex.com/wp-content/uploads/2022/07/5Y-High-Performance-Thresholds_ProductImage_605x380.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2022/07/Door-Seals_ProductImage_605x380.jpg"
+          - name: "Security Screens and Grilles"
+            itemId: "{7604D4F6-D505-4E27-BBDE-7B41AECFCC49}"
+            path: "/sitecore/content/quanex/quanex/Home/Products/Residential/Security Screens/Security Screens and Grilles"
+            parentId: "{D74BD42A-FD7F-4DE9-9D51-F229D51BB24D}"
+            sourcePage: "https://www.quanex.com/product/residential/fortify-security-screens/"
+            image: "https://www.quanex.com/wp-content/uploads/2023/06/petScreen_image.jpg"
+            imageSecondary: "https://www.quanex.com/wp-content/uploads/2023/06/lockingSystem_meshtec.jpg"
+    relatedLookups:
+      - { path: "/sitecore/templates/Project/quanex", itemId: "{7604E6D2-7DAB-4256-98A0-CC7C3B30C64A}" }
+      - { path: "/sitecore/templates/Project/quanex/Rendering Parameters/Products", itemId: "{0FF72213-59D4-4E03-9960-8311CACC486E}" }
+      - { path: "/sitecore/layout/Renderings/Project/quanex/Products", itemId: "{60F00535-9BB1-42EC-8458-8E0E3369E394}" }
+      - { path: "/sitecore/content/quanex/quanex/Presentation/Available Renderings/Page Content", itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}" }
+      - { path: "/sitecore/content/quanex/quanex/Presentation/Headless Variants", itemId: "{C3025033-D57E-4E06-A928-1BE1AD603795}" }
+    quanexAvailableRenderings:
+      itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}"
+      path: "/sitecore/content/quanex/quanex/Presentation/Available Renderings/Page Content"
+      renderingCount: 75
+      lastUpdatedAt: "2026-08-13T19:45:00Z"
+      lastVerifiedAt: "2026-08-13T20:05:00Z"
+      verificationMethod: "get_allowed_comps_by_ph on product page headless-main (Renderings field silent-read)"
+      status: "OK"
+      includesProductDetail: true
+      includesHeroCarousel: true
+      includesMultiPromo: true
+      includesHeaderST: true
+      warning: "Prior overwrite restored from list_components; CE Raw Values still recommended as absolute confirmation"
+    placement:
+      placeholder: "headless-main"
+      layoutEditingKind: "FINAL"
+      pagesUpdated: 9
+      pageDesignUpdated: "{02BE1207-EA56-4228-A2AE-8F8B474D853A}"
+      pageDesignPath: "/sitecore/content/quanex/quanex/Presentation/Page Designs/ProductPage"
+      note: "Placed on all 9 sample PDPs after ArticleContent + on ProductPage page design. SV not API-editable (no site root)."
+    codeChanges:
+      - "src/components/uiim/products/ProductDetail.tsx"
+      - "src/components/uiim/products/product-detail.props.ts"
+      - "src/__tests__/product-detail/ProductDetail.test.tsx"
+      - "src/Layout.tsx RouteFields extended with Product Detail fields"
+    verification:
+      checkedAt: "2026-08-13T21:00:00Z"
+      passed:
+        - "Product Detail Page template inherits Services Page; Product Data fields typed correctly"
+        - "Rendering Parameters + JSON Rendering ProductDetail (no datasource/ComponentQuery)"
+        - "Default Headless Variant created"
+        - "list_components shows ProductDetail under Products {9AFBB222-DFDC-400D-9385-E50BA119B0C0}"
+        - "Available Renderings proxy-OK: 75 allowed comps on headless-main incl. ProductDetail/HeroCarousel/MultiPromo/HeaderST"
+        - "9 sample Product Detail Page items: Description/TechnicalData/StylesAvailable/Benefits populated (Mikron 7200 + Super Spacer spot-check)"
+        - "ProductDetail on Final layout headless-main for all 9 samples + ProductPage page design"
+        - "React ProductDetail Default export + 4 unit tests passed"
+        - "9 sample Image + ImageSecondary updated from public quanex.com URLs; ImageSecondary re-read confirmed (Duralite, Q-LON spot-check); pageTitle/pageHeaderTitle written"
+      failed: []
+      pendingManual:
+        - "Optional CE Raw Values: confirm Available Renderings/Page Content Renderings [shared] is ~75 GUIDs (not 2)"
+        - "Assign Product Detail Page __Standard Values → Page Design 'ProductPage' (or place ProductDetail on SV Final layout in CE) so new PDPs inherit it"
+        - "Verify pageTitle/pageHeaderTitle/image on samples in CE (inherited fields silent in MCP)"
+        - "Verify __Standard values link on Product Detail Page + Rendering Params templates"
+        - "Verify __Masters insert options on IG Spacers / Extruded Solutions / Weatherseals / Security Screens"
+        - "Publish the 9 sample Product Detail Page items (and related template/rendering if not already) for Edge"
+        - "Optional: remove inherited ArticleContent from PDP Final layouts if ProductDetail alone is desired"
+        - "Optional: replace external quanex.com image URLs with DAM assets"
 

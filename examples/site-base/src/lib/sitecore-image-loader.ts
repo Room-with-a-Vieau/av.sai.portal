@@ -33,7 +33,10 @@ function shouldBypassOptimizer(src: string): boolean {
       hostname.endsWith('.sitecoresandbox.cloud') ||
       hostname.endsWith('.sitecorecontenthub.cloud') ||
       hostname.includes('stylelabs.cloud') ||
-      hostname === 'images.unsplash.com'
+      hostname === 'images.unsplash.com' ||
+      // Public Quanex WP media — serve directly (avoid Vercel optimizer hotlink/fetch issues)
+      hostname === 'www.quanex.com' ||
+      hostname === 'quanex.com'
     );
   } catch {
     return false;

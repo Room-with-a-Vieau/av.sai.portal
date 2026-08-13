@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { Default as HeroCarousel } from '../../components/uiim/banners/HeroCarousel';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Default as HeroCarousel, FocusProduct, SplitPanel } from '../../components/uiim/banners/HeroCarousel';
 import type { HeroCarouselProps } from '../../components/uiim/banners/HeroCarousel';
 
 jest.mock('@sitecore-content-sdk/nextjs', () => {
@@ -12,12 +12,20 @@ jest.mock('@sitecore-content-sdk/nextjs', () => {
     Text: ({ field }: { field?: { value?: string } }) => (
       <span data-testid="hero-carousel-text">{field?.value}</span>
     ),
-    NextImage: ({ field }: { field?: { value?: { src?: string; alt?: string } } }) => (
+    NextImage: ({
+      field,
+      className,
+    }: {
+      field?: { value?: { src?: string; alt?: string } };
+      className?: string;
+    }) => (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         data-testid="hero-carousel-image"
+        data-src={field?.value?.src || ''}
         src={field?.value?.src || ''}
         alt={field?.value?.alt || ''}
+        className={className}
       />
     ),
     Link: ({
@@ -182,8 +190,144 @@ describe('HeroCarousel', () => {
       />
     );
 
-    // Active slide is intro (no image). Switch to the content slide with empty Image.
-    screen.getByLabelText('Go to slide 2').click();
+    fireEvent.click(screen.getByLabelText('Go to slide 2'));
     expect(screen.getByTestId('hero-carousel-image')).toBeInTheDocument();
+  });
+
+  it('FocusProduct renders background and product images with horizontal dots', () => {
+    render(
+      <FocusProduct
+        params={baseParams}
+        page={mockPage}
+        rendering={mockRendering}
+        fields={{
+          data: {
+            datasource: {
+              children: {
+                results: [
+                  {
+                    id: 'fp-1',
+                    slideName: { jsonValue: { value: 'Attraction Handle' } },
+                    description: { jsonValue: { value: 'Modern design for casement windows.' } },
+                    backgroundImage: {
+                      jsonValue: {
+                        value: { src: 'https://example.com/bg.jpg', alt: 'Factory' },
+                      },
+                    },
+                    image: {
+                      jsonValue: {
+                        value: { src: 'https://example.com/product.png', alt: 'Handle' },
+                      },
+                    },
+                    link: {
+                      jsonValue: { value: { href: '/products/attraction', text: 'Learn More' } },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        }}
+      />
+    );
+
+    expect(screen.getByText('Attraction Handle')).toBeInTheDocument();
+    expect(screen.getByText('Learn More')).toBeInTheDocument();
+    const images = screen.getAllByTestId('hero-carousel-image');
+    expect(images).toHaveLength(2);
+    expect(images[0]).toHaveAttribute('data-src', 'https://example.com/bg.jpg');
+    expect(images[1]).toHaveAttribute('data-src', 'https://example.com/product.png');
+    expect(screen.getByLabelText('Go to slide 1')).toBeInTheDocument();
+    expect(screen.queryByText('CONTACT US')).not.toBeInTheDocument();
+  });
+
+  it('SplitPanel renders content left and image right by default', () => {
+    const { container } = render(
+      <SplitPanel
+        params={baseParams}
+        page={mockPage}
+        rendering={mockRendering}
+        fields={{
+          data: {
+            datasource: {
+              children: {
+                results: [
+                  {
+                    id: 'sp-1',
+                    slideName: { jsonValue: { value: 'Open a Trade Account' } },
+                    description: {
+                      jsonValue: { value: 'Access exclusive trade pricing and support.' },
+                    },
+                    summary: { jsonValue: { value: 'Spoilt for choice...' } },
+                    image: {
+                      jsonValue: {
+                        value: { src: 'https://example.com/trade.jpg', alt: 'Trade' },
+                      },
+                    },
+                    link: {
+                      jsonValue: { value: { href: '/trade-account', text: 'Apply Now' } },
+                    },
+                    imageOnLeft: { jsonValue: { value: '' } },
+                  },
+                ],
+              },
+            },
+          },
+        }}
+      />
+    );
+
+    expect(screen.getByText('Open a Trade Account')).toBeInTheDocument();
+    expect(screen.getByText('Apply Now')).toBeInTheDocument();
+    expect(screen.getByText('Spoilt for choice...')).toBeInTheDocument();
+    expect(screen.getByTestId('hero-carousel-image')).toHaveAttribute(
+      'data-src',
+      'https://example.com/trade.jpg'
+    );
+    expect(screen.getByLabelText('Go to slide 1')).toBeInTheDocument();
+    expect(screen.queryByText('CONTACT US')).not.toBeInTheDocument();
+    expect(container.querySelector('.hero-carousel--split-panel')).toBeInTheDocument();
+    const grid = container.querySelector('[role="group"] > div');
+    expect(grid?.className).toContain('md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]');
+  });
+
+  it('SplitPanel places image on left when ImageOnLeft is checked', () => {
+    const { container } = render(
+      <SplitPanel
+        params={baseParams}
+        page={mockPage}
+        rendering={mockRendering}
+        fields={{
+          data: {
+            datasource: {
+              children: {
+                results: [
+                  {
+                    id: 'sp-2',
+                    slideName: { jsonValue: { value: 'Fab&Fix Collection' } },
+                    summary: { jsonValue: { value: 'FROM Fab&Fix' } },
+                    image: {
+                      jsonValue: {
+                        value: { src: 'https://example.com/fabfix.jpg', alt: 'Fab&Fix' },
+                      },
+                    },
+                    link: {
+                      jsonValue: { value: { href: '/fabfix', text: 'Shop Now' } },
+                    },
+                    imageOnLeft: { jsonValue: { value: '1' } },
+                  },
+                ],
+              },
+            },
+          },
+        }}
+      />
+    );
+
+    expect(screen.getByText('Fab&Fix Collection')).toBeInTheDocument();
+    expect(screen.getByText('FROM Fab&Fix')).toBeInTheDocument();
+    expect(screen.getByText('Shop Now')).toBeInTheDocument();
+    const grid = container.querySelector('[role="group"] > div');
+    expect(grid?.className).toContain('md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]');
   });
 });

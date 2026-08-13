@@ -2,7 +2,13 @@
  * This Layout is needed for Starter Kit.
  */
 import React, { type JSX } from 'react';
-import { Field, ImageField, Page, AppPlaceholder } from '@sitecore-content-sdk/nextjs';
+import {
+  Field,
+  ImageField,
+  LinkField,
+  Page,
+  AppPlaceholder,
+} from '@sitecore-content-sdk/nextjs';
 import Scripts from 'src/Scripts';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from 'src/Providers';
@@ -48,12 +54,21 @@ export interface RouteFields {
   metadataAuthor?: Field;
   metadataKeywords?: Field;
   pageTitle?: Field;
+  pageHeaderTitle?: Field;
   metadataDescription?: Field;
   pageSummary?: Field;
   ogTitle?: Field;
   ogDescription?: Field;
   ogImage?: ImageField;
   thumbnailImage?: ImageField;
+  /** Product Detail Page route fields */
+  CategoryLabel?: Field;
+  SpecSheetLink?: LinkField;
+  ImageSecondary?: ImageField;
+  Description?: Field;
+  TechnicalData?: Field;
+  StylesAvailable?: Field;
+  Benefits?: Field;
 }
 
 const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
