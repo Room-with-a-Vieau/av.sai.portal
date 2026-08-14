@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-14T21:00:00Z"
+lastUpdatedAt: "2026-08-14T21:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5024,6 +5024,119 @@ ia:
         - "Append {8278F36C-8492-4641-A401-9C19AA69D08A} to Available Renderings/Page Content (silent-read)"
         - "Verify Datasource Template/Location in CE (silent-write)"
         - "Publish BlogListing rendering + Insights/Blogs page"
+
+  - name: "MediaCanvas"
+    kind: "list"
+    category: "Media"
+    status: "complete"
+    createdAt: "2026-08-14T21:10:00Z"
+    updatedAt: "2026-08-14T21:15:00Z"
+    siteName: "cooley"
+    siteCollection: "Cooley"
+    notes: >
+      Homepage scattered media collage. Live Cooley project paths used (not project.yaml pkm / not Pillsbury).
+      _HorizonDatasourceGrouping template ID not found in this instance; parent uses Standard + Grid Parameters.
+      Home IA pages were not modified. MediaCanvas added to Home final layout headless-main.
+    react:
+      filePath: "src/components/uiim/media/MediaCanvas.tsx"
+      componentMapKey: "MediaCanvas"
+      variants:
+        - "Default"
+    templates:
+      parent:
+        name: "MediaCanvas"
+        path: "/sitecore/templates/Project/Cooley/Components/Media/MediaCanvas"
+        itemId: "{7D4D75CB-CF77-43E7-8A91-B0534483E72E}"
+        sectionName: "Data"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{4D8F0644-B5FA-4B31-8585-E6EB6930CD83}" }
+          - { name: "Subtitle", type: "Single-Line Text", itemId: "{28E1040F-5EE2-42EF-8ECC-0DBF848DD42A}" }
+          - { name: "Cta", type: "General Link", itemId: "{56E7B2F9-03F4-4761-B94D-AC8C608B3BA8}" }
+          - { name: "PauseVideoLabel", type: "Single-Line Text", itemId: "{B0E60D96-0E02-4D33-94F0-67ECDAAF21C9}" }
+          - { name: "PlayVideoLabel", type: "Single-Line Text", itemId: "{8637AF3D-25F3-43E9-A55B-B5866858F30A}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{32395BDA-D979-4A7D-9BAB-6531F22D13FD}"
+          linked: true
+      child:
+        name: "MediaCanvasItem"
+        path: "/sitecore/templates/Project/Cooley/Components/Media/MediaCanvasItem"
+        itemId: "{9E9A4A47-08EC-44CA-AB32-D0C6E88D8792}"
+        fields:
+          - { name: "Image", type: "Image", itemId: "{F7987410-0BD9-4947-A43F-AE883DD17B7A}" }
+          - { name: "Video", type: "General Link", itemId: "{AB1661E6-DF8C-47FC-8D4E-BC88F42948BA}" }
+          - { name: "Tagline", type: "Single-Line Text", itemId: "{1C52CA4B-6318-4CFF-A1D8-21E34EF9B894}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{A65A1F96-FD70-4B43-8AA7-4996061EF590}"
+          linked: true
+      folder:
+        name: "MediaCanvas Folder"
+        path: "/sitecore/templates/Project/Cooley/Folders/MediaCanvas Folder"
+        itemId: "{34F819E7-3B3E-4AED-BE29-94F485F9F436}"
+        standardValues:
+          itemId: "{ECF83553-EA1B-4CA4-B2E1-DA20B693E47F}"
+          linked: true
+      renderingParams:
+        name: "MediaCanvas"
+        path: "/sitecore/templates/Project/Cooley/Rendering Parameters/Media/MediaCanvas"
+        itemId: "{B66082AC-E0F1-41C5-AE94-7A627D99D980}"
+        baseTemplatesSet: true
+    datasourceFolder:
+      name: "MediaCanvas"
+      path: "/sitecore/content/Cooley/cooley/Data/MediaCanvas"
+      itemId: "{4940DBEB-10DC-4D2F-9264-EEF5B59896ED}"
+      insertOptionsSet: true
+      exampleItem:
+        name: "Homepage Hero"
+        itemId: "{3C6AFEF1-AAE6-48A8-BD76-3FD71A13ACE4}"
+    rendering:
+      name: "MediaCanvas"
+      path: "/sitecore/layout/Renderings/Project/Cooley/Media/MediaCanvas"
+      itemId: "{53E21CA2-BA94-4A60-ADA4-7D3F09289DA2}"
+      componentName: "MediaCanvas"
+      datasourceTemplatePath: "/sitecore/templates/Project/Cooley/Components/Media/MediaCanvas"
+      useComponentQuery: true
+      registeredInAvailableRenderings: false
+    variants:
+      containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MediaCanvas"
+      containerId: "{D1B76B64-40F2-49D7-B005-96120805B899}"
+      definitions:
+        - { name: "Default", itemId: "{CC16BD23-EEBC-4847-9F42-407FF68FE275}" }
+    pagePlacement:
+      pagePath: "/sitecore/content/Cooley/cooley/Home"
+      pageId: "{E17C24E2-6BC8-4415-8745-484D0DBBF8D0}"
+      placeholder: "headless-main"
+      instanceId: "{C51B4680-28EE-48BB-9F04-26C3DDE955A7}"
+      localDatasource: "{415E1109-92A4-4F99-9816-EAD3075C4E28}"
+    lookupsAdded:
+      - { path: "/sitecore/content/Cooley/cooley/Data", itemId: "{51224EB9-4E9B-486A-9A40-4FC0689E1FD0}" }
+      - { path: "/sitecore/templates/Project/Cooley/Components", itemId: "{5A4BC589-73DB-499F-B501-B0ABB5EDF529}" }
+      - { path: "/sitecore/templates/Project/Cooley/Folders", itemId: "{8374FF65-420C-450E-B8B9-81A67F895C25}" }
+      - { path: "/sitecore/templates/Project/Cooley/Rendering Parameters", itemId: "{DA76C3D7-6B83-4B0E-B330-20E9C354C6B6}" }
+      - { path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants", itemId: "{C2E79017-E902-4B54-9BF6-EC597393D47F}" }
+      - { path: "/sitecore/content/Cooley/cooley/Presentation/Available Renderings/Page Content", itemId: "{82D8DEC3-8F75-4002-B68A-4A2286D6BC61}" }
+    verification:
+      checkedAt: "2026-08-14T21:15:00Z"
+      passed:
+        - "Parent/child templates with Standard + Grid Parameters"
+        - "Fields created with correct Type"
+        - "Standard Values created"
+        - "Rendering Parameters template created"
+        - "JSON Rendering componentName + Parameters Template + ComponentQuery verified"
+        - "Example parent + 5 children under Data/MediaCanvas"
+        - "Local Home datasource populated with title + 5 tiles"
+        - "Default Headless Variant created"
+        - "React MediaCanvas.tsx created"
+        - "Placed on Home headless-main"
+      failed: []
+      pendingManual:
+        - "Append {53E21CA2-BA94-4A60-ADA4-7D3F09289DA2} to Available Renderings/Page Content (silent-read; do not replace)"
+        - "Verify Datasource Template/Location in CE (silent-write)"
+        - "Verify __Masters on folder SV and Data folder instance (silent-write)"
+        - "Verify __Standard values links on templates (silent-write)"
+        - "Publish rendering, templates, Home, and Data items for Edge"
+        - "_HorizonDatasourceGrouping not found on this instance — optional follow-up"
 
 iaTrees:
   - name: "Cooley Home IA"
