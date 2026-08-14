@@ -96,7 +96,7 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/do-product-images/**',
       },
-      // Public Quanex product media (external Image field URLs, not Content Hub)
+      // Public Quanex / ERA / AmesburyTruth product media (external ImageUrl fields)
       {
         protocol: 'https',
         hostname: 'www.quanex.com',
@@ -106,6 +106,30 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'quanex.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.eraeverywhere.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'eraeverywhere.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.amesburytruth.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'amesburytruth.com',
         port: '',
         pathname: '/**',
       },

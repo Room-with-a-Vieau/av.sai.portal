@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 import { extractImageSrc } from '@/lib/sitecore-image-field';
+import { shouldBypassOptimizer } from '@/lib/sitecore-image-loader';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
 import type {
@@ -89,7 +90,6 @@ function ProductImage({
   className?: string;
 }) {
   if (!src) return null;
-  const isQuanex = /quanex\.com/i.test(src);
   return (
     <NextImage
       src={src}
@@ -97,7 +97,7 @@ function ProductImage({
       width={320}
       height={240}
       className={className}
-      unoptimized={isQuanex}
+      unoptimized={shouldBypassOptimizer(src)}
     />
   );
 }

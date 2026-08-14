@@ -18,6 +18,7 @@ import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import { extractImageSrc } from '@/lib/sitecore-image-field';
+import { shouldBypassOptimizer } from '@/lib/sitecore-image-loader';
 
 import type { ProductDetailFields, ProductDetailProps } from './product-detail.props';
 
@@ -66,7 +67,6 @@ function ProductImage({
   // Prefer resolved public URL (Image URL fields / extractImageSrc). Sitecore Image fields with
   // external-only XML often have empty value.src in layout/Pages — ContentSdkImage then shows a grey placeholder.
   if (src) {
-    const isQuanex = /quanex\.com/i.test(src);
     return (
       <NextImage
         src={src}
@@ -74,7 +74,7 @@ function ProductImage({
         width={605}
         height={380}
         className={className}
-        unoptimized={isQuanex}
+        unoptimized={shouldBypassOptimizer(src)}
         priority={priority}
       />
     );
