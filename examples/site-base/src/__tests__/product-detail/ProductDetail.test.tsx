@@ -102,7 +102,10 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 import { Default as ProductDetail } from '@/components/uiim/products/ProductDetail';
 
 const baseFields: ProductDetailFields = {
-  pageHeaderTitle: { value: 'MIKRON 7200 SOUND CONTROL SYSTEM' },
+  ProductName: { value: 'MIKRON 7200 SOUND CONTROL SYSTEM' },
+  ProductID: { value: 'QNX-M7200' },
+  ProductSKU: { value: 'QNX-M7200-STD' },
+  pageHeaderTitle: { value: 'Should not win when ProductName is set' },
   CategoryLabel: { value: 'Commercial Window Profiles' },
   SpecSheetLink: {
     value: {
@@ -154,6 +157,8 @@ describe('ProductDetail', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'MIKRON 7200 SOUND CONTROL SYSTEM'
     );
+    expect(screen.getByText('QNX-M7200')).toBeInTheDocument();
+    expect(screen.getByText('QNX-M7200-STD')).toBeInTheDocument();
     expect(screen.getByText('Commercial Window Profiles')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /print a spec sheet/i })).toHaveAttribute(
       'href',
@@ -235,7 +240,8 @@ describe('ProductDetail', () => {
             context: {},
             route: {
               fields: {
-                pageHeaderTitle: { value: 'Q-LON WEATHERSEALS' },
+                ProductName: { value: 'Q-LON WEATHERSEALS' },
+                ProductID: { value: 'QNX-QLON' },
                 CategoryLabel: { value: 'Weatherseals and Fenestration Seals' },
               },
             },

@@ -5921,12 +5921,13 @@ ia:
     category: "Products"
     status: "complete"
     createdAt: "2026-08-13T19:30:00Z"
-    updatedAt: "2026-08-13T21:00:00Z"
+    updatedAt: "2026-08-14T15:00:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
       - "2026-08-13: Quanex PDP architecture — Product Detail Page (route template inheriting Services Page) + ProductDetail context component. Did NOT reuse starter Product Page (SYNC audio fields)."
-      - "Main product image reuses inherited Services Page `image`; title reuses pageTitle/pageHeaderTitle."
+      - "Main product image reuses inherited Services Page `image`. Title prefers Product Data ProductName, then pageHeaderTitle, then pageTitle."
+      - "2026-08-14: Added Product Data fields ProductID {CA94EC7F-2908-4E34-A9E5-F8EC8DD7A91D}, ProductSKU {C5B02812-DEB7-4B51-8A68-8019A44F0DB3}, ProductName {F2FA4F60-BFEC-4B8A-858C-F5AE25DF459B}. Populated on Quanex 9 + AT 10 + ERA 10 PDPs. ProductDetail shows ID/SKU under the h1."
       - "Available Renderings briefly overwritten with HeroCarousel|ProductDetail only; restored to 75 GUIDs reconstructed from list_components (includes ProductDetail)."
       - "2026-08-13 safety check: get_allowed_comps_by_ph(headless-main) on Mikron returned 75 allowed comps including ProductDetail {9AFBB222…}, HeroCarousel, MultiPromo, HeaderST — NOT a 2-item list. Renderings field itself is silent-read (fields:{}). Status OK (proxy-verified)."
       - "2026-08-13: ProductDetail placed on all 9 sample PDP Final layouts + Page Designs/ProductPage headless-main. Product Detail Page __Standard Values not API-editable (no site root) — wire SV/Page Design assignment manually in CE."
@@ -5946,6 +5947,9 @@ ia:
       sectionName: "Product Data"
       sectionId: "{ECEB15EC-309E-4993-87C9-2E5ACD1BED9B}"
       fields:
+        - { name: "ProductID", type: "Single-Line Text", itemId: "{CA94EC7F-2908-4E34-A9E5-F8EC8DD7A91D}" }
+        - { name: "ProductSKU", type: "Single-Line Text", itemId: "{C5B02812-DEB7-4B51-8A68-8019A44F0DB3}" }
+        - { name: "ProductName", type: "Single-Line Text", itemId: "{F2FA4F60-BFEC-4B8A-858C-F5AE25DF459B}" }
         - { name: "CategoryLabel", type: "Single-Line Text", itemId: "{0169DFCE-89A4-4941-821A-AB1266A1DE4A}" }
         - { name: "SpecSheetLink", type: "General Link", itemId: "{17CBE776-D3B6-4203-A37C-30A46022BAE6}" }
         - { name: "ImageSecondary", type: "Image", itemId: "{4E90C3B8-4BD8-4034-87E0-9E824460F7E5}" }
@@ -6111,13 +6115,13 @@ ia:
     category: "Products"
     status: "complete"
     createdAt: "2026-08-13T21:00:00Z"
-    updatedAt: "2026-08-14T13:30:00Z"
+    updatedAt: "2026-08-14T15:00:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
       - "2026-08-13: List-style carousel; authors pick Product Detail Page items via Products Treelist (not child datasource items)."
       - "Template/fields/folder/params created earlier; this pass finished HorizonDatasourceGrouping, folder Masters, Data folders, samples, JSON Rendering + ComponentQuery, variants, Available Renderings, React."
-      - "ComponentQuery expands Products MultilistField targetItems with PDP fields (pageTitle, CategoryLabel, Description, ImageUrl, etc.). Prefer ImageUrl over Image XML."
+      - "2026-08-14: ComponentQuery now includes ProductName/ProductID/ProductSKU on Treelist targetItems. Card titles prefer ProductName over pageHeaderTitle/pageTitle."
       - "Available Renderings reconstructed from get_allowed_comps_by_ph then appended ProductCarousel on quanex (76), era (46), amesburytruth (46)."
       - "2026-08-13: Products Treelist Source widened to query:$site/Home (PDPs live under IA L2/L3 folders, not Home/Products)."
       - "2026-08-13: ERA Popular Products + AT AmesburyTruth Highlights retargeted to site-local PDPs (brace+pipe GUIDs matching Featured Products format)."
@@ -6204,7 +6208,7 @@ ia:
       datasourceTemplatePath: "/sitecore/templates/Project/quanex/Components/Products/ProductCarousel"
       datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='ProductCarousel Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='ProductCarousel Folder']"
       addFieldEditorButton: "1"
-      componentQuery: "query ProductCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"Title\") { jsonValue } backgroundImageUrl: field(name: \"BackgroundImageUrl\") { jsonValue } ctaLabel: field(name: \"CtaLabel\") { jsonValue } showOptionsHint: field(name: \"ShowOptionsHint\") { jsonValue } products: field(name: \"Products\") { ... on MultilistField { targetItems { id name path url { path } pageTitle: field(name: \"pageTitle\") { jsonValue } pageHeaderTitle: field(name: \"pageHeaderTitle\") { jsonValue } categoryLabel: field(name: \"CategoryLabel\") { jsonValue } description: field(name: \"Description\") { jsonValue } imageUrl: field(name: \"ImageUrl\") { jsonValue } imageSecondaryUrl: field(name: \"ImageSecondaryUrl\") { jsonValue } specSheetLink: field(name: \"SpecSheetLink\") { jsonValue } } } } } }"
+      componentQuery: "query ProductCarousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"Title\") { jsonValue } backgroundImageUrl: field(name: \"BackgroundImageUrl\") { jsonValue } ctaLabel: field(name: \"CtaLabel\") { jsonValue } showOptionsHint: field(name: \"ShowOptionsHint\") { jsonValue } products: field(name: \"Products\") { ... on MultilistField { targetItems { id name path url { path } productName: field(name: \"ProductName\") { jsonValue } productId: field(name: \"ProductID\") { jsonValue } productSku: field(name: \"ProductSKU\") { jsonValue } pageTitle: field(name: \"pageTitle\") { jsonValue } pageHeaderTitle: field(name: \"pageHeaderTitle\") { jsonValue } categoryLabel: field(name: \"CategoryLabel\") { jsonValue } description: field(name: \"Description\") { jsonValue } imageUrl: field(name: \"ImageUrl\") { jsonValue } imageSecondaryUrl: field(name: \"ImageSecondaryUrl\") { jsonValue } specSheetLink: field(name: \"SpecSheetLink\") { jsonValue } } } } } }"
       registeredInAvailableRenderings: true
     headlessVariants:
       - siteName: "quanex"

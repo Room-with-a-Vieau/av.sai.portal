@@ -8,6 +8,9 @@ import type {
 import type { ComponentProps } from '@/lib/component-props';
 
 export type ProductDetailFields = {
+  ProductName?: Field<string>;
+  ProductID?: Field<string>;
+  ProductSKU?: Field<string>;
   pageTitle?: Field<string>;
   pageHeaderTitle?: Field<string>;
   CategoryLabel?: Field<string>;

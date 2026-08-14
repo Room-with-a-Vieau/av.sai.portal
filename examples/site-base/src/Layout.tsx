@@ -63,7 +63,10 @@ export interface RouteFields {
   ogDescription?: Field;
   ogImage?: ImageField;
   thumbnailImage?: ImageField;
-  /** Product Detail Page route fields */
+  /** Product Detail Page fields */
+  ProductName?: Field;
+  ProductID?: Field;
+  ProductSKU?: Field;
   CategoryLabel?: Field;
   SpecSheetLink?: LinkField;
   ImageSecondary?: ImageField;

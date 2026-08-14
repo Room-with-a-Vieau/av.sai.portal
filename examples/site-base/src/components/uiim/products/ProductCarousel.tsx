@@ -60,6 +60,8 @@ function productHref(product: ProductCarouselProductItem): string {
 }
 
 function productTitleField(product: ProductCarouselProductItem): TextField | undefined {
+  const productName = product.productName?.jsonValue;
+  if (textValue(productName)) return productName;
   const header = product.pageHeaderTitle?.jsonValue;
   if (textValue(header)) return header;
   const title = product.pageTitle?.jsonValue;

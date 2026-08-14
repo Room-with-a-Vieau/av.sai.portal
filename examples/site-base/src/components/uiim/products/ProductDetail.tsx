@@ -125,10 +125,14 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
     ...(propFields ?? {}),
   };
 
-  const titleField = fields.pageHeaderTitle?.value
-    ? fields.pageHeaderTitle
-    : fields.pageTitle;
+  const titleField = fields.ProductName?.value
+    ? fields.ProductName
+    : fields.pageHeaderTitle?.value
+      ? fields.pageHeaderTitle
+      : fields.pageTitle;
   const titleText = textValue(titleField);
+  const productId = textValue(fields.ProductID);
+  const productSku = textValue(fields.ProductSKU);
   const categoryLabel = textValue(fields.CategoryLabel);
   const descriptionField = richHasContent(fields.Description)
     ? fields.Description
@@ -148,6 +152,8 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
 
   const hasContent =
     Boolean(titleText) ||
+    Boolean(productId) ||
+    Boolean(productSku) ||
     Boolean(categoryLabel) ||
     richHasContent(descriptionField) ||
     richHasContent(fields.TechnicalData) ||
@@ -190,6 +196,23 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
                 field={titleField}
                 className="font-heading text-balance text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl"
               />
+            )}
+
+            {(productId || productSku || isEditing) && (
+              <p className="text-muted-foreground mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                {(productId || isEditing) && fields.ProductID && (
+                  <span>
+                    <span className="font-medium tracking-wide uppercase">ID </span>
+                    <Text tag="span" field={fields.ProductID} />
+                  </span>
+                )}
+                {(productSku || isEditing) && fields.ProductSKU && (
+                  <span>
+                    <span className="font-medium tracking-wide uppercase">SKU </span>
+                    <Text tag="span" field={fields.ProductSKU} />
+                  </span>
+                )}
+              </p>
             )}
 
             {(linkHasHref(specSheet) || isEditing) && specSheet && (

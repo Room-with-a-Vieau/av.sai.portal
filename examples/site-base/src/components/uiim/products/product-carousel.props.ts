@@ -6,6 +6,9 @@ export type ProductCarouselProductItem = {
   name?: string;
   path?: string;
   url?: { path?: string };
+  productName?: IGQLTextField;
+  productId?: IGQLTextField;
+  productSku?: IGQLTextField;
   pageTitle?: IGQLTextField;
   pageHeaderTitle?: IGQLTextField;
   categoryLabel?: IGQLTextField;

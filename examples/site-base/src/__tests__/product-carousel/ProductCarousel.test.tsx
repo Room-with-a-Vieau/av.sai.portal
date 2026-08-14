@@ -125,7 +125,10 @@ const sampleProducts = [
     name: 'Maxim HP Hinge',
     path: '/sitecore/content/quanex/quanex/Home/Products/Weatherseals/Q-LON Weatherseals',
     url: { path: '/Products/Weatherseals/Q-LON Weatherseals' },
-    pageTitle: { jsonValue: { value: 'Maxim HP Hinge' } },
+    productName: { jsonValue: { value: 'Maxim HP Hinge' } },
+    productId: { jsonValue: { value: 'AT-MHP' } },
+    productSku: { jsonValue: { value: 'AT-HINGE-MHP' } },
+    pageTitle: { jsonValue: { value: 'Should not win when ProductName is set' } },
     categoryLabel: { jsonValue: { value: 'HINGES' } },
     description: {
       jsonValue: { value: '<p>High-performance hinge for casement windows.</p>' },
