@@ -19,6 +19,7 @@ import * as careerlistingprops from 'src/components/uiim/lawyers/career-listing.
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
 import * as biorelatedcontent from 'src/components/uiim/lawyers/bio-related-content';
+import * as biodetailprops from 'src/components/uiim/lawyers/bio-detail.props';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
 import * as HeroCarousel from 'src/components/uiim/banners/HeroCarousel';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
@@ -130,6 +131,8 @@ import * as multipromotabsprops from 'src/components/multi-promo-tabs/multi-prom
 import * as modetoggledev from 'src/components/mode-toggle/mode-toggle.dev';
 import * as MediaSectiondev from 'src/components/media-section/MediaSection.dev';
 import * as mediasectionprops from 'src/components/media-section/media-section.props';
+import * as MainNav from 'src/components/main-nav/MainNav';
+import * as mainnavprops from 'src/components/main-nav/main-nav.props';
 import * as meteors from 'src/components/magicui/meteors';
 import * as LogoTabs from 'src/components/logo-tabs/LogoTabs';
 import * as LogoItem from 'src/components/logo-tabs/LogoItem';
@@ -311,6 +314,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BioListing', { ...BioListing, componentType: 'client' }],
   ['BioDetail', { ...BioDetail, componentType: 'client' }],
   ['bio-related-content', { ...biorelatedcontent }],
+  ['bio-detail', { ...biodetailprops }],
   ['BlogListing', { ...BlogListing, componentType: 'client' }],
   ['HeroCarousel', { ...HeroCarousel, componentType: 'client' }],
   ['TopicListing', { ...TopicListing }],
@@ -419,6 +423,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['mode-toggle', { ...modetoggledev }],
   ['MediaSection', { ...MediaSectiondev }],
   ['media-section', { ...mediasectionprops }],
+  ['MainNav', { ...MainNav, componentType: 'client' }],
+  ['main-nav', { ...mainnavprops }],
   ['meteors', { ...meteors, componentType: 'client' }],
   ['LogoTabs', { ...LogoTabs, componentType: 'client' }],
   ['LogoItem', { ...LogoItem }],

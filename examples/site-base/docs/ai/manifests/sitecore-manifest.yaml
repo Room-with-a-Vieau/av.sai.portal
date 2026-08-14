@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-13T21:45:00Z"
+lastUpdatedAt: "2026-08-14T13:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5931,6 +5931,7 @@ ia:
       - "2026-08-13 safety check: get_allowed_comps_by_ph(headless-main) on Mikron returned 75 allowed comps including ProductDetail {9AFBB222…}, HeroCarousel, MultiPromo, HeaderST — NOT a 2-item list. Renderings field itself is silent-read (fields:{}). Status OK (proxy-verified)."
       - "2026-08-13: ProductDetail placed on all 9 sample PDP Final layouts + Page Designs/ProductPage headless-main. Product Detail Page __Standard Values not API-editable (no site root) — wire SV/Page Design assignment manually in CE."
       - "2026-08-13: Sample PDP Image + ImageSecondary set from public quanex.com wp-content URLs (not Content Hub/DAM). Inherited `image`/`pageTitle`/`pageHeaderTitle` silent in MCP reads but written via update_fields_on_item. ImageSecondary verified on re-read."
+      - "2026-08-14: Product Detail Page __Base template was empty (MCP); OG fields missing. Set __Base template to Services Page {274FC64E-530F-457E-BD04-8B195DF94646}. get_page_template_by_id now includes ogTitle/ogDescription/ogImage via Detail Page {A9919790-3389-4FC2-ABC8-24F73C847C8E}."
     react:
       filePath: "src/components/uiim/products/ProductDetail.tsx"
       componentMapKey: "ProductDetail"
@@ -6110,7 +6111,7 @@ ia:
     category: "Products"
     status: "complete"
     createdAt: "2026-08-13T21:00:00Z"
-    updatedAt: "2026-08-13T21:30:00Z"
+    updatedAt: "2026-08-14T13:30:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
@@ -6118,7 +6119,9 @@ ia:
       - "Template/fields/folder/params created earlier; this pass finished HorizonDatasourceGrouping, folder Masters, Data folders, samples, JSON Rendering + ComponentQuery, variants, Available Renderings, React."
       - "ComponentQuery expands Products MultilistField targetItems with PDP fields (pageTitle, CategoryLabel, Description, ImageUrl, etc.). Prefer ImageUrl over Image XML."
       - "Available Renderings reconstructed from get_allowed_comps_by_ph then appended ProductCarousel on quanex (76), era (46), amesburytruth (46)."
-      - "Sample Products Treelist points at quanex PDP samples (ERA/AT have no Home/Products tree yet)."
+      - "2026-08-13: Products Treelist Source widened to query:$site/Home (PDPs live under IA L2/L3 folders, not Home/Products)."
+      - "2026-08-13: ERA Popular Products + AT AmesburyTruth Highlights retargeted to site-local PDPs (brace+pipe GUIDs matching Featured Products format)."
+      - "2026-08-14: CE Runtime Error on selecting ProductCarousel datasources (e.g. Featured Products). Cause: Products Treelist Source `query:$site/Home&IncludeTemplatesForSelection=Product Detail Page` — `$site` is unreliable in CE for Data-folder items, and `&` is Sitecore Query AND unless DataSource= is used. HeroCarousel/MainNav Contact do not use this Treelist so they did not throw. Item fields/layout/GUIDs were healthy. Fix: Source on {CB418CCB-EDAA-4D6C-8A28-0D62CD901331} = DataSource=query:./ancestor-or-self::*[@@templatename='Headless Site']/*[@@name='Home']&IncludeTemplatesForSelection=Product Detail Page. ERA Popular Products + AT Highlights share the same template field (no item edits)."
     react:
       filePath: "src/components/uiim/products/ProductCarousel.tsx"
       componentMapKey: "ProductCarousel"
@@ -6137,7 +6140,7 @@ ia:
           - { name: "BackgroundImageUrl", type: "Single-Line Text", itemId: "{BACE846D-7EAB-49B6-9961-9B82A2F9C9BD}" }
           - { name: "CtaLabel", type: "Single-Line Text", itemId: "{FDC10F8A-7DF8-492C-94F4-FE1CBE80B1E7}", default: "Learn More" }
           - { name: "ShowOptionsHint", type: "Checkbox", itemId: "{8D3EECE7-48D3-4F23-8DE7-1AB8BD74ACD1}" }
-          - { name: "Products", type: "Treelist", itemId: "{CB418CCB-EDAA-4D6C-8A28-0D62CD901331}", source: "query:$site/Home/Products&IncludeTemplatesForSelection=Product Detail Page" }
+          - { name: "Products", type: "Treelist", itemId: "{CB418CCB-EDAA-4D6C-8A28-0D62CD901331}", source: "DataSource=query:./ancestor-or-self::*[@@templatename='Headless Site']/*[@@name='Home']&IncludeTemplatesForSelection=Product Detail Page" }
         baseTemplatesSet: true
         horizonDatasourceGrouping: "{D0F6BE14-2A2D-4C56-ACB5-80CAA573B8E2}"
         standardValues:
@@ -6173,11 +6176,23 @@ ia:
         path: "/sitecore/content/quanex/era/Data/ProductCarousels/Popular Products"
         siteName: "era"
         note: "ShowOptionsHint=1; CtaLabel=More Information; ProductStrip variant"
+        products:
+          - "{A32E200C-94D6-405B-8CCE-5B28DF2A19BE}" # Classic Flag Hinge
+          - "{205A13A2-BBC9-4BD2-B359-9FE9F94848EB}" # Architectural Shield Letterplate
+          - "{C509E605-6BB0-4D3D-AAD6-7FC453AEAE49}" # Balmoral Handle
+          - "{0F898B80-ED16-46D0-91D4-B6F26D474E34}" # Connoisseur Window Handle
+          - "{F2475D1A-E5F1-4355-817C-FD83AB87989E}" # Monkey Tail Handle
+          - "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}" # BS3621 Fortress Deadlock
       - name: "AmesburyTruth Highlights"
         itemId: "{35E18643-B9C6-473D-80AE-F2E910D5A562}"
         path: "/sitecore/content/quanex/amesburytruth/Data/ProductCarousels/AmesburyTruth Highlights"
         siteName: "amesburytruth"
         note: "BackgroundImageUrl set; Default/Highlights variant"
+        products:
+          - "{46A0D438-64A3-444B-AFF3-0DC4F96F7C93}" # Maxim HP Hinge
+          - "{8975098D-C541-48D9-A3BD-9BF69CBBA739}" # P3000
+          - "{FA06DC63-6D5F-410B-92F9-F13F8CFFFAF5}" # Positive Action Lock
+          - "{4A22EEAB-C2F3-4EDE-85F4-38AEA2A9AC59}" # SafeGard 2
     rendering:
       name: "ProductCarousel"
       path: "/sitecore/layout/Renderings/Project/quanex/Products/ProductCarousel"
@@ -6219,7 +6234,7 @@ ia:
       - "src/components/uiim/products/product-carousel.props.ts"
       - "src/__tests__/product-carousel/ProductCarousel.test.tsx"
     verification:
-      checkedAt: "2026-08-13T21:30:00Z"
+      checkedAt: "2026-08-14T13:30:00Z"
       passed:
         - "HorizonDatasourceGrouping on ProductCarousel template base"
         - "ProductCarousels folders on quanex/era/amesburytruth"
@@ -6229,16 +6244,18 @@ ia:
         - "Default + ProductStrip variants on quanex/era/amesburytruth"
         - "Available Renderings appended on quanex/era/amesburytruth (silent-write)"
         - "React Default + ProductStrip exports + 4 unit tests passed"
+        - "Products Treelist Source = DataSource=query:./ancestor-or-self::*[@@templatename='Headless Site']/*[@@name='Home']&IncludeTemplatesForSelection=Product Detail Page (CE Runtime Error fix 2026-08-14)"
+        - "ERA Popular Products Products = 6 era PDPs (Classic Flag, Letterplate, Balmoral, Connoisseur, Monkey Tail, Fortress)"
+        - "AT AmesburyTruth Highlights Products = 4 AT PDPs (Maxim HP, P3000, Positive Action Lock, SafeGard 2)"
       failed: []
       pendingManual:
         - "Confirm __Masters on ProductCarousel Folder SV + folder instances in CE (silent-write)"
         - "Confirm Datasource Template/Location on rendering in CE (silent-write; get_component OK)"
         - "Confirm Available Renderings Raw Values include {4A6F68B9-709B-4AA8-9444-B695EFDC7180} on all 3 sites"
-        - "Publish ProductCarousel rendering, templates, Data/ProductCarousels, variants for Edge"
+        - "Publish ProductCarousel template field Source + Data/ProductCarousels samples for Edge"
         - "Place on ERA Home (ProductStrip) and AT Home (Default) with sample datasources"
-        - "Create Home/Products trees on ERA/AT (or adjust Treelist source) so authors can pick site-local PDPs"
+        - "In CE: click Featured Products, Popular Products, AmesburyTruth Highlights — editor should load (no Runtime Error); Treelist should root at that site Home"
         - "Component map regenerates on npm run build/dev — verify ProductCarousel key present"
-        - "2026-08-13: ERA/AT now have 10 PDPs each under IA product-line folders — retarget ProductCarousel Treelists to site-local PDPs"
 
   - name: "EraAmesburyTruthProductDetailPages"
     kind: "content"
@@ -6396,5 +6413,191 @@ ia:
         - "Set pageTitle/pageHeaderTitle in CE (MCP cannot write inherited Services Page title fields)"
         - "Remove duplicate ProductDetail if Page Design already provides one"
         - "Publish all 20 PDPs for Edge"
-        - "Optional: retarget ProductCarousel Treelists to these site-local PDPs"
+        - "ProductCarousel ERA/AT samples retargeted (2026-08-13 follow-up)"
+
+  - name: "quanex-open-graph-fields"
+    kind: "content-update"
+    category: "Metadata"
+    status: "complete"
+    createdAt: "2026-08-14T12:00:00Z"
+    updatedAt: "2026-08-14T12:20:00Z"
+    siteName: "quanex"
+    contentRootPath: "/sitecore/content/quanex/quanex/Home"
+    contentRootItemId: "{E6276198-3FC7-4D8B-BD14-8669B1701536}"
+    notes: >
+      2026-08-14 follow-up: Product Detail Page {7629F514-E156-4543-ADC6-051453441B33} had empty
+      __Base template (MCP) so og* GraphQL fields were missing. Set __Base template to Services Page
+      {274FC64E-530F-457E-BD04-8B195DF94646} (which inherits Detail Page {A9919790-3389-4FC2-ABC8-24F73C847C8E}
+      where ogTitle/ogDescription/ogImage live). No new OG fields created. Then populated all 9 Quanex
+      PDPs. MCP update_fields_on_item remains silent for inherited OG (echoes Product Data only) but
+      no GraphQL missing-field error. ogImage Image XML uses each PDP ImageUrl (all quanex.com).
+      Prior 70 Home/Services/Page OG writes unchanged.
+    fieldsUpdated:
+      - ogTitle
+      - ogDescription
+      - ogImage
+    productDetailPageTemplate:
+      itemId: "{7629F514-E156-4543-ADC6-051453441B33}"
+      baseTemplateSet: "{274FC64E-530F-457E-BD04-8B195DF94646}"
+      ogViaInheritance: true
+      ogFieldIdsAdded: []
+    productDetailPagesUpdated:
+      - { name: "Super Spacer", itemId: "{E5D63D4B-5A70-43E6-987A-9E454C99034F}", ogTitle: "Super Spacer | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2026/04/R1_SuperSpacer_ProductRendering_Glass_Black_TopCorner.jpg" }
+      - { name: "Super Spacer Premium", itemId: "{2B1E0840-06E9-47A0-9923-A3DD9211ECA3}", ogTitle: "Super Spacer Premium | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2026/04/R1_SuperSpacer_Premium_ProductRendering_Glass_Black_TopCorner.jpg" }
+      - { name: "Duralite", itemId: "{464E91A3-C14F-4DF9-9F95-71F15993012B}", ogTitle: "Duralite | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2026/04/R2_Duralite_ProductRendering_Glass_TopCorner_Extended.jpg" }
+      - { name: "Q-LON Weatherseals", itemId: "{00B55533-00D4-425A-9D48-1A126F079857}", ogTitle: "Q-LON Weatherseals | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2026/04/U71_Frame000002.jpg" }
+      - { name: "Threshold and Sweep Systems", itemId: "{FD4CA406-D7C2-46FE-8196-E6D09098DC0B}", ogTitle: "Threshold and Sweep Systems | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2022/07/5Y-High-Performance-Thresholds_ProductImage_605x380.jpg" }
+      - { name: "Mikron Residential Vinyl Profiles", itemId: "{C2FD1252-0EF7-4658-87D6-20CE4A177181}", ogTitle: "Mikron Residential Vinyl Profiles | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2022/09/mikron8500.jpg" }
+      - { name: "Commercial Vinyl Door Systems", itemId: "{847A5329-808A-44F2-A876-4E1A835FC0E7}", ogTitle: "Commercial Vinyl Door Systems | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2022/07/Mikron-AW-Rated-Door-System-C3-11300_ProductImage_605x380.jpg" }
+      - { name: "Mikron 7200 Sound Control System", itemId: "{E3DDC8AF-C6F9-4600-8365-A37AF8AB4758}", ogTitle: "Mikron 7200 Sound Control System | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2022/07/Mikron-7200-Sound-Control-System_ProductImage_605x380.jpg" }
+      - { name: "Security Screens and Grilles", itemId: "{7604D4F6-D505-4E27-BBDE-7B41AECFCC49}", ogTitle: "Security Screens and Grilles | Quanex", ogImage: "https://www.quanex.com/wp-content/uploads/2023/06/petScreen_image.jpg" }
+    verification:
+      checkedAt: "2026-08-14T12:20:00Z"
+      passed:
+        - "Product Detail Page __Base template set to Services Page {274FC64E-530F-457E-BD04-8B195DF94646}"
+        - "get_page_template_by_id now lists ogTitle, ogDescription, ogImage on Product Detail Page"
+        - "9 PDP og* writes accepted (no GraphQL missing-field error)"
+        - "ogImage Image XML uses each PDP ImageUrl (quanex.com)"
+        - "70 prior Home/Services/Page OG pages not re-written"
+      failed: []
+      pendingManual:
+        - "Verify ogTitle/ogDescription/ogImage on 9 PDPs in Content Editor (MCP silent for inherited OG)"
+        - "Publish Product Detail Page template + 9 PDP items for Edge / Vercel"
+
+  - name: "MainNav"
+    kind: "list"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-14T12:50:00Z"
+    updatedAt: "2026-08-14T13:50:00Z"
+    siteCollection: "quanex"
+    siteName: "quanex"
+    notes:
+      - "2026-08-14: Mega-menu navbar from site Home tree (NavigationRoot droptree) plus authored chrome (logo/search/user/cart) and SupportLink children. React at src/components/main-nav/MainNav.tsx (component map scans src/components; ComponentName MainNav). StartLevel/EndLevel/MaxColumns rendering params. Folders on quanex/era/amesburytruth Data/MainNav."
+      - "2026-08-14: Pages/localhost preview crashed TypeError reading .route inside client.getPreview after MainNav was added. Cause: ComponentQuery expanded NavigationRoot (Home) children 4 levels with no first: cap, including Data folders, plus NavigationTitle/Title fields. Layout GraphQL failed so getPreview returned undefined layout. Fix: 3 levels, children(first: 20), pageTitle only; page.tsx guards missing route."
+      - "2026-08-14: Adding MainNav still 404'd pages (page.tsx notFound when layout.route missing). Root cause: layout ComponentQuery used LookupField.targetItem + children(first: 20), which Experience Edge layout GraphQL rejects. Fix: ComponentQuery is chrome + SupportLink children + NavigationRoot jsonValue only. Mega-menu tree loaded via client.getData in async Default (src/lib/main-nav-from-edge.ts)."
+    react:
+      filePath: "src/components/main-nav/MainNav.tsx"
+      componentMapKey: "MainNav"
+      propsShape: "graphql-datasource"
+      variants: ["Default"]
+      dataStrategy: "ComponentQuery chrome + SupportLink children + NavigationRoot jsonValue; mega-menu tree via Edge getData (not layout ComponentQuery)"
+    templates:
+      parent:
+        name: "MainNav"
+        path: "/sitecore/templates/Project/quanex/Components/Navigation/MainNav"
+        itemId: "{0F442B42-2403-45F5-A02B-67236DCCC929}"
+        sectionId: "{8CA8D154-C8C4-4C4C-91F5-212776ABA225}"
+        fields:
+          - { name: "Logo", type: "Image", itemId: "{BC6D8DE7-EEBA-49C7-8A35-6BEA676C82A3}" }
+          - { name: "LogoLink", type: "General Link", itemId: "{D5CB2527-5668-42D4-948F-6F888E41A281}" }
+          - { name: "SearchPage", type: "General Link", itemId: "{9BF0BB64-9927-422F-9F0B-D129C43A08E8}" }
+          - { name: "SearchLabel", type: "Single-Line Text", itemId: "{FA78DB7D-1604-4B71-A9E3-1D4590442CD2}" }
+          - { name: "UserLink", type: "General Link", itemId: "{7D881E04-5371-409C-8F34-93B3F3C8C078}" }
+          - { name: "UserLabel", type: "Single-Line Text", itemId: "{8E98FE43-D513-4016-A852-316D670D1DF7}" }
+          - { name: "ShowCart", type: "Checkbox", itemId: "{6208AF57-C3A6-4FDD-BB15-D0644F5985FB}" }
+          - { name: "CartLink", type: "General Link", itemId: "{D3718ED5-BC69-45A1-A868-9A6481280416}" }
+          - { name: "CartLabel", type: "Single-Line Text", itemId: "{91FCC981-7996-43F8-BD36-C9E68302EFEB}" }
+          - { name: "NavigationRoot", type: "Droptree", itemId: "{BF0DC0E1-3BCB-478D-B47D-422D40FE98D9}", source: "query:$site/Home" }
+        baseTemplatesSet: true
+        horizonDatasourceGrouping: true
+        standardValues:
+          itemId: "{F60BB7C1-6455-4F0E-886C-6DE1695CC9FE}"
+          linked: true
+          masters: ["SupportLink"]
+      child:
+        name: "SupportLink"
+        path: "/sitecore/templates/Project/quanex/Components/Navigation/SupportLink"
+        itemId: "{9B802DA1-FA85-4A77-B169-4151AA0C38CE}"
+        fields:
+          - { name: "LinkText", type: "Single-Line Text", itemId: "{9B2C8287-DA9C-474B-ABB1-7869E223F768}" }
+          - { name: "LinkUrl", type: "General Link", itemId: "{8FA1CD63-84C3-40F7-81D9-F7FC598F4D74}" }
+        standardValues:
+          itemId: "{2FCDBCAA-8255-4E8B-8083-578EE80E9DA1}"
+          linked: true
+      folder:
+        name: "MainNav Folder"
+        path: "/sitecore/templates/Project/quanex/Folders/MainNav Folder"
+        itemId: "{CD7F2CFE-0AD8-45D3-808B-FC1AB63F4108}"
+        standardValues:
+          itemId: "{C8EB10DA-4199-4E2F-8959-B40C4165E537}"
+          linked: true
+          masters: ["MainNav"]
+      renderingParams:
+        name: "MainNav"
+        path: "/sitecore/templates/Project/quanex/Rendering Parameters/Navigation/MainNav"
+        itemId: "{DF2D1209-220B-4199-90BB-605001811B2A}"
+        fields:
+          - { name: "StartLevel", type: "Single-Line Text", itemId: "{B495463B-B19D-490F-8439-36BE1FD65085}", default: "1" }
+          - { name: "EndLevel", type: "Single-Line Text", itemId: "{FC7B48C9-DF89-4D3F-835F-4A906C3432B7}", default: "3" }
+          - { name: "MaxColumns", type: "Single-Line Text", itemId: "{1DD93B90-B8C5-452C-B61B-CBBB3F049C75}", default: "4" }
+        standardValues:
+          itemId: "{99E4104D-A730-4A57-9DED-DECFB1EEE059}"
+          linked: true
+    datasourceFolders:
+      - { siteName: "quanex", name: "MainNav", itemId: "{21E6EE2F-364D-4691-B77E-BC387F16D62F}", path: "/sitecore/content/quanex/quanex/Data/MainNav" }
+      - { siteName: "era", name: "MainNav", itemId: "{3F985721-35E0-4B02-9416-2B50CBA761F3}", path: "/sitecore/content/quanex/era/Data/MainNav" }
+      - { siteName: "amesburytruth", name: "MainNav", itemId: "{0B7CF849-24FC-4334-B38B-4D0E94617073}", path: "/sitecore/content/quanex/amesburytruth/Data/MainNav" }
+    exampleItems:
+      - { siteName: "quanex", name: "MainNav", itemId: "{8AF2C42C-FFD3-4C21-A2A5-18E4449B01B3}", path: "/sitecore/content/quanex/quanex/Data/MainNav/MainNav", navigationRoot: "{E6276198-3FC7-4D8B-BD14-8669B1701536}" }
+      - { siteName: "era", name: "MainNav", itemId: "{450EDDA1-109D-4B4E-A922-4847C0393D69}", path: "/sitecore/content/quanex/era/Data/MainNav/MainNav", navigationRoot: "{69A414F6-9E12-48D6-92C1-215609517A83}" }
+      - { siteName: "amesburytruth", name: "MainNav", itemId: "{84F94449-C462-4F71-8A17-83717D5B5E00}", path: "/sitecore/content/quanex/amesburytruth/Data/MainNav/MainNav", navigationRoot: "{A57ED898-AA1D-46E6-B7CF-7C7804688EC8}" }
+    exampleChildren:
+      - { name: "Contact", itemId: "{391D1264-7806-45B6-938C-F2BBDD8239D8}", path: "/sitecore/content/quanex/quanex/Data/MainNav/MainNav/Contact" }
+    rendering:
+      name: "MainNav"
+      path: "/sitecore/layout/Renderings/Project/quanex/Navigation/MainNav"
+      itemId: "{CC7A7D1B-0D1B-4918-91BF-374FC19AD4A4}"
+      componentName: "MainNav"
+      parametersTemplateId: "{DF2D1209-220B-4199-90BB-605001811B2A}"
+      datasourceTemplatePath: "/sitecore/templates/Project/quanex/Components/Navigation/MainNav"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='MainNav Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='MainNav Folder']"
+      addFieldEditorButton: "1"
+      registeredInAvailableRenderings: true
+      componentQuery: "query MainNav($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { logo: field(name: \"Logo\") { jsonValue } logoLink: field(name: \"LogoLink\") { jsonValue } searchPage: field(name: \"SearchPage\") { jsonValue } searchLabel: field(name: \"SearchLabel\") { jsonValue } userLink: field(name: \"UserLink\") { jsonValue } userLabel: field(name: \"UserLabel\") { jsonValue } showCart: field(name: \"ShowCart\") { jsonValue } cartLink: field(name: \"CartLink\") { jsonValue } cartLabel: field(name: \"CartLabel\") { jsonValue } navigationRoot: field(name: \"NavigationRoot\") { jsonValue } children { results { id linkText: field(name: \"LinkText\") { jsonValue } linkUrl: field(name: \"LinkUrl\") { jsonValue } } } } }"
+    headlessVariants:
+      - siteName: "quanex"
+        containerId: "{1A795600-E645-45E8-B0B3-545B93FFCF3C}"
+        variants:
+          - { name: "Default", itemId: "{C3093A66-7727-4335-A05F-1FF04C7C4CDC}" }
+      - siteName: "era"
+        containerId: "{50842851-65C2-46D9-BDFC-588FA46C9331}"
+        variants:
+          - { name: "Default", itemId: "{057DC470-CDF5-4DA9-81A2-C2D5403B444A}" }
+      - siteName: "amesburytruth"
+        containerId: "{E101C51C-F2B9-4E00-A026-E327320CF894}"
+        variants:
+          - { name: "Default", itemId: "{A85DCCFD-6E62-446B-8BCD-2BD14016419B}" }
+    availableRenderingsUpdated:
+      - { siteName: "quanex", itemId: "{D0273ED1-4368-400B-B991-C33A168A603E}", renderingCount: 77 }
+      - { siteName: "era", itemId: "{5B8490CD-34BA-445E-92E2-A134CC48127D}", renderingCount: 47 }
+      - { siteName: "amesburytruth", itemId: "{A2064EC2-C155-41C6-BF47-8123D4016FBE}", renderingCount: 47 }
+    codeChanges:
+      - "src/components/main-nav/MainNav.tsx"
+      - "src/components/main-nav/MainNavView.client.tsx"
+      - "src/components/main-nav/main-nav.props.ts"
+      - "src/lib/main-nav-from-edge.ts"
+      - "src/__tests__/main-nav/MainNav.test.tsx"
+      - "src/app/[site]/[locale]/[[...path]]/page.tsx"
+    verification:
+      checkedAt: "2026-08-14T13:50:00Z"
+      passed:
+        - "Parent/child/folder/params templates created with field Types"
+        - "JSON Rendering MainNav ComponentName + Parameters Template GUID + ComponentQuery"
+        - "ComponentQuery chrome-only (no LookupField / children(first:)); nav tree via Edge getData"
+        - "get_component confirms datasource template/location/fields"
+        - "Data/MainNav folders + sample datasources with NavigationRoot=Home on quanex/era/amesburytruth"
+        - "Default Headless Variants on all 3 sites"
+        - "Available Renderings appended from get_allowed_comps_by_ph + MainNav (silent-write)"
+        - "React Default export + unit tests"
+        - "page.tsx getPreview/getPage guarded when layout.sitecore.route is missing"
+      failed: []
+      pendingManual:
+        - "Confirm __Masters on folder SV + Data/MainNav instances in CE"
+        - "Confirm Datasource Template/Location and ComponentQuery in CE"
+        - "Confirm Available Renderings Raw Values include {CC7A7D1B-0D1B-4918-91BF-374FC19AD4A4}"
+        - "Reload Pages/localhost after ComponentQuery chrome-only update; confirm Testing Headr renders with MainNav"
+        - "Place MainNav on Header partial designs and assign site datasource"
+        - "Set Logo, SearchPage, UserLink, optional ShowCart/CartLink, SupportLink URLs"
+        - "Component map regenerates on npm run build/dev — verify MainNav key"
 

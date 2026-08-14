@@ -43,7 +43,7 @@ export default defineCliConfig({
       // BioListing / BioDetail helpers
       'src/components/uiim/lawyers/bio-headshots.ts',
       'src/components/uiim/lawyers/bio-listing.props.ts',
-      'src/components/uiim/lawyers/bio-detail.props.ts',
+      'src/components/main-nav/MainNavView.client.tsx',
     ],
   },
 });

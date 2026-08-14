@@ -40,24 +40,29 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   // Fetch the page data from Sitecore
   let page;
-  if (draft.isEnabled) {
-    const editingParamsFromHeaders = client.getPreviewData(await headers());
-    const editingParamsFromQuery = await searchParams;
-    const hasHeaderPreview =
-      editingParamsFromHeaders != null && Object.keys(editingParamsFromHeaders).length > 0;
-    const editingParams = hasHeaderPreview ? editingParamsFromHeaders : editingParamsFromQuery;
+  try {
+    if (draft.isEnabled) {
+      const editingParamsFromHeaders = client.getPreviewData(await headers());
+      const editingParamsFromQuery = await searchParams;
+      const hasHeaderPreview =
+        editingParamsFromHeaders != null && Object.keys(editingParamsFromHeaders).length > 0;
+      const editingParams = hasHeaderPreview ? editingParamsFromHeaders : editingParamsFromQuery;
 
-    if (isDesignLibraryPreviewData(editingParams)) {
-      page = await client.getDesignLibraryData(editingParams);
+      if (isDesignLibraryPreviewData(editingParams)) {
+        page = await client.getDesignLibraryData(editingParams);
+      } else {
+        page = await client.getPreview(editingParams);
+      }
     } else {
-      page = await client.getPreview(editingParams);
+      page = await client.getPage(path ?? [], { site, locale });
     }
-  } else {
-    page = await client.getPage(path ?? [], { site, locale });
+  } catch (error) {
+    console.error('Failed to load Sitecore page layout', { site, locale, path, error });
+    notFound();
   }
 
-  // If the page is not found, return a 404
-  if (!page) {
+  // Preview/layout can return a page object without sitecore.route when GraphQL ComponentQuery fails
+  if (!page?.layout?.sitecore?.route) {
     notFound();
   }
 
@@ -105,7 +110,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
   const page = await client.getPage(path ?? [], { site, locale });
 
   // Cast route fields once to the expected RouteFields shape to avoid accessing unknown {}
-  const routeFields = (page?.layout.sitecore.route?.fields ?? {}) as RouteFields;
+  const routeFields = (page?.layout?.sitecore?.route?.fields ?? {}) as RouteFields;
 
   // Extract metadata values with fallback chain
   const metadataTitle =

@@ -1,25 +1,21 @@
 /**
  * Applies `data-theme` on `<html>` for the current Sitecore site.
  *
- * Root layout cannot see `/[site]` params, so we set the attribute here:
- * - Inline script runs before paint (avoids wrong-theme flash)
- * - useEffect keeps the attribute correct on client navigations between sites
+ * Root layout cannot read `/[site]` params, so it ships a default `data-theme`.
+ * This client component updates `document.documentElement` after hydrate / on
+ * client navigations. Do not render a `<script>` here — React will not execute
+ * it on the client and Pages editor throws (Next overlay).
  */
 'use client';
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type { AppTheme } from '@/lib/theme';
 
 export function ApplySiteTheme({ theme }: { theme: AppTheme }) {
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+  useLayoutEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.cookie = `app-theme=${theme}; path=/; SameSite=Lax`;
   }, [theme]);
 
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `document.documentElement.setAttribute('data-theme',${JSON.stringify(theme)});`,
-      }}
-    />
-  );
+  return null;
 }

@@ -1,3 +1,6 @@
+import { cookies, headers } from 'next/headers';
+import { DEFAULT_THEME, isAppTheme, type AppTheme } from '@/lib/theme';
+
 import './globals.css';
 
 import {
@@ -9,7 +12,6 @@ import {
   Roboto_Condensed,
   Source_Sans_3,
 } from 'next/font/google';
-import { DEFAULT_THEME } from '@/lib/theme';
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
@@ -75,16 +77,24 @@ const fontVariables = [
 ].join(' ');
 
 /**
- * Root HTML shell. Site-specific Skin is applied in `[site]/layout.tsx`
- * (Sitecore Site definition Skin → data-theme). Default theme is a safe
- * fallback for routes outside `/[site]/…` (editing shell, 404, etc.).
+ * Root HTML shell. Nested `[site]/layout.tsx` cannot set `<html>` attributes.
+ * Middleware sets `x-app-theme` from the URL/`sc_site`; cookie is a fallback.
+ * ApplySiteTheme still updates `document.documentElement` when Sitecore page.siteName differs (Pages editor).
  */
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const headerTheme = (await headers()).get('x-app-theme');
+  const cookieTheme = (await cookies()).get('app-theme')?.value;
+  const theme: AppTheme = isAppTheme(headerTheme)
+    ? headerTheme
+    : isAppTheme(cookieTheme)
+      ? cookieTheme
+      : DEFAULT_THEME;
+
   return (
     <html
       lang="en"
       className={fontVariables}
-      data-theme={DEFAULT_THEME}
+      data-theme={theme}
       suppressHydrationWarning
     >
       <head>

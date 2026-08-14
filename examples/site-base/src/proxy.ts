@@ -1,5 +1,6 @@
-import { type NextRequest } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import type { SiteInfo } from '@sitecore-content-sdk/nextjs';
+import { resolveTheme } from './lib/theme';
 import {
   defineProxy,
   AppRouterMultisiteProxy,
@@ -97,11 +98,38 @@ const preview = new PreviewProxy({
  * Scrunch AXP runs first for AI bots only; everyone else (and Scrunch miss/error)
  * continues through the Sitecore Content SDK proxy chain unchanged.
  */
+function siteFromPathname(pathname: string): string | undefined {
+  const segment = pathname.split('/').filter(Boolean)[0];
+  if (!segment || segment === 'api' || segment === '_next') return undefined;
+  return segment;
+}
+
+function applyAppTheme(req: NextRequest, res: NextResponse): NextResponse {
+  const rewrite = res.headers.get('x-middleware-rewrite') || '';
+  let rewritePath = '';
+  try {
+    if (rewrite.startsWith('http')) rewritePath = new URL(rewrite).pathname;
+  } catch {
+    rewritePath = '';
+  }
+
+  const site =
+    req.nextUrl.searchParams.get('sc_site') ||
+    req.nextUrl.searchParams.get('site') ||
+    siteFromPathname(rewritePath) ||
+    siteFromPathname(req.nextUrl.pathname);
+
+  const theme = resolveTheme({ site });
+  res.cookies.set('app-theme', theme, { path: '/', sameSite: 'lax' });
+  return res;
+}
+
 export default async function proxy(req: NextRequest) {
   const axp = await tryScrunchAxp(req);
   if (axp) return axp;
 
-  return defineProxy(locale, preview, multisite, redirects, personalize).exec(req);
+  const res = await defineProxy(locale, preview, multisite, redirects, personalize).exec(req);
+  return applyAppTheme(req, res);
 }
 
 export const config = {

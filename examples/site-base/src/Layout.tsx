@@ -17,6 +17,8 @@ import { DesignLibraryApp } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
 import { generateOrganizationSchema, generateWebSiteSchema } from 'src/lib/structured-data/schema';
 import { StructuredData } from 'src/components/structured-data/StructuredData';
+import { ApplySiteTheme } from '@/components/theme/ApplySiteTheme';
+import { resolveTheme } from '@/lib/theme';
 
 /** Optional mono stack — do not use `--font-accent`; that token is the themed UI accent face on <html>. */
 const ibmPlexMono = IBM_Plex_Mono({
@@ -94,8 +96,11 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
     url: baseUrl,
   });
 
+  const theme = resolveTheme({ site: page.siteName });
+
   return (
     <>
+      <ApplySiteTheme theme={theme} />
       <Scripts />
       {/* JSON-LD structured data for Organization and WebSite */}
       <StructuredData id="organization-schema" data={organizationSchema} />
