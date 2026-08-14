@@ -16,7 +16,7 @@ import { StructuredData } from 'src/components/structured-data/StructuredData';
 const ibmPlexMono = IBM_Plex_Mono({
   weight: ['400', '500', '600'],
   variable: '--font-ibm-plex-mono',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   display: 'swap',
   preload: true,
 });

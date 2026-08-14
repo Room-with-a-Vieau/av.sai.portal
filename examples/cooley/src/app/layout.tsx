@@ -11,7 +11,7 @@ import {
 import { resolveAppTheme } from '@/lib/app-theme';
 
 const inter = Inter({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
   preload: true,
@@ -19,14 +19,14 @@ const inter = Inter({
 
 /** Dwyer Omega — distinct from BCBS Inter stack */
 const sourceSans3 = Source_Sans_3({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-source-sans-3',
   weight: ['400', '600', '700'],
   display: 'swap',
 });
 
 const barlowCondensed = Barlow_Condensed({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-barlow-condensed',
   weight: ['500', '600', '700'],
   display: 'swap',
@@ -34,14 +34,14 @@ const barlowCondensed = Barlow_Condensed({
 
 /** Builders FirstSource / bldr.com — Open Sans body, Roboto Condensed display (industrial condensed headings, CTAs) */
 const openSans = Open_Sans({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-open-sans',
   weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
 const robotoCondensed = Roboto_Condensed({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-roboto-condensed',
   weight: ['400', '500', '600', '700'],
   display: 'swap',
@@ -49,7 +49,7 @@ const robotoCondensed = Roboto_Condensed({
 
 /** Rockland Trust + Pillsbury Law headings — Montserrat */
 const montserrat = Montserrat({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   variable: '--font-montserrat',
   weight: ['500', '600', '700'],
   display: 'swap',
