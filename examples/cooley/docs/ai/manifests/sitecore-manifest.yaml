@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-06T13:30:00Z"
+lastUpdatedAt: "2026-08-14T21:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5024,3 +5024,37 @@ ia:
         - "Append {8278F36C-8492-4641-A401-9C19AA69D08A} to Available Renderings/Page Content (silent-read)"
         - "Verify Datasource Template/Location in CE (silent-write)"
         - "Publish BlogListing rendering + Insights/Blogs page"
+
+iaTrees:
+  - name: "Cooley Home IA"
+    status: "complete"
+    createdAt: "2026-08-14T20:47:00Z"
+    updatedAt: "2026-08-14T21:05:00Z"
+    source: "https://www.cooley.com"
+    iaFile: "docs/ai/ia/cooley-ia.md"
+    siteName: "cooley"
+    contentRoot:
+      path: "/sitecore/content/Cooley/cooley/Home"
+      itemId: "{E17C24E2-6BC8-4415-8745-484D0DBBF8D0}"
+    pageTemplateId: "{25CF32E0-C2D1-4E72-8CB9-FDEB000BE0D7}"
+    language: "en"
+    createdCount: 130
+    deletedWrongTemplateCount: 130
+    skippedExisting:
+      - "Home"
+      - "Data"
+      - "Speakers"
+      - "Video"
+    l1:
+      - { name: "Practices", itemId: "{F93A9099-45BF-40DD-B1D0-1D4CD7CD2861}" }
+      - { name: "Industries", itemId: "{BCAB7711-8D2A-4040-9EBD-C2ECA3E8553F}" }
+      - { name: "People", itemId: "{E94FC8B8-FAF1-47EF-8985-B2B39BD102D1}" }
+      - { name: "Media and Insight", itemId: "{F2CFB86E-36DD-4F44-A5C9-1814BDB074EC}" }
+      - { name: "About", itemId: "{1FBF29A1-4BDC-43C8-A2D6-8B5B6DB33E30}" }
+      - { name: "Careers", itemId: "{C7E84C98-3C61-49FE-A3D7-92290EB40DBF}" }
+    notes:
+      - "2026-08-14: Recreated Cooley Home IA. Deleted items created on wrong Template {AB86861A-6030-46C5-B394-E8F99E8B87DB} (6 L1 recursive deletes covering ~130 pages). Recreated 130 pages on Services Page {25CF32E0-C2D1-4E72-8CB9-FDEB000BE0D7}."
+      - "Did not delete Home, Home/Data, Speakers, Video, or Pillsbury."
+      - "Item names sanitized for Sitecore ItemNameValidation (no &, /, +)."
+      - "Home insert options still do not list Services Page; create_page succeeded anyway."
+      - "Services Page fields include pageTitle, pageHeaderTitle, pageShortTitle, pageSubtitle, pageSummary, Detail; MCP create_page used without Title. pageTitle update on Practices was silent-write."

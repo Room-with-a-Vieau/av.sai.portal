@@ -301,6 +301,8 @@
  * rockland: official brand palette in src/assets/styles/themes/rockland-tokens.css (blue #005394 primary, #ffc233 accent).
  * pkm: Progressive Knowledge Management — official Progressive palette in src/assets/styles/themes/pkm-tokens.css
  *   (Progressive Blue #0077B3 primary, Steel Blue #0A3360 header, Blue 500 accent).
+ * pillsburylaw: navy surfaces + luminous blue (legacy copy; do not use for Cooley).
+ * cooley: white airy surfaces, signature red #FD1434 (cooley.com computed), ink #33040E.
  * Font stacks and heading weights are set on <html data-theme="…"> in src/app/globals.css (next/font on <html class>).
  */
 [data-theme='dwyeromega'] {
@@ -489,5 +491,59 @@
 }
 
 [data-theme='pillsburylaw'] .bg-dark {
+  color: var(--color-dark-foreground);
+}
+
+/*
+ * Cooley — white airy surfaces, signature red CTAs/headlines, burgundy ink.
+ * Same token hooks as pillsburylaw; colors from https://www.cooley.com (Playwright computed styles).
+ */
+[data-theme='cooley'] {
+  --background-image-gradient: linear-gradient(180deg, #FD1434 0%, #33040E 100%);
+  --background-image-gradient-secondary: linear-gradient(90deg, #ffffff 0%, #FD1434 50%, #33040E 100%);
+  --color-background: #ffffff;
+  --color-foreground: #33040E;
+  --color-card: #ffffff;
+  --color-card-foreground: #33040E;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #33040E;
+  --color-primary: #FD1434;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #D4112C;
+  --color-secondary: #F7F4F4;
+  --color-secondary-foreground: #33040E;
+  --color-secondary-hover: #EDE8E8;
+  --color-muted: #F4F1F1;
+  --color-muted-foreground: #6B5558;
+  --color-accent: #33040E;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-hover: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #E8DFE1;
+  --color-input: #E8DFE1;
+  --color-ring: #FD1434;
+  --color-tertiary-foreground: #33040E;
+  --color-tertiary-hover: #EDE8E8;
+  --color-tertiary: #F7F4F4;
+  --color-dark-foreground: #ffffff;
+  --color-dark-hover: #220209;
+  --color-dark: #33040E;
+  --color-light: #ffffff;
+  --color-light-hover: #F7F4F4;
+  --color-light-foreground: #33040E;
+  --color-overlay: rgb(253 20 52 / 0.45);
+}
+
+[data-theme='cooley'] .bg-primary {
+  background-color: #FD1434;
+  color: #ffffff;
+}
+
+[data-theme='cooley'] .bg-secondary {
+  color: var(--color-secondary-foreground);
+}
+
+[data-theme='cooley'] .bg-dark {
   color: var(--color-dark-foreground);
 }
