@@ -1,17 +1,43 @@
-import type { PulseAskResponse, PulseSource, PulseStateCode } from '@/lib/pulse-types';
+import type {
+  PulseAskResponse,
+  PulseSource,
+  PulseSourceType,
+  PulseStateCode,
+} from '@/lib/pulse-types';
+import type { PulseSitePack, PulseTypeLabels } from '@/lib/pulse-packs';
 
-const TYPE_LABEL: Record<PulseSource['type'], string> = {
-  'knowledge-article': 'Insight',
-  'people-and-teams': 'Lawyer',
-  product: 'Capability',
+const DEFAULT_TYPE_LABELS: Record<PulseSourceType, string> = {
+  'knowledge-article': 'Resource',
+  'people-and-teams': 'Expert',
+  product: 'Product',
   'shared-content': 'Related',
-  other: 'Career',
+  other: 'Page',
 };
 
 const STATE_NAME: Record<PulseStateCode, string> = {
   FL: 'Florida',
   NC: 'North Carolina',
 };
+
+export type ComposePulseAnswerOptions = {
+  stateCode?: PulseStateCode | null;
+  pack?: PulseSitePack | null;
+  brandName?: string;
+  typeLabels?: PulseTypeLabels;
+  enableStatePersona?: boolean;
+};
+
+function resolveBrandName(options?: ComposePulseAnswerOptions): string {
+  return options?.pack?.brandName || options?.brandName || 'this site';
+}
+
+function resolveTypeLabels(options?: ComposePulseAnswerOptions): PulseTypeLabels {
+  return options?.pack?.typeLabels || options?.typeLabels || DEFAULT_TYPE_LABELS;
+}
+
+function typeLabel(type: PulseSourceType, labels: PulseTypeLabels): string {
+  return labels[type] || labels.default || DEFAULT_TYPE_LABELS[type];
+}
 
 function sentenceFromExcerpt(excerpt?: string): string {
   if (!excerpt?.trim()) return '';
@@ -25,7 +51,7 @@ function sentenceFromExcerpt(excerpt?: string): string {
 function isLearningAsset(source: PulseSource): boolean {
   if (source.type !== 'knowledge-article') return false;
   const hay = `${source.title} ${source.url} ${source.path || ''}`.toLowerCase();
-  return /webinar|podcast|cle|checklist|alert|white.?paper|presentation|guide|who.to.talk/i.test(
+  return /webinar|podcast|cle|checklist|alert|white.?paper|presentation|guide|who.to.talk|technical/i.test(
     hay
   );
 }
@@ -33,29 +59,55 @@ function isLearningAsset(source: PulseSource): boolean {
 function isCareerSource(source: PulseSource): boolean {
   const hay = `${source.title} ${source.url} ${source.path || ''}`.toLowerCase();
   return (
-    source.type === 'other' ||
     /\/careers/i.test(hay) ||
-    /career|open role|summer associate|how to apply|legal operations|lateral partner/i.test(hay)
+    /career|open role|summer associate|how to apply|legal operations|lateral partner|job opening/i.test(
+      hay
+    )
+  );
+}
+
+function isProductLike(source: PulseSource): boolean {
+  if (source.type === 'product') return true;
+  const hay = `${source.path || ''} ${source.url}`.toLowerCase();
+  return (
+    /\/products?\//i.test(hay) ||
+    /\/capabilities\//i.test(hay) ||
+    /\/practices\//i.test(hay) ||
+    /\/industries\//i.test(hay) ||
+    /\/window/i.test(hay) ||
+    /\/door/i.test(hay) ||
+    /\/weatherseal/i.test(hay) ||
+    /\/extrusion/i.test(hay) ||
+    /\/hardware/i.test(hay)
   );
 }
 
 /**
- * Build a demoworthy, citation-backed answer from retrieved sources only.
- * Prefers lawyer bios for Pillsbury visitor demos; surfaces webinars and related
- * learning assets when the playbook includes them. Career intents use openings-first framing.
+ * Build a citation-backed answer from retrieved sources only.
+ * Brand-agnostic templates; inject brandName / typeLabels from the active site pack.
  */
 export function composePulseAnswer(
   question: string,
   sources: PulseSource[],
-  stateCode?: PulseStateCode | null
+  options?: ComposePulseAnswerOptions | PulseStateCode | null
 ): PulseAskResponse {
-  const personaState = stateCode ?? null;
+  // Back-compat: composePulseAnswer(q, sources, stateCode)
+  const opts: ComposePulseAnswerOptions =
+    typeof options === 'string' || options === null || options === undefined
+      ? { stateCode: options ?? null }
+      : options;
+
+  const brandName = resolveBrandName(opts);
+  const labels = resolveTypeLabels(opts);
+  const enableStatePersona = opts.enableStatePersona ?? opts.pack?.enableStatePersona ?? false;
+  const personaState = enableStatePersona ? (opts.stateCode ?? null) : null;
 
   if (!sources.length) {
     return {
       answer:
-        `I searched indexed Pillsbury content for “${question.trim()}” and didn’t find a strong match. ` +
-        `Try describing the situation (industry, geography, or risk), or open site search for a broader look.`,
+        `I searched published ${brandName} content for “${question.trim()}” and didn’t find a strong match. ` +
+        `Try another product, category, or topic — or open site search for a broader look. ` +
+        `(Pulse uses the same Experience Edge content as the live site; unpublished items will not appear.)`,
       sources: [],
       stateCallout: null,
       personaState,
@@ -63,13 +115,15 @@ export function composePulseAnswer(
   }
 
   const careerHits = sources.filter(isCareerSource);
-  const isCareerJourney = careerHits.length >= 2 || (careerHits.length >= 1 && careerHits[0] === sources[0]);
+  const isCareerJourney =
+    careerHits.length >= 2 || (careerHits.length >= 1 && careerHits[0] === sources[0]);
 
   if (isCareerJourney) {
-    return composeCareerAnswer(question, sources, personaState);
+    return composeCareerAnswer(question, sources, personaState, brandName, labels);
   }
 
   const peopleHits = sources.filter((s) => s.type === 'people-and-teams');
+  const productHits = sources.filter(isProductLike);
   const insightHits = sources.filter((s) => s.type === 'knowledge-article');
   const learningHits = insightHits.filter(isLearningAsset);
   const otherInsightHits = insightHits.filter((s) => !isLearningAsset(s));
@@ -77,26 +131,41 @@ export function composePulseAnswer(
     ? sources.filter((s) => s.stateCode === personaState)
     : [];
 
-  const primary = peopleHits[0] || insightHits[0] || stateHits[0] || sources[0];
+  // Product / category journey (manufacturing brands)
+  if (productHits.length >= 1 && peopleHits.length === 0) {
+    return composeProductAnswer(
+      question,
+      sources,
+      productHits,
+      otherInsightHits.concat(learningHits),
+      personaState,
+      brandName,
+      labels
+    );
+  }
+
+  const primary = peopleHits[0] || productHits[0] || insightHits[0] || stateHits[0] || sources[0];
   const otherPeople = peopleHits.filter((s) => s.id !== primary.id);
 
   const lines: string[] = [];
 
   lines.push(
-    `Here’s who I’d start with for “${question.trim()}” — based on indexed lawyer bios and related site content.`
+    peopleHits.length
+      ? `Here’s who I’d start with for “${question.trim()}” — based on published ${brandName} bios and related site content.`
+      : `Here’s what I’d start with for “${question.trim()}” — based on published ${brandName} site content.`
   );
 
   const primaryBit = sentenceFromExcerpt(primary.excerpt);
   lines.push(
     primaryBit
-      ? `**${primary.title}** (${TYPE_LABEL[primary.type]}). ${primaryBit}`
-      : `**${primary.title}** (${TYPE_LABEL[primary.type]}) is the strongest match in the citations below.`
+      ? `**${primary.title}** (${typeLabel(primary.type, labels)}). ${primaryBit}`
+      : `**${primary.title}** (${typeLabel(primary.type, labels)}) is the strongest match in the citations below.`
   );
 
   if (otherPeople.length) {
     const names = otherPeople
       .slice(0, 3)
-      .map((s) => `**${s.title}** (${TYPE_LABEL[s.type]})`)
+      .map((s) => `**${s.title}** (${typeLabel(s.type, labels)})`)
       .join('; ');
     lines.push(`Also bring in: ${names}.`);
     for (const extra of otherPeople.slice(0, 2)) {
@@ -110,9 +179,7 @@ export function composePulseAnswer(
       .slice(0, 5)
       .map((s) => `**${s.title}**`)
       .join('; ');
-    lines.push(
-      `To brief the business side before intake, use these learning assets: ${assetNames}.`
-    );
+    lines.push(`Related learning assets: ${assetNames}.`);
     const webinar = learningHits.find((s) => /webinar/i.test(s.title));
     if (webinar) {
       const bit = sentenceFromExcerpt(webinar.excerpt);
@@ -121,15 +188,13 @@ export function composePulseAnswer(
   } else if (otherInsightHits.length) {
     const names = otherInsightHits
       .slice(0, 3)
-      .map((s) => `**${s.title}** (${TYPE_LABEL[s.type]})`)
+      .map((s) => `**${s.title}** (${typeLabel(s.type, labels)})`)
       .join('; ');
-    lines.push(`Related indexed insights: ${names}.`);
+    lines.push(`Related resources: ${names}.`);
   }
 
   lines.push(
-    learningHits.length
-      ? 'Keyword search rarely surfaces this people + webinar + guide path together — open the citation cards below for bios and learning assets.'
-      : 'Keyword search is weaker for multi-factor asks like this — Pulse can connect practice, geography, and situation in one step. Open a citation card to view the full bio.'
+    'Open a citation card below to view the full page. Pulse connects multi-factor asks that keyword search alone often misses.'
   );
 
   if (personaState && stateHits.length) {
@@ -145,9 +210,15 @@ export function composePulseAnswer(
 
   const ordered = [
     ...peopleHits,
+    ...productHits,
     ...learningHits,
     ...otherInsightHits,
-    ...sources.filter((s) => s.type !== 'people-and-teams' && s.type !== 'knowledge-article'),
+    ...sources.filter(
+      (s) =>
+        s.type !== 'people-and-teams' &&
+        s.type !== 'knowledge-article' &&
+        !isProductLike(s)
+    ),
   ].filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
 
   return {
@@ -158,18 +229,76 @@ export function composePulseAnswer(
   };
 }
 
+function composeProductAnswer(
+  question: string,
+  sources: PulseSource[],
+  productHits: PulseSource[],
+  resourceHits: PulseSource[],
+  personaState: PulseStateCode | null,
+  brandName: string,
+  labels: PulseTypeLabels
+): PulseAskResponse {
+  const primary = productHits[0] || sources[0];
+  const others = productHits.filter((s) => s.id !== primary.id);
+
+  const lines: string[] = [];
+  lines.push(
+    `Here’s where I’d start for “${question.trim()}” — based on published ${brandName} product and category pages.`
+  );
+
+  const primaryBit = sentenceFromExcerpt(primary.excerpt);
+  lines.push(
+    primaryBit
+      ? `**${primary.title}** (${typeLabel(primary.type, labels)}). ${primaryBit}`
+      : `**${primary.title}** (${typeLabel(primary.type, labels)}) is the strongest match in the citations below.`
+  );
+
+  if (others.length) {
+    const names = others
+      .slice(0, 4)
+      .map((s) => `**${s.title}** (${typeLabel(s.type, labels)})`)
+      .join('; ');
+    lines.push(`Also explore: ${names}.`);
+  }
+
+  if (resourceHits.length) {
+    const names = resourceHits
+      .slice(0, 3)
+      .map((s) => `**${s.title}**`)
+      .join('; ');
+    lines.push(`Related resources: ${names}.`);
+  }
+
+  lines.push(
+    'Citation cards link to live routes under this site. Unpublished Edge content will not appear.'
+  );
+
+  const ordered = [...productHits, ...resourceHits, ...sources].filter(
+    (s, i, arr) => arr.findIndex((x) => x.id === s.id) === i
+  );
+
+  return {
+    answer: lines.join('\n\n'),
+    sources: ordered,
+    stateCallout: null,
+    personaState,
+  };
+}
+
 function composeCareerAnswer(
   question: string,
   sources: PulseSource[],
-  personaState: PulseStateCode | null
+  personaState: PulseStateCode | null,
+  brandName: string,
+  labels: PulseTypeLabels
 ): PulseAskResponse {
   const openings = sources.filter(
     (s) =>
       isCareerSource(s) &&
       !/how to apply/i.test(s.title) &&
-      !/^careers at pillsbury$/i.test(s.title.trim())
+      !new RegExp(`^careers at ${brandName}$`, 'i').test(s.title.trim())
   );
-  const hub = sources.find((s) => /^careers at pillsbury$/i.test(s.title.trim()));
+  const hub = sources.find((s) => new RegExp(`^careers at ${brandName}$`, 'i').test(s.title.trim()));
   const howToApply = sources.find((s) => /how to apply/i.test(s.title));
   const people = sources.filter((s) => s.type === 'people-and-teams');
   const primary = openings[0] || hub || sources[0];
@@ -178,13 +307,13 @@ function composeCareerAnswer(
   const lines: string[] = [];
 
   lines.push(
-    `Here’s how I’d find openings for “${question.trim()}” — based on indexed career listings and apply guidance.`
+    `Here’s how I’d find openings for “${question.trim()}” — based on published ${brandName} career pages.`
   );
 
   const primaryBit = sentenceFromExcerpt(primary.excerpt);
   lines.push(
     primaryBit
-      ? `**${primary.title}** (${TYPE_LABEL[primary.type] || 'Career'}). ${primaryBit}`
+      ? `**${primary.title}** (${typeLabel(primary.type, labels)}). ${primaryBit}`
       : `**${primary.title}** is the strongest career match in the citations below.`
   );
 
@@ -201,7 +330,7 @@ function composeCareerAnswer(
     lines.push(
       bit
         ? `Next step: **${howToApply.title}**. ${bit}`
-        : `Next step: open **${howToApply.title}** for resume and cover-letter guidance.`
+        : `Next step: open **${howToApply.title}** for application guidance.`
     );
   } else if (hub) {
     lines.push(`Start from **${hub.title}** to browse every open track.`);
@@ -212,11 +341,11 @@ function composeCareerAnswer(
       .slice(0, 2)
       .map((s) => `**${s.title}**`)
       .join('; ');
-    lines.push(`Optional practice contact while you explore: ${names}.`);
+    lines.push(`Optional contact while you explore: ${names}.`);
   }
 
   lines.push(
-    'Describing the career you want beats hunting keywords alone — Pulse and site search surface the same openings in one step. Open a citation card to view the role.'
+    'Describing the role you want beats hunting keywords alone — open a citation card to view the page.'
   );
 
   const ordered = [

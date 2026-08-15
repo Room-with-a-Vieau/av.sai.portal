@@ -20,6 +20,8 @@ export type PulseSource = {
 
 export type PulseAskRequest = {
   question: string;
+  /** Site key matching theme packs (cooley). */
+  siteName?: string | null;
   stateCode?: PulseStateCode | null;
 };
 
@@ -28,4 +30,10 @@ export type PulseAskResponse = {
   sources: PulseSource[];
   stateCallout?: string | null;
   personaState?: PulseStateCode | null;
+};
+
+export type PulseRetrieveOptions = {
+  siteName?: string | null;
+  stateCode?: PulseStateCode | null;
+  language?: string;
 };

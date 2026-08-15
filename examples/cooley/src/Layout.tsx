@@ -136,7 +136,10 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                   )}
                 </div>
               </footer>
-              <PulseAssistant hidden={isEditing || page.mode.isDesignLibrary} />
+              <PulseAssistant
+                hidden={isEditing || page.mode.isDesignLibrary}
+                siteName={page.siteName}
+              />
             </>
           )}
         </div>

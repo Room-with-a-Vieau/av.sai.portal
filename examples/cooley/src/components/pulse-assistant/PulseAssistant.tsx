@@ -11,7 +11,7 @@ import {
   readStoredDemoTaxonomy,
   type DemoUserTaxonomy,
 } from '@/lib/demo-taxonomy';
-import { PULSE_DEMO_STARTER_PROMPTS } from '@/lib/pulse-demo-playbook';
+import { getPulsePack, getPulseStarterPrompts } from '@/lib/pulse-packs';
 import { cn } from '@/lib/utils';
 import type { PulseAskResponse, PulseSource, PulseStateCode } from '@/lib/pulse-types';
 
@@ -25,24 +25,25 @@ type ChatMessage = {
   stateCallout?: string | null;
 };
 
-const STARTER_PROMPTS = [...PULSE_DEMO_STARTER_PROMPTS];
-
-const TYPE_BADGE: Record<PulseSource['type'], string> = {
+const DEFAULT_TYPE_BADGE: Record<PulseSource['type'], string> = {
   'knowledge-article': 'Insight',
   'people-and-teams': 'Lawyer',
-  product: 'Capability',
+  product: 'Practice',
   'shared-content': 'Related',
-  other: 'Content',
+  other: 'Page',
 };
 
-function sourceBadge(source: PulseSource): string {
+function sourceBadge(
+  source: PulseSource,
+  typeBadges: Record<PulseSource['type'], string>
+): string {
   const hay = `${source.title} ${source.url}`.toLowerCase();
   if (/webinar/.test(hay)) return 'Webinar';
   if (/podcast/.test(hay)) return 'Podcast';
   if (/\bcle\b/.test(hay)) return 'CLE';
   if (/checklist|white.?paper/.test(hay)) return 'Guide';
   if (/alert/.test(hay)) return 'Alert';
-  return TYPE_BADGE[source.type];
+  return typeBadges[source.type] || DEFAULT_TYPE_BADGE[source.type];
 }
 
 const STATE_LABEL: Record<PulseStateCode, string> = {
@@ -64,7 +65,13 @@ function renderAnswerText(text: string): React.ReactNode {
   });
 }
 
-function SourceCards({ sources }: { sources: PulseSource[] }) {
+function SourceCards({
+  sources,
+  typeBadges,
+}: {
+  sources: PulseSource[];
+  typeBadges: Record<PulseSource['type'], string>;
+}) {
   if (!sources.length) return null;
   return (
     <ul className="mt-3 space-y-2">
@@ -77,7 +84,7 @@ function SourceCards({ sources }: { sources: PulseSource[] }) {
             <div className="flex items-start justify-between gap-2">
               <span className="text-sm font-medium text-foreground leading-snug">{source.title}</span>
               <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                {sourceBadge(source)}
+                {sourceBadge(source, typeBadges)}
               </span>
             </div>
             {source.excerpt ? (
@@ -93,9 +100,11 @@ function SourceCards({ sources }: { sources: PulseSource[] }) {
 export type PulseAssistantProps = {
   /** When true, the widget is not rendered (Experience Editor / Design Library). */
   hidden?: boolean;
+  /** Site key matching theme packs (cooley). */
+  siteName?: string | null;
 };
 
-export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
+export function PulseAssistant({ hidden = false, siteName = null }: PulseAssistantProps) {
   const panelId = useId();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -105,6 +114,18 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const latestTurnRef = useRef<HTMLDivElement>(null);
+
+  const pack = getPulsePack(siteName);
+  const starterPrompts = [...getPulseStarterPrompts(pack.siteName)];
+  const typeBadges: Record<PulseSource['type'], string> = {
+    ...DEFAULT_TYPE_BADGE,
+    ...Object.fromEntries(
+      (Object.keys(DEFAULT_TYPE_BADGE) as PulseSource['type'][]).map((key) => [
+        key,
+        pack.typeLabels[key] || DEFAULT_TYPE_BADGE[key],
+      ])
+    ),
+  };
 
   useEffect(() => {
     const sync = () => setPersona(readStoredDemoTaxonomy());
@@ -148,7 +169,10 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
 
   if (hidden) return null;
 
-  const stateCode = persona ? (getPersonaStateCode(persona) as PulseStateCode) : null;
+  const stateCode =
+    pack.enableStatePersona && persona
+      ? (getPersonaStateCode(persona) as PulseStateCode)
+      : null;
 
   async function ask(question: string) {
     const q = question.trim();
@@ -167,7 +191,11 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
       const res = await fetch('/api/pulse/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q, stateCode }),
+        body: JSON.stringify({
+          question: q,
+          siteName: pack.siteName,
+          stateCode,
+        }),
       });
 
       if (!res.ok) {
@@ -189,7 +217,7 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
         {
           id: `a-err-${Date.now()}`,
           role: 'assistant',
-          text: 'Pulse hit a snag reaching the content index. Try again in a moment, or use site search.',
+          text: 'Pulse hit a snag reaching published site content. Try again in a moment, or use site search.',
         },
       ]);
     } finally {
@@ -219,7 +247,7 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
                 <h2 className="text-base font-semibold tracking-tight">Pulse</h2>
               </div>
               <p className="mt-0.5 text-xs text-primary-foreground/80">
-                Find the right lawyer from indexed site content
+                Answers from published Cooley site content
               </p>
               {stateCode ? (
                 <span className="mt-2 inline-flex rounded-md bg-primary-foreground/15 px-2 py-0.5 text-[11px] font-medium">
@@ -245,11 +273,11 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
             {messages.length === 0 ? (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Ask in plain language — practice, geography, and situation at once. Pulse is
-                  strongest when keyword search would force you to guess the right terms.
+                  Ask in plain language about practices, people, industries, or insight. Pulse
+                  searches the same Experience Edge content as the live site.
                 </p>
                 <div className="flex flex-col gap-2">
-                  {STARTER_PROMPTS.map((prompt) => (
+                  {starterPrompts.map((prompt) => (
                     <button
                       key={prompt}
                       type="button"
@@ -294,7 +322,7 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
                       {msg.role === 'assistant' ? renderAnswerText(msg.text) : msg.text}
                     </div>
                     {msg.role === 'assistant' && msg.sources?.length ? (
-                      <SourceCards sources={msg.sources} />
+                      <SourceCards sources={msg.sources} typeBadges={typeBadges} />
                     ) : null}
                     {msg.role === 'assistant' && msg.sources && msg.sources.length === 0 ? (
                       <p className="mt-2 text-xs">
@@ -314,7 +342,7 @@ export function PulseAssistant({ hidden = false }: PulseAssistantProps) {
             {busy ? (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-                Searching indexed content…
+                Searching published content…
               </div>
             ) : null}
           </div>
