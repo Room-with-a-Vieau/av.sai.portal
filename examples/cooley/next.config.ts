@@ -68,6 +68,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'mrfbasech2.sitecoresandbox.cloud',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'bcbsa.sitecoresandbox.cloud',
         port: '',
         pathname: '/**',
@@ -81,6 +87,18 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.cooley.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cooley.com',
         port: '',
         pathname: '/**',
       },

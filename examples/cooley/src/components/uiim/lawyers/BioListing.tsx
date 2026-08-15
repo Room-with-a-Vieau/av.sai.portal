@@ -22,6 +22,7 @@ import type {
   BioListingProps,
   BioListingTaxonomyItem,
 } from './bio-listing.props';
+import { shouldBypassNextImageOptimizer } from '@/lib/sitecore-image-field';
 import { resolveBioHeadshotSrc } from './bio-headshots';
 
 /** McKinsey-style hover shared with MultiPromo Default cards. */
@@ -84,7 +85,8 @@ function resolveAttorney(attorney: BioListingAttorney): ResolvedAttorney {
   const headshot = resolveBioHeadshotSrc({
     itemName,
     displayName: name,
-    headshotField: attorney.headshot,
+    headshotField:
+      attorney.headshot ?? (attorney as BioListingAttorney & { Headshot?: unknown }).Headshot,
   });
   return {
     key: attorney.id || name,
@@ -131,8 +133,7 @@ function Headshot({
   alt: string;
   className?: string;
 }) {
-  const bypassOptimizer =
-    src.includes('images.unsplash.com') || src.includes('sitecoresandbox.cloud');
+  const bypassOptimizer = shouldBypassNextImageOptimizer(src);
 
   return (
     <div
@@ -142,14 +143,18 @@ function Headshot({
       )}
     >
       {src ? (
-        <Image
-          src={src}
-          alt={alt || name}
-          fill
-          sizes="128px"
-          className="object-cover"
-          unoptimized={bypassOptimizer}
-        />
+        bypassOptimizer ? (
+          // eslint-disable-next-line @next/next/no-img-element -- Cooley CDN / DAM URLs fail through the optimizer
+          <img src={src} alt={alt || name} className="absolute inset-0 size-full object-cover" />
+        ) : (
+          <Image
+            src={src}
+            alt={alt || name}
+            fill
+            sizes="128px"
+            className="object-cover"
+          />
+        )
       ) : (
         <span aria-hidden>{initials(name)}</span>
       )}

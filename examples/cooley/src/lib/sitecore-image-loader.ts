@@ -30,6 +30,8 @@ function shouldBypassOptimizer(src: string): boolean {
   try {
     const hostname = new URL(src, 'https://localhost').hostname.toLowerCase();
     return (
+      hostname === 'www.cooley.com' ||
+      hostname === 'cooley.com' ||
       hostname.endsWith('.sitecoresandbox.cloud') ||
       hostname.endsWith('.sitecorecontenthub.cloud') ||
       hostname.includes('stylelabs.cloud') ||

@@ -24,33 +24,73 @@ export function normalizeImageFieldSrc(image?: ImageField): ImageField | undefin
   return image;
 }
 
+function decodeSrc(src: string): string {
+  return src
+    .trim()
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"');
+}
+
+function srcFromXmlOrUrl(text: string): string {
+  const trimmed = text.trim();
+  const fromAttr = trimmed.match(/\bsrc=["']([^"']+)["']/i)?.[1];
+  if (fromAttr) return decodeSrc(fromAttr);
+  if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('//')) return decodeSrc(trimmed);
+  return '';
+}
+
+function pickObjectSrc(raw: Record<string, unknown>): string {
+  for (const key of ['src', 'href', 'url']) {
+    const value = raw[key];
+    if (typeof value === 'string' && value.trim()) {
+      return srcFromXmlOrUrl(value) || decodeSrc(value);
+    }
+  }
+  return '';
+}
+
 /**
  * Pull a usable URL from Sitecore Image field shapes (layout, ComponentQuery jsonValue,
- * DAM, or raw external XML string). Edge often omits src for external-only Image XML.
+ * DAM, or raw external XML string). Edge often omits src for external-only Image XML
+ * and may leave the URL in `editable` / raw XML instead.
  */
-export function extractImageSrc(raw: unknown): string {
+export function extractImageSrc(raw: unknown, seen = new Set<unknown>()): string {
   if (!raw) return '';
-
-  if (typeof raw === 'object' && raw !== null && 'value' in raw) {
-    return extractImageSrc((raw as { value?: unknown }).value);
-  }
-
-  if (typeof raw === 'object' && raw !== null && 'jsonValue' in raw) {
-    return extractImageSrc((raw as { jsonValue?: unknown }).jsonValue);
-  }
+  if (typeof raw === 'object' && seen.has(raw)) return '';
+  if (typeof raw === 'object' && raw !== null) seen.add(raw);
 
   if (typeof raw === 'string') {
-    const trimmed = raw.trim();
-    const fromAttr = trimmed.match(/\bsrc=["']([^"']+)["']/i)?.[1];
-    if (fromAttr) return fromAttr.trim();
-    if (/^https?:\/\//i.test(trimmed)) return trimmed;
-    return '';
+    return srcFromXmlOrUrl(raw);
   }
 
-  if (typeof raw === 'object' && raw !== null) {
-    const v = raw as { src?: string; href?: string; url?: string };
-    return (v.src || v.href || v.url || '').trim();
+  if (typeof raw !== 'object' || raw === null) return '';
+
+  const obj = raw as Record<string, unknown>;
+  const direct = pickObjectSrc(obj);
+  if (direct) return direct;
+
+  for (const key of ['jsonValue', 'value', 'editable', 'xml', 'xmlValue', 'html', 'rendered']) {
+    if (!(key in obj) || obj[key] == null) continue;
+    const nested = extractImageSrc(obj[key], seen);
+    if (nested) return nested;
   }
 
   return '';
+}
+
+/** Hosts that should skip `/_next/image` (hotlink / sandbox / CDN). */
+export function shouldBypassNextImageOptimizer(src: string): boolean {
+  try {
+    const hostname = new URL(src, 'https://localhost').hostname.toLowerCase();
+    return (
+      hostname === 'www.cooley.com' ||
+      hostname === 'cooley.com' ||
+      hostname === 'images.unsplash.com' ||
+      hostname.endsWith('.sitecoresandbox.cloud') ||
+      hostname.endsWith('.sitecorecontenthub.cloud') ||
+      hostname.includes('stylelabs.cloud')
+    );
+  } catch {
+    return false;
+  }
 }

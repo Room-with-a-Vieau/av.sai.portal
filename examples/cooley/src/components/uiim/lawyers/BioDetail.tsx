@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
 import type { BioDetailFields, BioDetailProps } from './bio-detail.props';
+import { shouldBypassNextImageOptimizer } from '@/lib/sitecore-image-field';
 import { resolveBioHeadshotSrc } from './bio-headshots';
 import {
   relatedContentBadge,
@@ -246,8 +247,7 @@ export const Default: React.FC<BioDetailProps> = (props) => {
   });
   const headshotSrc = headshotResolved.src;
   const headshotAlt = headshotResolved.alt;
-  const bypassOptimizer =
-    headshotSrc.includes('images.unsplash.com') || headshotSrc.includes('sitecoresandbox.cloud');
+  const bypassOptimizer = shouldBypassNextImageOptimizer(headshotSrc);
   const linkedIn = fields.LinkedIn as LinkField | undefined;
 
   const practiceAreas = resolveTaxonomy(fields.PracticeAreas);
@@ -277,14 +277,22 @@ export const Default: React.FC<BioDetailProps> = (props) => {
           <div className="flex flex-col items-start gap-4">
             <div className="bg-muted text-muted-foreground relative flex size-36 items-center justify-center overflow-hidden rounded-2xl text-2xl font-semibold tracking-wide sm:size-44">
               {headshotSrc ? (
-                <Image
-                  src={headshotSrc}
-                  alt={headshotAlt || fullName || 'Attorney headshot'}
-                  fill
-                  sizes="176px"
-                  className="object-cover"
-                  unoptimized={bypassOptimizer}
-                />
+                bypassOptimizer ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- Cooley CDN / DAM URLs fail through the optimizer
+                  <img
+                    src={headshotSrc}
+                    alt={headshotAlt || fullName || 'Attorney headshot'}
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={headshotSrc}
+                    alt={headshotAlt || fullName || 'Attorney headshot'}
+                    fill
+                    sizes="176px"
+                    className="object-cover"
+                  />
+                )
               ) : isEditing && fields.Headshot ? (
                 <ContentSdkImage
                   field={fields.Headshot as ImageField}

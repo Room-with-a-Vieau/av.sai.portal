@@ -117,6 +117,10 @@ export function resolveBioHeadshotSrc(options: {
   const fromSitecore = extractImageSrc(options.headshotField);
   const fallback = bioHeadshotFallback(options.itemName);
   const src = fromSitecore || fallback?.src || '';
-  const alt = fallback?.alt || options.displayName || options.itemName || 'Attorney';
+  const altFromXml =
+    typeof options.headshotField === 'string'
+      ? options.headshotField.match(/\balt=["']([^"']+)["']/i)?.[1]
+      : undefined;
+  const alt = altFromXml || fallback?.alt || options.displayName || options.itemName || 'Attorney';
   return { src, alt };
 }
