@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-16T11:45:00Z"
+lastUpdatedAt: "2026-08-16T23:55:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5420,3 +5420,25 @@ iaTrees:
       - "Home insert options still do not list Services Page; create_page succeeded anyway."
       - "Services Page fields include pageTitle, pageHeaderTitle, pageShortTitle, pageSubtitle, pageSummary, Detail; MCP create_page used without Title. pageTitle update on Practices was silent-write."
       - "2026-08-14: Created 25 Cooley Bio people pages under Home/People parent {E94FC8B8-FAF1-47EF-8985-B2B39BD102D1} using Bio template {75BA19ED-046A-48F7-A214-1CCB30341785}. Source: live www.cooley.com profiles (not Pillsbury). Headshots use cooley.com /-/media/bio-images URLs in Image XML. Office droplink left empty (no office taxonomy items); office/practice stored in Summary. Insert options on People did not list Bio; create_content_item succeeded anyway. IA pages were not deleted."
+      - "2026-08-16: Search Results demo — React catalog rewritten for Cooley Home IA (lawyers, insights, webinars). Placed Portal SearchResults rendering {7691AC50-2BAE-4FBD-9BA9-05480FD844E4} on Home/Search Results {FBFCD228-0AEB-41E3-A7EB-548745906172} (instance {90DA37EF-F3EE-497E-9BA5-565D40DCEAF5}). Created Events hub + 3 webinars + 3 insight articles (see contentPages below). Publish for Edge."
+
+contentPages:
+  - name: "Cooley Search Results demo content"
+    status: "complete"
+    createdAt: "2026-08-16T23:55:00Z"
+    updatedAt: "2026-08-16T23:55:00Z"
+    siteName: "cooley"
+    notes:
+      - "Catalog + AI Q&A in examples/cooley/src/components/search-results/data.ts"
+      - "UI copy Cooley-branded in SearchResults.tsx"
+      - "Append {7691AC50-2BAE-4FBD-9BA9-05480FD844E4} to Available Renderings/Page Content if Pages picker should list SearchResults (silent-read; do not replace)"
+      - "Publish Search Results page + new Media and Insight children for Edge"
+    pages:
+      - { name: "Search Results", path: "/sitecore/content/Cooley/cooley/Home/Search Results", itemId: "{FBFCD228-0AEB-41E3-A7EB-548745906172}", route: "/Search-Results", component: "SearchResults", renderingId: "{7691AC50-2BAE-4FBD-9BA9-05480FD844E4}", instanceId: "{90DA37EF-F3EE-497E-9BA5-565D40DCEAF5}" }
+      - { name: "Events", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Events", itemId: "{25395B5D-0BAA-4C3A-A704-458470BACFCA}", route: "/Media-and-Insight/Events" }
+      - { name: "AI Board Oversight Webinar", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Events/AI Board Oversight Webinar", itemId: "{C3C26670-2493-490E-9D9E-A09257A582EF}", route: "/Media-and-Insight/Events/AI-Board-Oversight-Webinar" }
+      - { name: "Venture Term Sheets Webinar", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Events/Venture Term Sheets Webinar", itemId: "{92303B63-C083-43FA-B600-F346BA8E65F0}", route: "/Media-and-Insight/Events/Venture-Term-Sheets-Webinar" }
+      - { name: "Life Sciences Capital Webinar", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Events/Life Sciences Capital Webinar", itemId: "{F9E6B9F6-543B-418E-9F52-44294AB580DE}", route: "/Media-and-Insight/Events/Life-Sciences-Capital-Webinar" }
+      - { name: "Venture Financing Trends", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/Venture Financing Trends", itemId: "{56D8D7D4-237C-41F2-B612-089EDE0CF437}", route: "/Media-and-Insight/Insights/Venture-Financing-Trends" }
+      - { name: "AI Governance for Boards", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/AI Governance for Boards", itemId: "{B2ED2AE4-44B0-41CD-A357-B0E6DAAF9C52}", route: "/Media-and-Insight/Insights/AI-Governance-for-Boards" }
+      - { name: "Life Sciences IPO Outlook", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/Life Sciences IPO Outlook", itemId: "{CE9E7CA2-47DC-450D-B64A-D0B2295881E0}", route: "/Media-and-Insight/Insights/Life-Sciences-IPO-Outlook" }

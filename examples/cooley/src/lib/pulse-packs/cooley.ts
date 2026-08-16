@@ -20,10 +20,10 @@ export const cooleyPulsePack: PulseSitePack = {
     default: 'Page',
   },
   starterPrompts: [
-    'Which practices can help with a venture financing?',
-    'Who at Cooley should I talk to about life sciences?',
+    'Who should I talk to about a Series B venture financing?',
+    'Life sciences IPO counsel',
+    'AI governance webinar for boards',
     'Show me recent media and insight on technology companies.',
-    'What industries does Cooley serve besides technology?',
     'How do I explore careers at Cooley?',
   ],
   intents: [

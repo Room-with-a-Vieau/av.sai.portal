@@ -381,7 +381,7 @@ function SearchTips() {
         {
           icon: Globe2,
           title: 'Situation search',
-          body: 'Describe the matter—“expanding into Saudi Arabia,” “export-control questions”—for AI routing to people + events.',
+          body: 'Describe the matter—“Series B financing,” “AI board oversight”—for AI routing to people, insights, and webinars.',
         },
         {
           icon: CalendarDays,
@@ -673,20 +673,19 @@ export const SearchResults: FC<SearchResultsProps> = ({
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Pillsbury search</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Cooley search</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Find lawyers, insights & practices'
+                  'Find lawyers, insights & events'
                 )}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Built for a global firm: search by person, practice, office, or matter narrative. Results link into
-                Bios, capabilities, offices, and insight hubs already in the content tree—then refine by type,
-                practice area, and region.
+                Search by lawyer, practice, industry, or matter narrative. Results link into People, Media and
+                Insight, Practices, and webinars—then refine by type, practice area, and office.
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
@@ -850,8 +849,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
                 <p className="text-sm font-medium text-secondary-foreground">No results for that combination.</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try &ldquo;Mark Abate intellectual property,&rdquo; &ldquo;Japanese company acquisition,&rdquo; or
-                  &ldquo;Policyholder Pulse.&rdquo;
+                  Try &ldquo;Who should I talk to about a Series B venture financing?,&rdquo; &ldquo;AI governance
+                  webinar,&rdquo; or &ldquo;Life sciences IPO counsel.&rdquo;
                 </p>
                 <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
                   Clear filters
