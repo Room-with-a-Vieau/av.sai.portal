@@ -34,6 +34,7 @@ import * as MobileMenuWrapper from 'src/components/site-three/MobileMenuWrapper'
 import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrapper';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as HeroST from 'src/components/site-three/HeroST';
+import * as HeaderSTHamburger from 'src/components/site-three/HeaderSTHamburger';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
 import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
 import * as SecondaryNavigation from 'src/components/secondary-navigation/SecondaryNavigation';
@@ -156,6 +157,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MegaMenuItemWrapper', { ...MegaMenuItemWrapper }],
   ['ImageCarousel', { ...ImageCarousel }],
   ['HeroST', { ...HeroST }],
+  ['HeaderSTHamburger', { ...HeaderSTHamburger }],
   ['FeatureBanner', { ...FeatureBanner }],
   ['AccordionBlock', { ...AccordionBlock }],
   ['SecondaryNavigation', { ...SecondaryNavigation }],

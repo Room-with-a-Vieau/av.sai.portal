@@ -14,6 +14,7 @@ import { DemoUserSwitcher } from './non-sitecore/DemoUserSwitcher';
 import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
+import { HeaderSTHamburger } from './HeaderSTHamburger';
 import { cn } from '@/lib/utils';
 
 interface Fields {
@@ -154,3 +155,6 @@ export const Default = (props: HeaderSTProps) => {
     </section>
   );
 };
+
+/** Collapsed Cooley-style header: hamburger opens Sitecore nav in an overlay. */
+export const Hamburger = HeaderSTHamburger;

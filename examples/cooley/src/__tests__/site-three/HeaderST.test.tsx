@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Default as HeaderSTDefault } from '../../components/site-three/HeaderST';
+import { Default as HeaderSTDefault, Hamburger as HeaderSTHamburger } from '../../components/site-three/HeaderST';
 import {
   defaultHeaderSTProps,
   headerSTPropsBasic,
@@ -87,6 +87,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     </div>
   ),
   withDatasourceCheck: () => (Component: React.ComponentType) => Component,
+  useSitecore: () => ({ page: { mode: { isEditing: false } } }),
 }));
 
 // Mock Next.js Link
@@ -500,6 +501,48 @@ describe('HeaderST Component', () => {
         // Skip test if mobile toggle not found
         expect(mockSetIsVisible).toHaveBeenCalledTimes(0);
       }
+    });
+  });
+
+  describe('Hamburger variant', () => {
+    it('renders a collapsed header with a hamburger control and no desktop nav row', () => {
+      render(<HeaderSTHamburger {...defaultHeaderSTProps} />);
+
+      expect(document.querySelector('[data-header-st-variant="hamburger"]')).toBeInTheDocument();
+      expect(document.querySelector('[data-header-st-nav-row]')).not.toBeInTheDocument();
+
+      const toggle = screen.getByRole('button', { name: 'Open menu' });
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('opens the overlay menu from the hamburger button', () => {
+      const setIsVisible = jest.fn();
+      mockUseToggleWithClickOutside.mockReturnValue({
+        isVisible: false,
+        setIsVisible,
+        ref: { current: null },
+      });
+
+      render(<HeaderSTHamburger {...defaultHeaderSTProps} />);
+      fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+      expect(setIsVisible).toHaveBeenCalled();
+    });
+
+    it('keeps the overlay open when the toggle reports visible', () => {
+      mockUseToggleWithClickOutside.mockReturnValue({
+        isVisible: true,
+        setIsVisible: jest.fn(),
+        ref: { current: null },
+      });
+
+      render(<HeaderSTHamburger {...defaultHeaderSTProps} />);
+      const toggle = screen.getByRole('button', { name: 'Close menu' });
+      expect(toggle).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('dialog', { name: 'Site menu' })).toBeInTheDocument();
+      expect(screen.getByTestId('app-placeholder')).toHaveAttribute(
+        'data-name',
+        'header-navigation-main-nav'
+      );
     });
   });
 

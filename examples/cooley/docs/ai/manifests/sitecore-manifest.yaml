@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-15T10:16:00Z"
+lastUpdatedAt: "2026-08-16T11:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5030,13 +5030,14 @@ ia:
     category: "Media"
     status: "complete"
     createdAt: "2026-08-14T21:10:00Z"
-    updatedAt: "2026-08-14T21:15:00Z"
+    updatedAt: "2026-08-16T11:30:00Z"
     siteName: "cooley"
     siteCollection: "Cooley"
     notes: >
       Homepage scattered media collage. Live Cooley project paths used (not project.yaml pkm / not Pillsbury).
       _HorizonDatasourceGrouping template ID not found in this instance; parent uses Standard + Grid Parameters.
       Home IA pages were not modified. MediaCanvas added to Home final layout headless-main.
+      2026-08-16: Pages editor now renders each child as a stacked card with Image/Video/Tagline field helpers so authors can click chrome and set child content. Live collage unchanged.
     react:
       filePath: "src/components/uiim/media/MediaCanvas.tsx"
       componentMapKey: "MediaCanvas"
@@ -5270,6 +5271,117 @@ ia:
         - "Existing Cooley FeatureBanner variants match Pillsbury names; no duplicates created"
       failed: []
       pendingManual: []
+
+  - name: "MultiPromo"
+    kind: "list"
+    category: "Promos"
+    status: "complete"
+    createdAt: "2026-08-16T11:31:00Z"
+    updatedAt: "2026-08-16T11:45:00Z"
+    contentRootPath: "/sitecore/content/Cooley/cooley/Data/MultiPromos"
+    contentRootId: "{4A8FA752-22D1-4024-8DB4-EA634C6A36E2}"
+    notes:
+      - "2026-08-16: Verified Cooley MultiPromo Headless Variants already include SideTabs and TopTabs (Rockland Trust pattern). React named exports already present in src/components/site-three/MultiPromo.tsx. No new Sitecore items created. Did not add TopTabsNoImage (present on Rockland) because this task requested only SideTabs and TopTabs."
+      - "2026-08-16: Data/MultiPromos folder was empty. Created 4 Cooley MultiPromo parents + SimplePromo children (www.cooley.com copy; internal links to Home IA; Unsplash images already used on Cooley pages). Not Pillsbury. Items in Draft — authors must publish."
+    react:
+      filePath: "src/components/site-three/MultiPromo.tsx"
+      componentMapKey: "MultiPromo"
+      variants:
+        - "Default"
+        - "Stacked"
+        - "SingleColumn"
+        - "SideTabs"
+        - "TopTabs"
+        - "TopTabsNoImage"
+    rendering:
+      name: "MultiPromo"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Promos/MultiPromo"
+      itemId: "{D806DDF7-39A7-4A6D-8E0A-D138BC53845D}"
+      componentName: "MultiPromo"
+      registeredInAvailableRenderings: true
+    variants:
+      containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo"
+      containerId: "{664F697E-219C-434E-9001-F9A0F97AD663}"
+      definitions:
+        - { name: "Default", itemId: "{70B8A565-F244-4720-A632-056E8E667160}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo/Default" }
+        - { name: "SingleColumn", itemId: "{2BC1FFE9-7CF7-4841-AF52-3D62FA781B3C}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo/SingleColumn" }
+        - { name: "Stacked", itemId: "{ED89F084-7BBD-4ECF-AD5F-9589F77FC68E}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo/Stacked" }
+        - { name: "SideTabs", itemId: "{3811F0BD-D2AE-4B15-9C61-1F7E282471FF}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo/SideTabs" }
+        - { name: "TopTabs", itemId: "{A8565BDC-0325-4E32-97FC-A50C1E15FC34}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/MultiPromo/TopTabs" }
+    exampleItems:
+      - { displayName: "Explore Cooley", name: "Explore-Cooley", itemId: "{EAC876EE-F136-4673-94EC-C903927585CE}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley" }
+      - { displayName: "Practices", name: "Practices", itemId: "{23262D0F-7CCB-4F1C-B3B4-02CC67E594F2}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley/Practices" }
+      - { displayName: "Industries", name: "Industries", itemId: "{51079E1E-01A1-41F7-BF3A-F3330C840BF3}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley/Industries" }
+      - { displayName: "People", name: "People", itemId: "{09A6152B-FC2C-42A9-8587-A07531C4A8EC}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley/People" }
+      - { displayName: "Insight", name: "Insight", itemId: "{50760945-EC36-451F-AAFE-3C876CD9F6DB}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley/Insight" }
+      - { displayName: "Careers", name: "Careers", itemId: "{22568985-DE54-4AB9-8600-9E65E489454E}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Explore-Cooley/Careers" }
+      - { displayName: "Practices Spotlight", name: "Practices-Spotlight", itemId: "{AB234366-033B-421F-9AF7-4AFDEBE7F686}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Practices-Spotlight" }
+      - { displayName: "Venture Capital", name: "Venture-Capital", itemId: "{143D2F26-F7A2-45B3-B212-8917C80A9A95}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Practices-Spotlight/Venture-Capital" }
+      - { displayName: "Emerging Companies", name: "Emerging-Companies", itemId: "{8629A31E-3DBC-472D-9480-FDC7A94F4475}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Practices-Spotlight/Emerging-Companies" }
+      - { displayName: "Technology Transactions", name: "Technology-Transactions", itemId: "{B3F71F23-9446-46BF-8BF6-1902161CD192}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Practices-Spotlight/Technology-Transactions" }
+      - { displayName: "All Practices", name: "All-Practices", itemId: "{16AFACD3-AE59-4022-A9CD-157BDAE12A0C}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Practices-Spotlight/All-Practices" }
+      - { displayName: "Industries Spotlight", name: "Industries-Spotlight", itemId: "{0DB0D806-49C5-4798-972C-C03D9F190F5A}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Industries-Spotlight" }
+      - { displayName: "Technology", name: "Technology", itemId: "{E25A5C9A-4151-4D82-BB86-B1570AF296B1}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Industries-Spotlight/Technology" }
+      - { displayName: "Life Sciences", name: "Life-Sciences", itemId: "{44127919-EF2F-4C93-81B4-90586F8DFB50}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Industries-Spotlight/Life-Sciences" }
+      - { displayName: "Energy", name: "Energy", itemId: "{9089E1DD-4376-4C64-9E97-BA50880AFEF6}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Industries-Spotlight/Energy" }
+      - { displayName: "All Industries", name: "All-Industries", itemId: "{4007D674-E35F-49CD-9C26-7C6DFF55E11A}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/Industries-Spotlight/All-Industries" }
+      - { displayName: "People Insight Careers", name: "People-Insight-Careers", itemId: "{14FAA4B3-5184-491E-9962-C47ED0F21043}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/People-Insight-Careers" }
+      - { displayName: "Our People", name: "Our-People", itemId: "{47C56AA8-B276-4BED-9A7C-CE65523C3522}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/People-Insight-Careers/Our-People" }
+      - { displayName: "Insights", name: "Insights", itemId: "{AE0900CA-32A7-40B0-9F46-9800B8919128}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/People-Insight-Careers/Insights" }
+      - { displayName: "Careers", name: "Careers", itemId: "{08F63A8C-DF1B-4DA2-AFBB-09B0A6F91E6E}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/People-Insight-Careers/Careers" }
+      - { displayName: "About", name: "About", itemId: "{0EE8D0A1-11DA-4C77-B305-EFC32B4E53AE}", path: "/sitecore/content/Cooley/cooley/Data/MultiPromos/People-Insight-Careers/About" }
+    verification:
+      checkedAt: "2026-08-16T11:45:00Z"
+      passed:
+        - "Cooley Headless Variants container MultiPromo exists"
+        - "Default, Stacked, SingleColumn, SideTabs, TopTabs Variant Definitions verified via MCP"
+        - "TSX named exports SideTabs and TopTabs match Sitecore item names"
+        - "MultiPromo already listed in Cooley Available Renderings (Promos)"
+        - "Rockland source variants SideTabs/TopTabs inspected at /sitecore/content/rockland/rockland/Presentation/Headless Variants/MultiPromo"
+        - "Created 4 MultiPromo parents under Data/MultiPromos with 4–5 SimplePromo children each"
+        - "Explore-Cooley fields and children verified via get_content_item_by_id (title, description, heading, Slug, Unsplash image, internal link)"
+      failed: []
+      pendingManual:
+        - "Publish Headless Variants/MultiPromo (including SideTabs and TopTabs) to Edge if they are not yet live in Pages"
+        - "Optional: add TopTabsNoImage Variant Definition if authors should pick the React export that already exists in TSX"
+        - "Publish Data/MultiPromos (4 parents + children) — items are in Draft workflow; MCP has no publish tool"
+
+  - name: "HeaderST"
+    kind: "simple"
+    category: "Global Elements"
+    status: "complete"
+    createdAt: "2026-08-16T11:32:00Z"
+    updatedAt: "2026-08-16T11:45:00Z"
+    notes:
+      - "2026-08-16: Added Hamburger named export (Cooley collapsed nav) plus Headless Variants container with Default + Hamburger Variant Definitions. Default desktop mega-nav layout unchanged."
+    react:
+      filePath: "src/components/site-three/HeaderST.tsx"
+      componentMapKey: "HeaderST"
+      variants:
+        - "Default"
+        - "Hamburger"
+    rendering:
+      name: "HeaderST"
+      path: "/sitecore/layout/Renderings/Project/Cooley"
+      itemId: "{90A922AA-E2A7-4553-A7AD-B89AC9318D6B}"
+      componentName: "HeaderST"
+    variants:
+      containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/HeaderST"
+      containerId: "{40682E71-26EF-484F-BA38-743FEF0ACC4D}"
+      definitions:
+        - { name: "Default", itemId: "{D2F1E9D8-3B88-437E-B042-71E7F2DD50D4}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/HeaderST/Default" }
+        - { name: "Hamburger", itemId: "{E1184C51-275B-47EB-ADF3-C14760FC15DA}", path: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/HeaderST/Hamburger" }
+    verification:
+      checkedAt: "2026-08-16T11:45:00Z"
+      passed:
+        - "Headless Variants container HeaderST created"
+        - "Variant Definition Default created and verified"
+        - "Variant Definition Hamburger created and verified; name matches TSX export"
+        - "React named exports Default + Hamburger"
+      failed: []
+      pendingManual:
+        - "Publish Headless Variants/HeaderST (Default + Hamburger) for Edge"
+        - "Assign Hamburger on Header Partial Design HeaderST rendering in Pages"
 
 iaTrees:
   - name: "Cooley Home IA"
