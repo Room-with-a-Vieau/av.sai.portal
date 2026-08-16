@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from 'shadcd/components/ui/carousel';
 import { TrackedCtaLink } from '@/components/content-sdk/TrackedCtaLink';
+import { withResolvedImageSrc } from '@/lib/sitecore-image-field';
 import { IGQLImageField, IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'types/igql';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
@@ -52,13 +53,67 @@ type PromoItemProps = SimplePromoFields & {
   isHorizontal?: boolean;
 };
 
+const parentBasedGridClasses =
+  'grid lg:[.multipromo-2-3_&]:grid-cols-[2fr_3fr] lg:[.multipromo-3-2_&]:grid-cols-[3fr_2fr] lg:grid-cols-[1fr_1fr] gap-14';
+const parentBasedGridItemClasses =
+  '[.multipromo-centered_&]:items-center [.bg-gradient_&]:text-white items-start';
+
+const getPromoSlugField = (promo: SimplePromoFields) =>
+  promo.slug?.jsonValue ?? promo.Slug?.jsonValue;
+
+const EMPTY_IMAGE_FIELD = { value: {} };
+
+/** Pages: keep every child field in the DOM so chrome can select that datasource. */
+const PromoChildEditor = ({ promo }: { promo: SimplePromoFields }) => {
+  const { image, heading, description, link } = promo ?? {};
+  const slugField = getPromoSlugField(promo);
+
+  return (
+    <article
+      data-testid="multi-promo-child-editor"
+      className="relative z-10 flex flex-col gap-4 overflow-visible rounded-2xl border border-border bg-white p-4 text-foreground shadow-sm"
+    >
+      <div className="relative min-h-[8rem] overflow-visible bg-neutral-200">
+        <ContentSdkEditableImage
+          field={withResolvedImageSrc(image) ?? EMPTY_IMAGE_FIELD}
+          className="relative z-10 h-auto w-full object-cover"
+        />
+      </div>
+      <div className="space-y-1">
+        <p className="text-muted-foreground text-xs font-medium">Slug</p>
+        <ContentSdkText field={slugField} />
+      </div>
+      <div className="space-y-1">
+        <p className="text-muted-foreground text-xs font-medium">Heading</p>
+        <h3 className="text-xl font-semibold">
+          <ContentSdkText field={heading?.jsonValue} />
+        </h3>
+      </div>
+      <div className="space-y-1">
+        <p className="text-muted-foreground text-xs font-medium">Description</p>
+        <ContentSdkRichText field={description?.jsonValue} />
+      </div>
+      <div className="space-y-1">
+        <p className="text-muted-foreground text-xs font-medium">Link</p>
+        <TrackedCtaLink field={link?.jsonValue ?? { value: { href: '' } }} className="btn btn-ghost" />
+      </div>
+    </article>
+  );
+};
+
 const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
   const { image, heading, description, link } = promo ?? {};
+  const { page } = useSitecore();
+  const isEditing = Boolean(page?.mode?.isEditing || page?.mode?.isDesignLibrary);
+
+  if (isEditing) {
+    return <PromoChildEditor promo={promo} />;
+  }
 
   return (
     <div className={`grid gap-8 ${isHorizontal ? 'lg:grid-cols-[1fr_2fr]' : ''}`}>
       <ContentSdkImage
-        field={image?.jsonValue}
+        field={withResolvedImageSrc(image)}
         className="w-full h-full aspect-square object-cover shadow-2xl"
       />
       <div>
@@ -76,8 +131,14 @@ const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
 
 /** Default-variant card: McKinsey-style hover (white surface, dark text, blue chevron). */
 const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
+  const { page } = useSitecore();
+  const isEditing = Boolean(page?.mode?.isEditing || page?.mode?.isDesignLibrary);
   const { image, heading, description, link } = promo ?? {};
   const linkField = link?.jsonValue;
+
+  if (isEditing) {
+    return <PromoChildEditor promo={promo} />;
+  }
 
   const cardClassName = cn(
     'group flex h-full flex-col p-5 no-underline transition-colors duration-300',
@@ -88,7 +149,7 @@ const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
   const content = (
     <>
       <ContentSdkImage
-        field={image?.jsonValue}
+        field={withResolvedImageSrc(image)}
         className="mb-5 aspect-[4/3] w-full object-cover"
       />
       <h3 className="mb-3 flex items-center gap-1 text-xl font-semibold lg:text-2xl">
@@ -115,15 +176,9 @@ const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
   return <div className={cardClassName}>{content}</div>;
 };
 
-const parentBasedGridClasses =
-  'grid lg:[.multipromo-2-3_&]:grid-cols-[2fr_3fr] lg:[.multipromo-3-2_&]:grid-cols-[3fr_2fr] lg:grid-cols-[1fr_1fr] gap-14';
-const parentBasedGridItemClasses =
-  '[.multipromo-centered_&]:items-center [.bg-gradient_&]:text-white items-start';
-
-const getPromoSlugField = (promo: SimplePromoFields) =>
-  promo.slug?.jsonValue ?? promo.Slug?.jsonValue;
-
 export const Default = (props: MultiPromoProps) => {
+  const { page } = useSitecore();
+  const isEditing = Boolean(page?.mode?.isEditing || page?.mode?.isDesignLibrary);
   const datasource = useMemo(
     () => props.fields?.data?.datasource,
     [props.fields?.data?.datasource]
@@ -148,6 +203,13 @@ export const Default = (props: MultiPromoProps) => {
           </div>
 
           {promos.length > 0 && (
+            isEditing ? (
+              <div className="relative mt-12 grid gap-4">
+                {promos.map((promo) => (
+                  <PromoChildEditor key={promo.id} promo={promo} />
+                ))}
+              </div>
+            ) : (
             <div className="relative mt-12 px-0 sm:px-12">
               <Carousel
                 opts={{ align: 'start', loop: false }}
@@ -175,6 +237,7 @@ export const Default = (props: MultiPromoProps) => {
                 />
               </Carousel>
             </div>
+            )
           )}
         </div>
       </section>
@@ -270,7 +333,7 @@ const SideTabsPromoPanel = ({
   const { image, heading, description, link } = promo ?? {};
   const headingField = heading?.jsonValue;
   const descriptionField = description?.jsonValue;
-  const imageField = image?.jsonValue;
+  const imageField = withResolvedImageSrc(image);
   const linkField = link?.jsonValue;
 
   return (
@@ -417,7 +480,7 @@ const TopTabsPromoPanel = ({
   const { image, heading, description, link } = promo ?? {};
   const headingField = heading?.jsonValue;
   const descriptionField = description?.jsonValue;
-  const imageField = image?.jsonValue;
+  const imageField = withResolvedImageSrc(image);
   const linkField = link?.jsonValue;
 
   return (

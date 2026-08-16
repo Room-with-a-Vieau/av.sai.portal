@@ -5030,7 +5030,7 @@ ia:
     category: "Media"
     status: "complete"
     createdAt: "2026-08-14T21:10:00Z"
-    updatedAt: "2026-08-16T11:30:00Z"
+    updatedAt: "2026-08-16T12:10:00Z"
     siteName: "cooley"
     siteCollection: "Cooley"
     notes: >
@@ -5038,6 +5038,8 @@ ia:
       _HorizonDatasourceGrouping template ID not found in this instance; parent uses Standard + Grid Parameters.
       Home IA pages were not modified. MediaCanvas added to Home final layout headless-main.
       2026-08-16: Pages editor now renders each child as a stacked card with Image/Video/Tagline field helpers so authors can click chrome and set child content. Live collage unchanged.
+      2026-08-16: Child Image chrome — editor tiles now use Sitecore Image (not NextImage) with overflow-visible and pointer-events-auto so Pages can select child images. Live collage still uses NextImage.
+      2026-08-16: Editor tiles include data-clickable and data-item-id so Pages can switch chrome to the child datasource.
     react:
       filePath: "src/components/uiim/media/MediaCanvas.tsx"
       componentMapKey: "MediaCanvas"
@@ -5277,12 +5279,13 @@ ia:
     category: "Promos"
     status: "complete"
     createdAt: "2026-08-16T11:31:00Z"
-    updatedAt: "2026-08-16T11:45:00Z"
+    updatedAt: "2026-08-16T12:20:00Z"
     contentRootPath: "/sitecore/content/Cooley/cooley/Data/MultiPromos"
     contentRootId: "{4A8FA752-22D1-4024-8DB4-EA634C6A36E2}"
     notes:
       - "2026-08-16: Verified Cooley MultiPromo Headless Variants already include SideTabs and TopTabs (Rockland Trust pattern). React named exports already present in src/components/site-three/MultiPromo.tsx. No new Sitecore items created. Did not add TopTabsNoImage (present on Rockland) because this task requested only SideTabs and TopTabs."
       - "2026-08-16: Data/MultiPromos folder was empty. Created 4 Cooley MultiPromo parents + SimplePromo children (www.cooley.com copy; internal links to Home IA; Unsplash images already used on Cooley pages). Not Pillsbury. Items in Draft — authors must publish."
+      - "2026-08-16: SimplePromo image XML converted to DAM-style `<Image src=\"...\" width height dam-content-type>` keeping Unsplash URLs (Practices-Spotlight / Industries-Spotlight / People-Insight-Careers remaining children). Explore-Cooley + Venture-Capital already used Content Hub `<Image src>`."
     react:
       filePath: "src/components/site-three/MultiPromo.tsx"
       componentMapKey: "MultiPromo"

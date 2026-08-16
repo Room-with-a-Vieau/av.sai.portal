@@ -19,7 +19,8 @@ jest.mock('lucide-react', () => ({
   ),
 }));
 
-// Mock Sitecore SDK
+const mockUseSitecore = jest.fn();
+
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
   RichText: ({ field, ...props }: any) => (
@@ -31,22 +32,19 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   ),
   Image: ({ field, className }: any) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
+    <img
+      data-testid="sitecore-image"
+      src={field?.value?.src || undefined}
+      alt={field?.value?.alt || ''}
+      className={className}
+    />
   ),
   Link: ({ field, children, className }: any) => (
     <a href={field?.value?.href || '#'} className={className}>
       {children || field?.value?.text || ''}
     </a>
   ),
-  useSitecore: () => ({
-    page: {
-      mode: {
-        isEditing: false,
-        isPreview: false,
-        isNormal: true,
-      },
-    },
-  }),
+  useSitecore: () => mockUseSitecore(),
 }));
 
 jest.mock('shadcd/components/ui/carousel', () => ({
@@ -83,6 +81,17 @@ jest.mock('@/utils/NoDataFallback', () => ({
 }));
 
 describe('MultiPromo', () => {
+  beforeEach(() => {
+    mockUseSitecore.mockReturnValue({
+      page: {
+        mode: {
+          isEditing: false,
+          isPreview: false,
+          isNormal: true,
+        },
+      },
+    });
+  });
   const mockProps = {
     params: {
       styles: 'test-styles',
@@ -623,6 +632,62 @@ describe('MultiPromo', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoTopTabsNoImage {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('Pages editing child chrome', () => {
+    beforeEach(() => {
+      mockUseSitecore.mockReturnValue({
+        page: {
+          mode: {
+            isEditing: true,
+            isPreview: false,
+            isNormal: false,
+            isDesignLibrary: false,
+          },
+        },
+      });
+    });
+
+    it('uses Sitecore Image in SideTabs so Pages can select the image field', () => {
+      const { container } = render(<MultiPromoSideTabs {...mockProps} />);
+      expect(container.querySelector('.multi-promo-side-tabs')).toBeInTheDocument();
+      expect(screen.getByRole('tablist', { name: 'Promotions' })).toBeInTheDocument();
+      expect(screen.getAllByRole('tab')).toHaveLength(2);
+      expect(screen.queryByTestId('multi-promo-child-editor')).not.toBeInTheDocument();
+      expect(container.querySelector('[data-clickable]')).not.toBeInTheDocument();
+      expect(screen.getAllByTestId('sitecore-image').length).toBeGreaterThan(0);
+    });
+
+    it('shows Unsplash src from Image XML when Pages omits value.src', () => {
+      const unsplash =
+        'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80';
+      const unsplashProps = {
+        ...mockProps,
+        fields: {
+          data: {
+            datasource: {
+              ...mockProps.fields.data.datasource,
+              children: {
+                results: [
+                  {
+                    ...mockProps.fields.data.datasource.children.results[0],
+                    image: {
+                      jsonValue: {
+                        value: { mediaid: '', alt: 'Modern law office conference room' },
+                        editable: `<image mediaid="" src="${unsplash}" alt="Modern law office conference room" />`,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      render(<MultiPromoSideTabs {...unsplashProps} />);
+      expect(screen.getByTestId('sitecore-image')).toHaveAttribute('src', unsplash);
     });
   });
 });
