@@ -290,7 +290,14 @@ function BioListingView({ props, layout }: { props: BioListingProps; layout: Lay
   const isEditing = propEditing ?? page.mode.isEditing;
 
   const datasource = fields?.data?.datasource;
-  const attorneys = datasource?.biosRoot?.targetItem?.children?.results ?? [];
+  /** Only Bio pages (FullName) — skip folders/IA pages under BiosRoot. */
+  const attorneys = useMemo(
+    () =>
+      (datasource?.biosRoot?.targetItem?.children?.results ?? []).filter((item) =>
+        Boolean(fieldValue(item.fullName))
+      ),
+    [datasource?.biosRoot?.targetItem?.children?.results]
+  );
 
   const [query, setQuery] = useState('');
   const [practice, setPractice] = useState('all');

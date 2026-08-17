@@ -5171,15 +5171,22 @@ ia:
     category: "Lawyers"
     status: "complete"
     createdAt: "2026-08-15T10:16:00Z"
-    updatedAt: "2026-08-15T10:16:00Z"
+    updatedAt: "2026-08-17T03:00:00Z"
     notes:
       - "2026-08-15: Copied Headless Variants from Pillsbury BioListing {63D7FE8B-0CF2-42DD-A6A5-45FE685A87F0} (Default + Cards). React already had both named exports."
+      - "2026-08-17: Search/filters were empty because all Cooley Bio Office + PracticeAreas fields were blank (office/practice only in Summary text). Bio template Droplink/Multilist Sources still pointed at pillsbury paths. Fixed Sources to Cooley Geographies + Taxonomy; added Cooley practice tags; populated Office/PracticeAreas on all 25 People bios from Summary. Lawyer Directory BiosRoot already = People. Publish People bios + Taxonomy + Bio template for Edge."
     react:
       filePath: "src/components/uiim/lawyers/BioListing.tsx"
       componentMapKey: "BioListing"
       variants:
         - "Default"
         - "Cards"
+    relatedItems:
+      bioTemplateId: "{75BA19ED-046A-48F7-A214-1CCB30341785}"
+      officeFieldSource: "/sitecore/content/Cooley/cooley/Home/About/Geographies"
+      practiceAreasFieldSource: "/sitecore/content/Cooley/cooley/Data/Taxonomy/Practice Areas"
+      biosRoot: "{E94FC8B8-FAF1-47EF-8985-B2B39BD102D1}"
+      lawyerDirectoryDs: "{CC01D713-85DE-40C8-9662-8B383083C443}"
     variants:
       containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/BioListing"
       containerId: "{10D50BBC-8A34-4154-917F-AB15B651B884}"
@@ -5187,12 +5194,16 @@ ia:
         - { name: "Default", itemId: "{895D8B01-4369-49F6-BDCD-4461FB661E3F}" }
         - { name: "Cards", itemId: "{BCF64FC7-D086-4C80-80C2-7BB90D3B49D0}" }
     verification:
-      checkedAt: "2026-08-15T10:16:00Z"
+      checkedAt: "2026-08-17T03:00:00Z"
       passed:
         - "Cooley Headless Variants container + Default + Cards verified via MCP"
+        - "Bio.Office Source → Geographies; PracticeAreas Source → Cooley Taxonomy"
+        - "25 bios populated with Office Droplink + PracticeAreas Multilist"
+        - "New practice tags (Capital Markets, Emerging Companies, etc.) created under Cooley Taxonomy"
       failed: []
-      pendingManual: []
-
+      pendingManual:
+        - "Publish Home/People bios, Data/Taxonomy/Practice Areas, and Bio template field Sources for Edge"
+        - "Spot-check BioListing filters (practice + office dropdowns) and name search on /People"
   - name: "BlogListing"
     kind: "list"
     category: "Insights"
@@ -5535,3 +5546,67 @@ contentPages:
         - "Append {29419ABC-5E18-40B5-A113-26D89297D1A5} to Available Renderings/Page Content (silent-read; do not replace)"
         - "Verify Datasource Template/Location in CE (silent-write)"
         - "Publish rendering, templates, Home, Data/NewsListing, and new Media and Insight pages for Edge"
+
+  - name: "cooley-header-footer-nav-remap"
+    kind: "content-update"
+    category: "Navigation"
+    status: "complete"
+    createdAt: "2026-08-17T00:30:00Z"
+    updatedAt: "2026-08-17T00:45:00Z"
+    siteName: "cooley"
+    notes: >
+      Remapped Header + Footer Partial Designs under
+      /Presentation/Partial Designs/Global/{Header,Footer}/Data to Cooley Home IA.
+      Sitecore item names kept (Speakers/Headphones/Amps/Pro/Artist Services);
+      Title/Link fields and dropdown/footer link lists point at IA pages.
+    relatedItems:
+      headerPartialDesignId: "{5083D6DA-A436-4D9E-B832-357C4BE48C37}"
+      headerDataFolderId: "{EA8D727C-EA89-4448-9CE2-F7BAF4BB1E2F}"
+      footerPartialDesignId: "{1F739B7E-CEF4-4761-8F2A-5D744650780E}"
+      footerDataFolderId: "{F68B21E4-BCBD-417D-9C99-314C744EF2D0}"
+      footerSTId: "{362FBEA9-1FE9-480D-B9EF-EA0D3282B9A6}"
+      megaMenus:
+        - { itemName: "Speakers", title: "Practices", pageId: "{F93A9099-45BF-40DD-B1D0-1D4CD7CD2861}" }
+        - { itemName: "Headphones", title: "Industries", pageId: "{BCAB7711-8D2A-4040-9EBD-C2ECA3E8553F}" }
+        - { itemName: "Amps", title: "People", pageId: "{E94FC8B8-FAF1-47EF-8985-B2B39BD102D1}" }
+        - { itemName: "Pro", title: "Media and Insight", pageId: "{F2CFB86E-36DD-4F44-A5C9-1814BDB074EC}" }
+        - { itemName: "Artist Services", title: "About", pageId: "{1FBF29A1-4BDC-43C8-A2D6-8B5B6DB33E30}" }
+      primaryLinkLists:
+        - { itemName: "Speakers Primary Links", links: ["All practices", "Corporate", "Litigation", "Intellectual Property"] }
+        - { itemName: "Headphones Primary Links", links: ["All industries", "Technology", "Life Sciences and Healthcare", "Artificial Intelligence"] }
+        - { itemName: "Amps Primary Links", links: ["Find a lawyer", "Careers", "Geographies", "Alumni", "Giving"] }
+      secondaryLinkLists:
+        - { itemName: "Loud for less", title: "Featured practices", links: ["Emerging Companies"] }
+        - { itemName: "By feature", title: "Corporate focus", links: ["Venture Capital", "Capital Markets"] }
+        - { itemName: "More speakers", title: "More from Cooley", links: ["CooleyREG", "Media and Insight"] }
+      headerUtility:
+        supportLink: { text: "Careers", pageId: "{C7E84C98-3C61-49FE-A3D7-92290EB40DBF}" }
+        searchLink: { text: "Search", pageId: "{FBFCD228-0AEB-41E3-A7EB-548745906172}" }
+        image1TargetUrl: { text: "Practices", pageId: "{F93A9099-45BF-40DD-B1D0-1D4CD7CD2861}" }
+      footerBranding:
+        title: "Counsel that moves with you."
+        copyright: "© 2026 Cooley LLP. Attorney Advertising."
+        linkedIn: "https://www.linkedin.com/company/cooley-llp/"
+      footerPrimaryLinks:
+        - { text: "Practices", pageId: "{F93A9099-45BF-40DD-B1D0-1D4CD7CD2861}" }
+        - { text: "Industries", pageId: "{BCAB7711-8D2A-4040-9EBD-C2ECA3E8553F}" }
+        - { text: "People", pageId: "{E94FC8B8-FAF1-47EF-8985-B2B39BD102D1}" }
+        - { text: "Media and Insight", pageId: "{F2CFB86E-36DD-4F44-A5C9-1814BDB074EC}" }
+      footerSecondaryLinks:
+        - { text: "About", pageId: "{1FBF29A1-4BDC-43C8-A2D6-8B5B6DB33E30}" }
+        - { text: "Careers", pageId: "{C7E84C98-3C61-49FE-A3D7-92290EB40DBF}" }
+        - { text: "Geographies", pageId: "{47A92856-3173-40C6-BA7E-887E44CE67B7}" }
+        - { text: "Insights", pageId: "{ABAABA2D-1D32-48A4-B63E-55EA3A7E3D80}" }
+        - { text: "Search", pageId: "{FBFCD228-0AEB-41E3-A7EB-548745906172}" }
+    verification:
+      checkedAt: "2026-08-17T00:45:00Z"
+      passed:
+        - "Five mega menus Title/Link remapped to Practices/Industries/People/Media and Insight/About"
+        - "Primary + secondary header LinkLists remapped to Cooley L1/L2 pages"
+        - "Header SupportLink → Careers; SearchLink → Search Results; Image 1 → Practices"
+        - "Footer primary/secondary links remapped to Cooley IA"
+        - "FooterST Title/Copyright/social URLs updated; Instagram XML fixed"
+      failed: []
+      pendingManual:
+        - "Publish Header + Footer Partial Designs and their Data folders for Edge"
+        - "Spot-check browser nav labels + dropdown/footer URLs under /Home"
