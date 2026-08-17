@@ -9,7 +9,7 @@ import {
   type RichTextField,
   type TextField,
 } from '@sitecore-content-sdk/nextjs';
-import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 
@@ -469,3 +469,266 @@ export const Default: React.FC<ProductCarouselProps> = (props) => (
 export const ProductStrip: React.FC<ProductCarouselProps> = (props) => (
   <ProductCarouselBase {...props} variant="productStrip" />
 );
+
+function SpotlightCard({
+  product,
+  ctaLabelField,
+  isEditing,
+}: {
+  product: ProductCarouselProductItem;
+  ctaLabelField?: TextField;
+  isEditing: boolean;
+}) {
+  const titleField = productTitleField(product);
+  const titleText = textValue(titleField) || product.name || 'Product';
+  const categoryField = product.categoryLabel?.jsonValue;
+  const descriptionField = product.description?.jsonValue;
+  const imageSrc = productImageSrc(product);
+  const href = productHref(product);
+  const ctaText = textValue(ctaLabelField) || 'View product';
+
+  return (
+    <article className="group bg-card text-card-foreground flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 shadow-sm transition-shadow duration-300 hover:shadow-lg">
+      <Link
+        href={href}
+        prefetch={false}
+        className="bg-muted/30 relative block aspect-[5/4] overflow-hidden"
+        aria-label={titleText}
+      >
+        {imageSrc ? (
+          <ProductImage
+            src={imageSrc}
+            alt={titleText}
+            className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="text-muted-foreground flex h-full items-center justify-center text-xs uppercase tracking-widest">
+            No image
+          </div>
+        )}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background/80 to-transparent"
+          aria-hidden
+        />
+      </Link>
+
+      <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
+        {(gqlText(product.categoryLabel) || isEditing) && categoryField && (
+          <Text
+            tag="span"
+            field={categoryField}
+            className="bg-primary/10 text-primary inline-flex w-fit rounded-full px-2.5 py-1 text-[0.65rem] font-semibold tracking-[0.12em] uppercase"
+          />
+        )}
+
+        {(titleText || isEditing) && titleField && (
+          <Text
+            tag="h3"
+            field={titleField}
+            className="font-heading text-foreground line-clamp-2 text-lg font-semibold tracking-tight md:text-xl"
+          />
+        )}
+
+        {(richPlainText(descriptionField) || isEditing) && descriptionField && (
+          <div className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+            <ContentSdkRichText field={descriptionField} />
+          </div>
+        )}
+
+        <div className="mt-auto pt-2">
+          <Link
+            href={href}
+            prefetch={false}
+            className="text-primary hover:text-primary-hover inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+          >
+            {ctaLabelField ? <Text field={ctaLabelField} /> : ctaText}
+            <ArrowRight
+              className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            />
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function CarouselNavButtons({
+  canScrollPrev,
+  canScrollNext,
+  onPrev,
+  onNext,
+  className,
+}: {
+  canScrollPrev: boolean;
+  canScrollNext: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn('flex items-center gap-2', className)}>
+      <button
+        type="button"
+        aria-label="Previous products"
+        disabled={!canScrollPrev}
+        onClick={onPrev}
+        className="border-border bg-background text-foreground hover:bg-muted flex size-10 items-center justify-center rounded-full border shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ChevronLeft className="size-5" aria-hidden />
+      </button>
+      <button
+        type="button"
+        aria-label="Next products"
+        disabled={!canScrollNext}
+        onClick={onNext}
+        className="border-border bg-background text-foreground hover:bg-muted flex size-10 items-center justify-center rounded-full border shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ChevronRight className="size-5" aria-hidden />
+      </button>
+    </div>
+  );
+}
+
+/** Editorial product rail — peek carousel, category pills, inline CTA, scroll progress. */
+export const Spotlight: React.FC<ProductCarouselProps> = ({
+  fields,
+  params,
+  isPageEditing: propEditing,
+}) => {
+  const { page } = useSitecore();
+  const isEditing = propEditing ?? page?.mode?.isEditing;
+  const datasource = fields?.data?.datasource;
+  const products = datasource?.products?.targetItems ?? [];
+  const titleField = datasource?.title?.jsonValue;
+  const ctaLabelField = datasource?.ctaLabel?.jsonValue;
+
+  const [api, setApi] = useState<CarouselApi>();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnapCount, setScrollSnapCount] = useState(0);
+
+  const onSelect = useCallback((embla: CarouselApi) => {
+    if (!embla) return;
+    setSelectedIndex(embla.selectedScrollSnap());
+    setScrollSnapCount(embla.scrollSnapList().length);
+  }, []);
+
+  useEffect(() => {
+    if (!api) return;
+    onSelect(api);
+    api.on('reInit', onSelect);
+    api.on('select', onSelect);
+    return () => {
+      api.off('select', onSelect);
+      api.off('reInit', onSelect);
+    };
+  }, [api, onSelect]);
+
+  const id = params?.RenderingIdentifier;
+  const canScrollPrev = selectedIndex > 0;
+  const canScrollNext = scrollSnapCount > 0 && selectedIndex < scrollSnapCount - 1;
+  const progress =
+    scrollSnapCount > 1 ? ((selectedIndex + 1) / scrollSnapCount) * 100 : 100;
+
+  if (!datasource) {
+    return <NoDataFallback componentName="ProductCarousel" />;
+  }
+
+  if (!products.length && !isEditing) {
+    return <ProductCarouselEmpty />;
+  }
+
+  return (
+    <section
+      id={id}
+      data-component="ProductCarousel"
+      data-variant="spotlight"
+      className={cn('component product-carousel product-carousel--spotlight relative w-full', params?.styles)}
+      aria-roledescription="carousel"
+      aria-label={gqlText(datasource.title) || 'Product carousel'}
+    >
+      <div className="from-muted/40 to-background relative overflow-hidden bg-gradient-to-b py-12 md:py-16">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col gap-6 md:mb-10 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              {(gqlText(datasource.title) || isEditing) && titleField && (
+                <Text
+                  tag="h2"
+                  field={titleField}
+                  className="font-heading text-foreground text-2xl font-semibold tracking-tight md:text-3xl lg:text-4xl"
+                />
+              )}
+            </div>
+
+            {scrollSnapCount > 1 && (
+              <CarouselNavButtons
+                canScrollPrev={canScrollPrev}
+                canScrollNext={canScrollNext}
+                onPrev={() => api?.scrollPrev()}
+                onNext={() => api?.scrollNext()}
+                className="hidden shrink-0 md:flex"
+              />
+            )}
+          </div>
+
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: 'start',
+              loop: false,
+              slidesToScroll: 1,
+              containScroll: 'trimSnaps',
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4 md:-ml-6">
+              {products.map((product, index) => (
+                <CarouselItem
+                  key={product.id || `product-${index}`}
+                  className="basis-[85%] pl-4 sm:basis-[55%] md:basis-[42%] md:pl-6 lg:basis-[32%] xl:basis-[28%]"
+                >
+                  <SpotlightCard
+                    product={product}
+                    ctaLabelField={ctaLabelField}
+                    isEditing={Boolean(isEditing)}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+
+          {scrollSnapCount > 1 && (
+            <>
+              <CarouselNavButtons
+                canScrollPrev={canScrollPrev}
+                canScrollNext={canScrollNext}
+                onPrev={() => api?.scrollPrev()}
+                onNext={() => api?.scrollNext()}
+                className="mt-6 justify-center md:hidden"
+              />
+
+              <div className="mt-6 md:mt-8">
+                <div
+                  className="bg-muted h-1 w-full overflow-hidden rounded-full"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(progress)}
+                  aria-label="Carousel progress"
+                >
+                  <div
+                    className="bg-primary h-full rounded-full transition-[width] duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="text-muted-foreground mt-2 text-center text-xs tabular-nums md:text-right">
+                  {selectedIndex + 1} / {scrollSnapCount}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};

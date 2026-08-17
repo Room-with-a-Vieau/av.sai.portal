@@ -6115,7 +6115,7 @@ ia:
     category: "Products"
     status: "complete"
     createdAt: "2026-08-13T21:00:00Z"
-    updatedAt: "2026-08-14T15:00:00Z"
+    updatedAt: "2026-08-17T23:45:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
@@ -6125,12 +6125,12 @@ ia:
       - "Available Renderings reconstructed from get_allowed_comps_by_ph then appended ProductCarousel on quanex (76), era (46), amesburytruth (46)."
       - "2026-08-13: Products Treelist Source widened to query:$site/Home (PDPs live under IA L2/L3 folders, not Home/Products)."
       - "2026-08-13: ERA Popular Products + AT AmesburyTruth Highlights retargeted to site-local PDPs (brace+pipe GUIDs matching Featured Products format)."
-      - "2026-08-14: CE Runtime Error on selecting ProductCarousel datasources (e.g. Featured Products). Cause: Products Treelist Source `query:$site/Home&IncludeTemplatesForSelection=Product Detail Page` — `$site` is unreliable in CE for Data-folder items, and `&` is Sitecore Query AND unless DataSource= is used. HeroCarousel/MainNav Contact do not use this Treelist so they did not throw. Item fields/layout/GUIDs were healthy. Fix: Source on {CB418CCB-EDAA-4D6C-8A28-0D62CD901331} = DataSource=query:./ancestor-or-self::*[@@templatename='Headless Site']/*[@@name='Home']&IncludeTemplatesForSelection=Product Detail Page. ERA Popular Products + AT Highlights share the same template field (no item edits)."
+      - "2026-08-17: Added Spotlight variant (quanex Headless Variants only). Editorial card rail with category pills, peek carousel, header nav controls, scroll progress bar."
     react:
       filePath: "src/components/uiim/products/ProductCarousel.tsx"
       componentMapKey: "ProductCarousel"
       propsShape: "graphql-datasource"
-      variants: ["Default", "ProductStrip"]
+      variants: ["Default", "ProductStrip", "Spotlight"]
       dataStrategy: "ComponentQuery (Title/BackgroundImageUrl/CtaLabel/ShowOptionsHint + Products Treelist targetItems)"
     templates:
       datasource:
@@ -6217,6 +6217,7 @@ ia:
         variants:
           - { name: "Default", itemId: "{B664B490-0F64-4BD4-890D-0CE86C7CCBC6}" }
           - { name: "ProductStrip", itemId: "{6EA1A1FA-65D0-4A23-B7A8-7BDFF4230C3A}" }
+          - { name: "Spotlight", itemId: "{4B537818-0983-46BB-A8CC-BC34E14866C2}" }
       - siteName: "era"
         containerPath: "/sitecore/content/quanex/era/Presentation/Headless Variants/ProductCarousel"
         containerId: "{75574F79-FC00-4FC6-A973-A848DEC3EEAD}"

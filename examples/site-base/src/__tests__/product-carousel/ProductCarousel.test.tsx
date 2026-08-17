@@ -83,7 +83,8 @@ jest.mock('lucide-react', () => ({
   Info: (props: React.SVGProps<SVGSVGElement>) =>
     React.createElement('svg', { 'data-testid': 'info-icon', ...props }),
   ArrowLeft: () => null,
-  ArrowRight: () => null,
+  ArrowRight: (props: React.SVGProps<SVGSVGElement>) =>
+    React.createElement('svg', { 'data-testid': 'arrow-right', ...props }),
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
@@ -117,6 +118,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 import {
   Default as ProductCarouselDefault,
   ProductStrip,
+  Spotlight as ProductCarouselSpotlight,
 } from '@/components/uiim/products/ProductCarousel';
 
 const sampleProducts = [
@@ -242,5 +244,22 @@ describe('ProductCarousel', () => {
       />
     );
     expect(screen.getByText(/select products/i)).toBeInTheDocument();
+  });
+
+  it('renders Spotlight with editorial cards and progress', () => {
+    const { container } = render(
+      <ProductCarouselSpotlight
+        {...carouselProps({
+          fields: datasourceFields,
+        })}
+      />
+    );
+
+    expect(screen.getByText('AmesburyTruth Highlights')).toBeInTheDocument();
+    expect(screen.getByText('Maxim HP Hinge')).toBeInTheDocument();
+    expect(screen.getByText('HINGES')).toBeInTheDocument();
+    expect(container.querySelector('[data-variant="spotlight"]')).toBeInTheDocument();
+    expect(screen.getAllByTestId('arrow-right').length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: /learn more/i }).length).toBeGreaterThan(0);
   });
 });
