@@ -5204,6 +5204,48 @@ ia:
       pendingManual:
         - "Publish Home/People bios, Data/Taxonomy/Practice Areas, and Bio template field Sources for Edge"
         - "Spot-check BioListing filters (practice + office dropdowns) and name search on /People"
+
+  - name: "cooley-taxonomy-publications-speaking"
+    kind: "content-update"
+    category: "Taxonomy"
+    status: "complete"
+    createdAt: "2026-08-17T10:10:00Z"
+    updatedAt: "2026-08-17T10:10:00Z"
+    siteName: "cooley"
+    notes: >
+      Seeded Cooley-themed Tag samples under Data/Taxonomy/Publications and Speaking Engagements.
+      Pointed Bio Credentials multilist Sources (Publications, SpeakingEngagements, Awards) at Cooley
+      taxonomy paths (were still pillsbury). Wired sample pubs/speaking on Peinsipp, Nath, Goldstein, Shapiro.
+    relatedItems:
+      publicationsFolderId: "{A2BE12B2-AEC3-45DD-9255-14FA6A454DE6}"
+      speakingFolderId: "{ECBF8392-08EE-4296-8E20-2CC10B816D5F}"
+      publications:
+        - { name: "Sample-Article", title: "Q1 2026 Venture Financing Report", itemId: "{6C4BACD6-6685-421B-9490-6917CD2768A2}" }
+        - { name: "AI-Governance-for-Boards", itemId: "{68C02F58-15D3-4B71-9D90-DBD6AF8AF9A2}" }
+        - { name: "Life-Sciences-IPO-Outlook-2026", itemId: "{D82C0982-2A3E-462C-A65F-9BCE30776B0A}" }
+        - { name: "Cooley-Alert-SEC-Cybersecurity-Disclosure", itemId: "{564320D3-1D92-4749-A52C-81E01049F4DF}" }
+        - { name: "Chambers-Global-Venture-Capital", itemId: "{1E541ED5-7F7F-46BE-9DA0-D9717356F549}" }
+        - { name: "HLS-Forum-Corporate-Governance", itemId: "{04A0F7EA-B3EB-4007-B57D-97A53ADECBE2}" }
+        - { name: "Bloomberg-Law-CFIUS-Trends", itemId: "{F8511769-18F1-47DD-875A-45F073887F17}" }
+        - { name: "Cooley-Insights-Term-Sheet-Trends", itemId: "{E695CB4A-BE9A-4AD4-B543-B4C44096DE28}" }
+      speakingEngagements:
+        - { name: "Sample-Conference", title: "CooleyREG Webinar: Raising Capital in Life Sciences", itemId: "{AFC00F60-6318-4ADF-BFD6-11EF7EDEB285}" }
+        - { name: "AI-Board-Oversight-Webinar", itemId: "{6394D7C0-9C84-488C-8368-304D47A425D0}" }
+        - { name: "Venture-Term-Sheets-Webinar", itemId: "{E1579DCE-2777-4677-AE76-56012DFF33DA}" }
+        - { name: "BIO-International-Convention-Panel", itemId: "{EFB8E8A2-3F1F-4AD9-892D-67B6C13E147D}" }
+        - { name: "PLI-Securities-Regulation-Institute", itemId: "{5E5100BD-B16E-4998-A45B-C8B295B9BA25}" }
+        - { name: "Stanford-Directors-College", itemId: "{BF52B91D-4BCE-4169-8E51-E412C626E60A}" }
+        - { name: "ABA-Business-Law-Section-Annual-Meeting", itemId: "{0A40FA46-6E74-4E23-8617-5FC399A25667}" }
+        - { name: "SXSW-Startup-Legal-Essentials", itemId: "{A0CEC6CC-DC7F-4662-B71B-862CB3651395}" }
+    verification:
+      checkedAt: "2026-08-17T10:10:00Z"
+      passed:
+        - "8 Publications tags + 8 Speaking Engagement tags under Cooley Taxonomy"
+        - "Bio Publications/SpeakingEngagements/Awards Sources → Cooley Taxonomy"
+        - "Sample multilists set on Peinsipp, Nath, Goldstein, Shapiro"
+      failed: []
+      pendingManual:
+        - "Publish Taxonomy/Publications, Taxonomy/Speaking Engagements, and updated bios for Edge"
   - name: "BlogListing"
     kind: "list"
     category: "Insights"

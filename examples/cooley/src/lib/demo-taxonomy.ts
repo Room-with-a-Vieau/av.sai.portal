@@ -1,17 +1,43 @@
 export const DEMO_TAXONOMY_STORAGE_KEY = 'demo-user-taxonomy';
 export const DEMO_TAXONOMY_CHANGE_EVENT = 'demo-taxonomy-change';
 
+/**
+ * Portal-style demo logins for Cooley — clients, firm colleagues, and candidates.
+ * Used by HeaderST DemoUserSwitcher (and search/analytics when a persona is active).
+ */
 export const DEMO_USER_PERSONAS = [
-  'Internal Agent licensed in FL',
-  'Claims Specialist licensed in NC',
+  'Client Billing — Pay invoices',
+  'Client GC — Matter portal',
+  'Cooley Lawyer — Knowledge hub',
+  'Cooley Staff — Operations',
+  'Recruiting Candidate',
 ] as const;
 
 export type DemoUserTaxonomy = (typeof DEMO_USER_PERSONAS)[number];
 
-export const DEFAULT_DEMO_TAXONOMY: DemoUserTaxonomy = 'Internal Agent licensed in FL';
+export const DEFAULT_DEMO_TAXONOMY: DemoUserTaxonomy = 'Client Billing — Pay invoices';
 
 /** Sentinel value for the persona switcher logout action (not stored in localStorage). */
 export const DEMO_TAXONOMY_LOGOUT_VALUE = '__demo_logout__';
+
+/** Menu groupings for the HeaderST login dropdown. */
+export const DEMO_PERSONA_GROUPS: ReadonlyArray<{
+  label: string;
+  personas: readonly DemoUserTaxonomy[];
+}> = [
+  {
+    label: 'Client portals',
+    personas: ['Client Billing — Pay invoices', 'Client GC — Matter portal'],
+  },
+  {
+    label: 'Cooley team',
+    personas: ['Cooley Lawyer — Knowledge hub', 'Cooley Staff — Operations'],
+  },
+  {
+    label: 'Careers',
+    personas: ['Recruiting Candidate'],
+  },
+];
 
 export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserTaxonomy | null {
   const value = raw?.trim();
@@ -22,21 +48,22 @@ export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserT
 
 export function getPersonaCode(persona: DemoUserTaxonomy): string {
   const codes: Record<DemoUserTaxonomy, string> = {
-    'Internal Agent licensed in FL': 'ia-fl',
-    'Claims Specialist licensed in NC': 'cs-nc',
+    'Client Billing — Pay invoices': 'client-billing',
+    'Client GC — Matter portal': 'client-gc',
+    'Cooley Lawyer — Knowledge hub': 'cooley-lawyer',
+    'Cooley Staff — Operations': 'cooley-staff',
+    'Recruiting Candidate': 'recruiting',
   };
 
   return codes[persona];
 }
 
-/** US state code for licensed demo personas (used to filter state-specific shared content). */
-export function getPersonaStateCode(persona: DemoUserTaxonomy): string {
-  const states: Record<DemoUserTaxonomy, string> = {
-    'Internal Agent licensed in FL': 'FL',
-    'Claims Specialist licensed in NC': 'NC',
-  };
-
-  return states[persona];
+/**
+ * Optional state filter for KM/variant content.
+ * Cooley portal personas are firm-wide (not state-licensed), so this returns null.
+ */
+export function getPersonaStateCode(_persona: DemoUserTaxonomy): string | null {
+  return null;
 }
 
 export function clearStoredDemoTaxonomy(): void {

@@ -120,21 +120,21 @@ describe('demo-analytics-identity', () => {
     process.env.NODE_ENV = 'production';
     mockGetClientId.mockReturnValueOnce('').mockReturnValue('new-client-id');
 
-    await identifyDemoPersona('Internal Agent licensed in FL');
+    await identifyDemoPersona('Client Billing — Pay invoices');
 
     expect(mockSetClientId).toHaveBeenCalledTimes(1);
     expect(mockSetProfileId).toHaveBeenCalledTimes(1);
     expect(mockIdentity).toHaveBeenCalledWith({
       channel: 'WEB',
       currency: 'USD',
-      firstName: 'Morgan',
-      lastName: 'Ellis',
-      email: 'morgan.ellis@demo.progressive.com',
-      identifiers: [{ id: 'morgan.ellis@demo.progressive.com', provider: 'email' }],
+      firstName: 'Avery',
+      lastName: 'Chen',
+      email: 'avery.chen@acme-finance.demo',
+      identifiers: [{ id: 'avery.chen@acme-finance.demo', provider: 'email' }],
       extensionData: {
-        demoPersona: 'Internal Agent licensed in FL',
-        demoPersonaCode: 'ia-fl',
-        demoPersonaId: 'progressive-demo-ia-fl',
+        demoPersona: 'Client Billing — Pay invoices',
+        demoPersonaCode: 'client-billing',
+        demoPersonaId: 'cooley-demo-client-billing',
       },
     });
   });
@@ -142,13 +142,13 @@ describe('demo-analytics-identity', () => {
   it('can identify without resetting the session on page reload', async () => {
     process.env.NODE_ENV = 'production';
 
-    await identifyDemoPersona('Claims Specialist licensed in NC', { resetSession: false });
+    await identifyDemoPersona('Cooley Lawyer — Knowledge hub', { resetSession: false });
 
     expect(mockSetClientId).not.toHaveBeenCalled();
     expect(mockIdentity).toHaveBeenCalledWith(
       expect.objectContaining({
-        email: 'casey.nguyen@demo.progressive.com',
-        identifiers: [{ id: 'casey.nguyen@demo.progressive.com', provider: 'email' }],
+        email: 'rsoto@cooley.com',
+        identifiers: [{ id: 'rsoto@cooley.com', provider: 'email' }],
       })
     );
   });

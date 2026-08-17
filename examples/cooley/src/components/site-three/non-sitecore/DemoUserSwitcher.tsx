@@ -13,8 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+  DEMO_PERSONA_GROUPS,
   DEMO_TAXONOMY_CHANGE_EVENT,
-  DEMO_USER_PERSONAS,
   clearStoredDemoTaxonomy,
   readStoredDemoTaxonomy,
   setStoredDemoTaxonomy,
@@ -27,10 +27,10 @@ import {
 import { cn } from '@/lib/utils';
 
 /**
- * Demo persona menu (DropdownMenu, not Select).
+ * Demo portal login menu for HeaderST (DropdownMenu, not Select).
  *
  * Radix Select was a poor fit: logging out unmounted the Logout item and left
- * `value` undefined, so Select fell back to the first persona (FL). A menu with
+ * `value` undefined, so Select fell back to the first persona. A menu with
  * explicit actions avoids that.
  */
 export function DemoUserSwitcher() {
@@ -70,10 +70,10 @@ export function DemoUserSwitcher() {
           type="button"
           variant="outline"
           className="h-10 w-[min(100%,18.5rem)] justify-between gap-2 px-3 font-normal"
-          aria-label={isLoggedIn ? 'Demo persona' : 'Login as demo persona'}
+          aria-label={isLoggedIn ? 'Portal account' : 'Portal login'}
         >
           <span className="truncate text-left">
-            {taxonomy ?? 'Login / Logout'}
+            {taxonomy ?? 'Portal login'}
           </span>
           <ChevronDown className="size-4 shrink-0 opacity-50" aria-hidden />
         </Button>
@@ -83,29 +83,37 @@ export function DemoUserSwitcher() {
           <>
             <DropdownMenuItem className="text-primary font-medium" onSelect={handleLogout}>
               <LogOut className="size-4" aria-hidden />
-              Logout
+              Sign out
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
         <DropdownMenuLabel className="text-muted-foreground font-normal">
-          {isLoggedIn ? 'Switch persona' : 'Login as'}
+          {isLoggedIn ? 'Switch portal account' : 'Sign in as'}
         </DropdownMenuLabel>
-        {DEMO_USER_PERSONAS.map((persona) => {
-          const selected = taxonomy === persona;
-          return (
-            <DropdownMenuItem
-              key={persona}
-              className={cn(selected && 'bg-accent')}
-              onSelect={() => handleLogin(persona)}
-            >
-              <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden>
-                {selected ? <Check className="size-4" /> : null}
-              </span>
-              <span className="min-w-0 flex-1 whitespace-normal">{persona}</span>
-            </DropdownMenuItem>
-          );
-        })}
+        {DEMO_PERSONA_GROUPS.map((group, groupIndex) => (
+          <div key={group.label}>
+            {groupIndex > 0 ? <DropdownMenuSeparator /> : null}
+            <DropdownMenuLabel className="text-foreground/80 px-2 py-1.5 text-xs font-semibold tracking-wide uppercase">
+              {group.label}
+            </DropdownMenuLabel>
+            {group.personas.map((persona) => {
+              const selected = taxonomy === persona;
+              return (
+                <DropdownMenuItem
+                  key={persona}
+                  className={cn(selected && 'bg-accent')}
+                  onSelect={() => handleLogin(persona)}
+                >
+                  <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden>
+                    {selected ? <Check className="size-4" /> : null}
+                  </span>
+                  <span className="min-w-0 flex-1 whitespace-normal">{persona}</span>
+                </DropdownMenuItem>
+              );
+            })}
+          </div>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

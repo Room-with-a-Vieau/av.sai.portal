@@ -97,8 +97,9 @@ describe('variant-content.fields', () => {
     expect(filterChunksByPersonaState(chunks, 'NC').map((c) => c.stateCode)).toEqual(['NC']);
   });
 
-  it('maps demo personas to FL and NC state codes', () => {
-    expect(getPersonaStateCode('Internal Agent licensed in FL')).toBe('FL');
-    expect(getPersonaStateCode('Claims Specialist licensed in NC')).toBe('NC');
+  it('maps Cooley portal personas to no state license filter', () => {
+    expect(getPersonaStateCode('Client Billing — Pay invoices')).toBeNull();
+    expect(getPersonaStateCode('Cooley Lawyer — Knowledge hub')).toBeNull();
+    expect(getPersonaStateCode('Recruiting Candidate')).toBeNull();
   });
 });

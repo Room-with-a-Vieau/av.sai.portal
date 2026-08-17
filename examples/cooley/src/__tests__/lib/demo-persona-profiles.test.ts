@@ -18,19 +18,19 @@ describe('demo-persona-profiles', () => {
     expect(new Set(identifierIds).size).toBe(identifierIds.length);
   });
 
-  it('returns stable identity fields for Internal Agent licensed in FL', () => {
-    const profile = getDemoPersonaProfile('Internal Agent licensed in FL');
+  it('returns stable identity fields for Client Billing — Pay invoices', () => {
+    const profile = getDemoPersonaProfile('Client Billing — Pay invoices');
 
     expect(profile).toEqual({
-      persona: 'Internal Agent licensed in FL',
-      firstName: 'Morgan',
-      lastName: 'Ellis',
-      email: 'morgan.ellis@demo.progressive.com',
-      identifierId: 'progressive-demo-ia-fl',
+      persona: 'Client Billing — Pay invoices',
+      firstName: 'Avery',
+      lastName: 'Chen',
+      email: 'avery.chen@acme-finance.demo',
+      identifierId: 'cooley-demo-client-billing',
     });
   });
 
-  it('uses the progressive demo identifier provider', () => {
-    expect(DEMO_PERSONA_IDENTIFIER_PROVIDER).toBe('progressive-demo');
+  it('uses the Cooley demo identifier provider', () => {
+    expect(DEMO_PERSONA_IDENTIFIER_PROVIDER).toBe('cooley-demo');
   });
 });
