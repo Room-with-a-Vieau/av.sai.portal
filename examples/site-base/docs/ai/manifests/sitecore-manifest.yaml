@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-14T13:00:00Z"
+lastUpdatedAt: "2026-08-17T17:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -6604,4 +6604,66 @@ ia:
         - "Place MainNav on Header partial designs and assign site datasource"
         - "Set Logo, SearchPage, UserLink, optional ShowCart/CartLink, SupportLink URLs"
         - "Component map regenerates on npm run build/dev — verify MainNav key"
+
+  - name: "FeatureBanner"
+    kind: "list"
+    category: "SiteThree"
+    status: "complete"
+    createdAt: "2026-08-17T17:30:00Z"
+    updatedAt: "2026-08-17T17:45:00Z"
+    siteName: "era"
+    siteCollection: "quanex"
+    notes:
+      - "2026-08-17: Added ImagesOnly Headless Variant on quanex/era/amesburytruth. React export ImagesOnly renders child images only (no title/headings)."
+      - "2026-08-17: Populated era Data/Feature Banners/Home Services with 5 FeatureItem children from Content Hub public URLs (mrfbasech2). Removed placeholder Feature1."
+      - "Parent path note: item is named Home Services (not Home Services for Era)."
+    react:
+      filePath: "src/components/site-three/FeatureBanner.tsx"
+      componentMapKey: "FeatureBanner"
+      variants: ["Default", "Vertical", "Accent", "ImagesOnly"]
+    templates:
+      child:
+        name: "FeatureItem"
+        path: "/sitecore/templates/Project/click-click-launch/Sites/Site 3/FeatureBanner/FeatureItem"
+        itemId: "{4507E405-6110-4E56-AF58-27B65B58268F}"
+    exampleItems:
+      - siteName: "era"
+        name: "Home Services"
+        itemId: "{28CCFEF6-BEFC-4164-AF69-F4AF16942DC3}"
+        path: "/sitecore/content/quanex/era/Data/Feature Banners/Home Services"
+    exampleChildren:
+      - { name: "Design Quality Innovation 185 Years", itemId: "{C52F3053-155F-488A-8339-41548D5D17CC}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/a920334ba9354a5f9690e444c2e8168b?v=9a9d7e91" }
+      - { name: "Order by 3PM Same Day Dispatch", itemId: "{C83BACBC-246C-4A6C-B0E4-F7749C33E549}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/e7cc4eb3f2e44336bce599144ee6302e?v=0e5816d5" }
+      - { name: "Free Delivery Over 250", itemId: "{F84AF504-7D84-4B3A-9480-E312621FAAC5}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/68d39f69a69a4cfaae1e972a7d8192e8?v=8f4054ef" }
+      - { name: "Sales Support POS and Marketing", itemId: "{6818693D-B48C-4318-A51B-1EA17E7BEC5D}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/f8b4f46f14404d65a7c133afdb9eb53b?v=8598f3ad" }
+      - { name: "Quick and Easy Online Ordering", itemId: "{6F650F16-585F-4120-ABB9-D8A734163A05}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/73575553154246b7b153fd0474bea440?v=5c5a8e3b" }
+    headlessVariants:
+      - siteName: "era"
+        containerId: "{72E14D02-D37B-4C27-A2DF-230B4CA5D431}"
+        variants:
+          - { name: "ImagesOnly", itemId: "{CA91B068-E6A3-484B-A66C-1B964ABD078F}" }
+      - siteName: "quanex"
+        containerId: "{61794740-81F0-487F-9A41-2FB23A647BF0}"
+        variants:
+          - { name: "ImagesOnly", itemId: "{1E1EE27B-2BA5-4C2A-9AD3-AB1491FD6B53}" }
+      - siteName: "amesburytruth"
+        containerId: "{E752AC44-3A25-4A8D-8B73-C5D1190DCBFE}"
+        variants:
+          - { name: "ImagesOnly", itemId: "{4EBA4D8E-9E5D-47FF-946A-5F0C0FBAA0DA}" }
+    codeChanges:
+      - "src/components/site-three/FeatureBanner.tsx"
+      - "src/__tests__/site-three/FeatureBanner.test.tsx"
+      - "next.config.ts"
+    verification:
+      checkedAt: "2026-08-17T17:45:00Z"
+      passed:
+        - "5 FeatureItem children created under Home Services with external CH image XML"
+        - "ImagesOnly Variant Definition on era/quanex/amesburytruth"
+        - "React ImagesOnly export + unit tests"
+        - "mrfbasech2 added to next.config remotePatterns"
+      failed: []
+      pendingManual:
+        - "Select ImagesOnly variant on the Era FeatureBanner rendering that uses Home Services"
+        - "Publish Home Services + children for Edge"
+        - "Confirm images render after publish (external Image XML src)"
 

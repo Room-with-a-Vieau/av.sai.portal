@@ -5,6 +5,7 @@ import {
   Default as FeatureBannerDefault,
   Vertical as FeatureBannerVertical,
   Accent as FeatureBannerAccent,
+  ImagesOnly as FeatureBannerImagesOnly,
 } from '@/components/site-three/FeatureBanner';
 
 // Mock Sitecore SDK
@@ -243,6 +244,35 @@ describe('FeatureBanner', () => {
       // Check that the section still renders with the accent styling
       expect(document.querySelector('section')).toBeInTheDocument();
       expect(document.querySelector('.bg-primary')).toBeInTheDocument();
+    });
+  });
+
+  describe('ImagesOnly variant', () => {
+    it('renders images without title or headings', () => {
+      render(<FeatureBannerImagesOnly {...mockProps} />);
+      expect(screen.queryByText('Our Features')).not.toBeInTheDocument();
+      expect(screen.queryByText('High Quality')).not.toBeInTheDocument();
+      expect(screen.queryByText('Fast Delivery')).not.toBeInTheDocument();
+      expect(screen.getAllByRole('img')).toHaveLength(3);
+    });
+
+    it('handles empty results in ImagesOnly layout', () => {
+      const emptyProps = {
+        ...mockProps,
+        fields: {
+          data: {
+            datasource: {
+              ...mockProps.fields.data.datasource,
+              children: {
+                results: [],
+              },
+            },
+          },
+        },
+      };
+      const { container } = render(<FeatureBannerImagesOnly {...emptyProps} />);
+      expect(container.querySelector('section')).toBeInTheDocument();
+      expect(screen.queryAllByRole('img')).toHaveLength(0);
     });
   });
 

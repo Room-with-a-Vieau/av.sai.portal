@@ -68,6 +68,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'mrfbasech2.sitecoresandbox.cloud',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'bcbsa.sitecoresandbox.cloud',
         port: '',
         pathname: '/**',

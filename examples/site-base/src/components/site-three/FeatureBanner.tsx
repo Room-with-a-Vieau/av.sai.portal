@@ -3,6 +3,8 @@
 import { Text as ContentSdkText, NextImage as ContentSdkImage } from '@sitecore-content-sdk/nextjs';
 import { useMemo } from 'react';
 import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
+import { extractImageSrc } from '@/lib/sitecore-image-field';
+import { cn } from '@/lib/utils';
 
 interface Fields {
   data: {
@@ -31,25 +33,42 @@ type FeatureItemProps = FeatureItemFields & {
   imageClassName?: string;
   imageWidth?: number;
   imageHeight?: number;
+  showHeading?: boolean;
 };
 
 const FeatureItem = ({
   imageClassName = 'h-6 w-6 object-contain',
   imageWidth = 24,
   imageHeight = 24,
+  showHeading = true,
   ...props
 }: FeatureItemProps) => {
+  const imageField = props?.image?.jsonValue;
+  const resolvedSrc = extractImageSrc(imageField) || extractImageSrc(props?.image);
+  const editableImageField =
+    imageField && resolvedSrc && !(imageField as { value?: { src?: string } })?.value?.src
+      ? ({
+          ...imageField,
+          value: {
+            ...((imageField as { value?: object }).value || {}),
+            src: resolvedSrc,
+          },
+        } as typeof imageField)
+      : imageField;
+
   return (
     <div className="flex flex-col items-center gap-2">
       <ContentSdkImage
-        field={props?.image?.jsonValue}
+        field={editableImageField}
         width={imageWidth}
         height={imageHeight}
         className={imageClassName}
       />
-      <p className="text-base text-center">
-        <ContentSdkText field={props?.heading?.jsonValue} />
-      </p>
+      {showHeading && (
+        <p className="text-base text-center">
+          <ContentSdkText field={props?.heading?.jsonValue} />
+        </p>
+      )}
     </div>
   );
 };
@@ -131,6 +150,34 @@ export const Accent = (props: FeatureBannerProps) => {
               )) || []}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/** Images only — no section title, no item headings (graphics that already include text). */
+export const ImagesOnly = (props: FeatureBannerProps) => {
+  const datasource = useMemo(
+    () => props?.fields?.data?.datasource,
+    [props?.fields?.data?.datasource]
+  );
+  const items = datasource?.children?.results || [];
+
+  return (
+    <section className={cn('py-10 md:py-14', props?.params?.styles)} data-class-change>
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8 lg:gap-10">
+          {items.map((item) => (
+            <FeatureItem
+              key={item.id}
+              {...item}
+              showHeading={false}
+              imageClassName="h-16 w-auto max-w-[220px] object-contain sm:h-20 md:h-24 lg:max-w-[260px]"
+              imageWidth={260}
+              imageHeight={96}
+            />
+          ))}
         </div>
       </div>
     </section>
