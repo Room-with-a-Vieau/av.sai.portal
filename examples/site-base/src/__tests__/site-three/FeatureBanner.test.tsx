@@ -256,6 +256,19 @@ describe('FeatureBanner', () => {
       expect(screen.getAllByRole('img')).toHaveLength(3);
     });
 
+    it('keeps all images on a single scaling row', () => {
+      const { container } = render(<FeatureBannerImagesOnly {...mockProps} />);
+      const row = container.querySelector('.flex-nowrap');
+      expect(row).toBeInTheDocument();
+      expect(row).toHaveClass('w-full');
+      const items = row?.querySelectorAll(':scope > div') ?? [];
+      expect(items).toHaveLength(3);
+      items.forEach((item) => {
+        expect(item).toHaveClass('flex-1');
+        expect(item).toHaveClass('min-w-0');
+      });
+    });
+
     it('handles empty results in ImagesOnly layout', () => {
       const emptyProps = {
         ...mockProps,

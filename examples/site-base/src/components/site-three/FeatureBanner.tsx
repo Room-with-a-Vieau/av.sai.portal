@@ -30,6 +30,7 @@ type FeatureBannerProps = {
 };
 
 type FeatureItemProps = FeatureItemFields & {
+  className?: string;
   imageClassName?: string;
   imageWidth?: number;
   imageHeight?: number;
@@ -37,6 +38,7 @@ type FeatureItemProps = FeatureItemFields & {
 };
 
 const FeatureItem = ({
+  className,
   imageClassName = 'h-6 w-6 object-contain',
   imageWidth = 24,
   imageHeight = 24,
@@ -57,7 +59,7 @@ const FeatureItem = ({
       : imageField;
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className={cn('flex flex-col items-center gap-2', className)}>
       <ContentSdkImage
         field={editableImageField}
         width={imageWidth}
@@ -165,17 +167,18 @@ export const ImagesOnly = (props: FeatureBannerProps) => {
   const items = datasource?.children?.results || [];
 
   return (
-    <section className={cn('py-10 md:py-14', props?.params?.styles)} data-class-change>
+    <section className={cn('py-8 md:py-10', props?.params?.styles)} data-class-change>
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8 lg:gap-10">
+        <div className="flex w-full flex-nowrap items-center justify-between gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           {items.map((item) => (
             <FeatureItem
               key={item.id}
               {...item}
               showHeading={false}
-              imageClassName="h-16 w-auto max-w-[220px] object-contain sm:h-20 md:h-24 lg:max-w-[260px]"
-              imageWidth={260}
-              imageHeight={96}
+              className="min-w-0 flex-1 basis-0"
+              imageClassName="h-auto w-full object-contain"
+              imageWidth={320}
+              imageHeight={120}
             />
           ))}
         </div>
