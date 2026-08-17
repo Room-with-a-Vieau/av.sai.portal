@@ -6,6 +6,7 @@ import { Form } from '@sitecore-content-sdk/nextjs';
 import * as zipcodemodaldev from 'src/components/zipcode-modal/zipcode-modal.dev';
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
 import * as VariantContent from 'src/components/variant-content/VariantContent';
+import * as NewsListing from 'src/components/uiim/news/NewsListing';
 import * as MediaCanvas from 'src/components/uiim/media/MediaCanvas';
 import * as CareerListing from 'src/components/uiim/lawyers/CareerListing';
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
@@ -129,6 +130,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['zipcode-modal', { ...zipcodemodaldev }],
   ['VerticalImageAccordion', { ...VerticalImageAccordion }],
   ['VariantContent', { ...VariantContent }],
+  ['NewsListing', { ...NewsListing }],
   ['MediaCanvas', { ...MediaCanvas }],
   ['CareerListing', { ...CareerListing }],
   ['BioListing', { ...BioListing }],

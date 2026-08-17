@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-16T23:55:00Z"
+lastUpdatedAt: "2026-08-17T00:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5442,3 +5442,96 @@ contentPages:
       - { name: "Venture Financing Trends", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/Venture Financing Trends", itemId: "{56D8D7D4-237C-41F2-B612-089EDE0CF437}", route: "/Media-and-Insight/Insights/Venture-Financing-Trends" }
       - { name: "AI Governance for Boards", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/AI Governance for Boards", itemId: "{B2ED2AE4-44B0-41CD-A357-B0E6DAAF9C52}", route: "/Media-and-Insight/Insights/AI-Governance-for-Boards" }
       - { name: "Life Sciences IPO Outlook", path: "/sitecore/content/Cooley/cooley/Home/Media and Insight/Insights/Life Sciences IPO Outlook", itemId: "{CE9E7CA2-47DC-450D-B64A-D0B2295881E0}", route: "/Media-and-Insight/Insights/Life-Sciences-IPO-Outlook" }
+
+  - name: "NewsListing"
+    kind: "simple"
+    category: "News"
+    status: "complete"
+    createdAt: "2026-08-17T00:00:00Z"
+    updatedAt: "2026-08-17T00:15:00Z"
+    siteName: "cooley"
+    siteCollection: "Cooley"
+    notes: >
+      Firm News / What Matters carousel. Authors select Media and Insight pages via FeaturedItems Treelist
+      (source: Home/Media and Insight). Content type inferred from parent folder; date from pageSubtitle or Detail.
+      Live Cooley paths (not project.yaml pkm). Placed on Home after MultiPromo.
+    react:
+      filePath: "src/components/uiim/news/NewsListing.tsx"
+      componentMapKey: "NewsListing"
+      variants:
+        - "Default"
+    templates:
+      parent:
+        name: "NewsListing"
+        path: "/sitecore/templates/Project/Cooley/Components/News/NewsListing"
+        itemId: "{DE22037D-099B-40FD-895E-AF11C08FD8EE}"
+        sectionName: "Data"
+        fields:
+          - { name: "Eyebrow", type: "Single-Line Text", itemId: "{4E9732BD-2457-4D98-8BDD-CF44082C4304}" }
+          - { name: "Title", type: "Single-Line Text", itemId: "{6A5BAD2F-6A55-4C92-B63E-C6990E2242D1}" }
+          - { name: "FeaturedItems", type: "Treelist", itemId: "{C351FB98-4E20-4598-844F-90497BC78E7D}", source: "/sitecore/content/Cooley/cooley/Home/Media and Insight" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{9E49CD6B-7215-4476-AE56-4C85D1F71F0F}"
+          linked: true
+      folder:
+        name: "NewsListing Folder"
+        path: "/sitecore/templates/Project/Cooley/Folders/NewsListing Folder"
+        itemId: "{E7DDA8F5-E1CC-4568-87CB-0362CAE6C449}"
+        standardValues:
+          itemId: "{053C6D0C-3611-4811-86D1-B35AB1875D0F}"
+          linked: true
+      renderingParams:
+        name: "NewsListing"
+        path: "/sitecore/templates/Project/Cooley/Rendering Parameters/News/NewsListing"
+        itemId: "{5F1C0522-B946-437D-9958-17B57783E539}"
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{732092F4-A741-476E-921E-450153A3DDE1}"
+    datasourceFolder:
+      name: "NewsListing"
+      path: "/sitecore/content/Cooley/cooley/Data/NewsListing"
+      itemId: "{FA2C6030-3F01-4859-B6B4-DB1AD772B9F4}"
+      insertOptionsSet: true
+      exampleItem:
+        name: "Homepage Firm News"
+        itemId: "{B23FB132-3143-415F-A220-B9B6CF90817B}"
+    rendering:
+      name: "NewsListing"
+      path: "/sitecore/layout/Renderings/Project/Cooley/News/NewsListing"
+      itemId: "{29419ABC-5E18-40B5-A113-26D89297D1A5}"
+      componentName: "NewsListing"
+      datasourceTemplatePath: "/sitecore/templates/Project/Cooley/Components/News/NewsListing"
+      useComponentQuery: true
+      registeredInAvailableRenderings: false
+    variants:
+      containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/NewsListing"
+      containerId: "{7AB1C15B-F0FC-4B95-9384-17DB2D20D34C}"
+      definitions:
+        - { name: "Default", itemId: "{9BE629E9-09FF-4ADC-B6D8-F8E7A79ACA06}" }
+    pagePlacement:
+      pagePath: "/sitecore/content/Cooley/cooley/Home"
+      pageId: "{E17C24E2-6BC8-4415-8745-484D0DBBF8D0}"
+      placeholder: "headless-main"
+      instanceId: "{E673DDBE-1504-405E-8814-227454EE1EA0}"
+      datasourceId: "{B23FB132-3143-415F-A220-B9B6CF90817B}"
+    relatedContent:
+      - { name: "Cooley Named Official Legal Services Provider LA28", itemId: "{8C778F99-E512-4D05-95BE-FC5B4A6E3A2E}", type: "Press Release" }
+      - { name: "Cooley Maintains Top Rankings in Global MA and Private Equity", itemId: "{47E7AD19-7548-412D-9FE4-2715987277E1}", type: "Press Release" }
+      - { name: "State Of 2026 Energy Dealmaking Midyear Report", itemId: "{F0997884-F125-49F0-80BE-2E4ACE8B3E41}", type: "Press Mention" }
+      - { name: "Q1 2026 Venture Financing Report", itemId: "{4AEA92D3-6D10-4549-962E-A0FDD33FB3CE}", type: "Article" }
+    verification:
+      checkedAt: "2026-08-17T00:15:00Z"
+      passed:
+        - "NewsListing template + Treelist FeaturedItems with Media and Insight source"
+        - "Folder template + Data/NewsListing + Homepage Firm News with 4 FeaturedItems"
+        - "JSON Rendering componentName + Parameters Template + ComponentQuery"
+        - "Default Headless Variant"
+        - "React NewsListing.tsx carousel"
+        - "Placed on Home; datasource set to Homepage Firm News"
+        - "4 sample news pages under Press Releases / Coverage / Insights"
+      failed: []
+      pendingManual:
+        - "Append {29419ABC-5E18-40B5-A113-26D89297D1A5} to Available Renderings/Page Content (silent-read; do not replace)"
+        - "Verify Datasource Template/Location in CE (silent-write)"
+        - "Publish rendering, templates, Home, Data/NewsListing, and new Media and Insight pages for Edge"
