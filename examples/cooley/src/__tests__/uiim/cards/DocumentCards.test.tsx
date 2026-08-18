@@ -158,6 +158,22 @@ describe('DocumentCards', () => {
     expect(screen.getByText('Artificial Intelligence')).toBeInTheDocument();
   });
 
+  it('wraps the CompactRows file icon with DocumentLink', () => {
+    render(<CompactRows params={{}} fields={fields} />);
+
+    const fileIcons = screen.getAllByTestId('file-text-icon');
+    expect(fileIcons.length).toBeGreaterThan(0);
+    expect(fileIcons[0].closest('a')).toHaveAttribute('href', pdfHref);
+  });
+
+  it('keeps CompactRows file-icon DocumentLink chrome in editing', () => {
+    mockUseSitecore.mockReturnValue({ page: mockPageEditing });
+    render(<CompactRows params={{}} fields={fields} isPageEditing />);
+
+    const fileIcon = screen.getAllByTestId('file-text-icon')[0];
+    expect(fileIcon.closest('a')).toHaveAttribute('href', pdfHref);
+  });
+
   it('uses Sitecore Image chrome in editing mode', () => {
     mockUseSitecore.mockReturnValue({ page: mockPageEditing });
     render(<DocumentCards params={{}} fields={fields} isPageEditing />);
@@ -167,6 +183,34 @@ describe('DocumentCards', () => {
     expect(editorImages[0]).toHaveAttribute('src', '/media/preview.jpg');
     expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Preview/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' }).closest('[data-item-id]')).toHaveAttribute(
+      'data-item-id',
+      'card-1'
+    );
+  });
+
+  it('renders CompactRows file-icon DocumentLink chrome in editing even when href is empty', () => {
+    mockUseSitecore.mockReturnValue({ page: mockPageEditing });
+    const emptyLinkFields = {
+      data: {
+        datasource: {
+          ...fields.data.datasource,
+          children: {
+            results: [
+              card({
+                documentLink: { jsonValue: { value: { href: '' } } },
+              }),
+            ],
+          },
+        },
+      },
+    };
+
+    render(<CompactRows params={{}} fields={emptyLinkFields} isPageEditing />);
+
+    const fileIcon = screen.getByTestId('file-text-icon');
+    expect(fileIcon.closest('a')).toBeInTheDocument();
+    expect(fileIcon.closest('a')).toHaveAttribute('href', '');
     expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' }).closest('[data-item-id]')).toHaveAttribute(
       'data-item-id',
       'card-1'

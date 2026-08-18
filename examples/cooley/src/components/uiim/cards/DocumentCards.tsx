@@ -218,15 +218,65 @@ function DocumentPreview({
           tabIndex={-1}
         />
       ) : (
-        <div className="flex h-full min-h-40 flex-col items-center justify-center gap-3 bg-neutral-950 px-6 text-white">
-          <FileText className="size-10 opacity-80" aria-hidden />
-          <span className="font-heading text-sm tracking-[0.2em] uppercase">
-            {fieldString(item.fileType) || 'PDF'}
-          </span>
-        </div>
+        <DocumentFilePlaceholder item={item} isEditing={isEditing} />
       )}
     </div>
   );
+}
+
+function DocumentFilePlaceholder({
+  item,
+  isEditing,
+}: {
+  item: DocumentCardItem;
+  isEditing: boolean;
+}) {
+  const content = (
+    <>
+      <FileText className="size-10 opacity-80" aria-hidden />
+      <span className="font-heading text-sm tracking-[0.2em] uppercase">
+        {fieldString(item.fileType) || 'PDF'}
+      </span>
+    </>
+  );
+  const className = cn(
+    'flex h-full min-h-40 flex-col items-center justify-center gap-3 bg-neutral-950 px-6 text-white',
+    isEditing && 'pointer-events-auto'
+  );
+
+  if (hasLink(item.documentLink) || isEditing) {
+    return (
+      <ContentSdkLink field={item.documentLink?.jsonValue ?? EMPTY_LINK_FIELD} className={className}>
+        {content}
+      </ContentSdkLink>
+    );
+  }
+
+  return <div className={className}>{content}</div>;
+}
+
+function DocumentFileIcon({
+  item,
+  isEditing,
+}: {
+  item: DocumentCardItem;
+  isEditing: boolean;
+}) {
+  const className = cn(
+    'bg-primary text-primary-foreground flex size-12 shrink-0 items-center justify-center rounded-md',
+    isEditing && 'pointer-events-auto relative z-10'
+  );
+  const icon = <FileText className="size-5" aria-hidden />;
+
+  if (hasLink(item.documentLink) || isEditing) {
+    return (
+      <ContentSdkLink field={item.documentLink?.jsonValue ?? EMPTY_LINK_FIELD} className={className}>
+        {icon}
+      </ContentSdkLink>
+    );
+  }
+
+  return <div className={className}>{icon}</div>;
 }
 
 function DocumentActions({
@@ -483,16 +533,14 @@ const DocumentCardsCompactRows: React.FC<DocumentCardsProps> = (props) => {
 
   return (
     <DocumentCardsShell props={props} isEditing={isEditing}>
-      <ul className="divide-y overflow-hidden rounded-2xl border">
+      <ul className={cn('divide-y rounded-2xl border', isEditing ? 'overflow-visible' : 'overflow-hidden')}>
         {items.map((item, index) => (
           <li
             key={item.id || `document-row-${index}`}
             data-item-id={isEditing ? item.id : undefined}
             className="hover:bg-muted/30 grid gap-4 p-4 transition-colors md:grid-cols-[auto_1fr_auto] md:items-center"
           >
-            <div className="bg-primary text-primary-foreground flex size-12 items-center justify-center rounded-md">
-              <FileText className="size-5" aria-hidden />
-            </div>
+            <DocumentFileIcon item={item} isEditing={isEditing} />
             <div className="min-w-0 space-y-1">
               {(fieldString(item.cardTitle) || isEditing) && (
                 <Text
