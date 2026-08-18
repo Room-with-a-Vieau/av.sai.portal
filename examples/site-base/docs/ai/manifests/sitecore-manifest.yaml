@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-17T17:45:00Z"
+lastUpdatedAt: "2026-08-17T21:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -6667,4 +6667,39 @@ ia:
         - "Select ImagesOnly variant on the Era FeatureBanner rendering that uses Home Services"
         - "Publish Home Services + children for Edge"
         - "Confirm images render after publish (external Image XML src)"
+
+  - name: "quanex-search-results-site-pack"
+    kind: "content"
+    status: "complete"
+    createdAt: "2026-08-17T21:30:00Z"
+    updatedAt: "2026-08-17T21:30:00Z"
+    siteName: "quanex"
+    notes:
+      - "2026-08-17: SearchResults now uses site packs (same pattern as Pulse). Unknown sites fall back to env default then Quanex, never Pillsbury."
+      - "2026-08-17: Placed SearchResults ({7691AC50-2BAE-4FBD-9BA9-05480FD844E4}) on Quanex Search Results page headless-main."
+      - "2026-08-17: Pointed Quanex MainNav SearchPage at Search Results ({41BCA884-B8AC-42D5-A5AA-9BAF61161266}). Previously pointed at Home."
+    pages:
+      - { displayName: "Search Results", name: "Search Results", itemId: "{41BCA884-B8AC-42D5-A5AA-9BAF61161266}", path: "/sitecore/content/quanex/quanex/Home/Search Results", route: "/Search-Results" }
+    exampleItems:
+      - { name: "MainNav", itemId: "{8AF2C42C-FFD3-4C21-A2A5-18E4449B01B3}", path: "/sitecore/content/quanex/quanex/Data/MainNav/MainNav" }
+    rendering:
+      name: "SearchResults"
+      path: "/sitecore/layout/Renderings/Project/Portal/SearchResults/SearchResults"
+      itemId: "{7691AC50-2BAE-4FBD-9BA9-05480FD844E4}"
+      componentName: "SearchResults"
+    codeChanges:
+      - "src/lib/search-packs/"
+      - "src/components/search-results/SearchResults.tsx"
+      - "src/__tests__/lib/search-packs.test.ts"
+      - "src/__tests__/search-results/SearchResults.test.tsx"
+    verification:
+      checkedAt: "2026-08-17T21:30:00Z"
+      passed:
+        - "get_components_on_page shows SearchResults on Quanex Search Results"
+        - "MainNav SearchPage updated to Search Results item"
+      failed: []
+      pendingManual:
+        - "Publish Search Results page + MainNav for Edge"
+        - "Confirm SearchResults is allowed on headless-main in Pages (add may have bypassed placeholder whitelist)"
+        - "Open /quanex/en/Search-Results?q=super+spacer on the shared editing host"
 

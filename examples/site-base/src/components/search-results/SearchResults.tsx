@@ -3,24 +3,20 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSitecore } from '@sitecore-content-sdk/nextjs';
 import {
   ArrowUpRight,
   Briefcase,
-  Building2,
-  CalendarDays,
   ChevronDown,
+  Factory,
   FileText,
   Globe2,
+  Layers,
   Loader2,
-  MapPin,
   MessageSquareText,
-  Mic2,
-  Newspaper,
-  Scale,
   Search,
   Sparkles,
-  UserRound,
   X,
 } from 'lucide-react';
 
@@ -36,79 +32,45 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
-
 import {
+  RESULTS_PAGE_SIZE,
+  getSearchPack,
   itemMatchesQuery,
   itemMetadataLine,
   itemVisibleForDemoUser,
-  lobs,
+  listSearchPackSiteNames,
   normalizeQuery,
-  perils,
-  popularSearches,
   relevanceScore,
-  RESULTS_PAGE_SIZE,
-  searchCatalog,
-  searchFacetLabels,
+  resolveSearchSiteName,
   selectAiSearchInsight,
-  topics,
+  toSiteAwareHref,
   type AiSearchInsight,
-  type SearchLob,
-  type SearchPeril,
   type SearchResultItem,
-  type SearchTopic,
-} from './data';
+  type SearchSitePack,
+} from '@/lib/search-packs';
 
 export type SearchResultsProps = {
   className?: string;
   disableUrlSync?: boolean;
   initialQuery?: string;
+  /** Override Sitecore/URL site resolution (tests). */
+  siteName?: string | null;
 };
 
 type SortMode = 'relevance' | 'az';
 
-function resultIcon(lob: SearchLob) {
-  switch (lob) {
-    case 'lawyer':
-      return UserRound;
-    case 'insight':
-      return Newspaper;
-    case 'event':
-      return CalendarDays;
-    case 'podcast':
-      return Mic2;
-    case 'capability':
-      return Scale;
-    case 'office':
-      return Building2;
-    case 'career':
-      return Briefcase;
-    default:
-      return FileText;
-  }
+function resultIcon(lob: string, pack: SearchSitePack) {
+  return pack.iconByLob[lob] || FileText;
 }
 
-function resultCta(lob: SearchLob): string {
-  switch (lob) {
-    case 'lawyer':
-      return 'View bio';
-    case 'insight':
-      return 'Read insights';
-    case 'event':
-      return 'View event';
-    case 'podcast':
-      return 'Listen / open';
-    case 'capability':
-      return 'Explore practice';
-    case 'office':
-      return 'View office';
-    case 'career':
-      return 'View role';
-    default:
-      return 'Open page';
-  }
+function resultCta(lob: string, pack: SearchSitePack): string {
+  return pack.ctaByLob[lob] || pack.defaultCta;
 }
+
+const TIP_ICONS = [Layers, Globe2, Factory] as const;
 
 function SearchFacetsPanel({
+  pack,
   selectedLobs,
   selectedPerils,
   selectedTopics,
@@ -121,18 +83,22 @@ function SearchFacetsPanel({
   activeFilterCount,
   clearFilters,
 }: {
-  selectedLobs: Set<SearchLob>;
-  selectedPerils: Set<SearchPeril>;
-  selectedTopics: Set<SearchTopic>;
-  countsLobs: Record<SearchLob, number>;
-  countsPerils: Record<SearchPeril, number>;
-  countsTopics: Record<SearchTopic, number>;
-  onToggleLob: (key: SearchLob) => void;
-  onTogglePeril: (key: SearchPeril) => void;
-  onToggleTopic: (key: SearchTopic) => void;
+  pack: SearchSitePack;
+  selectedLobs: Set<string>;
+  selectedPerils: Set<string>;
+  selectedTopics: Set<string>;
+  countsLobs: Record<string, number>;
+  countsPerils: Record<string, number>;
+  countsTopics: Record<string, number>;
+  onToggleLob: (key: string) => void;
+  onTogglePeril: (key: string) => void;
+  onToggleTopic: (key: string) => void;
   activeFilterCount: number;
   clearFilters: () => void;
 }) {
+  const lobs = Object.keys(pack.facetLabels.lob);
+  const perils = Object.keys(pack.facetLabels.peril);
+  const topics = Object.keys(pack.facetLabels.topic);
   return (
     <div className="rounded-2xl border border-border/70 bg-card/95 shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm dark:ring-white/[0.06]">
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3.5">
@@ -144,7 +110,7 @@ function SearchFacetsPanel({
         ) : null}
       </div>
       <div className="max-h-[min(70vh,40rem)] overflow-y-auto px-2">
-        <FacetSection title="Content type">
+        <FacetSection title={pack.copy.facetLob}>
           <div className="flex flex-col gap-2.5">
             {lobs.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -154,14 +120,14 @@ function SearchFacetsPanel({
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.lob[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsLobs[key]})</span>
+                  <span>{pack.facetLabels.lob[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsLobs[key] ?? 0})</span>
                 </span>
               </label>
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Practice area">
+        <FacetSection title={pack.copy.facetPeril}>
           <div className="flex flex-col gap-2.5">
             {perils.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -171,14 +137,14 @@ function SearchFacetsPanel({
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.peril[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsPerils[key]})</span>
+                  <span>{pack.facetLabels.peril[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsPerils[key] ?? 0})</span>
                 </span>
               </label>
             ))}
           </div>
         </FacetSection>
-        <FacetSection title="Office / region" defaultOpen={false}>
+        <FacetSection title={pack.copy.facetTopic} defaultOpen={false}>
           <div className="flex flex-col gap-2.5">
             {topics.map((key) => (
               <label key={key} className="flex cursor-pointer items-start gap-2.5 text-sm text-foreground/90">
@@ -188,8 +154,8 @@ function SearchFacetsPanel({
                   className="mt-0.5 border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-x-1">
-                  <span>{searchFacetLabels.topic[key]}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">({countsTopics[key]})</span>
+                  <span>{pack.facetLabels.topic[key]}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">({countsTopics[key] ?? 0})</span>
                 </span>
               </label>
             ))}
@@ -220,27 +186,29 @@ function FacetSection({
   );
 }
 
-function ResultCard({ item }: { item: SearchResultItem }) {
-  const meta = itemMetadataLine(item);
-  const practiceLabels = item.perils.map((p) => searchFacetLabels.peril[p]).slice(0, 2);
-  const Icon = resultIcon(item.lob);
-  const isLawyer = item.lob === 'lawyer';
+function ResultCard({ item, pack }: { item: SearchResultItem; pack: SearchSitePack }) {
+  const pathname = usePathname();
+  const meta = itemMetadataLine(item, pack.facetLabels);
+  const practiceLabels = item.perils.map((p) => pack.facetLabels.peril[p]).filter(Boolean).slice(0, 2);
+  const Icon = resultIcon(item.lob, pack);
+  const isFeatured = pack.featuredLob ? item.lob === pack.featuredLob : false;
+  const href = toSiteAwareHref(item.href, pathname, listSearchPackSiteNames());
 
   return (
     <article
       className={cn(
         'group rounded-2xl border border-border/70 bg-card shadow-sm ring-1 ring-black/[0.03] transition-all duration-200 hover:border-primary/30 hover:shadow-md dark:ring-white/[0.05]',
-        isLawyer && 'border-l-[3px] border-l-primary/70'
+        isFeatured && 'border-l-[3px] border-l-primary/70'
       )}
     >
       <Link
-        href={item.href}
+        href={href}
         className="flex flex-col gap-3 p-4 text-inherit no-underline sm:flex-row sm:items-start sm:gap-4 sm:p-5"
       >
         <div
           className={cn(
             'flex size-11 shrink-0 items-center justify-center rounded-xl',
-            isLawyer ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
+            isFeatured ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
           )}
         >
           <Icon className="size-5" aria-hidden />
@@ -250,7 +218,7 @@ function ResultCard({ item }: { item: SearchResultItem }) {
             <Badge variant="secondary" className="rounded-md font-mono text-[10px] uppercase tracking-wide">
               {item.kbId}
             </Badge>
-            <span className="text-xs font-medium text-muted-foreground">{searchFacetLabels.lob[item.lob]}</span>
+            <span className="text-xs font-medium text-muted-foreground">{pack.facetLabels.lob[item.lob]}</span>
             {item.isNew ? (
               <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-foreground">
                 Featured
@@ -276,7 +244,7 @@ function ResultCard({ item }: { item: SearchResultItem }) {
             ))}
           </div>
           <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            {resultCta(item.lob)}
+            {resultCta(item.lob, pack)}
             <ArrowUpRight className="size-3.5" aria-hidden />
           </span>
         </div>
@@ -285,7 +253,9 @@ function ResultCard({ item }: { item: SearchResultItem }) {
   );
 }
 
-function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
+function AiQaPanel({ insight, pack }: { insight: AiSearchInsight; pack: SearchSitePack }) {
+  const pathname = usePathname();
+  const knownSites = listSearchPackSiteNames();
   return (
     <section
       className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/[0.07] via-background to-secondary/40 p-5 shadow-sm ring-1 ring-primary/10"
@@ -299,7 +269,7 @@ function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
           </div>
           <div className="min-w-0 flex-1 space-y-2">
             <p id="ai-qa-heading" className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-              Matter-aware guidance
+              {pack.copy.aiHeading}
             </p>
             <div className="flex items-start gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-2.5">
               <MessageSquareText className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -322,7 +292,7 @@ function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
             </ul>
             {insight.learnMoreHref ? (
               <Link
-                href={insight.learnMoreHref}
+                href={toSiteAwareHref(insight.learnMoreHref, pathname, knownSites)}
                 className="inline-flex items-center gap-1 text-sm font-semibold text-primary no-underline hover:underline"
               >
                 {insight.learnMoreLabel ?? 'Continue'}
@@ -335,13 +305,13 @@ function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
         {insight.citations.length ? (
           <div className="space-y-2 border-t border-border/50 pt-4">
             <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              Recommended people &amp; pages
+              {pack.copy.citationsHeading}
             </p>
             <ul className="grid gap-2 sm:grid-cols-2">
               {insight.citations.map((c) => (
                 <li key={c.href}>
                   <Link
-                    href={c.href}
+                    href={toSiteAwareHref(c.href, pathname, knownSites)}
                     className="flex h-full flex-col rounded-xl border border-border/70 bg-card px-3 py-3 text-inherit no-underline transition-colors hover:border-primary/35 hover:bg-primary/[0.03]"
                   >
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
@@ -369,34 +339,21 @@ function AiQaPanel({ insight }: { insight: AiSearchInsight }) {
   );
 }
 
-function SearchTips() {
+function SearchTips({ pack }: { pack: SearchSitePack }) {
   return (
     <div className="mt-4 grid gap-3 border-t border-border/50 pt-4 sm:grid-cols-3">
-      {[
-        {
-          icon: UserRound,
-          title: 'People first',
-          body: 'Name a lawyer, practice, or city to land on Bios and offices in the content tree.',
-        },
-        {
-          icon: Globe2,
-          title: 'Situation search',
-          body: 'Describe the matter—“expanding into Saudi Arabia,” “export-control questions”—for AI routing to people + events.',
-        },
-        {
-          icon: CalendarDays,
-          title: 'Learn while you connect',
-          body: 'Filter webinars, CLE, podcasts, and alerts alongside bios so the right content supports the right counsel.',
-        },
-      ].map((tip) => (
-        <div key={tip.title} className="flex gap-2.5 rounded-xl bg-background/60 px-3 py-2.5">
-          <tip.icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-          <div>
-            <p className="text-xs font-semibold text-foreground">{tip.title}</p>
-            <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tip.body}</p>
+      {pack.copy.tips.map((tip, index) => {
+        const Icon = TIP_ICONS[index % TIP_ICONS.length];
+        return (
+          <div key={tip.title} className="flex gap-2.5 rounded-xl bg-background/60 px-3 py-2.5">
+            <Icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+            <div>
+              <p className="text-xs font-semibold text-foreground">{tip.title}</p>
+              <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tip.body}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -405,11 +362,31 @@ export const SearchResults: FC<SearchResultsProps> = ({
   className,
   disableUrlSync = false,
   initialQuery = '',
+  siteName: siteNameOverride = null,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const routeParams = useParams();
+  const { page } = useSitecore();
   const qFromUrl = searchParams.get('q') ?? '';
+  const knownSites = listSearchPackSiteNames();
+  const routeSite = Array.isArray(routeParams?.site)
+    ? routeParams.site[0]
+    : typeof routeParams?.site === 'string'
+      ? routeParams.site
+      : null;
+  const resolvedSite = resolveSearchSiteName({
+    override: siteNameOverride,
+    sitecoreSite: (page as { siteName?: string } | undefined)?.siteName,
+    routeSite,
+    pathname,
+    knownSites,
+  });
+  const pack = getSearchPack(resolvedSite);
+  const lobKeys = Object.keys(pack.facetLabels.lob);
+  const perilKeys = Object.keys(pack.facetLabels.peril);
+  const topicKeys = Object.keys(pack.facetLabels.topic);
 
   const [query, setQuery] = useState(() =>
     disableUrlSync ? normalizeQuery(initialQuery) : normalizeQuery(qFromUrl)
@@ -418,9 +395,9 @@ export const SearchResults: FC<SearchResultsProps> = ({
   const [sort, setSort] = useState<SortMode>('relevance');
   const [isSearching, setIsSearching] = useState(false);
 
-  const [selectedLobs, setSelectedLobs] = useState<Set<SearchLob>>(new Set());
-  const [selectedPerils, setSelectedPerils] = useState<Set<SearchPeril>>(new Set());
-  const [selectedTopics, setSelectedTopics] = useState<Set<SearchTopic>>(new Set());
+  const [selectedLobs, setSelectedLobs] = useState<Set<string>>(new Set());
+  const [selectedPerils, setSelectedPerils] = useState<Set<string>>(new Set());
+  const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   const [resultsPage, setResultsPage] = useState(1);
   const [demoTaxonomyRaw, setDemoTaxonomyRaw] = useState('');
 
@@ -435,12 +412,22 @@ export const SearchResults: FC<SearchResultsProps> = ({
     };
   }, []);
 
-  const activeDemoUserTaxonomy = useMemo(() => parseDemoUserTaxonomy(demoTaxonomyRaw), [demoTaxonomyRaw]);
+  useEffect(() => {
+    setSelectedLobs(new Set());
+    setSelectedPerils(new Set());
+    setSelectedTopics(new Set());
+    setResultsPage(1);
+  }, [pack.siteName]);
 
-  const activeCatalog = useMemo(
-    () => searchCatalog.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy)),
-    [activeDemoUserTaxonomy]
+  const activeDemoUserTaxonomy = useMemo(
+    () => (pack.enableDemoPersona ? parseDemoUserTaxonomy(demoTaxonomyRaw) : null),
+    [demoTaxonomyRaw, pack.enableDemoPersona]
   );
+
+  const activeCatalog = useMemo(() => {
+    if (!pack.enableDemoPersona) return pack.catalog;
+    return pack.catalog.filter((item) => itemVisibleForDemoUser(item, activeDemoUserTaxonomy));
+  }, [activeDemoUserTaxonomy, pack]);
 
   const toggle = useCallback(<T extends string>(set: Dispatch<SetStateAction<Set<T>>>, v: T) => {
     set((prev) => {
@@ -468,8 +455,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
   }, [query, selectedLobs, selectedPerils, selectedTopics, sort]);
 
   const queryMatched = useMemo(
-    () => activeCatalog.filter((item) => itemMatchesQuery(item, query)),
-    [activeCatalog, query]
+    () => activeCatalog.filter((item) => itemMatchesQuery(item, query, pack.bucketSynonyms)),
+    [activeCatalog, pack.bucketSynonyms, query]
   );
 
   const countsLobs = useMemo(() => {
@@ -478,11 +465,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
       if (selectedTopics.size && !item.topics.some((t) => selectedTopics.has(t))) return false;
       return true;
     });
-    return Object.fromEntries(lobs.map((k) => [k, base.filter((i) => i.lob === k).length])) as Record<
-      SearchLob,
-      number
-    >;
-  }, [queryMatched, selectedPerils, selectedTopics]);
+    return Object.fromEntries(lobKeys.map((k) => [k, base.filter((i) => i.lob === k).length]));
+  }, [lobKeys, queryMatched, selectedPerils, selectedTopics]);
 
   const countsPerils = useMemo(() => {
     const base = queryMatched.filter((item) => {
@@ -491,9 +475,9 @@ export const SearchResults: FC<SearchResultsProps> = ({
       return true;
     });
     return Object.fromEntries(
-      perils.map((k) => [k, base.filter((i) => i.perils.includes(k)).length])
-    ) as Record<SearchPeril, number>;
-  }, [queryMatched, selectedLobs, selectedTopics]);
+      perilKeys.map((k) => [k, base.filter((i) => i.perils.includes(k)).length])
+    );
+  }, [perilKeys, queryMatched, selectedLobs, selectedTopics]);
 
   const countsTopics = useMemo(() => {
     const base = queryMatched.filter((item) => {
@@ -502,13 +486,13 @@ export const SearchResults: FC<SearchResultsProps> = ({
       return true;
     });
     return Object.fromEntries(
-      topics.map((k) => [k, base.filter((i) => i.topics.includes(k)).length])
-    ) as Record<SearchTopic, number>;
-  }, [queryMatched, selectedLobs, selectedPerils]);
+      topicKeys.map((k) => [k, base.filter((i) => i.topics.includes(k)).length])
+    );
+  }, [queryMatched, selectedLobs, selectedPerils, topicKeys]);
 
   const filtered = useMemo(() => {
     const q = normalizeQuery(query);
-    let list = activeCatalog.filter((item) => itemMatchesQuery(item, q));
+    let list = activeCatalog.filter((item) => itemMatchesQuery(item, q, pack.bucketSynonyms));
 
     if (selectedLobs.size) {
       list = list.filter((item) => selectedLobs.has(item.lob));
@@ -525,14 +509,36 @@ export const SearchResults: FC<SearchResultsProps> = ({
       sorted.sort((a, b) => a.title.localeCompare(b.title));
     } else {
       sorted.sort((a, b) => {
-        const ra = relevanceScore(a, q, activeDemoUserTaxonomy);
-        const rb = relevanceScore(b, q, activeDemoUserTaxonomy);
+        const ra = relevanceScore(
+          a,
+          q,
+          activeDemoUserTaxonomy,
+          pack.bucketSynonyms,
+          pack.featuredLob
+        );
+        const rb = relevanceScore(
+          b,
+          q,
+          activeDemoUserTaxonomy,
+          pack.bucketSynonyms,
+          pack.featuredLob
+        );
         if (rb !== ra) return rb - ra;
         return a.title.localeCompare(b.title);
       });
     }
     return sorted;
-  }, [activeCatalog, activeDemoUserTaxonomy, query, selectedLobs, selectedPerils, selectedTopics, sort]);
+  }, [
+    activeCatalog,
+    activeDemoUserTaxonomy,
+    pack.bucketSynonyms,
+    pack.featuredLob,
+    query,
+    selectedLobs,
+    selectedPerils,
+    selectedTopics,
+    sort,
+  ]);
 
   const resultsTotalPages = Math.max(1, Math.ceil(filtered.length / RESULTS_PAGE_SIZE));
   const safeResultsPage = Math.min(resultsPage, resultsTotalPages);
@@ -546,8 +552,8 @@ export const SearchResults: FC<SearchResultsProps> = ({
   }, [resultsPage, resultsTotalPages]);
 
   const aiInsight = useMemo(
-    () => selectAiSearchInsight(query, activeDemoUserTaxonomy),
-    [query, activeDemoUserTaxonomy]
+    () => selectAiSearchInsight(query, pack.insightRules),
+    [pack.insightRules, query]
   );
 
   const activeFilterCount = selectedLobs.size + selectedPerils.size + selectedTopics.size;
@@ -590,15 +596,16 @@ export const SearchResults: FC<SearchResultsProps> = ({
   };
 
   const facetPanelProps = {
+    pack,
     selectedLobs,
     selectedPerils,
     selectedTopics,
     countsLobs,
     countsPerils,
     countsTopics,
-    onToggleLob: (key: SearchLob) => toggle(setSelectedLobs, key),
-    onTogglePeril: (key: SearchPeril) => toggle(setSelectedPerils, key),
-    onToggleTopic: (key: SearchTopic) => toggle(setSelectedTopics, key),
+    onToggleLob: (key: string) => toggle(setSelectedLobs, key),
+    onTogglePeril: (key: string) => toggle(setSelectedPerils, key),
+    onToggleTopic: (key: string) => toggle(setSelectedTopics, key),
     activeFilterCount,
     clearFilters,
   };
@@ -633,7 +640,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     runSearch();
                   }
                 }}
-                placeholder="Search lawyers, practices, offices, insights… or describe your matter"
+                placeholder={pack.copy.placeholder}
                 className="h-12 w-full rounded-xl border border-border/80 bg-background pl-11 pr-10 text-sm text-foreground shadow-inner outline-none ring-primary/20 placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 autoComplete="off"
               />
@@ -656,7 +663,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
             <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Try searching
             </span>
-            {popularSearches.map((term) => (
+            {pack.popularSearches.map((term) => (
               <button
                 key={term}
                 type="button"
@@ -667,32 +674,30 @@ export const SearchResults: FC<SearchResultsProps> = ({
               </button>
             ))}
           </div>
-          <SearchTips />
+          <SearchTips pack={pack} />
         </div>
 
         <header className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">Pillsbury search</p>
+              <p className="text-xs font-medium uppercase tracking-widest text-primary/90">{pack.copy.kicker}</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {normalizeQuery(query) ? (
                   <>
                     Results for <span className="text-primary">&ldquo;{displayHeading}&rdquo;</span>
                   </>
                 ) : (
-                  'Find lawyers, insights & practices'
+                  pack.copy.headingEmpty
                 )}
               </h1>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Built for a global firm: search by person, practice, office, or matter narrative. Results link into
-                Bios, capabilities, offices, and insight hubs already in the content tree—then refine by type,
-                practice area, and region.
-              </p>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">{pack.copy.intro}</p>
             </div>
-            <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Demo context:</span> {personaLabel}
-              {personaCode ? <span className="ml-1 text-primary">({personaCode})</span> : null}
-            </div>
+            {pack.enableDemoPersona ? (
+              <div className="rounded-xl border border-dashed border-primary/25 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                <span className="font-semibold text-foreground">Demo context:</span> {personaLabel}
+                {personaCode ? <span className="ml-1 text-primary">({personaCode})</span> : null}
+              </div>
+            ) : null}
           </div>
         </header>
 
@@ -720,7 +725,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
           </aside>
 
           <main className="min-w-0 flex-1">
-            {aiInsight ? <AiQaPanel insight={aiInsight} /> : null}
+            {aiInsight ? <AiQaPanel insight={aiInsight} pack={pack} /> : null}
 
             <div
               className={cn(
@@ -739,7 +744,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                       for &ldquo;<span className="text-foreground">{displayHeading}</span>&rdquo;
                     </>
                   ) : (
-                    ' — try a starter search or describe your matter'
+                    pack.copy.resultsHint
                   )}
                 </span>
               </div>
@@ -766,7 +771,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
                     onClick={() => toggle(setSelectedLobs, key)}
                   >
-                    {searchFacetLabels.lob[key]}
+                    {pack.facetLabels.lob[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
@@ -777,7 +782,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
                     onClick={() => toggle(setSelectedPerils, key)}
                   >
-                    {searchFacetLabels.peril[key]}
+                    {pack.facetLabels.peril[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
@@ -788,7 +793,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
                     className="cursor-pointer gap-1 rounded-full pr-1.5 hover:bg-secondary/80"
                     onClick={() => toggle(setSelectedTopics, key)}
                   >
-                    {searchFacetLabels.topic[key]}
+                    {pack.facetLabels.topic[key]}
                     <X className="size-3" aria-hidden />
                   </Badge>
                 ))}
@@ -799,7 +804,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
               <>
                 <div className="mt-6 flex flex-col gap-4">
                   {pagedResults.map((item) => (
-                    <ResultCard key={item.id} item={item} />
+                    <ResultCard key={item.id} item={item} pack={pack} />
                   ))}
                 </div>
                 {filtered.length > RESULTS_PAGE_SIZE ? (
@@ -849,10 +854,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
             ) : (
               <div className="mt-10 rounded-2xl border border-dashed border-border bg-muted/25 px-6 py-12 text-center">
                 <p className="text-sm font-medium text-secondary-foreground">No results for that combination.</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Try &ldquo;Mark Abate intellectual property,&rdquo; &ldquo;Japanese company acquisition,&rdquo; or
-                  &ldquo;Policyholder Pulse.&rdquo;
-                </p>
+                <p className="mt-1 text-sm text-muted-foreground">{pack.copy.emptyHint}</p>
                 <Button type="button" variant="secondary" className="mt-5 rounded-lg" onClick={clearFilters}>
                   Clear filters
                 </Button>

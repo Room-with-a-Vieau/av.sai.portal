@@ -1,0 +1,66 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+
+import { SearchResults } from '@/components/search-results/SearchResults';
+
+jest.mock('lucide-react', () => {
+  const Icon = () => null;
+  return new Proxy(
+    {},
+    {
+      get: () => Icon,
+    }
+  );
+});
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: jest.fn() }),
+  usePathname: () => '/quanex/en/Search-Results',
+  useSearchParams: () => new URLSearchParams(),
+  useParams: () => ({ site: 'quanex', locale: 'en' }),
+}));
+
+jest.mock('next/link', () => ({
+  __esModule: true,
+  default: ({
+    href,
+    children,
+    ...rest
+  }: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
+jest.mock('@sitecore-content-sdk/nextjs', () => ({
+  useSitecore: () => ({
+    page: {
+      siteName: 'quanex',
+      mode: { isEditing: false, isDesignLibrary: false },
+    },
+  }),
+}));
+
+describe('SearchResults site packs', () => {
+  it('shows Quanex product results, not Pillsbury lawyers', () => {
+    render(<SearchResults siteName="quanex" disableUrlSync initialQuery="super spacer" />);
+
+    expect(screen.getByText('Quanex search')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'Super Spacer' })).toBeInTheDocument();
+    expect(screen.queryByText(/Pillsbury search/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /Mark Abate/i })).not.toBeInTheDocument();
+  });
+
+  it('keeps Pillsbury lawyer results on pillsburylaw', () => {
+    render(<SearchResults siteName="pillsburylaw" disableUrlSync initialQuery="Mark Abate" />);
+
+    expect(screen.getByText('Pillsbury search')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Mark Abate/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 3, name: 'Super Spacer' })).not.toBeInTheDocument();
+  });
+});

@@ -1252,13 +1252,13 @@ export const searchCatalog: SearchResultItem[] = [
   }),
 ];
 
-type InsightRule = {
+export type InsightRule = {
   id: string;
   matchAny: string[][];
   insight: Omit<AiSearchInsight, 'question'>;
 };
 
-const AI_INSIGHT_RULES: InsightRule[] = [
+export const AI_INSIGHT_RULES: InsightRule[] = [
   {
     id: 'careers',
     matchAny: [
