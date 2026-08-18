@@ -69,6 +69,20 @@ export const MegaMenuContent = ({ menuId, children }: MegaMenuContentProps) => {
   );
 };
 
+type MegaMenuColumn = 'primary' | 'secondary';
+
+const MegaMenuColumnContext = createContext<MegaMenuColumn | null>(null);
+
+export const MegaMenuColumnProvider = ({
+  column,
+  children,
+}: {
+  column: MegaMenuColumn;
+  children: ReactNode;
+}) => <MegaMenuColumnContext.Provider value={column}>{children}</MegaMenuColumnContext.Provider>;
+
+export const useMegaMenuColumn = () => useContext(MegaMenuColumnContext);
+
 interface MegaMenuBackButtonProps {
   menuId: string;
   children: ReactNode;

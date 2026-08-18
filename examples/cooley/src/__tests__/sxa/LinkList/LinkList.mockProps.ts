@@ -26,6 +26,9 @@ interface LinkListFields {
 type LinkListProps = {
   params: { [key: string]: string };
   fields: LinkListFields;
+  rendering?: {
+    placeholder?: string;
+  };
 };
 
 /**

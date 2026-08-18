@@ -12,6 +12,7 @@ import * as CareerListing from 'src/components/uiim/lawyers/CareerListing';
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
+import * as DocumentCards from 'src/components/uiim/cards/DocumentCards';
 import * as themeproviderdev from 'src/components/theme-provider/theme-provider.dev';
 import * as TextBannerTextTopdev from 'src/components/text-banner/TextBannerTextTop.dev';
 import * as TextBannerDefaultdev from 'src/components/text-banner/TextBannerDefault.dev';
@@ -136,6 +137,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BioListing', { ...BioListing }],
   ['BioDetail', { ...BioDetail }],
   ['BlogListing', { ...BlogListing }],
+  ['DocumentCards', { ...DocumentCards }],
   ['theme-provider', { ...themeproviderdev }],
   ['TextBannerTextTop', { ...TextBannerTextTopdev }],
   ['TextBannerDefault', { ...TextBannerDefaultdev }],

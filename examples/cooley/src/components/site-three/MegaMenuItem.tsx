@@ -12,7 +12,12 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import componentMap from '.sitecore/component-map';
-import { MegaMenuToggle, MegaMenuContent, MegaMenuBackButton } from './MegaMenuItemWrapper';
+import {
+  MegaMenuToggle,
+  MegaMenuContent,
+  MegaMenuBackButton,
+  MegaMenuColumnProvider,
+} from './MegaMenuItemWrapper';
 
 interface Fields {
   Title: Field<string>;
@@ -83,20 +88,24 @@ export const Default = (props: MegaMenuItemProps) => {
           </MegaMenuBackButton>
 
           <div className="text-2xl **:font-(family-name:--font-heading) pb-8">
-            <AppPlaceholder
-              name={`mega-menu-item-primary-links-${props.params?.DynamicPlaceholderId}`}
-              rendering={props.rendering}
-              page={props.page}
-              componentMap={componentMap}
-            />
+            <MegaMenuColumnProvider column="primary">
+              <AppPlaceholder
+                name={`mega-menu-item-primary-links-${props.params?.DynamicPlaceholderId}`}
+                rendering={props.rendering}
+                page={props.page}
+                componentMap={componentMap}
+              />
+            </MegaMenuColumnProvider>
           </div>
           <div className="flex flex-col gap-6 pb-8">
-            <AppPlaceholder
-              name={`mega-menu-item-secondary-links-${props.params?.DynamicPlaceholderId}`}
-              rendering={props.rendering}
-              page={props.page}
-              componentMap={componentMap}
-            />
+            <MegaMenuColumnProvider column="secondary">
+              <AppPlaceholder
+                name={`mega-menu-item-secondary-links-${props.params?.DynamicPlaceholderId}`}
+                rendering={props.rendering}
+                page={props.page}
+                componentMap={componentMap}
+              />
+            </MegaMenuColumnProvider>
           </div>
 
           {featuredProduct && featuredProduct.fields && featuredProduct.fields.FeaturedImage && (

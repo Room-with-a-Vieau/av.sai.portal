@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-17T21:30:00Z"
+lastUpdatedAt: "2026-08-18T10:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -6115,7 +6115,7 @@ ia:
     category: "Products"
     status: "complete"
     createdAt: "2026-08-13T21:00:00Z"
-    updatedAt: "2026-08-17T23:45:00Z"
+    updatedAt: "2026-08-18T10:45:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
@@ -6126,6 +6126,7 @@ ia:
       - "2026-08-13: Products Treelist Source widened to query:$site/Home (PDPs live under IA L2/L3 folders, not Home/Products)."
       - "2026-08-13: ERA Popular Products + AT AmesburyTruth Highlights retargeted to site-local PDPs (brace+pipe GUIDs matching Featured Products format)."
       - "2026-08-17: Added Spotlight variant (quanex Headless Variants only). Editorial card rail with category pills, peek carousel, header nav controls, scroll progress bar."
+      - "2026-08-18: Added 5 ERA category carousels under Data/ProductCarousels (Home Security, ERA Protect, Entrance Door Hardware, Casement Window Hardware, Locks and Deadlocks) so marketers can pick a product-line datasource."
     react:
       filePath: "src/components/uiim/products/ProductCarousel.tsx"
       componentMapKey: "ProductCarousel"
@@ -6187,6 +6188,55 @@ ia:
           - "{0F898B80-ED16-46D0-91D4-B6F26D474E34}" # Connoisseur Window Handle
           - "{F2475D1A-E5F1-4355-817C-FD83AB87989E}" # Monkey Tail Handle
           - "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}" # BS3621 Fortress Deadlock
+      - name: "Home Security"
+        itemId: "{EFB9FDA6-142B-442A-8A6F-49B684E5BEC1}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/Home Security"
+        siteName: "era"
+        note: "Title=Home Security Essentials; mixed physical + smart opening security"
+        products:
+          - "{9BDC0076-B5A0-439E-84DF-5AC606B332CD}" # Smart Handle
+          - "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}" # Fortress Deadlock
+          - "{FBF2801A-D424-408B-8856-50A852EE6624}" # Invincible MPL
+          - "{205A13A2-BBC9-4BD2-B359-9FE9F94848EB}" # Letterplate
+          - "{CEBEA933-44CD-4B53-BDCD-C1777FB52F21}" # Window Opening Restrictor
+      - name: "ERA Protect"
+        itemId: "{59418A07-9CC1-4B1C-A015-62A5B1B5BF2A}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/ERA Protect"
+        siteName: "era"
+        note: "Title=ERA Protect Connected Security; smart ecosystem only"
+        products:
+          - "{9BDC0076-B5A0-439E-84DF-5AC606B332CD}" # Smart Handle
+          - "{1682F5D9-7197-4B90-895D-10EF87D63578}" # Smart Alarm
+          - "{899AF56A-709C-4BE5-81BB-6F8C1CECD277}" # Door/Window Sensor
+          - "{C8ABC910-F758-440C-90B8-3D32044E8FBE}" # PIR
+          - "{D0F79EF4-699E-438D-830F-3A8E09F9B0E2}" # Indoor Camera
+      - name: "Entrance Door Hardware"
+        itemId: "{E58607F8-A939-4D7B-BBEC-C0D46509A5CD}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/Entrance Door Hardware"
+        siteName: "era"
+        products:
+          - "{A32E200C-94D6-405B-8CCE-5B28DF2A19BE}" # Flag Hinge
+          - "{C509E605-6BB0-4D3D-AAD6-7FC453AEAE49}" # Balmoral Handle
+          - "{205A13A2-BBC9-4BD2-B359-9FE9F94848EB}" # Letterplate
+          - "{FBF2801A-D424-408B-8856-50A852EE6624}" # Invincible MPL
+          - "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}" # Fortress Deadlock
+      - name: "Casement Window Hardware"
+        itemId: "{EEA7D658-373F-4066-B2F0-5557D2103DDA}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/Casement Window Hardware"
+        siteName: "era"
+        products:
+          - "{0F898B80-ED16-46D0-91D4-B6F26D474E34}" # Connoisseur
+          - "{F2475D1A-E5F1-4355-817C-FD83AB87989E}" # Monkey Tail
+          - "{CEBEA933-44CD-4B53-BDCD-C1777FB52F21}" # Restrictor
+      - name: "Locks and Deadlocks"
+        itemId: "{93C131F2-8021-4365-B5AC-2164D6B15A43}"
+        path: "/sitecore/content/quanex/era/Data/ProductCarousels/Locks and Deadlocks"
+        siteName: "era"
+        products:
+          - "{F0BDC9C4-51D2-4D90-9811-A667F26E1F36}" # Fortress
+          - "{FBF2801A-D424-408B-8856-50A852EE6624}" # Invincible MPL
+          - "{47D1CD20-6963-4FEA-99D1-4C4C9784DA2C}" # Safety Hasp
+          - "{205A13A2-BBC9-4BD2-B359-9FE9F94848EB}" # Letterplate
       - name: "AmesburyTruth Highlights"
         itemId: "{35E18643-B9C6-473D-80AE-F2E910D5A562}"
         path: "/sitecore/content/quanex/amesburytruth/Data/ProductCarousels/AmesburyTruth Highlights"
@@ -6406,6 +6456,26 @@ ia:
           title: "Safety Hasp and Staple"
           categoryLabel: "IRONMONGERY"
           imageUrl: "https://www.eraeverywhere.com/globalassets/era/product-1500max/10667.jpg"
+        - name: "ERA Protect Smart Alarm System"
+          itemId: "{1682F5D9-7197-4B90-895D-10EF87D63578}"
+          path: "/sitecore/content/quanex/era/Home/Home Security/Smart Home Alarm Systems/ERA Protect Smart Alarm System"
+          title: "ERA Protect Smart Alarm System"
+          categoryLabel: "SMART SECURITY"
+        - name: "ERA Protect Wireless Door Window Sensor"
+          itemId: "{899AF56A-709C-4BE5-81BB-6F8C1CECD277}"
+          path: "/sitecore/content/quanex/era/Home/Home Security/ERA Protect Ecosystem/ERA Protect Wireless Door Window Sensor"
+          title: "ERA Protect Wireless Door Window Sensor"
+          categoryLabel: "SMART SECURITY"
+        - name: "ERA Protect Pet Friendly PIR Motion Sensor"
+          itemId: "{C8ABC910-F758-440C-90B8-3D32044E8FBE}"
+          path: "/sitecore/content/quanex/era/Home/Home Security/ERA Protect Ecosystem/ERA Protect Pet Friendly PIR Motion Sensor"
+          title: "ERA Protect Pet Friendly PIR Motion Sensor"
+          categoryLabel: "SMART SECURITY"
+        - name: "ERA Protect Indoor Camera"
+          itemId: "{D0F79EF4-699E-438D-830F-3A8E09F9B0E2}"
+          path: "/sitecore/content/quanex/era/Home/Home Security/ERA Protect Ecosystem/ERA Protect Indoor Camera"
+          title: "ERA Protect Indoor Camera"
+          categoryLabel: "SMART SECURITY"
     verification:
       checkedAt: "2026-08-13T21:45:00Z"
       passed:

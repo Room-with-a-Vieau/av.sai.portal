@@ -20,6 +20,7 @@ import {
   linkListPropsMinimal,
   linkListPropsNullFields,
 } from './LinkList.mockProps';
+import { MegaMenuColumnProvider } from '@/components/site-three/MegaMenuItemWrapper';
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
@@ -168,6 +169,47 @@ describe('LinkList Component', () => {
 
       expect(container.querySelector('[data-class-change]')).toBeInTheDocument();
       expect(container.querySelector('h3')).toHaveTextContent('Link List');
+    });
+
+    it('renders HeaderPrimaryLinks in a mega menu primary placeholder', () => {
+      const { container } = render(
+        <LinkListDefault
+          {...defaultLinkListProps}
+          rendering={{
+            placeholder: '/headless-header/header-navigation-1/mega-menu-item-primary-links-4',
+          }}
+        />
+      );
+
+      expect(container.querySelector('ul.flex.flex-col.gap-4')).toBeInTheDocument();
+      expect(container.querySelector('.max-w-xs')).not.toBeInTheDocument();
+      expect(container.querySelector('h3')).not.toBeInTheDocument();
+    });
+
+    it('renders HeaderSecondaryLinks in a mega menu secondary placeholder', () => {
+      const { container } = render(
+        <LinkListDefault
+          {...defaultLinkListProps}
+          rendering={{
+            placeholder: '/headless-header/header-navigation-1/mega-menu-item-secondary-links-4',
+          }}
+        />
+      );
+
+      expect(container.querySelector('h2')).toBeInTheDocument();
+      expect(container.querySelector('.max-w-xs')).not.toBeInTheDocument();
+      expect(screen.getByText('Navigation Links')).toBeInTheDocument();
+    });
+
+    it('renders HeaderPrimaryLinks when inside a mega menu primary column', () => {
+      const { container } = render(
+        <MegaMenuColumnProvider column="primary">
+          <LinkListDefault {...defaultLinkListProps} />
+        </MegaMenuColumnProvider>
+      );
+
+      expect(container.querySelector('ul.flex.flex-col.gap-4')).toBeInTheDocument();
+      expect(container.querySelector('.max-w-xs')).not.toBeInTheDocument();
     });
   });
 

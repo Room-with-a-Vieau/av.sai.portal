@@ -3,6 +3,7 @@
 import React, { useEffect, useState, type JSX } from 'react';
 import { Link as ContentSdkLink, Text, LinkField, TextField, useSitecore } from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
+import { useMegaMenuColumn } from '@/components/site-three/MegaMenuItemWrapper';
 
 type ResultsFieldLink = {
   field: {
@@ -26,7 +27,16 @@ interface Fields {
 type LinkListProps = {
   params: { [key: string]: string };
   fields: Fields;
+  rendering?: {
+    placeholder?: string;
+  };
 };
+
+const isMegaMenuPrimaryPlaceholder = (placeholder?: string) =>
+  Boolean(placeholder?.includes('mega-menu-item-primary-links'));
+
+const isMegaMenuSecondaryPlaceholder = (placeholder?: string) =>
+  Boolean(placeholder?.includes('mega-menu-item-secondary-links'));
 
 type LinkListItemProps = {
   key: string;
@@ -72,6 +82,15 @@ const LinkListItem = (props: LinkListItemProps & { isPageEditing?: boolean }) =>
 };
 
 export const Default = (props: LinkListProps): JSX.Element => {
+  const megaMenuColumn = useMegaMenuColumn();
+  const placeholder = props.rendering?.placeholder;
+  if (megaMenuColumn === 'primary' || isMegaMenuPrimaryPlaceholder(placeholder)) {
+    return HeaderPrimaryLinks(props);
+  }
+  if (megaMenuColumn === 'secondary' || isMegaMenuSecondaryPlaceholder(placeholder)) {
+    return HeaderSecondaryLinks(props);
+  }
+
   const { page } = useSitecore();
   const isPageEditing = page?.mode?.isEditing;
   const datasource = props.fields?.data?.datasource;

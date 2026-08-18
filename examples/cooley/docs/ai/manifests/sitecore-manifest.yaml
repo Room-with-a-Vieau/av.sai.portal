@@ -1,5 +1,5 @@
 generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-17T00:15:00Z"
+lastUpdatedAt: "2026-08-18T20:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5594,13 +5594,21 @@ contentPages:
     category: "Navigation"
     status: "complete"
     createdAt: "2026-08-17T00:30:00Z"
-    updatedAt: "2026-08-17T00:45:00Z"
+    updatedAt: "2026-08-18T20:00:00Z"
     siteName: "cooley"
     notes: >
       Remapped Header + Footer Partial Designs under
       /Presentation/Partial Designs/Global/{Header,Footer}/Data to Cooley Home IA.
       Sitecore item names kept (Speakers/Headphones/Amps/Pro/Artist Services);
       Title/Link fields and dropdown/footer link lists point at IA pages.
+      2026-08-18: Media and Insight (Pro MegaMenuItem, DynamicPlaceholderId 4) now
+      uses the same mega-menu placeholders as Practices/Industries/People — primary
+      + secondary LinkLists were empty before, so the item looked like a simple link.
+      Header mega-menu LinkLists still resolve FieldNames to Default in Pages (MCP cannot
+      set rendering parameters). MegaMenuItem now tags primary/secondary columns so
+      LinkList Default renders HeaderPrimaryLinks / HeaderSecondaryLinks.
+      2026-08-18: Added Header/Data LinkLists for Media and Insight children —
+      Alerts, Coverage, Events, Insights Links — each with internal links to that folder's pages.
     relatedItems:
       headerPartialDesignId: "{5083D6DA-A436-4D9E-B832-357C4BE48C37}"
       headerDataFolderId: "{EA8D727C-EA89-4448-9CE2-F7BAF4BB1E2F}"
@@ -5617,10 +5625,17 @@ contentPages:
         - { itemName: "Speakers Primary Links", links: ["All practices", "Corporate", "Litigation", "Intellectual Property"] }
         - { itemName: "Headphones Primary Links", links: ["All industries", "Technology", "Life Sciences and Healthcare", "Artificial Intelligence"] }
         - { itemName: "Amps Primary Links", links: ["Find a lawyer", "Careers", "Geographies", "Alumni", "Giving"] }
+        - { itemName: "Pro Primary Links", itemId: "{4358935B-5ACA-4189-AD2C-6FA917E44CAF}", instanceId: "{EDAED080-E544-4160-BA1E-B4784E9CEC46}", placeholder: "mega-menu-item-primary-links-4", links: ["All Media and Insight", "Insights", "Alerts", "Events", "Press Releases", "Coverage"] }
       secondaryLinkLists:
         - { itemName: "Loud for less", title: "Featured practices", links: ["Emerging Companies"] }
         - { itemName: "By feature", title: "Corporate focus", links: ["Venture Capital", "Capital Markets"] }
         - { itemName: "More speakers", title: "More from Cooley", links: ["CooleyREG", "Media and Insight"] }
+        - { itemName: "Alerts", itemId: "{BA975387-8F9B-4B97-943E-0C836F57EFBC}", title: "Alerts", links: ["Alert", "Alert 2"] }
+        - { itemName: "Coverage", itemId: "{F9994703-5EC7-472F-9C59-A2EFFFE20244}", title: "Coverage", links: ["State Of 2026 Energy Dealmaking Midyear Report"] }
+        - { itemName: "Events", itemId: "{1D757771-E38C-45FB-8E87-1E9859741AF0}", title: "Events", links: ["AI Board Oversight Webinar", "Life Sciences Capital Webinar", "Venture Term Sheets Webinar"] }
+        - { itemName: "Insights Links", itemId: "{5907A752-46E9-4F37-9F74-42CEBE52864A}", title: "Insights", links: ["AI Governance for Boards", "Life Sciences IPO Outlook", "Q1 2026 Venture Financing Report", "Venture Financing Trends"] }
+        - { itemName: "Pro_Events_Webinars", itemId: "{BEBC26D2-6E9B-4BC4-90C0-95F6BBF1A3B0}", instanceId: "{12706BDA-8637-4ED8-9986-5A65B4A292D2}", placeholder: "mega-menu-item-secondary-links-4", title: "Events and webinars", links: ["All events", "AI Board Oversight Webinar", "Venture Term Sheets Webinar"] }
+        - { itemName: "Featured insights", itemId: "{0FF3944D-9ED0-4F4D-97BB-895110CF9A41}", instanceId: "{8BE06E64-3684-4AA6-824D-F15A9CA7A6AC}", placeholder: "mega-menu-item-secondary-links-4", title: "Featured insights", links: ["Venture Financing Trends", "AI Governance for Boards"] }
       headerUtility:
         supportLink: { text: "Careers", pageId: "{C7E84C98-3C61-49FE-A3D7-92290EB40DBF}" }
         searchLink: { text: "Search", pageId: "{FBFCD228-0AEB-41E3-A7EB-548745906172}" }
@@ -5641,14 +5656,141 @@ contentPages:
         - { text: "Insights", pageId: "{ABAABA2D-1D32-48A4-B63E-55EA3A7E3D80}" }
         - { text: "Search", pageId: "{FBFCD228-0AEB-41E3-A7EB-548745906172}" }
     verification:
-      checkedAt: "2026-08-17T00:45:00Z"
+      checkedAt: "2026-08-18T19:35:00Z"
       passed:
         - "Five mega menus Title/Link remapped to Practices/Industries/People/Media and Insight/About"
         - "Primary + secondary header LinkLists remapped to Cooley L1/L2 pages"
         - "Header SupportLink → Careers; SearchLink → Search Results; Image 1 → Practices"
         - "Footer primary/secondary links remapped to Cooley IA"
         - "FooterST Title/Copyright/social URLs updated; Instagram XML fixed"
+        - "Media and Insight mega menu: LinkList on primary-links-4 (Pro Primary Links) plus secondary-links-4 (Events and webinars + Featured insights)"
+        - "MegaMenuItem primary/secondary columns wrap LinkList so Default variant renders HeaderPrimaryLinks / HeaderSecondaryLinks"
+        - "Header/Data LinkLists created for Alerts, Coverage, Events, Insights Links with child page links"
       failed: []
       pendingManual:
-        - "Publish Header + Footer Partial Designs and their Data folders for Edge"
-        - "Spot-check browser nav labels + dropdown/footer URLs under /Home"
+        - "Publish Header Partial Design + Header/Data for Edge"
+        - "Publish Footer Partial Design + Footer/Data if not already published"
+        - "Spot-check Media and Insight hover/click mega menu under /Home"
+        - "Assign Alerts and Coverage LinkLists onto mega-menu-item-secondary-links-4 in Pages if those columns should show in the menu"
+
+  - name: "DocumentCards"
+    kind: "list"
+    category: "Cards"
+    status: "complete"
+    createdAt: "2026-08-18T18:30:00Z"
+    updatedAt: "2026-08-18T19:52:00Z"
+    siteName: "cooley"
+    siteCollection: "Cooley"
+    notes: >
+      Authorable Content Hub PDF cards under /sitecore/content/Cooley/cooley/Data/DocumentCards.
+      Live Cooley project paths used (not project.yaml pkm / not FMC).
+      Example DocumentLink values use a public sample PDF until Content Hub public links are swapped in.
+      _HorizonDatasourceGrouping template ID not found on this instance; parent uses Standard + Grid Parameters.
+      get_component confirmed Datasource Template + Location even though those fields are silent on item read.
+    react:
+      filePath: "src/components/uiim/cards/DocumentCards.tsx"
+      componentMapKey: "DocumentCards"
+      variants:
+        - "Default"
+        - "Spotlight"
+        - "CompactRows"
+    templates:
+      parent:
+        name: "DocumentCards"
+        path: "/sitecore/templates/Project/Cooley/Components/Cards/DocumentCards"
+        itemId: "{1B3492FC-0A41-4E2E-AE64-08D18A55A822}"
+        sectionName: "Data"
+        sectionId: "{6F6BB094-EFF1-4FC7-9E16-7815C92B813B}"
+        fields:
+          - { name: "SectionTitle", type: "Single-Line Text", itemId: "{F00BE1E9-D4AF-427E-A924-72E5038E2711}" }
+          - { name: "SectionIntro", type: "Multi-Line Text", itemId: "{4024BD94-9976-4F1D-9502-98F9B61492A2}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{615CCC6C-9EC7-434F-9D0A-37A191C2BC02}"
+          linked: true
+          masters: ["DocumentCard"]
+      child:
+        name: "DocumentCard"
+        path: "/sitecore/templates/Project/Cooley/Components/Cards/DocumentCard"
+        itemId: "{209D7904-335F-426B-9724-87E8A1E1AC0B}"
+        fields:
+          - { name: "CardTitle", type: "Single-Line Text", itemId: "{F79134A4-1574-463B-8ADB-42317AE3F520}" }
+          - { name: "CardSummary", type: "Multi-Line Text", itemId: "{8C0C6DFD-A0AD-4503-9F49-37081B086641}" }
+          - { name: "PreviewImage", type: "Image", itemId: "{B712FAB2-3D16-4EB7-A268-A18D9691BA54}" }
+          - { name: "DocumentLink", type: "General Link", itemId: "{AD868A5C-8B8D-40CE-A78A-1721C54E9778}" }
+          - { name: "FileType", type: "Single-Line Text", itemId: "{7DBF456C-98EB-4C98-BEEA-983AF1AFF729}" }
+          - { name: "FileSize", type: "Single-Line Text", itemId: "{804D28AB-59DD-422B-8355-1AC8878FCFC9}" }
+          - { name: "PublishedDate", type: "Date", itemId: "{7538013D-0700-4673-9531-9E1FFBC1B0FA}" }
+          - { name: "PracticeArea", type: "Single-Line Text", itemId: "{09014979-CB35-4EFC-BE86-16BD8F04910E}" }
+          - { name: "DownloadLabel", type: "Single-Line Text", itemId: "{FB59136D-A3AA-406D-A5CF-F4B2DAB3A4D0}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{2EE85C17-9297-4FE1-BCA6-5FFF85CFD691}"
+          linked: true
+      folder:
+        name: "DocumentCards Folder"
+        path: "/sitecore/templates/Project/Cooley/Folders/DocumentCards Folder"
+        itemId: "{5262BDB4-F224-4871-8D76-E35F9B419876}"
+        standardValues:
+          itemId: "{21204ABE-4810-42C2-838E-60061BA1C3C5}"
+          linked: true
+          masters: ["DocumentCards"]
+      renderingParams:
+        name: "DocumentCards"
+        path: "/sitecore/templates/Project/Cooley/Rendering Parameters/Cards/DocumentCards"
+        itemId: "{CEBF4394-E3C5-44EA-AC59-104C24598C09}"
+        baseTemplatesSet: true
+    datasourceFolder:
+      name: "DocumentCards"
+      path: "/sitecore/content/Cooley/cooley/Data/DocumentCards"
+      itemId: "{00DD53DD-4885-4FE7-AED1-47326916252B}"
+      insertOptionsSet: true
+      exampleItem:
+        name: "Insights Library"
+        itemId: "{E1F02C92-88BF-4731-8C1F-A8FC15B989EA}"
+        children:
+          - { name: "Venture Financing Trends", itemId: "{C7AED42E-50CC-4E0A-BFAE-770AEEFF4F62}" }
+          - { name: "AI Governance for Boards", itemId: "{FD4CB0E8-AF83-43CC-B074-BB338BE85396}" }
+          - { name: "Life Sciences Capital Markets", itemId: "{F6483F06-DA91-4895-9F2E-C9191AE55E41}" }
+    rendering:
+      name: "DocumentCards"
+      path: "/sitecore/layout/Renderings/Project/Cooley/Cards/DocumentCards"
+      itemId: "{E355EF35-A679-4AFC-8ABA-35DD4A6E0DA5}"
+      componentName: "DocumentCards"
+      datasourceTemplatePath: "/sitecore/templates/Project/Cooley/Components/Cards/DocumentCards"
+      useComponentQuery: true
+      registeredInAvailableRenderings: false
+    variants:
+      containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/DocumentCards"
+      containerId: "{BCD9B2D9-96C3-4E00-8421-3122E1AD9FE0}"
+      definitions:
+        - { name: "Default", itemId: "{2EBE7F29-FE8A-4FF3-94A8-A1E8170C7AB1}" }
+        - { name: "Spotlight", itemId: "{B2880F07-8D1D-4EAF-BA73-7111814FC612}" }
+        - { name: "CompactRows", itemId: "{FA886385-C52E-4DDF-A7FA-D81E0DD22D8B}" }
+    lookupsAdded:
+      - { path: "/sitecore/templates/Project/Cooley/Components/Cards", itemId: "{97DECF64-2939-42D3-A576-214E4B3D86AF}" }
+      - { path: "/sitecore/templates/Project/Cooley/Rendering Parameters/Cards", itemId: "{D324D8AC-8650-43EC-B53E-37D97E2EC2EE}" }
+      - { path: "/sitecore/layout/Renderings/Project/Cooley/Cards", itemId: "{C41A9D69-3275-47F8-9DE7-40DA97A90F42}" }
+      - { path: "/sitecore/content/Cooley/cooley/Data", itemId: "{51224EB9-4E9B-486A-9A40-4FC0689E1FD0}" }
+      - { path: "/sitecore/content/Cooley/cooley/Presentation/Available Renderings/Page Content", itemId: "{82D8DEC3-8F75-4002-B68A-4A2286D6BC61}" }
+    verification:
+      checkedAt: "2026-08-18T19:52:00Z"
+      passed:
+        - "Parent/child templates with Standard + Grid Parameters"
+        - "Parent/child fields created with correct Type"
+        - "Standard Values created (parent SectionTitle=Documents; child FileType=PDF, DownloadLabel=Download PDF)"
+        - "Rendering Parameters template has all four base templates"
+        - "JSON Rendering componentName + Parameters Template + ComponentQuery verified"
+        - "get_component confirmed datasource template DocumentCards and DocumentCards Folder query locations"
+        - "Headless Variants Default, Spotlight, CompactRows created"
+        - "Example parent Insights Library + 3 DocumentCard children under Data/DocumentCards"
+        - "React DocumentCards.tsx created with named exports matching variants"
+        - "Unit tests passing for Default, Spotlight, CompactRows, empty datasource, and editing chrome"
+      failed: []
+      pendingManual:
+        - "Append {E355EF35-A679-4AFC-8ABA-35DD4A6E0DA5} to Available Renderings/Page Content (silent-read; do not replace)"
+        - "Verify __Masters on parent SV (DocumentCard), folder SV, and Data folder instance (silent-write)"
+        - "Verify __Standard values links on templates (silent-write)"
+        - "Swap sample PDF URLs for real Content Hub public links"
+        - "Publish templates, rendering, variants, and Data/DocumentCards for Edge"
+        - "_HorizonDatasourceGrouping not found on this instance — optional follow-up"
