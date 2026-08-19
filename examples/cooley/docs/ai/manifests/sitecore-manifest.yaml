@@ -5678,15 +5678,16 @@ contentPages:
     category: "Cards"
     status: "complete"
     createdAt: "2026-08-18T18:30:00Z"
-    updatedAt: "2026-08-18T19:52:00Z"
+    updatedAt: "2026-08-18T23:42:00Z"
     siteName: "cooley"
     siteCollection: "Cooley"
     notes: >
       Authorable Content Hub PDF cards under /sitecore/content/Cooley/cooley/Data/DocumentCards.
       Live Cooley project paths used (not project.yaml pkm / not FMC).
       Example DocumentLink values use a public sample PDF until Content Hub public links are swapped in.
-      _HorizonDatasourceGrouping template ID not found on this instance; parent uses Standard + Grid Parameters.
+      _HorizonDatasourceGrouping template ID not found on this instance; parent uses Standard + Grid Parameters (same as MediaCanvas). MCP path lookups returned not found; do not invent IDs.
       get_component confirmed Datasource Template + Location even though those fields are silent on item read.
+      2026-08-18: Pages chrome for child PreviewImage + DocumentLink. Editing now always renders Sitecore Image (empty src included), fills the preview box, uses overflow-visible + pointer-events-auto, and data-item-id + data-clickable on Default cards, Spotlight featured/supporting items, and CompactRows rows so Pages can switch from the parent datasource. DocumentLink in editing is ContentSdkLink directly (not Button asChild). CompactRows file-icon ContentSdkLink kept. FieldEditorFields set on rendering to SectionTitle|SectionIntro|CardTitle|CardSummary|PreviewImage|DocumentLink|PracticeArea; AddFieldEditorButton remains 1. Child fields in FieldEditorFields will not edit children while the parent datasource is selected — child chrome is the real fix.
     react:
       filePath: "src/components/uiim/cards/DocumentCards.tsx"
       componentMapKey: "DocumentCards"
@@ -5759,6 +5760,8 @@ contentPages:
       componentName: "DocumentCards"
       datasourceTemplatePath: "/sitecore/templates/Project/Cooley/Components/Cards/DocumentCards"
       useComponentQuery: true
+      addFieldEditorButton: "1"
+      fieldEditorFields: "SectionTitle|SectionIntro|CardTitle|CardSummary|PreviewImage|DocumentLink|PracticeArea"
       registeredInAvailableRenderings: false
     variants:
       containerPath: "/sitecore/content/Cooley/cooley/Presentation/Headless Variants/DocumentCards"
@@ -5774,7 +5777,7 @@ contentPages:
       - { path: "/sitecore/content/Cooley/cooley/Data", itemId: "{51224EB9-4E9B-486A-9A40-4FC0689E1FD0}" }
       - { path: "/sitecore/content/Cooley/cooley/Presentation/Available Renderings/Page Content", itemId: "{82D8DEC3-8F75-4002-B68A-4A2286D6BC61}" }
     verification:
-      checkedAt: "2026-08-18T19:52:00Z"
+      checkedAt: "2026-08-18T23:42:00Z"
       passed:
         - "Parent/child templates with Standard + Grid Parameters"
         - "Parent/child fields created with correct Type"
@@ -5786,6 +5789,11 @@ contentPages:
         - "Example parent Insights Library + 3 DocumentCard children under Data/DocumentCards"
         - "React DocumentCards.tsx created with named exports matching variants"
         - "Unit tests passing for Default, Spotlight, CompactRows, empty datasource, and editing chrome"
+        - "Pages editing always renders Sitecore Image for PreviewImage including empty src"
+        - "Pages editing renders DocumentLink as ContentSdkLink without Button asChild"
+        - "data-item-id and data-clickable present on child cards in editing"
+        - "Live site still uses NextImage when preview src exists"
+        - "AddFieldEditorButton=1 and FieldEditorFields set on DocumentCards rendering (MCP read-back confirmed)"
       failed: []
       pendingManual:
         - "Append {E355EF35-A679-4AFC-8ABA-35DD4A6E0DA5} to Available Renderings/Page Content (silent-read; do not replace)"
@@ -5793,4 +5801,4 @@ contentPages:
         - "Verify __Standard values links on templates (silent-write)"
         - "Swap sample PDF URLs for real Content Hub public links"
         - "Publish templates, rendering, variants, and Data/DocumentCards for Edge"
-        - "_HorizonDatasourceGrouping not found on this instance — optional follow-up"
+        - "_HorizonDatasourceGrouping not found on this instance — optional follow-up; MediaCanvas parent also Standard + Grid Parameters only"

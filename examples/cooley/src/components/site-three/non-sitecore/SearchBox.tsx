@@ -30,6 +30,13 @@ const triggerClassName = cn(
   'text-foreground hover:text-primary'
 );
 
+/** Build a search URL without `window` so SSR and client markup match. */
+function buildSearchHref(baseHref: string, query: string): string {
+  if (!query.trim()) return baseHref;
+  const separator = baseHref.includes('?') ? '&' : '?';
+  return `${baseHref}${separator}q=${encodeURIComponent(query.trim())}`;
+}
+
 export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
   const t = useTranslations();
   const { isVisible, setIsVisible, ref } = useToggleWithClickOutside<HTMLDivElement>(false);
@@ -40,24 +47,10 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
   const searchLabel =
     searchLink?.value?.text?.trim() || t(DICTIONARY_KEYS.SEARCH_LABEL) || 'Search';
 
-  const buildSearchUrl = (): string | null => {
-    if (!hasValidSearchLink) return null;
-    try {
-      const url = new URL(searchBaseHref!, window.location.origin);
-      if (searchTerm.trim()) {
-        url.searchParams.set('q', searchTerm.trim());
-      } else {
-        url.searchParams.delete('q');
-      }
-      return url.toString();
-    } catch {
-      return searchTerm.trim()
-        ? `${searchBaseHref}?q=${encodeURIComponent(searchTerm.trim())}`
-        : (searchBaseHref ?? null);
-    }
-  };
-
-  const searchUrl = buildSearchUrl();
+  const searchUrl =
+    hasValidSearchLink && searchBaseHref
+      ? buildSearchHref(searchBaseHref, searchTerm)
+      : null;
 
   const triggerContent = (
     <>
@@ -142,13 +135,7 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
                 aria-label={t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || SEARCH_GO_ARIA_LABEL}
                 onClick={() => {
                   if (searchTerm.trim() && searchBaseHref) {
-                    try {
-                      const url = new URL(searchBaseHref, window.location.origin);
-                      url.searchParams.set('q', searchTerm.trim());
-                      window.location.href = url.toString();
-                    } catch {
-                      // no-op if URL invalid
-                    }
+                    window.location.href = buildSearchHref(searchBaseHref, searchTerm);
                   }
                 }}
               >

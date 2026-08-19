@@ -10,7 +10,7 @@ const NoDataFallback = (props: ComponentName): JSX.Element => {
   const { componentName } = props;
 
   return (
-    <div className={`component ${kebabCase(componentName)}`}>
+    <div suppressHydrationWarning className={`component ${kebabCase(componentName)}`}>
       <div className="component-content">
         <span className="is-empty-hint">
           {capitalCase(componentName)} requires a datasource item assigned. Please assign a

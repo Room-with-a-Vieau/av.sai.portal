@@ -264,6 +264,7 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
 
   return (
     <article
+      suppressHydrationWarning={isEditing}
       data-component="ArticleContent"
       data-variant="kmpage"
       className={cn(

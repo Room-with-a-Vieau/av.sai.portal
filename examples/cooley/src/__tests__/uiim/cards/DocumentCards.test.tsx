@@ -18,6 +18,14 @@ jest.mock('lucide-react', () => ({
   X: () => <svg data-testid="x-icon" />,
 }));
 
+jest.mock('@/components/content-sdk/TrackedCtaLink', () => ({
+  TrackedCtaLink: ({ field, children, className }: any) => (
+    <a href={field?.value?.href || ''} className={className}>
+      {children || field?.value?.text || field?.value?.href || ''}
+    </a>
+  ),
+}));
+
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, tag: Tag = 'span', className }: any) => (
     <Tag className={className}>{field?.value || ''}</Tag>
@@ -102,9 +110,15 @@ describe('DocumentCards', () => {
     expect(formatSitecoreDate('20260312T000000Z')).toBe('Mar 12, 2026');
   });
 
-  it('falls back when datasource is missing', () => {
-    render(<DocumentCards params={{}} fields={{ data: {} }} />);
+  it('falls back only when fields are missing', () => {
+    render(<DocumentCards params={{}} fields={undefined} />);
     expect(screen.getByTestId('no-data-fallback')).toHaveTextContent('DocumentCards');
+  });
+
+  it('renders the shell when fields exist even if datasource is empty', () => {
+    render(<DocumentCards params={{}} fields={{ data: {} }} />);
+    expect(screen.queryByTestId('no-data-fallback')).not.toBeInTheDocument();
+    expect(screen.getByText(/Add Document Card items under this datasource/i)).toBeInTheDocument();
   });
 
   it('renders the default preview grid with metadata and download', () => {
@@ -147,12 +161,14 @@ describe('DocumentCards', () => {
 
   it('renders Spotlight with a featured document and supporting list', () => {
     render(<Spotlight params={{}} fields={fields} />);
+    expect(document.querySelector('[data-variant="spotlight"]')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 4, name: 'AI Governance for Boards' })).toBeInTheDocument();
   });
 
   it('renders CompactRows as a dense document list', () => {
     render(<CompactRows params={{}} fields={fields} />);
+    expect(document.querySelector('[data-variant="compact-rows"]')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: 'AI Governance for Boards' })).toBeInTheDocument();
     expect(screen.getByText('Artificial Intelligence')).toBeInTheDocument();
@@ -166,30 +182,63 @@ describe('DocumentCards', () => {
     expect(fileIcons[0].closest('a')).toHaveAttribute('href', pdfHref);
   });
 
-  it('keeps CompactRows file-icon DocumentLink chrome in editing', () => {
+  it('uses compact grid child editors in Default editing mode', () => {
     mockUseSitecore.mockReturnValue({ page: mockPageEditing });
-    render(<CompactRows params={{}} fields={fields} isPageEditing />);
+    render(<DocumentCards params={{}} fields={fields} />);
 
-    const fileIcon = screen.getAllByTestId('file-text-icon')[0];
-    expect(fileIcon.closest('a')).toHaveAttribute('href', pdfHref);
-  });
-
-  it('uses Sitecore Image chrome in editing mode', () => {
-    mockUseSitecore.mockReturnValue({ page: mockPageEditing });
-    render(<DocumentCards params={{}} fields={fields} isPageEditing />);
-
-    const editorImages = screen.getAllByTestId('sitecore-image');
-    expect(editorImages.length).toBeGreaterThan(0);
-    expect(editorImages[0]).toHaveAttribute('src', '/media/preview.jpg');
+    const editors = screen.getAllByTestId('document-card-child-editor');
+    expect(editors).toHaveLength(2);
+    expect(editors[0]).toHaveAttribute('data-editor-layout', 'grid');
+    expect(screen.getAllByTestId('sitecore-image')).toHaveLength(2);
+    expect(screen.getAllByText('Document link')).toHaveLength(2);
     expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Preview/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' }).closest('[data-item-id]')).toHaveAttribute(
-      'data-item-id',
-      'card-1'
-    );
   });
 
-  it('renders CompactRows file-icon DocumentLink chrome in editing even when href is empty', () => {
+  it('uses variant-specific compact editors for Spotlight and CompactRows in editing', () => {
+    mockUseSitecore.mockReturnValue({ page: mockPageEditing });
+
+    render(<Spotlight params={{}} fields={fields} />);
+    expect(document.querySelector('[data-variant="spotlight"]')).toBeInTheDocument();
+    const spotlightEditors = screen.getAllByTestId('document-card-child-editor');
+    expect(spotlightEditors).toHaveLength(2);
+    expect(spotlightEditors[0]).toHaveAttribute('data-editor-layout', 'featured');
+    expect(spotlightEditors[1]).toHaveAttribute('data-editor-layout', 'row');
+    expect(screen.getByRole('heading', { level: 4, name: 'AI Governance for Boards' })).toBeInTheDocument();
+
+    render(<CompactRows params={{}} fields={fields} />);
+    expect(document.querySelector('[data-variant="compact-rows"]')).toBeInTheDocument();
+    const compactRoot = document.querySelector('[data-variant="compact-rows"]') as HTMLElement;
+    const rowEditors = compactRoot.querySelectorAll('[data-testid="document-card-child-editor"]');
+    expect(rowEditors.length).toBeGreaterThanOrEqual(2);
+    expect(rowEditors[0]).toHaveAttribute('data-editor-layout', 'row-dense');
+    expect(compactRoot.querySelector('[data-testid="file-text-icon"]')).toBeNull();
+  });
+
+  it('renders Sitecore Image in editing even when preview src is empty', () => {
+    mockUseSitecore.mockReturnValue({ page: mockPageEditing });
+    const emptyImageFields = {
+      data: {
+        datasource: {
+          ...fields.data.datasource,
+          children: {
+            results: [
+              card({
+                previewImage: { jsonValue: { value: {} } },
+              }),
+            ],
+          },
+        },
+      },
+    };
+
+    render(<DocumentCards params={{}} fields={emptyImageFields} />);
+    expect(screen.getAllByTestId('sitecore-image').length).toBeGreaterThan(0);
+    expect(screen.queryByTestId('next-image')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Venture Financing Trends')).not.toBeInTheDocument();
+  });
+
+  it('renders DocumentLink chrome in editing when href is empty', () => {
     mockUseSitecore.mockReturnValue({ page: mockPageEditing });
     const emptyLinkFields = {
       data: {
@@ -206,14 +255,17 @@ describe('DocumentCards', () => {
       },
     };
 
-    render(<CompactRows params={{}} fields={emptyLinkFields} isPageEditing />);
+    render(<DocumentCards params={{}} fields={emptyLinkFields} />);
+    const childEditor = screen.getByTestId('document-card-child-editor');
+    const documentLink = childEditor.querySelector('a');
+    expect(documentLink).toBeInTheDocument();
+    expect(documentLink).toHaveAttribute('href', '');
+    expect(documentLink?.closest('button')).toBeNull();
+  });
 
-    const fileIcon = screen.getByTestId('file-text-icon');
-    expect(fileIcon.closest('a')).toBeInTheDocument();
-    expect(fileIcon.closest('a')).toHaveAttribute('href', '');
-    expect(screen.getByRole('heading', { level: 3, name: 'Venture Financing Trends' }).closest('[data-item-id]')).toHaveAttribute(
-      'data-item-id',
-      'card-1'
-    );
+  it('keeps NextImage on the live site when preview src exists', () => {
+    render(<Spotlight params={{}} fields={fields} />);
+    expect(screen.getAllByTestId('next-image')[0]).toHaveAttribute('src', '/media/preview.jpg');
+    expect(screen.queryByTestId('sitecore-image')).not.toBeInTheDocument();
   });
 });
