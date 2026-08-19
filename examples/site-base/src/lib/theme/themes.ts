@@ -22,6 +22,7 @@ export const APP_THEMES = [
   'quanex',
   'amesburytruth',
   'era',
+  'dfsupply',
 ] as const;
 
 export type AppTheme = (typeof APP_THEMES)[number];

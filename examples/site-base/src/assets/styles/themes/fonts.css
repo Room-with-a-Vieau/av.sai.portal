@@ -159,3 +159,27 @@ html[data-theme='era'] .btn.btn-primary:hover {
   background-color: var(--color-primary-hover);
   color: var(--color-primary-foreground);
 }
+
+/* dfsupply.com: Open Sans body, Roboto headings (uppercase section titles, gold CTAs). */
+html[data-theme='dfsupply'] {
+  --font-body: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-roboto), 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-roboto), 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 700;
+}
+
+html[data-theme='dfsupply'] :where(h1, .h1, h2, .h2, h3, .h3) {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+html[data-theme='dfsupply'] .btn.btn-primary {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+html[data-theme='dfsupply'] .btn.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}

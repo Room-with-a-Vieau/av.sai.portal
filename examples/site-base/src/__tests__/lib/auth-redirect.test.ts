@@ -1,3 +1,4 @@
+import { resolveLinkFieldHref } from '@/lib/auth/link-field';
 import {
   isSafeInternalPath,
   resolvePostLoginRedirect,
@@ -18,6 +19,12 @@ describe('auth-redirect', () => {
     expect(resolvePostLoginRedirect(sp, '/from-param')).toBe('/after-login');
   });
 
+  it('prefers datasource link over rendering param for login', () => {
+    expect(resolvePostLoginRedirect(new URLSearchParams(), '/from-param', '/from-link')).toBe(
+      '/from-link',
+    );
+  });
+
   it('falls back to param then default for login', () => {
     expect(resolvePostLoginRedirect(new URLSearchParams(), '/from-param')).toBe('/from-param');
     expect(resolvePostLoginRedirect(new URLSearchParams())).toBe('/');
@@ -27,5 +34,23 @@ describe('auth-redirect', () => {
     const sp = new URLSearchParams();
     sp.set('post_logout_redirect', '/bye');
     expect(resolvePostLogoutRedirect(sp, '/param')).toBe('/bye');
+  });
+});
+
+describe('resolveLinkFieldHref', () => {
+  it('returns safe internal paths from General Link fields', () => {
+    expect(
+      resolveLinkFieldHref({
+        value: { href: '/portal/dashboard', text: 'Dashboard', linktype: 'internal' },
+      }),
+    ).toBe('/portal/dashboard');
+  });
+
+  it('rejects external links', () => {
+    expect(
+      resolveLinkFieldHref({
+        value: { href: 'https://example.com', text: 'External', linktype: 'external' },
+      }),
+    ).toBeUndefined();
   });
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { createElement, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useSitecore } from '@sitecore-content-sdk/nextjs';
@@ -190,7 +190,6 @@ function ResultCard({ item, pack }: { item: SearchResultItem; pack: SearchSitePa
   const pathname = usePathname();
   const meta = itemMetadataLine(item, pack.facetLabels);
   const practiceLabels = item.perils.map((p) => pack.facetLabels.peril[p]).filter(Boolean).slice(0, 2);
-  const Icon = resultIcon(item.lob, pack);
   const isFeatured = pack.featuredLob ? item.lob === pack.featuredLob : false;
   const href = toSiteAwareHref(item.href, pathname, listSearchPackSiteNames());
 
@@ -211,7 +210,7 @@ function ResultCard({ item, pack }: { item: SearchResultItem; pack: SearchSitePa
             isFeatured ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
           )}
         >
-          <Icon className="size-5" aria-hidden />
+          {createElement(resultIcon(item.lob, pack), { className: 'size-5', 'aria-hidden': true })}
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">

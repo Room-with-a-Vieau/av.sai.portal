@@ -3,16 +3,42 @@ import type { NextAuthConfig, User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 
+import { authenticatePortalUser } from '@/lib/auth/users';
+
 const credentialsProvider = Credentials({
   id: 'credentials',
   name: 'Credentials',
   credentials: {
+    email: { type: 'email' },
     username: { type: 'text' },
     password: { type: 'password' },
   },
   authorize: async (credentials): Promise<User | null> => {
-    const username = typeof credentials?.username === 'string' ? credentials.username : '';
+    const emailInput =
+      typeof credentials?.email === 'string'
+        ? credentials.email
+        : typeof credentials?.username === 'string'
+          ? credentials.username
+          : '';
     const password = typeof credentials?.password === 'string' ? credentials.password : '';
+
+    if (emailInput && password) {
+      const portalUser = await authenticatePortalUser({
+        email: emailInput,
+        password,
+      });
+
+      if (portalUser) {
+        return {
+          id: portalUser.id,
+          name: portalUser.customerName,
+          email: portalUser.email,
+          customerSlug: portalUser.customerSlug,
+        };
+      }
+    }
+
+    const username = emailInput;
     const expectedUser = process.env.AUTH_DEMO_USERNAME;
     const expectedPass = process.env.AUTH_DEMO_PASSWORD;
 
@@ -58,6 +84,9 @@ export const authConfig = {
       if (user && typeof user.taxonomy === 'string' && user.taxonomy) {
         token.taxonomy = user.taxonomy;
       }
+      if (user && typeof user.customerSlug === 'string' && user.customerSlug) {
+        token.customerSlug = user.customerSlug;
+      }
       return token;
     },
     session({ session, token }) {
@@ -66,6 +95,9 @@ export const authConfig = {
       }
       if (session.user && typeof token.taxonomy === 'string' && token.taxonomy) {
         session.user.taxonomy = token.taxonomy;
+      }
+      if (session.user && typeof token.customerSlug === 'string' && token.customerSlug) {
+        session.user.customerSlug = token.customerSlug;
       }
       return session;
     },

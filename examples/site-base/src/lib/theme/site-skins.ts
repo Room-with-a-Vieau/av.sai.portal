@@ -34,6 +34,7 @@ export const SITE_SKINS: Readonly<Record<string, AppTheme>> = {
   quanex: 'quanex',
   amesburytruth: 'amesburytruth',
   era: 'era',
+  dfsupply: 'dfsupply',
 
   // Example: site name differs from skin
   // 'acme-demo': 'rockland',

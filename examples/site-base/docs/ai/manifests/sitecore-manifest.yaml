@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-18T10:45:00Z"
+lastUpdatedAt: "2026-08-19T22:10:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -6772,4 +6772,129 @@ ia:
         - "Publish Search Results page + MainNav for Edge"
         - "Confirm SearchResults is allowed on headless-main in Pages (add may have bypassed placeholder whitelist)"
         - "Open /quanex/en/Search-Results?q=super+spacer on the shared editing host"
+
+  - name: "Authentication"
+    kind: "simple"
+    category: "Portal"
+    status: "complete"
+    createdAt: "2026-08-19T18:00:00Z"
+    updatedAt: "2026-08-19T18:13:00Z"
+
+    react:
+      filePath: "src/components/authentication/Authentication.tsx"
+      componentMapKey: "Authentication"
+      variants:
+        - "Default"
+
+    sitecoreEnvironment:
+      siteName: "dfs"
+      siteCollection: "dfs"
+      note: "Created in connected XM Cloud Portal project (dfs site). Manifest originally planned fmc-custom-demo/main-website paths; those do not exist in this MCP instance."
+
+    templates:
+      datasource:
+        name: "Authentication"
+        path: "/sitecore/templates/Project/Portal/Authentication"
+        itemId: "{C83B63CF-8864-4AC8-BBA6-51689ECABA9B}"
+        sectionName: "Authentication Settings"
+        sectionItemId: "{9DD92B9A-541B-4CB8-85DE-232B2B7BF079}"
+        fields:
+          - { name: "title", type: "Single-Line Text", itemId: "{9B054522-3B7A-462B-9763-44FFDC0635EC}" }
+          - { name: "subtitle", type: "Single-Line Text", itemId: "{BC0DA429-C7C9-453C-81A9-B8F24DD50A19}" }
+          - { name: "logo", type: "Image", itemId: "{15FDC17E-D21A-40D4-8101-C06EF797B37C}" }
+          - { name: "customerSlug", type: "Single-Line Text", itemId: "{EC67B273-2675-4F12-AFD2-390B1C3A8AB9}", deprecated: true, note: "Unused — customer comes from User record at login; safe to leave on template until removed in CM" }
+          - { name: "postLoginRedirect", type: "General Link", itemId: "{79567B03-BCD0-4B04-BFFC-1CB9FFA1A658}" }
+          - { name: "loginButtonText", type: "Single-Line Text", itemId: "{402E9FAF-46BE-422A-BB8D-A75114C91C98}" }
+          - { name: "logoutButtonText", type: "Single-Line Text", itemId: "{39145D70-68A5-451A-B927-A0770476E878}" }
+          - { name: "userNameLabel", type: "Single-Line Text", itemId: "{B0D8750D-8C6F-4479-9933-08D624839259}" }
+          - { name: "passwordLabel", type: "Single-Line Text", itemId: "{FAF8911A-F308-4366-A778-057C55AB62EE}" }
+          - { name: "forgotPasswordLabel", type: "Single-Line Text", itemId: "{C941D204-A9BA-401B-8F28-A20B535C54E1}" }
+          - { name: "forgotPasswordLinkText", type: "Single-Line Text", itemId: "{AAE77518-1399-4F96-82EF-72CCF01A797D}" }
+          - { name: "loginFailedMessage", type: "Single-Line Text", itemId: "{00489DF2-39F3-4071-9C94-68E1B4A93F79}" }
+          - { name: "resetPasswordPath", type: "Single-Line Text", itemId: "{06D19ED9-D636-4B58-88F1-D45696A7B910}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{23FEEEE7-9AB2-42BC-833C-58941F850427}"
+          linked: true
+
+      folder:
+        name: "Authentication Folder"
+        path: "/sitecore/templates/Project/Portal/Authentication Folder"
+        itemId: "{65E235E8-F15E-44F8-9197-81EAE93AA55C}"
+        standardValues:
+          itemId: "{FBFCA238-CC83-4043-BAD9-E14046B890D3}"
+          linked: true
+          masters: ["Authentication"]
+
+      renderingParams:
+        name: "Authentication"
+        path: "/sitecore/templates/Project/Portal/Rendering Parameters/Authentication"
+        itemId: "{BCDBD048-3B71-4558-8E56-A21BD6E9DFA7}"
+        standardValues:
+          itemId: "{A4D7594D-CE2B-49A1-A850-45B102C9918F}"
+        paramFields:
+          - { name: "redirectUrl", type: "Single-Line Text", itemId: "{07B3243F-867C-4D8A-A9D4-0B346EE9C12C}" }
+          - { name: "postLogoutRedirect", type: "Single-Line Text", itemId: "{D7E2AFD5-B3C9-4B41-A442-460D24BD2F9A}" }
+
+    datasourceFolder:
+      name: "Authentication"
+      path: "/sitecore/content/dfs/dfs/Data/Authentication"
+      itemId: "{06974976-9D8F-4B2C-82E5-DEDCDFDA45EE}"
+      insertOptionsSet: true
+      exampleItems:
+        - { name: "Portal Login", itemId: "{EFEAC18B-D47C-41AC-B207-5525CD230634}", path: "/sitecore/content/dfs/dfs/Data/Authentication/Portal Login", note: "Single shared login datasource for all portal users; customer resolved from User record" }
+      deprecatedExampleItems:
+        - { name: "Chipotle Login", itemId: "{2732488B-DE2B-4F8B-A9BB-76196DF88322}", note: "Replace with Portal Login; remove from pages and delete in CM when convenient" }
+        - { name: "Taco Bell Login", itemId: "{05BF59E6-E58A-43D2-A31D-5083632BA0AB}", note: "Replace with Portal Login; remove from pages and delete in CM when convenient" }
+
+    rendering:
+      name: "Authentication"
+      path: "/sitecore/layout/Renderings/Project/Portal/authentication/Authentication"
+      itemId: "{AE098E9C-B142-4D3E-820F-BA39907281D5}"
+      componentName: "Authentication"
+      datasourceTemplatePath: "/sitecore/templates/Project/Portal/Authentication"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='Authentication Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='Authentication Folder']"
+      parametersTemplateId: "{BCDBD048-3B71-4558-8E56-A21BD6E9DFA7}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      registeredInAvailableRenderings: true
+
+    headlessVariants:
+      containerPath: "/sitecore/content/dfs/dfs/Presentation/Headless Variants/Authentication"
+      containerId: "{AB57B7DA-68DC-4AD8-846F-CA7D02572DA1}"
+      variants:
+        - { name: "Default", itemId: "{6D746335-E8F8-4829-B765-B01CE63A2829}" }
+
+    availableRenderingsUpdated:
+      - { siteName: "dfs", pageContentItemId: "{2DC67527-C0F2-43D4-8568-60A3DAA5C748}", authenticationGroupItemId: "{ABA377EC-99FF-4489-B18A-2C6EA7782E68}", appendedRenderingId: "{AE098E9C-B142-4D3E-820F-BA39907281D5}" }
+
+    verification:
+      checkedAt: "2026-08-19T22:10:00Z"
+      passed:
+        - "React Authentication component implemented"
+        - "Component map includes Authentication (client component)"
+        - "Datasource template created with 12 active camelCase fields matching authentication.props.ts (customerSlug deprecated on template)"
+        - "Folder template + datasource folder with insert options"
+        - "Rendering Parameters template with redirectUrl and postLogoutRedirect (AuthPanel pattern)"
+        - "JSON Rendering created; get_component confirms datasource template, location, and fields"
+        - "Portal Login shared datasource (replaces per-customer Chipotle/Taco Bell items)"
+        - "Headless Variants Default created"
+        - "Authentication allowed on headless-main placeholder (get_allowed_comps_by_ph)"
+        - "Prisma SQLite user store + seed script"
+        - "Password reset API routes and reset-password page"
+      failed: []
+      pendingManual:
+        - "Publish Authentication datasource items (currently Draft workflow state)"
+        - "Add Authentication rendering to a login page in Pages"
+        - "Verify Page Content Available Renderings Renderings field in Content Editor (silent-write; reconstructed from list_components Page Content IDs + Authentication)"
+        - "Verify __Masters on folder SV and datasource folder instance (silent-write)"
+        - "If deploying to fmc-custom-demo/main-website XM instance, recreate items at planned manifest paths"
+
+    notes:
+      - "Portal auth MVP docs: docs/auth-portal-mvp.md"
+      - "Extends existing Auth.js setup; AuthPanel remains for legacy demo credentials"
+      - "Single login pattern: email+password only; customerSlug from User DB record, not datasource"
+      - "Field names use camelCase (Portal/Auth convention), not PascalCase from original fmc-custom-demo plan — matches React props exactly"
+      - "2026-08-19: All Sitecore artifacts created via Marketer MCP in dfs/Portal project"
+      - "2026-08-19: Refactored to shared Portal Login datasource; customerSlug template field deprecated"
 

@@ -278,6 +278,8 @@ import * as ButtonComponent from 'src/components/button-component/ButtonComponen
 import * as Breadcrumbs from 'src/components/breadcrumbs/Breadcrumbs';
 import * as breadcrumbsprops from 'src/components/breadcrumbs/breadcrumbs.props';
 import * as BackgroundThumbnaildev from 'src/components/background-thumbnail/BackgroundThumbnail.dev';
+import * as Authentication from 'src/components/authentication/Authentication';
+import * as authenticationprops from 'src/components/authentication/authentication.props';
 import * as AuthPanel from 'src/components/auth-panel/AuthPanel';
 import * as authpanelprops from 'src/components/auth-panel/auth-panel.props';
 import * as ArticleListing from 'src/components/article-listing/ArticleListing';
@@ -560,6 +562,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Breadcrumbs', { ...Breadcrumbs }],
   ['breadcrumbs', { ...breadcrumbsprops }],
   ['BackgroundThumbnail', { ...BackgroundThumbnaildev }],
+  ['Authentication', { ...Authentication, componentType: 'client' }],
+  ['authentication', { ...authenticationprops }],
   ['AuthPanel', { ...AuthPanel, componentType: 'client' }],
   ['auth-panel', { ...authpanelprops }],
   ['ArticleListing', { ...ArticleListing, componentType: 'client' }],

@@ -43,14 +43,16 @@ function firstQueryMatch(
 
 /**
  * Resolves where to send the user after a successful login.
- * Priority: query string → rendering param → default `/`.
+ * Priority: query string → datasource link href → rendering param → default `/`.
  */
 export function resolvePostLoginRedirect(
   searchParams: URLSearchParams | AuthRedirectSearchParams | null | undefined,
   paramRedirect?: string,
+  linkHref?: string,
 ): string {
   return (
     firstQueryMatch(searchParams, QUERY_LOGIN_KEYS) ??
+    (linkHref && isSafeInternalPath(linkHref) ? linkHref : undefined) ??
     (paramRedirect && isSafeInternalPath(paramRedirect) ? paramRedirect : undefined) ??
     DEFAULT_PATH
   );
