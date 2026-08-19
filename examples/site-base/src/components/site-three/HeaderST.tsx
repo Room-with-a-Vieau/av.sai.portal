@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,10 +13,21 @@ import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
 import { HeaderPreviewSearch } from './non-sitecore/HeaderPreviewSearch';
 import { ComponentProps } from 'lib/component-props';
-import componentMap from '.sitecore/component-map';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
 import { HeaderSTAuthControls, useHeaderSTNavigationVisibility } from './HeaderSTAuthControls';
 import { cn } from '@/lib/utils';
+
+type ComponentMap = typeof import('.sitecore/component-map').default;
+
+let cachedComponentMap: ComponentMap | undefined;
+
+function getComponentMap(): ComponentMap {
+  if (!cachedComponentMap) {
+    // Defer loading the map until render time to avoid a circular import with HeaderST exports.
+    cachedComponentMap = require('.sitecore/component-map').default as ComponentMap;
+  }
+  return cachedComponentMap;
+}
 
 interface Fields {
   Logo: ImageField;
@@ -50,6 +61,7 @@ const HeaderSTView = (props: HeaderSTViewProps) => {
   const { fields, params, requireAuthForNav } = props;
   const isReverseTheme = isReverseThemeParam(params?.ReverseTheme);
   const showNavigation = useHeaderSTNavigationVisibility(requireAuthForNav);
+  const componentMap = getComponentMap();
 
   return (
     <section

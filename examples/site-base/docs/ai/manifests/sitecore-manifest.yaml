@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-19T22:45:00Z"
+lastUpdatedAt: "2026-08-19T23:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5759,7 +5759,7 @@ ia:
     category: "Banners"
     status: "complete"
     createdAt: "2026-08-13T12:50:00Z"
-    updatedAt: "2026-08-13T19:20:00Z"
+    updatedAt: "2026-08-19T23:15:00Z"
     siteName: "quanex"
     siteCollection: "quanex"
     notes:
@@ -5769,6 +5769,7 @@ ia:
       - "2026-08-13: Added FocusProduct variant (AT-style: BackgroundImage backdrop + Image product + horizontal dots). BackgroundImage field on slide. Theme tokens only (bg-dark/primary). Variants registered on quanex + amesburytruth sites."
       - "2026-08-13: Family marketing datasources — ERA + AmesburyTruth HeroCarousels folders + 3 carousels each; Quanex +2 new carousels (Solar/Extrusions, Part of Something Bigger). Matching MultiPromos under each site Data/MultiPromos. See ia entry quanex-family-hero-multipromo-datasources."
       - "2026-08-13: Added SplitPanel variant (ERA-style solid content panel + large image split). Layout is the variant; colors via theme tokens (bg-background/text-foreground/bg-primary). ImageOnLeft checkbox toggles Fab&Fix (image left) vs Trade Account (content left). Do NOT force ERA look into Default/FocusProduct via theme alone. Variants on quanex + amesburytruth + era (ERA container created with Default/FocusProduct/SplitPanel)."
+      - "2026-08-19: Created full HeroCarousel infrastructure on dfs XM Cloud instance under Project/click-click-launch (templates, rendering, Data/HeroCarousels). Quanex manifest IDs are 404 on dfs MCP — separate item IDs recorded in sitecoreEnvironments.dfs. Sample portal heroes for Chipotle and Taco Bell customers."
     react:
       filePath: "src/components/uiim/banners/HeroCarousel.tsx"
       componentMapKey: "HeroCarousel"
@@ -5839,6 +5840,24 @@ ia:
         - { siteName: "quanex", path: "/sitecore/content/quanex/quanex/Data/HeroCarousels", itemId: "{9DEA8CA4-0CF8-44F4-ACE6-E993D632581A}" }
         - { siteName: "era", path: "/sitecore/content/quanex/era/Data/HeroCarousels", itemId: "{3C0B98D1-7F79-4C00-9655-C732E5A4F8D2}" }
         - { siteName: "amesburytruth", path: "/sitecore/content/quanex/amesburytruth/Data/HeroCarousels", itemId: "{7FAD9903-66A3-4357-B57C-5DAD1E295416}" }
+        - { siteName: "dfs", path: "/sitecore/content/dfs/dfs/Data/HeroCarousels", itemId: "{FC928466-98E1-46E8-9842-5FE7DD44271D}" }
+      dfsPortalHeroCarousels:
+        - name: "Chipotle Portal Hero"
+          itemId: "{61979ED4-3BAD-49C2-AF3D-0D725DF1884A}"
+          path: "/sitecore/content/dfs/dfs/Data/HeroCarousels/Chipotle Portal Hero"
+          slides:
+            - { name: "Intro Welcome", itemId: "{06A429E2-A31F-40ED-AF05-AAC53F54401D}" }
+            - { name: "Kitchen Equipment", itemId: "{E5B4577C-12CD-4196-AD2F-FE60E49B5567}" }
+            - { name: "Facilities Maintenance", itemId: "{7C2EDB0E-035E-4A22-B069-F8242035EA9D}" }
+            - { name: "Restaurant Operations", itemId: "{748D6283-8CCA-4DAD-8E11-C35FE50DAA30}" }
+        - name: "Taco Bell Portal Hero"
+          itemId: "{BCDAC03C-F707-4431-8D86-B0CE1159A478}"
+          path: "/sitecore/content/dfs/dfs/Data/HeroCarousels/Taco Bell Portal Hero"
+          slides:
+            - { name: "Intro Welcome", itemId: "{F50E8412-01F7-475C-BA38-9DB8B44167E5}" }
+            - { name: "Kitchen Equipment", itemId: "{63AA8E43-48DB-4292-9883-875F9D1251AE}" }
+            - { name: "Facilities Maintenance", itemId: "{6437301F-C41C-491F-AF1F-493E568B757B}" }
+            - { name: "Restaurant Operations", itemId: "{D2CFCDE5-8839-4405-9113-06D5AE4DBD90}" }
       multiPromoFolders:
         - { siteName: "quanex", path: "/sitecore/content/quanex/quanex/Data/MultiPromos", itemId: "{4600C0B1-78F9-43C1-B49C-B08D3C78E325}", folderTemplateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}" }
         - { siteName: "era", path: "/sitecore/content/quanex/era/Data/MultiPromos", itemId: "{B9759704-6758-4324-B063-65E5439E95BC}", folderTemplateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}" }
@@ -5885,6 +5904,48 @@ ia:
           - { name: "Default", itemId: "{453D5D4E-D9C0-4B99-8099-CD6E66584D3F}" }
           - { name: "FocusProduct", itemId: "{D477F40A-6C82-40B2-AEAC-4F2F8DB5F03A}" }
           - { name: "SplitPanel", itemId: "{DFC20993-D8F0-44B4-BA5C-846540B4E0EC}" }
+    sitecoreEnvironments:
+      dfs:
+        siteName: "dfs"
+        siteCollection: "dfs"
+        projectKey: "click-click-launch"
+        templates:
+          parent:
+            path: "/sitecore/templates/Project/click-click-launch/Components/Banners/HeroCarousel"
+            itemId: "{5AD5125E-1146-4CE5-9B1B-34041A9BE8B1}"
+            sectionItemId: "{AE1C99BF-9A0E-43A6-B1A4-EC3CFF1C6D64}"
+            fields:
+              - { name: "ContactLink", type: "General Link", itemId: "{BE8C83E4-0018-4D1F-9E14-40022911FCA1}" }
+            standardValuesItemId: "{812BA300-BCD1-43D4-ACEB-5EB8DD135917}"
+          child:
+            path: "/sitecore/templates/Project/click-click-launch/Components/Banners/HeroCarouselSlide"
+            itemId: "{9C063CFD-1D09-42B5-9FC4-560A6D7E859F}"
+            sectionItemId: "{4703A10D-D9FF-44ED-8DB9-611BCBDA2B9E}"
+            fields:
+              - { name: "SlideName", type: "Single-Line Text", itemId: "{CD3300C5-39A0-4B1A-9D0D-37A89B7517F9}" }
+              - { name: "Description", type: "Multi-Line Text", itemId: "{0DA51F00-CB5F-45EF-9C9E-4A387CA41A53}" }
+              - { name: "Summary", type: "Single-Line Text", itemId: "{3CE233BE-84F2-4003-A560-6C0E347D1A09}" }
+              - { name: "Image", type: "Image", itemId: "{6488D3E6-7485-4E1A-B83F-C88D6B0DB7A5}" }
+              - { name: "BackgroundImage", type: "Image", itemId: "{5B942368-55C8-4026-B269-D12154486212}" }
+              - { name: "Link", type: "General Link", itemId: "{D7652D2B-7405-4763-AFD9-8D541A2F1F13}" }
+              - { name: "IsIntroSlide", type: "Checkbox", itemId: "{979E79F0-D6D5-4ABB-A3BF-D971F54F5990}" }
+              - { name: "ImageOnLeft", type: "Checkbox", itemId: "{947B502F-C8B4-4AE3-8357-BA14B486D13F}" }
+            standardValuesItemId: "{8C49061E-9FF5-4387-A240-EA0D1D36A8C3}"
+          folder:
+            path: "/sitecore/templates/Project/click-click-launch/Components/Banners/HeroCarousel Folder"
+            itemId: "{A1575187-A620-4A29-8AE4-16159C9300E5}"
+            standardValuesItemId: "{B28D07FA-4870-40B2-BE58-C79FA4D5C751}"
+          renderingParams:
+            path: "/sitecore/templates/Project/click-click-launch/Components/Banners/Rendering Parameters/HeroCarousel"
+            itemId: "{351F970D-1740-407C-AA4C-A479DDBB061D}"
+        rendering:
+          path: "/sitecore/layout/Renderings/Project/click-click-launch/Banners/HeroCarousel"
+          itemId: "{8E9810AD-B388-4D1A-B921-7CE3A5E21E33}"
+          registeredInAvailableRenderings: true
+          pageContentAvailableRenderingsItemId: "{2DC67527-C0F2-43D4-8568-60A3DAA5C748}"
+        datasourceFolder:
+          path: "/sitecore/content/dfs/dfs/Data/HeroCarousels"
+          itemId: "{FC928466-98E1-46E8-9842-5FE7DD44271D}"
     relatedLookups:
       - { path: "/sitecore/templates/Project/quanex/Components", itemId: "{4B071654-D2FC-44CE-983B-D913460C2380}" }
       - { path: "/sitecore/templates/Project/quanex/Folders", itemId: "{89DBC649-2033-4C1A-B2C1-8CABC0E71E99}" }
@@ -5922,6 +5983,10 @@ ia:
         - "Place HeroCarousel on quanex Home and assign Homepage Hero datasource"
         - "Publish ERA/AT/quanex family HeroCarousel + MultiPromo datasources (see ia quanex-family-hero-multipromo-datasources)"
         - "Optional: set slide __Sortorder so Intro slides appear first in CE"
+        - "dfs (2026-08-19): Publish HeroCarousel templates + rendering + Data/HeroCarousels for Edge"
+        - "dfs: Verify Page Content Available Renderings Renderings field in CE (silent-write; reconstructed from list_components + HeroCarousel)"
+        - "dfs: Verify __Masters on parent SV, folder SV, and HeroCarousels folder instance (silent-write)"
+        - "dfs: Place HeroCarousel on portal pages; assign Chipotle or Taco Bell datasource per customer context"
 
   - name: "ProductDetail"
     kind: "context-only"
