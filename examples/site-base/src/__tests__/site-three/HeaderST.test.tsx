@@ -535,6 +535,30 @@ describe('HeaderST Component', () => {
       expect(screen.queryAllByTestId('app-placeholder')).toHaveLength(0);
     });
 
+    it('hides navigation when unauthenticated even in editing mode', () => {
+      jest.spyOn(require('@sitecore-content-sdk/nextjs'), 'useSitecore').mockReturnValue({
+        page: { mode: { isEditing: true } },
+      });
+
+      render(<HeaderSTLoginRequired {...defaultHeaderSTProps} />);
+
+      expect(screen.queryAllByTestId('app-placeholder')).toHaveLength(0);
+    });
+
+    it('hides navigation when Default export has LoginRequired FieldNames param', () => {
+      render(
+        <HeaderSTDefault
+          {...defaultHeaderSTProps}
+          params={{
+            ...defaultHeaderSTProps.params,
+            FieldNames: '{197F5333-48FF-42CF-8357-B49796219679}',
+          }}
+        />,
+      );
+
+      expect(screen.queryAllByTestId('app-placeholder')).toHaveLength(0);
+    });
+
     it('shows login link when LoginLink is populated', () => {
       render(<HeaderSTLoginRequired {...defaultHeaderSTProps} />);
 

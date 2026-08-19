@@ -50,6 +50,36 @@ type HeaderSTViewProps = HeaderSTProps & {
 const navLinkClass =
   'block p-4 font-[family-name:var(--font-body)] text-foreground font-normal hover:text-primary';
 
+const LOGIN_REQUIRED_VARIANT_ID = '197f5333-48ff-42cf-8357-b49796219679';
+
+function isTruthyParam(value: string | undefined): boolean {
+  if (value == null || typeof value !== 'string') return false;
+  const v = value.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
+/** Headless variant can surface as params.FieldNames (name or variant definition GUID). */
+function isLoginRequiredVariant(props: HeaderSTProps): boolean {
+  const fieldNames =
+    props.params?.FieldNames ??
+    (props.rendering as { params?: { FieldNames?: string } } | undefined)?.params?.FieldNames;
+  if (fieldNames == null || typeof fieldNames !== 'string') {
+    return false;
+  }
+  const normalized = fieldNames.replace(/[{}]/g, '').trim().toLowerCase();
+  return normalized === 'loginrequired' || normalized === LOGIN_REQUIRED_VARIANT_ID;
+}
+
+function resolveRequireAuthForNav(props: HeaderSTProps, fromLoginRequiredExport: boolean): boolean {
+  if (fromLoginRequiredExport) {
+    return true;
+  }
+  return (
+    isLoginRequiredVariant(props) ||
+    isTruthyParam(props.params?.RequireAuthForNav) ||
+    isTruthyParam(props.params?.requireAuthForNav)
+  );
+}
 /** Sitecore checkbox / string params for rendering parameter ReverseTheme */
 function isReverseThemeParam(value: string | undefined): boolean {
   if (value == null || typeof value !== 'string') return false;
@@ -184,8 +214,10 @@ const HeaderSTView = (props: HeaderSTViewProps) => {
   );
 };
 
-export const Default = (props: HeaderSTProps) => <HeaderSTView {...props} requireAuthForNav={false} />;
+export const Default = (props: HeaderSTProps) => (
+  <HeaderSTView {...props} requireAuthForNav={resolveRequireAuthForNav(props, false)} />
+);
 
 export const LoginRequired = (props: HeaderSTProps) => (
-  <HeaderSTView {...props} requireAuthForNav={true} />
+  <HeaderSTView {...props} requireAuthForNav={resolveRequireAuthForNav(props, true)} />
 );

@@ -108,13 +108,8 @@ export const HeaderSTAuthControls: React.FC<HeaderSTAuthControlsProps> = ({
 
 export function useHeaderSTNavigationVisibility(requireAuthForNav: boolean): boolean {
   const { data: session, status } = useSession();
-  const { page } = useSitecore();
 
   if (!requireAuthForNav) {
-    return true;
-  }
-
-  if (page.mode.isEditing) {
     return true;
   }
 
