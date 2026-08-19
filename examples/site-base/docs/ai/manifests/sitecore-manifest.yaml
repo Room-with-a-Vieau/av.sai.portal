@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-19T22:10:00Z"
+lastUpdatedAt: "2026-08-19T22:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -5878,6 +5878,13 @@ ia:
           - { name: "Default", itemId: "{14BE8A5A-0D4F-4FD0-B8FD-BA36EFE825EA}" }
           - { name: "FocusProduct", itemId: "{435AD6B3-A988-433C-A336-453CF59CBDCD}" }
           - { name: "SplitPanel", itemId: "{67B0B8E9-448E-4452-84F6-3D0598E1A97F}" }
+      dfs:
+        containerPath: "/sitecore/content/dfs/dfs/Presentation/Headless Variants/HeroCarousel"
+        containerId: "{F7B1732E-7CAE-4C39-ABDB-205F34147D90}"
+        variants:
+          - { name: "Default", itemId: "{453D5D4E-D9C0-4B99-8099-CD6E66584D3F}" }
+          - { name: "FocusProduct", itemId: "{D477F40A-6C82-40B2-AEAC-4F2F8DB5F03A}" }
+          - { name: "SplitPanel", itemId: "{DFC20993-D8F0-44B4-BA5C-846540B4E0EC}" }
     relatedLookups:
       - { path: "/sitecore/templates/Project/quanex/Components", itemId: "{4B071654-D2FC-44CE-983B-D913460C2380}" }
       - { path: "/sitecore/templates/Project/quanex/Folders", itemId: "{89DBC649-2033-4C1A-B2C1-8CABC0E71E99}" }
@@ -6968,4 +6975,150 @@ ia:
       - "2026-08-19: Portal auth header update — LoginLink (PascalCase, matches SupportLink/SearchLink/CartLink)"
       - "LoginRequired variant hides header-navigation placeholder until Auth.js session is authenticated"
       - "Utility row (Support, Search, Cart, LoginLink) remains visible when unauthenticated"
+
+  - name: "dfs-headless-variants-audit"
+    kind: "fix"
+    category: "Presentation"
+    status: "complete"
+    createdAt: "2026-08-19T22:30:00Z"
+    updatedAt: "2026-08-19T22:45:00Z"
+
+    sitecoreEnvironment:
+      siteName: "dfs"
+      siteCollection: "dfs"
+      headlessVariantsRoot: "/sitecore/content/dfs/dfs/Presentation/Headless Variants"
+
+    headlessVariantsCreated:
+      - component: "MultiPromo"
+        action: "added variants"
+        containerId: "{BA7EFAD7-5193-411F-9D6B-A274790D6D0E}"
+        variants:
+          - { name: "SideTabs", itemId: "{3CFE6F00-C10B-40E3-9453-4DA4667129D0}" }
+          - { name: "TopTabs", itemId: "{8CF634B4-47F8-41A1-AEE6-8ACC12510A40}" }
+          - { name: "TopTabsNoImage", itemId: "{123018DD-9C84-4DC3-9A66-1C98B6ECF624}" }
+      - component: "FeatureBanner"
+        action: "added variant"
+        containerId: "{CB8E2DEA-A060-4310-A0E8-A884CD34C046}"
+        variants:
+          - { name: "ImagesOnly", itemId: "{B49A8884-E271-4638-A4CC-1F9FD1F0B7A5}" }
+      - component: "SearchResults"
+        action: "created container + Default"
+        containerId: "{BD7AFD4A-71D2-431B-B28C-3CF9ED4D7607}"
+        variants:
+          - { name: "Default", itemId: "{62521BBB-8AE1-4A01-8091-2DCB73492E41}" }
+      - component: "ImageBanner"
+        action: "created container + variants"
+        containerId: "{B00DE2D2-664E-499D-A563-98C13C1E30AC}"
+        variants:
+          - { name: "Default", itemId: "{0845893F-67A0-4340-9162-2A515675104A}" }
+          - { name: "Grid", itemId: "{3F719CA0-72D9-4866-8CCC-0D6C857A5977}" }
+          - { name: "FullWidthRow", itemId: "{2DFBF6C6-D17D-4ECA-B8A3-9C1BEB4C1B98}" }
+          - { name: "SingleRowGrid", itemId: "{1850989C-1689-4DA9-B576-81C3DC635D6C}" }
+          - { name: "Stacked", itemId: "{CB3A180F-8481-490E-831A-F7DCBBBFEEEC}" }
+      - component: "MegaMenuItem"
+        action: "created container + Default"
+        containerId: "{4F78092C-C178-4BD8-A342-FCACB4084454}"
+        variants:
+          - { name: "Default", itemId: "{4FE50269-C5FA-4B0B-91BD-24E1D43687EB}" }
+      - component: "ProductComparison"
+        action: "created container + Default"
+        containerId: "{D710FC8E-1402-427A-9F3E-6868742B113D}"
+        variants:
+          - { name: "Default", itemId: "{A0927BC8-601E-40EB-B8E5-E7EF14CE4E4D}" }
+      - component: "TextSlider"
+        action: "created container + Default"
+        containerId: "{799FDE25-7319-4121-8120-C1DF47AE6034}"
+        variants:
+          - { name: "Default", itemId: "{45B5B7AE-F12E-4E20-AB94-0328872A3911}" }
+      - component: "SecondaryNavigation"
+        action: "created container + Default"
+        containerId: "{E53DE4B8-8C32-4D6C-8006-4E46D502A2FD}"
+        variants:
+          - { name: "Default", itemId: "{D323D47E-158A-455F-B041-E97C2D920607}" }
+      - component: "DownloadList"
+        action: "created container + Default"
+        containerId: "{1BD9A090-19D4-406F-A158-209968D5CF8B}"
+        variants:
+          - { name: "Default", itemId: "{2274DF9C-A366-4466-996D-428791DF8896}" }
+      - component: "HtmlSnippetBlock"
+        action: "created container + Default"
+        containerId: "{67945B8B-9C74-497E-8ACE-C42CD23874EC}"
+        variants:
+          - { name: "Default", itemId: "{8471A3BA-4EBF-4E87-901B-EFB5762230FA}" }
+      - component: "PortalHub"
+        action: "created container + Default"
+        containerId: "{7DCE3BBD-17A4-4C1E-94A9-81F2435F0897}"
+        variants:
+          - { name: "Default", itemId: "{B7C7B556-C4A8-4C3D-98EE-2BFD6D42BC2A}" }
+      - component: "PortalPageDetail"
+        action: "created container + Default"
+        containerId: "{FCD21E83-88D0-4555-A342-1D890FF1F98F}"
+        variants:
+          - { name: "Default", itemId: "{63C8AD05-F694-41D7-AF91-D035DE92F69E}" }
+      - component: "AuthPanel"
+        action: "created container + Default"
+        containerId: "{03DF8D9D-C981-4A3E-9193-2CFFBF0B2495}"
+        variants:
+          - { name: "Default", itemId: "{77C81234-8216-43FF-8EEE-7CECC77FE139}" }
+      - component: "ArticleContent"
+        action: "created container + variants"
+        containerId: "{3354F8FE-715A-4CF5-AE94-68527E440A4C}"
+        variants:
+          - { name: "Default", itemId: "{8AAB3D2C-B22C-4978-A997-7C6D3C798A8F}" }
+          - { name: "ServicePageVariant", itemId: "{7B42A4D1-4A0B-4707-B477-54BD76909E63}" }
+          - { name: "kmpage", itemId: "{85B3480F-AA86-4388-9187-2E88875856A6}" }
+      - component: "MultiPromoTabs"
+        action: "created container + Default"
+        containerId: "{9DEAF77B-B80D-4DD7-B0BD-FAC906C24686}"
+        variants:
+          - { name: "Default", itemId: "{DAB8E7D5-131C-4967-8294-1E1206028FA0}" }
+      - component: "Promo"
+        action: "added variants"
+        containerId: "{1BC20A9F-180B-40A6-A231-93B77B641C0E}"
+        variants:
+          - { name: "CenteredCard", itemId: "{E11A230A-2935-46DE-9D8B-F5E9CD9376B4}" }
+          - { name: "BoldLeft", itemId: "{03D368B6-B8E8-4113-9513-8F51CA2E3C75}" }
+          - { name: "BoldRight", itemId: "{F637B3AB-C2B3-440D-9D75-72319BBD72C4}" }
+          - { name: "Left", itemId: "{FD4A3DA1-E6B0-47BB-9B5C-6DAF0BA50C8C}" }
+          - { name: "Right", itemId: "{8F275582-BD3C-4FDA-A7AF-B8AE372F3500}" }
+          - { name: "Columns", itemId: "{834A0B59-9BC7-47B2-9304-31029084BB0D}" }
+      - component: "LinkList"
+        action: "added variant"
+        containerId: "{3AB32AAC-C484-41EA-8F07-204A6242477D}"
+        variants:
+          - { name: "AnchorNav", itemId: "{098764D6-E921-4571-A47D-D191DA74097E}" }
+      - component: "HeroCarousel"
+        action: "created container + variants"
+        containerId: "{F7B1732E-7CAE-4C39-ABDB-205F34147D90}"
+        variants:
+          - { name: "Default", itemId: "{453D5D4E-D9C0-4B99-8099-CD6E66584D3F}" }
+          - { name: "FocusProduct", itemId: "{D477F40A-6C82-40B2-AEAC-4F2F8DB5F03A}" }
+          - { name: "SplitPanel", itemId: "{DFC20993-D8F0-44B4-BA5C-846540B4E0EC}" }
+
+    headlessVariantsVerifiedOk:
+      - "Authentication (Default)"
+      - "HeaderST (Default, LoginRequired)"
+      - "HeroST (Default, Right, Centered, SplitScreen, Stacked)"
+      - "FooterST (Default, LogoLeft, LogoRight, Centered)"
+      - "SignupBanner (Default, ContentLeft, BackgroundPrimary, BackgroundDark)"
+      - "PageHeaderST (Default, TextRight, SplitScreen, Stacked, TwoColumn)"
+      - "HeroCarousel (Default, FocusProduct, SplitPanel)"
+
+    notes:
+      - "2026-08-19: HeroCarousel Headless Variants container + 3 variants created on dfs (missed in initial audit)"
+      - "2026-08-19: Audited dfs Headless Variants against React named exports for click-click-launch and Portal renderings"
+      - "MultiPromoItem container exists in Sitecore but is a child datasource template, not a page rendering — skipped"
+      - "MultiPromoTabs is a separate rendering from MultiPromo tab variants (SideTabs/TopTabs/TopTabsNoImage)"
+
+    verification:
+      checkedAt: "2026-08-19T22:45:00Z"
+      passed:
+        - "MultiPromo now has all 6 React exports as Variant Definitions"
+        - "FeatureBanner ImagesOnly added for dfs"
+        - "13 new Headless Variants containers created for Portal/click-click-launch components"
+        - "All created items verified via get_content_item_by_path"
+      failed: []
+      pendingManual:
+        - "Publish Presentation/Headless Variants changes for Edge"
+        - "Confirm variant picker shows new options in Pages for affected renderings"
 

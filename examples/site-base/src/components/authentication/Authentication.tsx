@@ -20,18 +20,20 @@ import type { AuthenticationProps } from './authentication.props';
 
 function AuthenticationFallback(): React.ReactElement {
   return (
-    <Card className="my-8 w-full max-w-md">
-      <CardHeader className="space-y-4">
-        <Skeleton className="mx-auto h-12 w-32" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-4 w-full" />
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </CardContent>
-    </Card>
+    <div className="flex w-full items-center justify-center px-4 py-8 sm:py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-4">
+          <Skeleton className="mx-auto h-12 w-32" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-4 w-full" />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
@@ -163,10 +165,13 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
   return (
     <section
       data-component="Authentication"
-      className={cn('@container/authentication my-8 w-full max-w-md', params?.styles)}
+      className={cn(
+        '@container/authentication flex w-full items-center justify-center px-4 py-8 sm:py-12',
+        params?.styles,
+      )}
       id={params?.RenderingIdentifier}
     >
-      <Card>
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-4">
           {fields.logo && (
             <div className="relative mx-auto h-12 w-auto max-w-[200px]">
@@ -285,4 +290,4 @@ export const Default: React.FC<AuthenticationProps> = (props) => (
     <AuthenticationInner {...props} />
   </Suspense>
 );
-
+
