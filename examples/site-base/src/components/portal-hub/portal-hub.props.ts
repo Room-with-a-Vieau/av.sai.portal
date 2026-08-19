@@ -14,7 +14,7 @@ export type PortalHubFields = {
   subtitle: Field<string>;
   /**
    * Optional root item path for GraphQL (`item(path:)`). When empty, uses rendering param
-   * `hubItemPath`, env `PORTAL_HUB_ITEM_PATH`, or `/sitecore/content/sync/{site}/Data/Portal Hub`.
+   * `hubItemPath`, env `PORTAL_HUB_ITEM_PATH`, or `/sitecore/content/{site}/{site}/Data/Portal Hub`.
    */
   hubRootPath?: Field<string>;
   /** Shown when no `industryType` / query industry is resolved. */

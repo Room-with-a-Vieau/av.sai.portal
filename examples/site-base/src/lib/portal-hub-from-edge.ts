@@ -92,7 +92,7 @@ export function resolvePortalHubItemPath(args: {
   if (!siteName) return '';
 
   const suffix = process.env.PORTAL_HUB_DATA_PATH_SUFFIX?.trim() || '/Data/Portal Hub';
-  return `/sitecore/content/sync/${siteName}${suffix}`;
+  return `/sitecore/content/${siteName}/${siteName}${suffix}`;
 }
 
 function buildPortalHubQuery(industryType: string, moduleType: string): string {

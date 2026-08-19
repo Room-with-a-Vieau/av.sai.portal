@@ -6970,6 +6970,173 @@ ia:
       - "2026-08-19: All Sitecore artifacts created via Marketer MCP in dfs/Portal project"
       - "2026-08-19: Refactored to shared Portal Login datasource; customerSlug template field deprecated"
 
+  - name: "PortalHub"
+    kind: "list"
+    category: "portal-hub"
+    status: "complete"
+    createdAt: "2026-08-19T23:30:00Z"
+    updatedAt: "2026-08-19T23:45:00Z"
+
+    react:
+      filePath: "src/components/portal-hub/PortalHub.tsx"
+      componentMapKey: "PortalHub"
+      dataStrategy: "Edge GraphQL under hubItemPath (industry folder → module rows); component datasource supplies title/subtitle only"
+      variants:
+        - "Default"
+
+    sitecoreEnvironment:
+      siteName: "dfs"
+      siteCollection: "dfs"
+      projectKey: "Portal"
+      note: "Generic single hub for all portal customers (Chipotle, Taco Bell, etc.). Tenant/customer resolved from Auth.js session — NOT separate hub datasources per chain."
+
+    templates:
+      industryFolder:
+        name: "PortalIndustryFolder"
+        path: "/sitecore/templates/Project/Portal/PortalIndustryFolder"
+        itemId: "{14644C7B-CFD3-40A8-88DC-7236FD507E9C}"
+        sectionName: "Data"
+        fields:
+          - { name: "Industry Key", type: "Single-Line Text", itemId: "{1EB2357B-C6ED-4EBE-B5D2-67CCC7F126DC}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{21AD1F6D-1471-458E-9D40-7DCBA84A868E}"
+          linked: false
+          masters: ["PortalHubModule"]
+      module:
+        name: "PortalHubModule"
+        path: "/sitecore/templates/Project/Portal/PortalHubModule"
+        itemId: "{093943E6-3092-4D75-BCEA-4AEDC764351B}"
+        sectionName: "Data"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{80AF96F4-247D-4383-BCFE-933BFC3CD10F}" }
+          - { name: "Description", type: "Multi-Line Text", itemId: "{DA35CC87-2D16-498E-8470-C1FD37A0F78B}" }
+          - { name: "Icon", type: "Image", itemId: "{A3EDE8C2-8B17-42F4-B417-5A6B47BB4B8C}" }
+          - { name: "Link", type: "General Link", itemId: "{52DEE76D-ADD8-47CA-A950-4AFF8F1FB886}" }
+          - { name: "Cta Text", type: "Single-Line Text", itemId: "{497C5E39-2335-43DA-881D-6B1812510BCD}" }
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{6CD9275D-E2FE-44A2-9A3B-F26C9E396EF7}"
+          linked: false
+      hubDataFolder:
+        name: "Portal Hub Folder"
+        path: "/sitecore/templates/Project/Portal/Portal Hub Folder"
+        itemId: "{0E0D9544-EAE5-48C7-9778-58E1565845FB}"
+        standardValues:
+          itemId: "{A30BB0BB-864C-49C4-8CFF-AD7C32FC5125}"
+          linked: false
+          masters: ["PortalIndustryFolder"]
+      datasourceFolder:
+        name: "PortalHub Folder"
+        path: "/sitecore/templates/Project/Portal/PortalHub Folder"
+        itemId: "{29860BAA-636B-48F1-9F56-B634F8F03081}"
+        standardValues:
+          itemId: "{76788B5F-7B5D-41C6-9440-98CEF8451263}"
+          linked: false
+          masters: ["PortalHub"]
+      componentDatasource:
+        name: "PortalHub"
+        path: "/sitecore/templates/Project/Portal/PortalHub"
+        itemId: "{C9C98B56-4F64-4AB0-AA45-EA57EBCA42D1}"
+        preexisting: true
+        fields:
+          - { name: "title", type: "Single-Line Text" }
+          - { name: "subtitle", type: "Single-Line Text" }
+      renderingParams:
+        name: "PortalHub"
+        path: "/sitecore/templates/Project/Portal/Rendering Parameters/PortalHub"
+        itemId: "{8D4FB1F7-C49A-4E04-BE05-093B1730DDE8}"
+        preexisting: true
+        paramFields:
+          - { name: "industryType", type: "Droplist", itemId: "{C82B5840-30AB-438A-AEC9-D2D8E6F634DA}", source: "query:$site/Presentation/Enumerations/Portal/Industries/*" }
+          - { name: "hubItemPath", type: "Single-Line Text", itemId: "{6C4F8F02-1F55-4C50-AA72-FFF4EB8F26F7}" }
+        standardValues:
+          itemId: "{FD5407E5-002B-4329-A969-730723862C8D}"
+          defaults:
+            hubItemPath: "/sitecore/content/dfs/dfs/Data/Portal Hub"
+            industryType: "restaurant"
+
+    rendering:
+      name: "PortalHub"
+      path: "/sitecore/layout/Renderings/Project/Portal/portal-hub/PortalHub"
+      itemId: "{939FA530-084F-4C50-BC07-3E8638D4E37A}"
+      preexisting: true
+      componentName: "PortalHub"
+      datasourceTemplatePath: "/sitecore/templates/Project/Portal/PortalHub"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='PortalHub Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='PortalHub Folder']"
+      parametersTemplateId: "{8D4FB1F7-C49A-4E04-BE05-093B1730DDE8}"
+      componentQuery: ""
+      datasourceLocationUpdated: true
+
+    headlessVariants:
+      containerPath: "/sitecore/content/dfs/dfs/Presentation/Headless Variants/PortalHub"
+      containerId: "{7DCE3BBD-17A4-4C1E-94A9-81F2435F0897}"
+      preexisting: true
+      variants:
+        - { name: "Default", itemId: "{B7C7B556-C4A8-4C3D-98EE-2BFD6D42BC2A}" }
+
+    hubDataTree:
+      hubRoot:
+        name: "Portal Hub"
+        path: "/sitecore/content/dfs/dfs/Data/Portal Hub"
+        itemId: "{99687F4A-2B91-40D6-973E-9D2854D42003}"
+      industryFolders:
+        - name: "Restaurant"
+          itemId: "{BCAF473B-A5A8-4DB1-BA8C-A5AEF5959F52}"
+          path: "/sitecore/content/dfs/dfs/Data/Portal Hub/Restaurant"
+          industryKey: "restaurant"
+          modules:
+            - { name: "Equipment Ordering", itemId: "{5EDAC6C2-1564-4A5C-8208-EB7364A25DEB}" }
+            - { name: "Maintenance Requests", itemId: "{97A630D3-B7DC-4562-99C2-976D205EBA6F}" }
+            - { name: "Account Information", itemId: "{0472B832-AC8E-46E4-A2BD-6996D275806E}" }
+            - { name: "Training and Resources", itemId: "{F02992B3-876B-44BC-995E-7CF95FC95C36}" }
+            - { name: "Order History", itemId: "{4280FAB8-A903-48F9-BB55-12CC58F51E31}" }
+            - { name: "Store Profile", itemId: "{59D9840E-30CA-4B6F-8197-6454C8303BB9}" }
+            - { name: "Support Center", itemId: "{49739CB8-4D50-46A7-A9DE-7D6CFF20793B}" }
+
+    componentDatasourceFolder:
+      name: "Portal Hubs"
+      path: "/sitecore/content/dfs/dfs/Data/Portal Hubs"
+      itemId: "{A6AF8120-97A5-4CB1-ADC8-5BD7D429E675}"
+      exampleItems:
+        - name: "Manager Portal Hub"
+          itemId: "{A27EAE93-FB65-4295-BD9E-86D9B8AD1584}"
+          path: "/sitecore/content/dfs/dfs/Data/Portal Hubs/Manager Portal Hub"
+          fields:
+            title: "Manager Portal"
+            subtitle: "Access tools and resources for your restaurant locations."
+
+    enumerations:
+      path: "/sitecore/content/dfs/dfs/Presentation/Enumerations/Portal/Industries"
+      itemId: "{251BDB44-E2E1-49B2-866E-87C704AF7870}"
+      values:
+        - { name: "restaurant", itemId: "{D4053EA6-FEF9-4F53-9572-02149729B83B}", value: "restaurant" }
+
+    verification:
+      checkedAt: "2026-08-19T23:45:00Z"
+      passed:
+        - "PortalIndustryFolder + PortalHubModule + folder templates created under Project/Portal"
+        - "Data/Portal Hub + Restaurant industry + 7 modules verified via get_content_item_by_path"
+        - "Shared Manager Portal Hub datasource in Data/Portal Hubs"
+        - "Portal/Industries/restaurant enumeration for industryType droplist"
+        - "Rendering params SV defaults hubItemPath + industryType=restaurant"
+        - "PortalHub rendering datasource location query updated (get_component verified)"
+        - "Headless Variants Default preexisting from dfs audit"
+      failed: []
+      pendingManual:
+        - "Publish Portal Hub templates + Data/Portal Hub + Data/Portal Hubs + Enumerations/Portal for Edge GraphQL"
+        - "Verify __Masters on folder template SVs and folder instances in Content Editor (silent-write)"
+        - "Verify template Standard values links on PortalIndustryFolder/PortalHubModule/folders in CE"
+        - "Place PortalHub on /sitecore/content/dfs/dfs/Home/Portal; assign Manager Portal Hub datasource"
+        - "Set rendering params hubItemPath and industryType if not inherited from params SV"
+        - "Optional: add module Icon images in Content Hub / Media Library"
+
+    notes:
+      - "Module grid loads via Edge GraphQL (portal-hub-from-edge.ts), not ComponentQuery"
+      - "industryType rendering param (or ?industry= query) selects industry folder by Industry Key — same modules for all authenticated customers"
+      - "hubItemPath overrides env PORTAL_HUB_ITEM_PATH; default suffix /Data/Portal Hub uses sync site name if unset"
+      - "GraphQL fragment types: PortalIndustryFolder, PortalHubModule (env PORTAL_GRAPHQL_* overrides)"
+
   - name: "HeaderST"
     kind: "update"
     category: "Global Elements"

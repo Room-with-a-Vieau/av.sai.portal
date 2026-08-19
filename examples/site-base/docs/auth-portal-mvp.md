@@ -90,3 +90,14 @@ npm run db:seed
 ```
 
 If you had duplicate emails across customers in an older schema, resolve conflicts before applying the unique constraint.
+
+## Portal Hub (dfs)
+
+Author checklist for the shared manager portal hub on the **dfs** site:
+
+- **Page:** `/sitecore/content/dfs/dfs/Home/Portal`
+- **Component:** PortalHub, datasource **Manager Portal Hub**
+- **Rendering params:** `industryType=restaurant`, `hubItemPath=/sitecore/content/dfs/dfs/Data/Portal Hub`
+- **One hub for all customers** — do not create per-chain or per-customer hub items
+- **Publish:** Portal Hub templates + `Data/Portal Hub` + `Data/Portal Hubs`
+- **Optional env:** `PORTAL_HUB_ITEM_PATH`, `NEXT_PUBLIC_DEFAULT_SITE_NAME=dfs`
