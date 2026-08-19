@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,11 +24,11 @@ let cachedComponentMap: ComponentMap | undefined;
 function getComponentMap(): ComponentMap {
   if (!cachedComponentMap) {
     // Defer loading the map until render time to avoid a circular import with HeaderST exports.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- break HeaderST <-> component-map cycle
     cachedComponentMap = require('.sitecore/component-map').default as ComponentMap;
   }
   return cachedComponentMap;
 }
-
 interface Fields {
   Logo: ImageField;
   SupportLink: LinkField;
