@@ -1,7 +1,10 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Default as HeaderSTDefault } from '../../components/site-three/HeaderST';
+import {
+  Default as HeaderSTDefault,
+  LoginRequired as HeaderSTLoginRequired,
+} from '../../components/site-three/HeaderST';
 import {
   defaultHeaderSTProps,
   headerSTPropsBasic,
@@ -44,8 +47,29 @@ jest.mock('.sitecore/component-map', () => ({
   default: new Map(),
 }));
 
+// Mock Lucide icons
+jest.mock('lucide-react', () => ({
+  User: (props: React.SVGProps<SVGSVGElement>) => <svg data-testid="lucide-user" {...props} />,
+}));
+
+const mockSignOut = jest.fn();
+const mockUseSession = jest.fn(() => ({ data: null, status: 'unauthenticated' as const }));
+
+jest.mock('next-auth/react', () => ({
+  useSession: () => mockUseSession(),
+  signOut: (...args: unknown[]) => mockSignOut(...args),
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: jest.fn(), refresh: jest.fn() }),
+  useSearchParams: () => ({ get: () => null }),
+}));
+
 // Mock Sitecore Content SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
+  useSitecore: () => ({
+    page: { mode: { isEditing: false } },
+  }),
   Link: ({ field, prefetch, className, children, ...props }: any) => (
     <a
       href={field?.value?.href || ''}
@@ -146,6 +170,7 @@ const mockUseToggleWithClickOutside = require('../../hooks/useToggleWithClickOut
 describe('HeaderST Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseSession.mockReturnValue({ data: null, status: 'unauthenticated' });
     mockUseToggleWithClickOutside.mockReturnValue({
       isVisible: false,
       setIsVisible: jest.fn(),
@@ -496,6 +521,40 @@ describe('HeaderST Component', () => {
         // Skip test if mobile toggle not found
         expect(mockSetIsVisible).toHaveBeenCalledTimes(0);
       }
+    });
+  });
+
+  describe('LoginRequired variant', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({ data: null, status: 'unauthenticated' });
+    });
+
+    it('hides navigation placeholders when unauthenticated', () => {
+      render(<HeaderSTLoginRequired {...defaultHeaderSTProps} />);
+
+      expect(screen.queryAllByTestId('app-placeholder')).toHaveLength(0);
+    });
+
+    it('shows login link when LoginLink is populated', () => {
+      render(<HeaderSTLoginRequired {...defaultHeaderSTProps} />);
+
+      const loginLinks = screen
+        .getAllByTestId('sitecore-link')
+        .filter((link) => link.getAttribute('href') === '/login');
+      expect(loginLinks.length).toBeGreaterThan(0);
+    });
+
+    it('shows navigation and user menu when authenticated', () => {
+      mockUseSession.mockReturnValue({
+        data: { user: { name: 'Portal User', email: 'user@example.com' } },
+        status: 'authenticated',
+      } as any);
+
+      render(<HeaderSTLoginRequired {...defaultHeaderSTProps} />);
+
+      expect(screen.getAllByTestId('app-placeholder')).toHaveLength(2);
+      expect(screen.getByText('Portal User')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Log out' })).toBeInTheDocument();
     });
   });
 

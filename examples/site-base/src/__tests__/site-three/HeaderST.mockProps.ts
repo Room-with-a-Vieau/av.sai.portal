@@ -28,6 +28,7 @@ export const defaultHeaderSTProps = {
     SupportLink: createMockLinkField('/support', 'Support'),
     SearchLink: createMockLinkField('/search', 'Search Products'),
     CartLink: createMockLinkField('/cart', 'Shopping Cart'),
+    LoginLink: createMockLinkField('/login', 'Login'),
   },
 };
 
@@ -168,6 +169,7 @@ export const headerSTPropsReverseTheme = {
     SupportLink: createMockLinkField('/support', 'Support'),
     SearchLink: createMockLinkField('/search', 'Search Products'),
     CartLink: createMockLinkField('/cart', 'Shopping Cart'),
+    LoginLink: createMockLinkField('/login', 'Login'),
   },
 };
 

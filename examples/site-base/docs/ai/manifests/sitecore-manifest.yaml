@@ -6898,3 +6898,74 @@ ia:
       - "2026-08-19: All Sitecore artifacts created via Marketer MCP in dfs/Portal project"
       - "2026-08-19: Refactored to shared Portal Login datasource; customerSlug template field deprecated"
 
+  - name: "HeaderST"
+    kind: "update"
+    category: "Global Elements"
+    status: "complete"
+    createdAt: "2026-08-19T18:30:00Z"
+    updatedAt: "2026-08-19T18:45:00Z"
+
+    react:
+      filePath: "src/components/site-three/HeaderST.tsx"
+      componentMapKey: "HeaderST"
+      variants:
+        - "Default"
+        - "LoginRequired"
+
+    sitecoreEnvironment:
+      siteName: "dfs"
+      siteCollection: "dfs"
+
+    templates:
+      datasource:
+        name: "HeaderST"
+        path: "/sitecore/templates/Project/click-click-launch/Sites/Site 3/HeaderST/HeaderST"
+        itemId: "{3CB38973-6209-4407-B463-4B017E0467CD}"
+        sectionName: "Data"
+        sectionItemId: "{53729771-C163-4873-94F7-0A2EA4D8F34E}"
+        fields:
+          - { name: "Logo", type: "Image", itemId: "{81209A76-ECF8-4185-9166-076F4B6A8987}" }
+          - { name: "SupportLink", type: "General Link", itemId: "{2230296B-D1F6-4F24-819C-C744EC9782B1}" }
+          - { name: "SearchLink", type: "General Link", itemId: "{34B1E883-E1FA-4BB0-B605-0BF9DD521DC9}" }
+          - { name: "CartLink", type: "General Link", itemId: "{FA169FD8-4C46-433E-B61B-C7D6660257DD}" }
+          - { name: "LoginLink", type: "General Link", itemId: "{4358E5E6-CF64-4AD8-82FD-0452D4FBDFB9}", note: "Added 2026-08-19 for portal auth login icon link" }
+
+    rendering:
+      name: "HeaderST"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Global Elements/HeaderST"
+      itemId: "{90A922AA-E2A7-4553-A7AD-B89AC9318D6B}"
+      componentName: "HeaderST"
+      parametersTemplateId: "{4B39645F-F45A-4099-817A-60A20E48DA25}"
+
+    headlessVariants:
+      containerPath: "/sitecore/content/dfs/dfs/Presentation/Headless Variants/HeaderST"
+      containerId: "{149B0A42-855A-4ACF-948B-9C6FAFB82D2}"
+      variants:
+        - { name: "Default", itemId: "{466965AD-0D48-4359-852B-D3660BCFFEE5}" }
+        - { name: "LoginRequired", itemId: "{197F5333-48FF-42CF-8357-B49796219679}" }
+
+    datasourceExample:
+      name: "Header"
+      path: "/sitecore/content/dfs/dfs/Presentation/Partial Designs/Global/Header/Data/Header"
+      itemId: "{791CD863-6B4B-4372-80FE-E75A516FA129}"
+      note: "LoginLink points to Portal Login page item {EFEAC18B-D47C-41AC-B207-5525CD230634}"
+
+    verification:
+      checkedAt: "2026-08-19T18:45:00Z"
+      passed:
+        - "LoginLink field created on HeaderST datasource template"
+        - "Headless Variants container + Default + LoginRequired verified via MCP"
+        - "Header partial design datasource LoginLink populated"
+        - "React HeaderST Default + LoginRequired variants with Auth.js session"
+        - "LoginRequired hides nav until authenticated; shows user + logout when authenticated"
+      failed: []
+      pendingManual:
+        - "Select LoginRequired variant on Header partial design HeaderST rendering in Pages"
+        - "Publish Header partial design + template changes for Edge"
+        - "Optional: add postLogoutRedirect to HeaderST rendering parameters template"
+
+    notes:
+      - "2026-08-19: Portal auth header update — LoginLink (PascalCase, matches SupportLink/SearchLink/CartLink)"
+      - "LoginRequired variant hides header-navigation placeholder until Auth.js session is authenticated"
+      - "Utility row (Support, Search, Cart, LoginLink) remains visible when unauthenticated"
+
