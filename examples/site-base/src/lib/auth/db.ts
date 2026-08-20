@@ -32,16 +32,18 @@ function getPrismaClient(): PrismaClient {
     globalForPrisma.prismaDatabaseUrl !== databaseUrl ||
     globalForPrisma.prismaClientVersion !== PRISMA_CLIENT_VERSION;
 
-  if (mustRecreate) {
-    if (globalForPrisma.prisma) {
-      void globalForPrisma.prisma.$disconnect().catch(() => undefined);
-    }
-    globalForPrisma.prisma = createPrismaClient(databaseUrl);
-    globalForPrisma.prismaDatabaseUrl = databaseUrl;
-    globalForPrisma.prismaClientVersion = PRISMA_CLIENT_VERSION;
+  if (!mustRecreate && globalForPrisma.prisma) {
+    return globalForPrisma.prisma;
   }
 
-  return globalForPrisma.prisma;
+  if (globalForPrisma.prisma) {
+    void globalForPrisma.prisma.$disconnect().catch(() => undefined);
+  }
+  const prismaClient = createPrismaClient(databaseUrl);
+  globalForPrisma.prisma = prismaClient;
+  globalForPrisma.prismaDatabaseUrl = databaseUrl;
+  globalForPrisma.prismaClientVersion = PRISMA_CLIENT_VERSION;
+  return prismaClient;
 }
 
 export const prisma = getPrismaClient();
