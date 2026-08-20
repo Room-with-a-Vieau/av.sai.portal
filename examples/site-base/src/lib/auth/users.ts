@@ -1,3 +1,4 @@
+import { authenticateDemoPortalUser } from '@/lib/auth/demo-portal-users';
 import { prisma } from '@/lib/auth/db';
 import { verifyPassword } from '@/lib/auth/password';
 
@@ -20,6 +21,9 @@ function logAuthFailure(reason: string, detail?: string): void {
   console.error(`[auth] Portal login failed: ${reason}.`);
 }
 
+/**
+ * Portal login: demo users file first (Vercel-safe), then optional Prisma SQLite for local.
+ */
 export async function authenticatePortalUser(input: {
   email: string;
   password: string;
@@ -32,6 +36,11 @@ export async function authenticatePortalUser(input: {
     return null;
   }
 
+  const demoUser = authenticateDemoPortalUser({ email, password });
+  if (demoUser) {
+    return demoUser;
+  }
+
   let user: Awaited<ReturnType<typeof findUserByEmail>>;
   try {
     user = await findUserByEmail(email);
@@ -40,14 +49,19 @@ export async function authenticatePortalUser(input: {
     if (/Environment variable not found:\s*DATABASE_URL/i.test(message)) {
       logAuthFailure(
         'DATABASE_URL missing in Prisma runtime',
-        'Restart `npm run dev` after setting DATABASE_URL; PrismaClient must receive an explicit datasources url.',
+        'Demo file users still work without a DB. For Prisma local: set DATABASE_URL and run db:push/db:seed.',
       );
-    } else if (/no such table|does not exist/i.test(message)) {
-      logAuthFailure('User table missing', 'Run `npm run db:push && npm run db:seed`.');
-    } else {
-      logAuthFailure('database lookup error', message);
+      return null;
     }
-    throw error;
+    if (/no such table|does not exist|Unable to open|ENOENT/i.test(message)) {
+      logAuthFailure(
+        'database unavailable',
+        'Using demo users only. For Prisma local: run `npm run db:push && npm run db:seed`.',
+      );
+      return null;
+    }
+    logAuthFailure('database lookup error', message);
+    return null;
   }
 
   if (!user) {

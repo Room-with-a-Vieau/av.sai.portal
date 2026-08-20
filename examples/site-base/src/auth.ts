@@ -23,25 +23,18 @@ const credentialsProvider = Credentials({
     const password = typeof credentials?.password === 'string' ? credentials.password : '';
 
     if (emailInput && password) {
-      try {
-        const portalUser = await authenticatePortalUser({
-          email: emailInput,
-          password,
-        });
+      const portalUser = await authenticatePortalUser({
+        email: emailInput,
+        password,
+      });
 
-        if (portalUser) {
-          return {
-            id: portalUser.id,
-            name: portalUser.customerName,
-            email: portalUser.email,
-            customerSlug: portalUser.customerSlug,
-          };
-        }
-      } catch (error) {
-        console.error(
-          '[auth] Portal user lookup failed (db/env). Ensure DATABASE_URL is set, then run npm run db:push && npm run db:seed and restart npm run dev.',
-          error,
-        );
+      if (portalUser) {
+        return {
+          id: portalUser.id,
+          name: portalUser.customerName,
+          email: portalUser.email,
+          customerSlug: portalUser.customerSlug,
+        };
       }
     }
 

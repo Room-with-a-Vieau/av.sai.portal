@@ -32,11 +32,29 @@ Each user belongs to exactly one customer. Login validates **email + password on
 
 ## Environment variables
 
-See `.env.remote.example` — Authentication section:
+See `.env.remote.example` — Authentication section.
 
-- `AUTH_SECRET` — required (`openssl rand -base64 32`)
-- `AUTH_URL` — public app URL (recommended in production)
-- `DATABASE_URL` — must be `file:./dev.db` in `.env.local`. Prisma CLI resolves that relative to `prisma/schema.prisma` → `prisma/dev.db`. Do **not** use `file:./prisma/dev.db` (that creates nested `prisma/prisma/dev.db`). The Next.js Prisma client rewrites the URL to an absolute path of `prisma/dev.db` so login hits the same file as `npm run db:seed`.
+### Vercel / editing host (POC — recommended)
+
+Portal login uses a **static demo users file** (`src/lib/auth/demo-portal-users.ts`) first — no database required.
+
+| Variable | Required | Notes |
+|----------|----------|--------|
+| `AUTH_SECRET` | **Yes** | `openssl rand -base64 32` |
+| `AUTH_URL` | Recommended | Public site URL, e.g. `https://your-app.vercel.app` |
+
+Do **not** set `DATABASE_URL=file:./dev.db` on Vercel for this POC path.
+
+Demo accounts (edit the file to add more):
+
+| Email | Password | customerSlug |
+|-------|----------|--------------|
+| chipotle@example.com | password123 | chipotle |
+| tacobell@example.com | password123 | tacobell |
+
+### Optional local Prisma (SQLite)
+
+- `DATABASE_URL` — local only: `file:./dev.db` (see `.env.remote.example`). Used only when the email is **not** in the demo users file.
 - `AUTH_EXPOSE_RESET_LINK` — set `true` in dev to return reset URLs from the API (instead of email)
 
 Legacy demo credentials (`AUTH_DEMO_USERNAME` / `AUTH_DEMO_PASSWORD`) still work for the existing **AuthPanel** component.
