@@ -21,6 +21,8 @@ import type { AuthenticationProps } from './authentication.props';
 const DEFAULT_LOGIN_BUTTON_TEXT = 'Sign In';
 const DEFAULT_LOGOUT_BUTTON_TEXT = 'Sign Out';
 
+type FieldTextTag = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 function FieldTextOrFallback({
   field,
   fallback,
@@ -29,7 +31,7 @@ function FieldTextOrFallback({
 }: {
   field?: { value?: string };
   fallback: string;
-  tag?: React.ElementType;
+  tag?: FieldTextTag;
   className?: string;
 }): React.ReactElement {
   const value = field?.value?.trim();
