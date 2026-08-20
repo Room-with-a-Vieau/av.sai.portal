@@ -28,6 +28,7 @@ describe('resolveTheme', () => {
     expect(resolveTheme({ site: 'quanex' })).toBe('quanex');
     expect(resolveTheme({ site: 'amesburytruth' })).toBe('amesburytruth');
     expect(resolveTheme({ site: 'era' })).toBe('era');
+    expect(resolveTheme({ site: 'dfs' })).toBe('dfsupply');
   });
 
   it('treats site name as theme when registered', () => {

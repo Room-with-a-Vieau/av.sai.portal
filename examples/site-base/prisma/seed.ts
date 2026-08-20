@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
+import { applyPortalDatabaseUrl } from '../src/lib/auth/sqlite-url';
 import { hashPassword } from '../src/lib/auth/password';
+
+applyPortalDatabaseUrl();
 
 const prisma = new PrismaClient();
 

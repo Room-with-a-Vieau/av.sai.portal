@@ -1,13 +1,47 @@
 import { PrismaClient } from '@prisma/client';
 
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+import { applyPortalDatabaseUrl } from '@/lib/auth/sqlite-url';
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+/** Bump when PrismaClient construction strategy changes so hot reload drops stale clients. */
+const PRISMA_CLIENT_VERSION = 2;
+
+type PrismaGlobal = {
+  prisma?: PrismaClient;
+  prismaDatabaseUrl?: string;
+  prismaClientVersion?: number;
+};
+
+const globalForPrisma = globalThis as unknown as PrismaGlobal;
+
+function createPrismaClient(databaseUrl: string): PrismaClient {
+  // Pass url explicitly so Next.js webpack cannot inline process.env.DATABASE_URL as undefined
+  // inside Prisma's generated client (which caused "Environment variable not found: DATABASE_URL").
+  return new PrismaClient({
+    datasources: {
+      db: { url: databaseUrl },
+    },
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
 }
+
+function getPrismaClient(): PrismaClient {
+  const databaseUrl = applyPortalDatabaseUrl();
+
+  const mustRecreate =
+    !globalForPrisma.prisma ||
+    globalForPrisma.prismaDatabaseUrl !== databaseUrl ||
+    globalForPrisma.prismaClientVersion !== PRISMA_CLIENT_VERSION;
+
+  if (mustRecreate) {
+    if (globalForPrisma.prisma) {
+      void globalForPrisma.prisma.$disconnect().catch(() => undefined);
+    }
+    globalForPrisma.prisma = createPrismaClient(databaseUrl);
+    globalForPrisma.prismaDatabaseUrl = databaseUrl;
+    globalForPrisma.prismaClientVersion = PRISMA_CLIENT_VERSION;
+  }
+
+  return globalForPrisma.prisma;
+}
+
+export const prisma = getPrismaClient();

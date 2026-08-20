@@ -8,7 +8,7 @@ import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { Image as ContentSdkImage, Text } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
 import { resolveLinkFieldHref } from '@/lib/auth/link-field';
-import { resolvePostLoginRedirect, resolvePostLogoutRedirect } from '@/lib/auth-redirect';
+import { resolvePostLogoutRedirect, resolvePortalPostLoginRedirect } from '@/lib/auth-redirect';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,27 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import type { AuthenticationProps } from './authentication.props';
+
+const DEFAULT_LOGIN_BUTTON_TEXT = 'Sign In';
+const DEFAULT_LOGOUT_BUTTON_TEXT = 'Sign Out';
+
+function FieldTextOrFallback({
+  field,
+  fallback,
+  tag: Tag = 'span',
+  className,
+}: {
+  field?: { value?: string };
+  fallback: string;
+  tag?: React.ElementType;
+  className?: string;
+}): React.ReactElement {
+  const value = field?.value?.trim();
+  if (value) {
+    return <Text field={field} tag={Tag} className={className} />;
+  }
+  return <Tag className={className}>{fallback}</Tag>;
+}
 
 function AuthenticationFallback(): React.ReactElement {
   return (
@@ -68,7 +89,7 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
   }, [routeParams.locale, routeParams.site, resetPasswordPath]);
 
   const postLoginTarget = useMemo(
-    () => resolvePostLoginRedirect(searchParams, params?.redirectUrl, postLoginLinkHref),
+    () => resolvePortalPostLoginRedirect(searchParams, params?.redirectUrl, postLoginLinkHref),
     [searchParams, params?.redirectUrl, postLoginLinkHref],
   );
 
@@ -171,19 +192,24 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
       )}
       id={params?.RenderingIdentifier}
     >
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-4">
+      <Card className="w-full max-w-md border shadow-sm">
+        <CardHeader className="space-y-4 text-center">
           {fields.logo && (
-            <div className="relative mx-auto h-12 w-auto max-w-[200px]">
-              <ContentSdkImage field={fields.logo} className="object-contain" />
+            <div className="mx-auto flex h-12 w-full max-w-[200px] shrink-0 items-center justify-center overflow-hidden">
+              <ContentSdkImage
+                field={fields.logo}
+                className="max-h-12 w-auto max-w-full object-contain object-center"
+              />
             </div>
           )}
-          <CardTitle className="text-center text-2xl font-semibold">
-            <Text field={fields.title} tag="span" />
-          </CardTitle>
-          <CardDescription className="text-center">
-            <Text field={fields.subtitle} tag="span" />
-          </CardDescription>
+          <div className="space-y-1.5">
+            <CardTitle className="text-2xl font-semibold">
+              <Text field={fields.title} tag="span" />
+            </CardTitle>
+            <CardDescription>
+              <Text field={fields.subtitle} tag="span" />
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {loginError && fields.loginFailedMessage ? (
@@ -224,7 +250,10 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
                 <p className="text-muted-foreground text-xs">Tenant: {sessionCustomer}</p>
               ) : null}
               <Button type="button" variant="secondary" disabled={isSubmitting} onClick={handleLogout}>
-                <Text field={fields.logoutButtonText} tag="span" />
+                <FieldTextOrFallback
+                  field={fields.logoutButtonText}
+                  fallback={DEFAULT_LOGOUT_BUTTON_TEXT}
+                />
               </Button>
             </div>
           ) : (
@@ -261,8 +290,15 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
                   aria-invalid={loginError}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                <Text field={fields.loginButtonText} tag="span" />
+              <Button
+                type="submit"
+                className="w-full text-primary-foreground [&_*]:text-inherit"
+                disabled={isSubmitting}
+              >
+                <FieldTextOrFallback
+                  field={fields.loginButtonText}
+                  fallback={DEFAULT_LOGIN_BUTTON_TEXT}
+                />
               </Button>
               <div className="flex flex-col gap-2 text-center text-sm">
                 <button

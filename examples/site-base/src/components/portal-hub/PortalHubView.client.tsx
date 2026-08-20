@@ -95,7 +95,10 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
   const queryIndustryRaw = searchParams.get('industry') ?? searchParams.get('industryType') ?? '';
   const queryIndustryKey = useMemo(() => normalizeIndustryKey(queryIndustryRaw), [queryIndustryRaw]);
 
-  const paramIndustryKey = useMemo(() => normalizeIndustryKey(params.industryType ?? ''), [params.industryType]);
+  const paramIndustryKey = useMemo(
+    () => normalizeIndustryKey(params.industryType ?? initialIndustryKey ?? ''),
+    [initialIndustryKey, params.industryType],
+  );
 
   const effectiveIndustryKey = queryIndustryKey || paramIndustryKey;
 
@@ -156,6 +159,7 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
       data-component="PortalHub"
       className={cn('@container/portal-hub mx-auto w-full max-w-6xl px-4 py-10', params.styles)}
       aria-labelledby="portal-hub-title"
+      suppressHydrationWarning={isEditing}
     >
       <header className="mb-8 max-w-3xl space-y-2">
         <h1 id="portal-hub-title" className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">

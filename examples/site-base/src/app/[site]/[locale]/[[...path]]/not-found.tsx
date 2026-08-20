@@ -5,7 +5,7 @@ import scConfig from 'sitecore.config';
 import Layout from 'src/Layout';
 import Providers from 'src/Providers';
 import { NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 
 export default async function NotFound() {
   const { site, locale } = getCachedPageParams();
@@ -20,8 +20,9 @@ export default async function NotFound() {
     });
 
     if (page) {
+      const messages = await getMessages();
       return (
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <Providers page={page}>
             <Layout page={page} />
           </Providers>

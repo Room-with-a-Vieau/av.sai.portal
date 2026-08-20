@@ -1,6 +1,6 @@
 import type { LinkField } from '@sitecore-content-sdk/nextjs';
 
-import { isSafeInternalPath } from '@/lib/auth-redirect';
+import { isSafeInternalPath, mapSitecorePortalItemPath } from '@/lib/auth-redirect';
 
 export function resolveLinkFieldHref(field?: LinkField | null): string | undefined {
   const href = field?.value?.href?.trim();
@@ -10,6 +10,11 @@ export function resolveLinkFieldHref(field?: LinkField | null): string | undefin
 
   if (href.startsWith('http://') || href.startsWith('https://')) {
     return undefined;
+  }
+
+  const fromItemPath = mapSitecorePortalItemPath(href);
+  if (fromItemPath) {
+    return fromItemPath;
   }
 
   if (isSafeInternalPath(href)) {

@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-08-19T23:15:00Z"
+lastUpdatedAt: "2026-08-19T23:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -6753,33 +6753,67 @@ ia:
     category: "SiteThree"
     status: "complete"
     createdAt: "2026-08-17T17:30:00Z"
-    updatedAt: "2026-08-17T17:45:00Z"
+    updatedAt: "2026-08-19T23:45:00Z"
     siteName: "era"
     siteCollection: "quanex"
     notes:
       - "2026-08-17: Added ImagesOnly Headless Variant on quanex/era/amesburytruth. React export ImagesOnly renders child images only (no title/headings)."
       - "2026-08-17: Populated era Data/Feature Banners/Home Services with 5 FeatureItem children from Content Hub public URLs (mrfbasech2). Removed placeholder Feature1."
       - "Parent path note: item is named Home Services (not Home Services for Era)."
+      - "2026-08-19: Created dfs Data/Feature Banners folder + Portal Features parent + 7 FeatureItem children (foodservice copy; Image left empty for public URLs)."
     react:
       filePath: "src/components/site-three/FeatureBanner.tsx"
       componentMapKey: "FeatureBanner"
       variants: ["Default", "Vertical", "Accent", "ImagesOnly"]
     templates:
+      parent:
+        name: "FeatureBanner"
+        path: "/sitecore/templates/Project/click-click-launch/Sites/Site 3/FeatureBanner/FeatureBanner"
+        itemId: "{0079BAE6-9C74-4C6B-B52E-B46F5B3CE31D}"
+        fields:
+          - { name: "title", type: "Single-Line Text" }
+      folder:
+        name: "FeatureBanner Folder"
+        path: "/sitecore/templates/Project/click-click-launch/Sites/Site 3/FeatureBanner/FeatureBanner Folder"
+        itemId: "{84006BEA-244E-4B35-BA49-096EA2A653EC}"
       child:
         name: "FeatureItem"
         path: "/sitecore/templates/Project/click-click-launch/Sites/Site 3/FeatureBanner/FeatureItem"
         itemId: "{4507E405-6110-4E56-AF58-27B65B58268F}"
+        fields:
+          - { name: "heading", type: "Single-Line Text" }
+          - { name: "image", type: "Image" }
+    rendering:
+      name: "FeatureBanner"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Banners/FeatureBanner"
+      itemId: "{6850377F-83D9-4C25-B26D-4CE1BC80BA3D}"
+      componentName: "FeatureBanner"
     exampleItems:
       - siteName: "era"
         name: "Home Services"
         itemId: "{28CCFEF6-BEFC-4164-AF69-F4AF16942DC3}"
         path: "/sitecore/content/quanex/era/Data/Feature Banners/Home Services"
+      - siteName: "dfs"
+        name: "Portal Features"
+        itemId: "{B424DC55-1698-4CDE-BD12-40C1FF57C305}"
+        path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features"
+        folderPath: "/sitecore/content/dfs/dfs/Data/Feature Banners"
+        folderId: "{EC1F2583-579E-40D8-9513-64C7D3F15C8E}"
+        title: "Why operators choose DFS"
     exampleChildren:
       - { name: "Design Quality Innovation 185 Years", itemId: "{C52F3053-155F-488A-8339-41548D5D17CC}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/a920334ba9354a5f9690e444c2e8168b?v=9a9d7e91" }
       - { name: "Order by 3PM Same Day Dispatch", itemId: "{C83BACBC-246C-4A6C-B0E4-F7749C33E549}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/e7cc4eb3f2e44336bce599144ee6302e?v=0e5816d5" }
       - { name: "Free Delivery Over 250", itemId: "{F84AF504-7D84-4B3A-9480-E312621FAAC5}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/68d39f69a69a4cfaae1e972a7d8192e8?v=8f4054ef" }
       - { name: "Sales Support POS and Marketing", itemId: "{6818693D-B48C-4318-A51B-1EA17E7BEC5D}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/f8b4f46f14404d65a7c133afdb9eb53b?v=8598f3ad" }
       - { name: "Quick and Easy Online Ordering", itemId: "{6F650F16-585F-4120-ABB9-D8A734163A05}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/73575553154246b7b153fd0474bea440?v=5c5a8e3b" }
+    dfsExampleChildren:
+      - { name: "Same-Day Kitchen Delivery", itemId: "{320881F9-1C13-4212-9E21-9CD872C97940}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Same-Day Kitchen Delivery", heading: "Same-day delivery for kitchens" }
+      - { name: "National Foodservice Catalog", itemId: "{1124B683-35B5-4EDE-B0EB-309370C78D38}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/National Foodservice Catalog", heading: "100,000+ foodservice SKUs" }
+      - { name: "Equipment and Smallwares", itemId: "{E5B238CA-494D-40C2-A2C2-5411AA345ED9}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Equipment and Smallwares", heading: "Equipment, smallwares & tabletop" }
+      - { name: "Culinary Operator Support", itemId: "{5D1FD51A-5448-462B-84CF-6573BB084F24}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Culinary Operator Support", heading: "Chef and operator support" }
+      - { name: "High-Volume Reorder", itemId: "{D73A8A30-8850-40A3-9DC6-AA3D273ACE47}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/High-Volume Reorder", heading: "Quick reorder for high-volume sites" }
+      - { name: "Responsible Sourcing", itemId: "{3B3C08A7-AC89-44E3-B900-FC6C472F19A4}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Responsible Sourcing", heading: "Responsible sourcing & packaging" }
+      - { name: "Dedicated Account Teams", itemId: "{30FEF63B-40DE-4039-B3A4-9C4B4211F094}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Dedicated Account Teams", heading: "Dedicated account teams" }
     headlessVariants:
       - siteName: "era"
         containerId: "{72E14D02-D37B-4C27-A2DF-230B4CA5D431}"
@@ -6798,17 +6832,22 @@ ia:
       - "src/__tests__/site-three/FeatureBanner.test.tsx"
       - "next.config.ts"
     verification:
-      checkedAt: "2026-08-17T17:45:00Z"
+      checkedAt: "2026-08-19T23:45:00Z"
       passed:
         - "5 FeatureItem children created under Home Services with external CH image XML"
         - "ImagesOnly Variant Definition on era/quanex/amesburytruth"
         - "React ImagesOnly export + unit tests"
         - "mrfbasech2 added to next.config remotePatterns"
+        - "dfs Data/Feature Banners folder created"
+        - "dfs Portal Features parent + 7 FeatureItem children verified via MCP"
       failed: []
       pendingManual:
         - "Select ImagesOnly variant on the Era FeatureBanner rendering that uses Home Services"
         - "Publish Home Services + children for Edge"
         - "Confirm images render after publish (external Image XML src)"
+        - "Publish dfs Feature Banners folder + Portal Features + 7 children for Edge"
+        - "Place FeatureBanner on a dfs page and assign Portal Features datasource"
+        - "Paste public image URLs into each child's Image field"
 
   - name: "quanex-search-results-site-pack"
     kind: "content"
@@ -7136,6 +7175,115 @@ ia:
       - "industryType rendering param (or ?industry= query) selects industry folder by Industry Key — same modules for all authenticated customers"
       - "hubItemPath overrides env PORTAL_HUB_ITEM_PATH; default suffix /Data/Portal Hub uses sync site name if unset"
       - "GraphQL fragment types: PortalIndustryFolder, PortalHubModule (env PORTAL_GRAPHQL_* overrides)"
+      - "2026-08-19: Maintenance Requests module Link corrected to /portal/maintenance-requests (was /portal/maintenance)"
+
+  - name: "dfs-portal-module-pages"
+    kind: "content-update"
+    category: "portal-hub"
+    status: "complete"
+    createdAt: "2026-08-19T23:50:00Z"
+    updatedAt: "2026-08-19T23:55:00Z"
+
+    sitecoreEnvironment:
+      siteName: "dfs"
+      siteCollection: "dfs"
+      projectKey: "Portal"
+      contentRoot: "/sitecore/content/dfs/dfs/Home/Portal"
+
+    rendering:
+      name: "PortalPageDetail"
+      itemId: "{3706248D-3D4F-4EC8-8802-AB3539EAA652}"
+      path: "/sitecore/layout/Renderings/Project/Portal/portal-page-detail/PortalPageDetail"
+      placeholder: "headless-main"
+      layoutEditingKind: "FINAL"
+
+    pages:
+      - name: "account"
+        itemId: "{B8DA1A6C-17D0-4508-B647-AEFC0225B80B}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/account"
+        route: "/Portal/account"
+        liveUrl: "/portal/account"
+        moduleItemId: "{0472B832-AC8E-46E4-A2BD-6996D275806E}"
+        datasourceItemId: "{A15204FB-3BEA-4B87-8E6E-44013EBF3DDC}"
+        title: "Account Information"
+      - name: "equipment-ordering"
+        itemId: "{08FA8890-C920-4483-937F-2850366269F1}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/equipment-ordering"
+        route: "/Portal/equipment-ordering"
+        liveUrl: "/portal/equipment-ordering"
+        moduleItemId: "{5EDAC6C2-1564-4A5C-8208-EB7364A25DEB}"
+        datasourceItemId: "{7C455B86-4660-4C15-8F77-2EC0D55C8289}"
+        title: "Equipment Ordering"
+      - name: "maintenance-requests"
+        itemId: "{6414371E-FA04-42A3-80FD-EB3B5FFE36A1}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/maintenance-requests"
+        route: "/Portal/maintenance-requests"
+        liveUrl: "/portal/maintenance-requests"
+        moduleItemId: "{97A630D3-B7DC-4562-99C2-976D205EBA6F}"
+        datasourceItemId: "{4A055A18-9707-4001-B9DB-BD1CE96FBD37}"
+        title: "Maintenance Requests"
+      - name: "orders"
+        itemId: "{F4A1434C-6A3B-4130-A0F0-FA304BF38DEF}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/orders"
+        route: "/Portal/orders"
+        liveUrl: "/portal/orders"
+        moduleItemId: "{4280FAB8-A903-48F9-BB55-12CC58F51E31}"
+        datasourceItemId: "{FFDE6815-EF0D-4D3B-92C4-C9F4A5BC1CAB}"
+        title: "Order History"
+        createdThisSession: true
+      - name: "store-profile"
+        itemId: "{EE395E6E-5AED-4995-937D-CEB5EA963BC2}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/store-profile"
+        route: "/Portal/store-profile"
+        liveUrl: "/portal/store-profile"
+        moduleItemId: "{59D9840E-30CA-4B6F-8197-6454C8303BB9}"
+        datasourceItemId: "{BE9C47B0-4C9F-445B-9459-EC2402DDF0AC}"
+        title: "Store Profile"
+        createdThisSession: true
+      - name: "support"
+        itemId: "{74ED78A1-5F46-4373-9122-3FD2A92C3AE7}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/support"
+        route: "/Portal/support"
+        liveUrl: "/portal/support"
+        moduleItemId: "{49739CB8-4D50-46A7-A9DE-7D6CFF20793B}"
+        datasourceItemId: "{98FC0A17-B56C-4E95-A755-CC61AEC9623A}"
+        title: "Support Center"
+        createdThisSession: true
+      - name: "training"
+        itemId: "{962B18FC-5D57-482D-B2B0-A538A6FD59D7}"
+        path: "/sitecore/content/dfs/dfs/Home/Portal/training"
+        route: "/Portal/training"
+        liveUrl: "/portal/training"
+        moduleItemId: "{F02992B3-876B-44BC-995E-7CF95FC95C36}"
+        datasourceItemId: "{2285E1D2-0501-4114-BF8C-6BF21CF5AF29}"
+        title: "Training and Resources"
+        createdThisSession: true
+
+    moduleLinkUpdates:
+      - { module: "Account Information", link: "/portal/account", ctaText: "View account" }
+      - { module: "Equipment Ordering", link: "/portal/equipment-ordering", ctaText: "Browse catalog" }
+      - { module: "Maintenance Requests", link: "/portal/maintenance-requests", ctaText: "View requests", note: "Fixed from /portal/maintenance" }
+      - { module: "Order History", link: "/portal/orders", ctaText: "View orders" }
+      - { module: "Store Profile", link: "/portal/store-profile", ctaText: "Manage stores" }
+      - { module: "Support Center", link: "/portal/support", ctaText: "Contact support" }
+      - { module: "Training and Resources", link: "/portal/training", ctaText: "Open library" }
+
+    verification:
+      checkedAt: "2026-08-19T23:55:00Z"
+      passed:
+        - "7 PortalPageDetail components placed on headless-main (FINAL layout)"
+        - "Rich HTML body with Tailwind cards, stats, tables, CTAs, alerts on all pages"
+        - "Local datasources under each page Data folder verified (account sample)"
+        - "All 7 PortalHubModule Link + Cta Text fields updated"
+        - "4 new pages created: orders, store-profile, support, training"
+      failed: []
+      pendingManual:
+        - "Publish Home/Portal subtree + Data/Portal Hub/Restaurant modules for Edge/live preview"
+        - "Verify module card links resolve after publish on deployed host"
+
+    notes:
+      - "Generic DFS restaurant-manager mock content — not Chipotle/Taco Bell specific"
+      - "PortalPageDetail.tsx unchanged; existing not-prose body wrapper handles RTE layout HTML"
 
   - name: "HeaderST"
     kind: "update"

@@ -1,7 +1,7 @@
 import type { Field } from '@sitecore-content-sdk/nextjs';
 import scConfig from 'sitecore.config';
 
-import { resolvePortalHubItemPath } from '@/lib/portal-hub-from-edge';
+import { resolvePortalHubItemPath, wireLinkField } from '@/lib/portal-hub-from-edge';
 
 jest.mock('sitecore.config', () => ({
   __esModule: true,
@@ -101,5 +101,28 @@ describe('resolvePortalHubItemPath', () => {
     mockScConfig.defaultSite = undefined;
 
     expect(resolvePortalHubItemPath({})).toBe('');
+  });
+});
+
+describe('wireLinkField', () => {
+  it('parses General Link XML from Edge value', () => {
+    const wired = wireLinkField({
+      value: '<link linktype="internal" url="/portal/account" />',
+    });
+    expect(wired?.jsonValue?.value?.href).toBe('/portal/account');
+    expect(wired?.jsonValue?.value?.linktype).toBe('internal');
+  });
+
+  it('passes through structured link objects', () => {
+    const wired = wireLinkField({
+      value: { href: '/portal/orders', text: 'Orders', linktype: 'internal' },
+    });
+    expect(wired?.jsonValue?.value?.href).toBe('/portal/orders');
+    expect(wired?.jsonValue?.value?.text).toBe('Orders');
+  });
+
+  it('returns undefined for empty values', () => {
+    expect(wireLinkField({ value: '' })).toBeUndefined();
+    expect(wireLinkField(undefined)).toBeUndefined();
   });
 });

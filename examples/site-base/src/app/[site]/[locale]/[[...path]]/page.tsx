@@ -11,7 +11,7 @@ import Layout, { RouteFields } from 'src/Layout';
 import components from '.sitecore/component-map';
 import Providers from 'src/Providers';
 import { NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { getBaseUrl } from 'lib/utils';
 
 /** Time-based ISR for published Sitecore pages (5 minutes). Preview/editing stays dynamic via draft mode. */
@@ -68,9 +68,10 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   // Fetch the component data from Sitecore (Likely will be deprecated)
   const componentProps = await client.getComponentData(page.layout, {}, components);
+  const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider>
+    <NextIntlClientProvider messages={messages}>
       <Suspense fallback={null}>
         <Providers page={page} componentProps={componentProps}>
           <Layout page={page} baseUrl={baseUrl || undefined} />

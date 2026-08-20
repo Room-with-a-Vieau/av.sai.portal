@@ -3,6 +3,7 @@ import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs'
 import scConfig from 'sitecore.config';
 import client from '@/lib/sitecore-client';
 import { getMockPortalHubModules, isPortalHubMocksEnabled } from '@/lib/portal-hub-mocks';
+import { extractImageSrc, normalizeImageFieldSrc } from '@/lib/sitecore-image-field';
 import { isAllowedPortalHubPath, normalizeIndustryKey } from '@/lib/portal-hub-utils';
 
 const DEFAULT_INDUSTRY_FRAGMENT = 'PortalIndustryFolder';
@@ -32,11 +33,15 @@ interface IndustryChildResult {
   };
 }
 
+interface EdgeValueField {
+  value?: unknown;
+}
+
 interface ModuleChildResult {
   title?: EdgeJsonField;
   description?: EdgeJsonField;
-  icon?: EdgeJsonField;
-  link?: EdgeJsonField;
+  icon?: EdgeValueField;
+  link?: EdgeValueField;
   ctaText?: EdgeJsonField;
 }
 
@@ -108,8 +113,8 @@ function buildPortalHubQuery(industryType: string, moduleType: string): string {
                   ... on ${moduleType} {
                     title: field(name: "Title") { jsonValue }
                     description: field(name: "Description") { jsonValue }
-                    icon: field(name: "Icon") { jsonValue }
-                    link: field(name: "Link") { jsonValue }
+                    icon: field(name: "Icon") { value }
+                    link: field(name: "Link") { value }
                     ctaText: field(name: "Cta Text") { jsonValue }
                   }
                 }
@@ -122,6 +127,49 @@ function buildPortalHubQuery(industryType: string, moduleType: string): string {
   `;
 }
 
+
+function wireImageField(icon?: EdgeValueField): PortalHubModuleWire['icon'] {
+  if (icon?.value == null) return undefined;
+  const src = extractImageSrc(icon.value);
+  if (!src) return undefined;
+  const imageField =
+    typeof icon.value === 'object' && icon.value !== null && 'src' in icon.value
+      ? normalizeImageFieldSrc({ value: icon.value } as ImageField)
+      : normalizeImageFieldSrc({ value: { src } } as ImageField);
+  if (!imageField?.value?.src) return undefined;
+  return { jsonValue: imageField };
+}
+
+/** Edge returns General Link as raw XML in `value`; jsonValue often fails with FORMAT errors. */
+export function wireLinkField(link?: EdgeValueField): PortalHubModuleWire['link'] {
+  if (link?.value == null) return undefined;
+
+  if (typeof link.value === 'object' && link.value !== null && 'href' in link.value) {
+    const href = String((link.value as { href?: string }).href ?? '').trim();
+    if (!href) return undefined;
+    return {
+      jsonValue: {
+        value: link.value,
+      } as LinkField,
+    };
+  }
+
+  if (typeof link.value !== 'string') return undefined;
+  const raw = link.value.trim();
+  if (!raw) return undefined;
+
+  const href = raw.match(/\burl="([^"]*)"/i)?.[1]?.trim();
+  if (!href) return undefined;
+
+  const linktype = raw.match(/\blinktype="([^"]*)"/i)?.[1]?.trim() || 'internal';
+  const text = raw.match(/\b(?:text|title)="([^"]*)"/i)?.[1]?.trim() || '';
+
+  return {
+    jsonValue: {
+      value: { href, text, linktype },
+    } as LinkField,
+  };
+}
 export async function fetchPortalHubModules(args: FetchPortalHubModulesArgs): Promise<PortalHubModuleWire[]> {
   const { path, language, industryKey } = args;
   const normalizedKey = normalizeIndustryKey(industryKey);
@@ -156,8 +204,8 @@ export async function fetchPortalHubModules(args: FetchPortalHubModulesArgs): Pr
     return modules.map((m) => ({
       title: m.title,
       description: m.description,
-      icon: m.icon,
-      link: m.link,
+      icon: wireImageField(m.icon),
+      link: wireLinkField(m.link),
       ctaText: m.ctaText,
     })) as PortalHubModuleWire[];
   } catch (error) {

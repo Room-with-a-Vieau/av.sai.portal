@@ -183,8 +183,8 @@
     "sitecore-tools:generate-map:watch": "node --no-inspect ./node_modules/@sitecore-content-sdk/cli/dist/cjs/bin/sitecore-tools.js project component generate-map --watch",
     "dev": "node --no-inspect ./scripts/run-dev.cjs",
     "start": "cross-env-shell NODE_ENV=production npm-run-all --serial build next:start",
-    "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
+    "db:push": "cross-env DATABASE_URL=file:./dev.db prisma db push --skip-generate",
+    "db:seed": "cross-env DATABASE_URL=file:./dev.db tsx prisma/seed.ts",
     "db:studio": "prisma studio"
   },
   "prisma": {

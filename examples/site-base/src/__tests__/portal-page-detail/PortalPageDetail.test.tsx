@@ -17,6 +17,34 @@ function portalDetailProps(partial: Partial<PortalPageDetailProps>): PortalPageD
   } as PortalPageDetailProps;
 }
 
+jest.mock('next/link', () => ({
+  __esModule: true,
+  default: ({
+    href,
+    children,
+    className,
+  }: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+    prefetch?: boolean;
+  }) => (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  ),
+}));
+
+jest.mock('lucide-react', () => {
+  const Icon = () => null;
+  return new Proxy(
+    {},
+    {
+      get: () => Icon,
+    },
+  );
+});
+
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: jest.fn(() => ({
     page: {
@@ -75,12 +103,35 @@ describe('PortalPageDetail', () => {
     expect(body?.innerHTML).toContain('<strong>HTML</strong>');
   });
 
-  it('renders nothing inside article when no field values and not editing', () => {
+  it('renders portal hub navigation with root-relative /portal links', () => {
+    render(<PortalPageDetail {...portalDetailProps({ fields: baseFields })} />);
+
+    expect(screen.getByText('Back to Portal')).toBeInTheDocument();
+    expect(screen.getByLabelText('breadcrumb')).toBeInTheDocument();
+
+    const portalLinks = screen.getAllByRole('link', { name: 'Portal' });
+    expect(portalLinks).toHaveLength(1);
+    expect(portalLinks[0]).toHaveAttribute('href', '/portal');
+
+    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute(
+      'href',
+      '/portal',
+    );
+
+    expect(screen.getAllByText('Orders').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('still renders portal navigation when no field values and not editing', () => {
     const { container } = render(<PortalPageDetail {...portalDetailProps({ fields: {} })} />);
 
     const article = container.querySelector('[data-component="portal-page-detail"]');
     expect(article).toBeInTheDocument();
     expect(article?.querySelector('h1')).toBeNull();
+    expect(screen.getByText('Back to Portal')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute(
+      'href',
+      '/portal',
+    );
   });
 });
 
@@ -114,7 +165,7 @@ describe('PortalPageDetail (editing)', () => {
     sdk.useSitecore.mockReturnValue(defaultPage);
   });
 
-  it('still renders field chrome when values are empty', () => {
+  it('still renders field chrome and navigation when values are empty', () => {
     render(
       <PortalPageDetail
         {...portalDetailProps({
@@ -128,5 +179,7 @@ describe('PortalPageDetail (editing)', () => {
     );
 
     expect(document.querySelector('[data-component="portal-page-detail"]')).toBeInTheDocument();
+    expect(screen.getByText('Back to Portal')).toBeInTheDocument();
+    expect(screen.getByText('Current page')).toBeInTheDocument();
   });
 });

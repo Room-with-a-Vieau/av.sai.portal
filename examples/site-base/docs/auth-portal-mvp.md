@@ -36,7 +36,7 @@ See `.env.remote.example` — Authentication section:
 
 - `AUTH_SECRET` — required (`openssl rand -base64 32`)
 - `AUTH_URL` — public app URL (recommended in production)
-- `DATABASE_URL` — SQLite path, e.g. `file:./prisma/dev.db`
+- `DATABASE_URL` — must be `file:./dev.db` in `.env.local`. Prisma CLI resolves that relative to `prisma/schema.prisma` → `prisma/dev.db`. Do **not** use `file:./prisma/dev.db` (that creates nested `prisma/prisma/dev.db`). The Next.js Prisma client rewrites the URL to an absolute path of `prisma/dev.db` so login hits the same file as `npm run db:seed`.
 - `AUTH_EXPOSE_RESET_LINK` — set `true` in dev to return reset URLs from the API (instead of email)
 
 Legacy demo credentials (`AUTH_DEMO_USERNAME` / `AUTH_DEMO_PASSWORD`) still work for the existing **AuthPanel** component.
@@ -56,7 +56,7 @@ In `src/app/api/auth/password-reset/request/route.ts`, replace the dev `resetUrl
 **Authentication** datasource fields (UI/branding only — not tenant-scoped):
 
 - `title`, `subtitle`, `logo` — branding and copy
-- `postLoginRedirect` — General Link to a Sitecore page (internal path used after login)
+- `postLoginRedirect` — General Link: pick the **Portal** page (`/sitecore/content/dfs/dfs/Home/Portal`). The app maps that item path (including `dfs/dfs/home/portal`) to the live URL **`/portal`**. Do not expect the browser to open `/dfs/dfs/home/portal`. Query string `callbackUrl` / `redirect` / `redirectUrl` still override when they are safe internal paths.
 - Label fields (`loginButtonText`, `userNameLabel`, etc.)
 - `resetPasswordPath` — relative path for forgot-password flow (default `/reset-password`)
 
