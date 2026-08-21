@@ -37,6 +37,8 @@ export default defineCliConfig({
       'src/components/search-results/SearchResults copy.tsx',
       // Legacy GraphQL blog grid — name collides with UIIM Insights BlogListing
       'src/components/BlogListing/**',
+      // Kit RichTextBlock is the generate-map source; UIIM copy used the same filename
+      'src/components/uiim/content/RichTextBlock.tsx',
       // BlogListing helper modules (not Sitecore renderings)
       'src/components/uiim/insights/blog-listing.taxonomy.ts',
       'src/components/uiim/insights/blog-listing.props.ts',

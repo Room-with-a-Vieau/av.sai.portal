@@ -306,6 +306,8 @@ components:
       datasourceFolder: "/sitecore/content/finance/guidestone-financial/Data/Rich Text Blocks"
       variants: "/sitecore/content/finance/guidestone-financial/Presentation/Headless Variants/RichTextBlock"
     variants: ["Default", "Centered", "Narrow", "GuideStoneMissionBand"]
+    notes:
+      - "2026-08-21T20:55:00Z — Removed src/components/uiim/content/RichTextBlock.tsx because generate-map collides with the kit original at src/components/rich-text-block/RichTextBlock.tsx (duplicate Identifier RichTextBlock). Keep the kit file; do not recreate the UIIM file under the same basename."
   - name: "TrustStatsRow"
     kind: "list"
     category: "Content"
@@ -651,3 +653,4 @@ notes:
   - "2026-08-21T18:02:00Z — Cards batch began, but six required create operations were rejected because the client decision service could not locate their approval context. Recorded all successful IDs and stopped further dependent writes; Available Renderings remains unchanged at seven IDs."
   - "2026-08-21T18:25:00Z — Resumed Cards from parent-created IDs and completed all independent work. Eight exact calls remain recorded on the two entries for parent execution because child-context review blocked them. Neither Cards rendering was appended; cumulative Available Renderings remains exactly seven IDs."
   - "2026-08-21T18:45:00Z — Parent executed remaining Cards MCP writes, linked existing Standard Values, created missing ProductPricingCard Standard Values and Card 1, and appended both Cards renderings. Totals: 9 complete, 10 planned. Available Renderings now 9 IDs."
+  - "2026-08-21T20:55:00Z — Removed UIIM RichTextBlock.tsx to fix XM Cloud generate-map duplicate identifier. Kit src/components/rich-text-block/RichTextBlock.tsx remains. Other exact-filename collisions (AccordionBlock, ImageCarousel, MultiPromo, Video) were already excluded in sitecore.cli.config.ts."
