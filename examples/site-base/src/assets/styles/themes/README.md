@@ -4,7 +4,7 @@
  * How it works
  * ------------
  * 1. Sitecore Site definition (template {E46F3AF2-39FA-4866-A157-7017C4B2A40C})
- *    has a field named **Skin**. Value = theme key (e.g. `rockland`).
+ *    has a field named **Skin**. Value = theme key (e.g. `bcbst`).
  * 2. This app maps site → skin in `src/lib/theme/site-skins.ts` (Edge does not
  *    ship custom Site fields in sites.json).
  * 3. `[site]/layout.tsx` sets `<html data-theme="<skin>">`.

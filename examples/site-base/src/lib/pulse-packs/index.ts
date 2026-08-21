@@ -1,22 +1,13 @@
-import { amesburytruthPulsePack } from './amesburytruth';
-import { eraPulsePack } from './era';
+import { DEFAULT_PULSE_PACK } from './default';
 import { matchPulsePackIntent } from './match';
-import { pillsburylawPulsePack } from './pillsburylaw';
-import { quanexPulsePack } from './quanex';
 import type { MatchedPulseIntent, PulseSitePack } from './types';
 
 export type { MatchedPulseIntent, PulsePackIntent, PulseSitePack, PulseTypeLabels } from './types';
 export { matchPulsePackIntent, normalizePulseQuestion } from './match';
-
-const DEFAULT_PACK_SITE = 'pillsburylaw';
+export { DEFAULT_PULSE_PACK } from './default';
 
 /** Registry of Pulse site packs. Add a new demo site = new pack file + entry here. */
-export const PULSE_SITE_PACKS: Readonly<Record<string, PulseSitePack>> = {
-  quanex: quanexPulsePack,
-  era: eraPulsePack,
-  amesburytruth: amesburytruthPulsePack,
-  pillsburylaw: pillsburylawPulsePack,
-};
+export const PULSE_SITE_PACKS: Readonly<Record<string, PulseSitePack>> = {};
 
 export function normalizePulseSiteName(siteName?: string | null): string {
   return (siteName || '').toLowerCase().trim();
@@ -24,7 +15,7 @@ export function normalizePulseSiteName(siteName?: string | null): string {
 
 /**
  * Resolve a Pulse pack for the current site.
- * Falls back to NEXT_PUBLIC_DEFAULT_SITE_NAME, then pillsburylaw (legacy demos).
+ * Falls back to NEXT_PUBLIC_DEFAULT_SITE_NAME, then the empty default pack.
  */
 export function getPulsePack(siteName?: string | null): PulseSitePack {
   const key = normalizePulseSiteName(siteName);
@@ -33,7 +24,7 @@ export function getPulsePack(siteName?: string | null): PulseSitePack {
   const envDefault = normalizePulseSiteName(process.env.NEXT_PUBLIC_DEFAULT_SITE_NAME);
   if (envDefault && PULSE_SITE_PACKS[envDefault]) return PULSE_SITE_PACKS[envDefault];
 
-  return PULSE_SITE_PACKS[DEFAULT_PACK_SITE];
+  return DEFAULT_PULSE_PACK;
 }
 
 export function listPulsePackSiteNames(): string[] {

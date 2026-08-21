@@ -20,7 +20,7 @@ const sitesAll = sitesJson as SiteInfo[];
 
 /**
  * Edge publishes many sites with hostName "*". SiteResolver picks the first match,
- * so rockland (listed first in sites.json) wins on localhost unless we prefer
+ * so the first site in sites.json wins on localhost unless we prefer
  * NEXT_PUBLIC_DEFAULT_SITE_NAME.
  */
 const sites = (() => {

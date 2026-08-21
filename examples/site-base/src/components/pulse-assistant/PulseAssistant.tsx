@@ -100,7 +100,7 @@ function SourceCards({
 export type PulseAssistantProps = {
   /** When true, the widget is not rendered (Experience Editor / Design Library). */
   hidden?: boolean;
-  /** Site key matching theme/skin packs (quanex, era, amesburytruth, pillsburylaw). */
+  /** Site key matching theme/skin packs. */
   siteName?: string | null;
 };
 

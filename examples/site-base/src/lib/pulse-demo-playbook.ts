@@ -1,5 +1,5 @@
 /**
- * @deprecated Prefer `@/lib/pulse-packs`. Thin compatibility shim for Pillsbury demos.
+ * Compatibility shim — prefer `@/lib/pulse-packs` for new code.
  */
 import {
   getPulsePack,
@@ -8,27 +8,19 @@ import {
 } from '@/lib/pulse-packs';
 import type { PulseSource } from '@/lib/pulse-types';
 
-export type PulseDemoIntentId =
-  | 'japan-us-tech-acquisition'
-  | 'distressed-portfolio-company'
-  | 'saudi-expansion-export-controls'
-  | 'mena-trade-sanctions'
-  | 'insurance-construction-dispute'
-  | 'careers-find-opening';
-
-export function matchPulseDemoIntent(question: string) {
-  return matchPulseIntentForSite(question, 'pillsburylaw');
+export function matchPulseDemoIntent(question: string, siteName?: string | null) {
+  return matchPulseIntentForSite(question, siteName);
 }
 
 /**
- * Build high-confidence sources for a matched demo intent (Pillsbury pack).
+ * Build high-confidence sources for a matched demo intent.
  * Prefer Edge hydration via retrievePulseSources; this path uses citationFallbacks only.
  */
-export function buildDemoPlaybookSources(question: string): PulseSource[] {
-  const intent = matchPulseIntentForSite(question, 'pillsburylaw');
+export function buildDemoPlaybookSources(question: string, siteName?: string | null): PulseSource[] {
+  const intent = matchPulseIntentForSite(question, siteName);
   if (!intent) return [];
 
-  const pack = getPulsePack('pillsburylaw');
+  const pack = getPulsePack(siteName);
   const fallbacks = pack.citationFallbacks || {};
 
   return intent.citationItemIds
@@ -40,4 +32,4 @@ export function buildDemoPlaybookSources(question: string): PulseSource[] {
     .filter((s): s is PulseSource => Boolean(s));
 }
 
-export const PULSE_DEMO_STARTER_PROMPTS = getPulseStarterPrompts('pillsburylaw');
+export const PULSE_DEMO_STARTER_PROMPTS = getPulseStarterPrompts();

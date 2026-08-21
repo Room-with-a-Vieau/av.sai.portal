@@ -82,9 +82,9 @@ describe('resolvePortalHubItemPath', () => {
     delete process.env.PORTAL_HUB_ITEM_PATH;
     delete process.env.PORTAL_HUB_DATA_PATH_SUFFIX;
     mockScConfig.defaultSite = undefined;
-    process.env.NEXT_PUBLIC_DEFAULT_SITE_NAME = 'quanex';
+    process.env.NEXT_PUBLIC_DEFAULT_SITE_NAME = 'acme';
 
-    expect(resolvePortalHubItemPath({})).toBe('/sitecore/content/quanex/quanex/Data/Portal Hub');
+    expect(resolvePortalHubItemPath({})).toBe('/sitecore/content/acme/acme/Data/Portal Hub');
   });
 
   it('honors PORTAL_HUB_DATA_PATH_SUFFIX for the default path', () => {

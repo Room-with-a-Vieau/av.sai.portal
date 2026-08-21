@@ -196,7 +196,7 @@ function pickKnownSite(raw: string | null | undefined, known: Set<string>): stri
  * Order:
  * 1. Explicit override (tests / Storybook)
  * 2. App Router `[site]` param or first pathname segment **if it is a known pack**
- *    (`/quanex/en/search` → quanex). Skips content paths like `/Products/...`
+ *    (`/acme/en/search` → acme). Skips content paths like `/Products/...`
  *    on custom domains.
  * 3. Sitecore `page.siteName` (reliable on branded hosts; historically wrong
  *    in some Pages iframe cases — hence URL first when the segment is known)

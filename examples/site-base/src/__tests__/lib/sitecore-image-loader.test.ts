@@ -1,20 +1,15 @@
 import sitecoreImageLoader, { shouldBypassOptimizer } from '@/lib/sitecore-image-loader';
 
 describe('sitecore-image-loader', () => {
-  it('bypasses the optimizer for Quanex, ERA, and AmesburyTruth product CDNs', () => {
-    expect(shouldBypassOptimizer('https://www.quanex.com/wp-content/uploads/x.jpg')).toBe(true);
+  it('bypasses the optimizer for Content Hub and sandbox hosts', () => {
     expect(
-      shouldBypassOptimizer('https://www.eraeverywhere.com/globalassets/era/product-1500max/11099.jpg')
+      shouldBypassOptimizer('https://example.sitecorecontenthub.cloud/api/public/content/x.jpg')
     ).toBe(true);
-    expect(
-      shouldBypassOptimizer(
-        'https://www.amesburytruth.com/images/products/Maxim%20HP%20Casement%20Hinge_clear%20bkgr,%20no%20shadow1.png'
-      )
-    ).toBe(true);
+    expect(shouldBypassOptimizer('https://images.unsplash.com/photo-x')).toBe(true);
   });
 
-  it('returns the original URL for ERA media instead of /_next/image', () => {
-    const src = 'https://www.eraeverywhere.com/globalassets/era/product-1500max/11099.jpg';
+  it('returns the original URL for Content Hub instead of /_next/image', () => {
+    const src = 'https://example.sitecorecontenthub.cloud/api/public/content/x.jpg';
     expect(sitecoreImageLoader({ src, width: 320 })).toBe(src);
   });
 

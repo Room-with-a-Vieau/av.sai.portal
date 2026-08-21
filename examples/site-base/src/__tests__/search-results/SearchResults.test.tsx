@@ -15,9 +15,9 @@ jest.mock('lucide-react', () => {
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ replace: jest.fn() }),
-  usePathname: () => '/quanex/en/Search-Results',
+  usePathname: () => '/acme/en/Search-Results',
   useSearchParams: () => new URLSearchParams(),
-  useParams: () => ({ site: 'quanex', locale: 'en' }),
+  useParams: () => ({ site: 'acme', locale: 'en' }),
 }));
 
 jest.mock('next/link', () => ({
@@ -40,27 +40,20 @@ jest.mock('next/link', () => ({
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => ({
     page: {
-      siteName: 'quanex',
+      siteName: 'acme',
       mode: { isEditing: false, isDesignLibrary: false },
     },
   }),
 }));
 
 describe('SearchResults site packs', () => {
-  it('shows Quanex product results, not Pillsbury lawyers', () => {
-    render(<SearchResults siteName="quanex" disableUrlSync initialQuery="super spacer" />);
+  it('renders the generic empty catalog, not leftover client content', () => {
+    render(<SearchResults siteName="acme" disableUrlSync initialQuery="super spacer" />);
 
-    expect(screen.getByText('Quanex search')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 3, name: 'Super Spacer' })).toBeInTheDocument();
-    expect(screen.queryByText(/Pillsbury search/i)).not.toBeInTheDocument();
+    expect(screen.getByText('Site search')).toBeInTheDocument();
+    expect(screen.queryByText('Quanex search')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pillsbury search')).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Super Spacer' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: /Mark Abate/i })).not.toBeInTheDocument();
-  });
-
-  it('keeps Pillsbury lawyer results on pillsburylaw', () => {
-    render(<SearchResults siteName="pillsburylaw" disableUrlSync initialQuery="Mark Abate" />);
-
-    expect(screen.getByText('Pillsbury search')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 3, name: /Mark Abate/i })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { level: 3, name: 'Super Spacer' })).not.toBeInTheDocument();
   });
 });

@@ -104,7 +104,7 @@ Collect:
 
 ### Step 2 — Choose the Skin key
 
-Lowercase, no spaces (`bcbst`, `dwyeromega`, `rockland`). Prefer matching the Sitecore site
+Lowercase, no spaces (`acme`, `northwind`). Prefer matching the Sitecore site
 name when the brand owns that site. Confirm it does not already exist in `APP_THEMES`.
 
 ### Step 3 — Register the key (`src/lib/theme/themes.ts`)

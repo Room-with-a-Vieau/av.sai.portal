@@ -4,11 +4,8 @@ import scConfig from 'sitecore.config';
 import type { KnowledgeArticleListItem } from '@/components/knowledge-listing/knowledge-listing.props';
 import type { TaxonomyTopicReference } from '@/lib/taxonomy-topic';
 
-/** Knowledge Articles hub under Home */
-const DEFAULT_ROOT_PATH = '/sitecore/content/progressive/pkm/Home/Knowledge Articles';
-const DEFAULT_ROOT_ID = 'ef281e84-ff74-48c8-b64f-00933f9f0eff';
-/** Knowledge Article page template */
-const DEFAULT_TEMPLATE_ID = '42f8929a-83cd-48fe-92f0-8aac46e6cc62';
+/** Optional Knowledge Article page template (set KNOWLEDGE_ARTICLE_TEMPLATE_ID when known). */
+const FALLBACK_TEMPLATE_ID = '';
 
 const MAX_FETCH = 48;
 
@@ -82,11 +79,11 @@ function stripGuid(id: string): string {
 }
 
 function knowledgeRootId(): string {
-  return edgeGuid(process.env.KNOWLEDGE_ARTICLES_ROOT_ID?.trim() || DEFAULT_ROOT_ID);
+  return edgeGuid(process.env.KNOWLEDGE_ARTICLES_ROOT_ID?.trim() || '');
 }
 
 function knowledgeTemplateId(): string {
-  return edgeGuid(process.env.KNOWLEDGE_ARTICLE_TEMPLATE_ID?.trim() || DEFAULT_TEMPLATE_ID);
+  return edgeGuid(process.env.KNOWLEDGE_ARTICLE_TEMPLATE_ID?.trim() || FALLBACK_TEMPLATE_ID);
 }
 
 /**
@@ -225,6 +222,9 @@ export async function fetchKnowledgeArticlePool(
   first = MAX_FETCH,
   edgeMode: KnowledgeListingEdgeMode = 'live'
 ): Promise<KnowledgeArticleListItem[]> {
+  if (!knowledgeRootId() || !knowledgeTemplateId()) {
+    return [];
+  }
   const client = createEdgeClient(edgeMode);
   try {
     const data = await client.getData<SearchResult>(buildSearchQuery(), {
@@ -331,5 +331,5 @@ export async function fetchArticlesByIds(
 }
 
 export function resolveKnowledgeArticlesRootPath(): string {
-  return process.env.KNOWLEDGE_ARTICLES_ROOT_PATH?.trim() || DEFAULT_ROOT_PATH;
+  return process.env.KNOWLEDGE_ARTICLES_ROOT_PATH?.trim() || '';
 }

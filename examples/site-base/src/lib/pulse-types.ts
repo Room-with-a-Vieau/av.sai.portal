@@ -20,7 +20,7 @@ export type PulseSource = {
 
 export type PulseAskRequest = {
   question: string;
-  /** Site key matching theme/skin packs (quanex, era, amesburytruth, pillsburylaw). */
+  /** Site key matching theme/skin packs. */
   siteName?: string | null;
   stateCode?: PulseStateCode | null;
 };

@@ -12,7 +12,7 @@ Markdown information-architecture trees for Sitecore page creation.
 docs/ai/ia/<client-kebab>-ia.md
 ```
 
-Examples: `rockland-ia.md`, `quanex-ia.md`, `era-ia.md`
+Examples: `acme-ia.md`, `northwind-ia.md`
 
 ## Format
 

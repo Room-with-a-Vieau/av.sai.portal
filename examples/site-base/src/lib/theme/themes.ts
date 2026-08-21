@@ -12,18 +12,8 @@
 
 export const DEFAULT_THEME = 'bcbst' as const;
 
-export const APP_THEMES = [
-  'bcbst',
-  'dwyeromega',
-  'builderfs',
-  'rockland',
-  'pkm',
-  'pillsburylaw',
-  'quanex',
-  'amesburytruth',
-  'era',
-  'dfsupply',
-] as const;
+/** Starter palette plus skins added by create-new-theme. */
+export const APP_THEMES = ['bcbst'] as const;
 
 export type AppTheme = (typeof APP_THEMES)[number];
 

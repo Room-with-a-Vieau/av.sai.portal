@@ -26,18 +26,6 @@ export default function sitecoreImageLoader({
   return `/_next/image?${params.toString()}`;
 }
 
-/** Public product CDNs that block or fail the `/_next/image` optimizer (hotlink / fetch). */
-function isDirectProductMediaHost(hostname: string): boolean {
-  return (
-    hostname === 'quanex.com' ||
-    hostname.endsWith('.quanex.com') ||
-    hostname === 'eraeverywhere.com' ||
-    hostname.endsWith('.eraeverywhere.com') ||
-    hostname === 'amesburytruth.com' ||
-    hostname.endsWith('.amesburytruth.com')
-  );
-}
-
 export function shouldBypassOptimizer(src: string): boolean {
   try {
     const hostname = new URL(src, 'https://localhost').hostname.toLowerCase();
@@ -45,8 +33,7 @@ export function shouldBypassOptimizer(src: string): boolean {
       hostname.endsWith('.sitecoresandbox.cloud') ||
       hostname.endsWith('.sitecorecontenthub.cloud') ||
       hostname.includes('stylelabs.cloud') ||
-      hostname === 'images.unsplash.com' ||
-      isDirectProductMediaHost(hostname)
+      hostname === 'images.unsplash.com'
     );
   } catch {
     return false;

@@ -1,15 +1,6 @@
 /* Theme packages — one CSS file per Skin / data-theme key */
 @import '../assets/styles/globals.css';
 @import '../assets/styles/themes/bcbst.css';
-@import '../assets/styles/themes/dwyeromega.css';
-@import '../assets/styles/themes/builderfs.css';
-@import '../assets/styles/themes/rockland.css';
-@import '../assets/styles/themes/pkm.css';
-@import '../assets/styles/themes/pillsburylaw.css';
-@import '../assets/styles/themes/quanex.css';
-@import '../assets/styles/themes/amesburytruth.css';
-@import '../assets/styles/themes/era.css';
-@import '../assets/styles/themes/dfsupply.css';
 @import '../assets/styles/themes/fonts.css';
 @import '../assets/styles/tailwind-bootstrap-grid.css';
 @import '../assets/styles/column-splitter.css';

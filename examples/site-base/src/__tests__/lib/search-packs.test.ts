@@ -1,9 +1,8 @@
 import {
+  DEFAULT_SEARCH_PACK,
   getSearchPack,
-  itemMatchesQuery,
   listSearchPackSiteNames,
   resolveSearchSiteName,
-  selectAiSearchInsight,
   toSiteAwareHref,
 } from '@/lib/search-packs';
 
@@ -17,108 +16,71 @@ jest.mock('lucide-react', () => {
   );
 });
 
-const KNOWN = listSearchPackSiteNames();
-
 describe('search pack registry', () => {
-  it('registers quanex, era, amesburytruth, and pillsburylaw', () => {
-    expect(KNOWN.sort()).toEqual(['amesburytruth', 'era', 'pillsburylaw', 'quanex'].sort());
+  it('starts with no client packs registered', () => {
+    expect(listSearchPackSiteNames()).toEqual([]);
   });
 
-  it('resolves packs by siteName (case-insensitive)', () => {
-    expect(getSearchPack('Quanex').siteName).toBe('quanex');
-    expect(getSearchPack('ERA').brandName).toBe('ERA');
-    expect(getSearchPack('pillsburylaw').brandName).toBe('Pillsbury');
-  });
-
-  it('does not silently reuse Pillsbury when siteName is missing', () => {
+  it('falls back to the empty default pack', () => {
     const pack = getSearchPack(null);
-    expect(pack.siteName).not.toBe('pillsburylaw');
-    expect(KNOWN).toContain(pack.siteName);
+    expect(pack).toBe(DEFAULT_SEARCH_PACK);
+    expect(pack.catalog).toEqual([]);
+    expect(pack.siteName).toBe('default');
+  });
+
+  it('does not resolve former client catalogs', () => {
+    expect(getSearchPack('quanex').catalog).toEqual([]);
+    expect(getSearchPack('pillsburylaw').brandName).toBe('Search');
   });
 });
 
 describe('resolveSearchSiteName (shared editing host)', () => {
+  const known = ['acme', 'northwind'];
+
   it('prefers a known URL site over a mismatched Sitecore siteName', () => {
     expect(
       resolveSearchSiteName({
-        sitecoreSite: 'pillsburylaw',
-        pathname: '/quanex/en/Search-Results',
-        knownSites: KNOWN,
+        sitecoreSite: 'northwind',
+        pathname: '/acme/en/Search-Results',
+        knownSites: known,
       })
-    ).toBe('quanex');
+    ).toBe('acme');
   });
 
   it('uses Sitecore siteName on custom-domain content paths', () => {
     expect(
       resolveSearchSiteName({
-        sitecoreSite: 'quanex',
-        pathname: '/Products/Insulating-Glass-Spacers/Super-Spacer',
-        knownSites: KNOWN,
+        sitecoreSite: 'acme',
+        pathname: '/Products/Example',
+        knownSites: known,
       })
-    ).toBe('quanex');
+    ).toBe('acme');
   });
 
   it('honors an explicit override', () => {
     expect(
       resolveSearchSiteName({
-        override: 'era',
-        sitecoreSite: 'quanex',
-        pathname: '/quanex/en/search',
-        knownSites: KNOWN,
+        override: 'northwind',
+        sitecoreSite: 'acme',
+        pathname: '/acme/en/search',
+        knownSites: known,
       })
-    ).toBe('era');
+    ).toBe('northwind');
   });
 });
 
 describe('toSiteAwareHref', () => {
+  const known = ['acme'];
+
   it('prefixes catalog hrefs on a shared-host /site/locale URL and hyphenates spaces', () => {
-    expect(
-      toSiteAwareHref(
-        '/Products/Insulating Glass Spacers/Super Spacer',
-        '/quanex/en/Search-Results',
-        KNOWN
-      )
-    ).toBe('/quanex/en/Products/Insulating-Glass-Spacers/Super-Spacer');
+    expect(toSiteAwareHref('/Products/Example Item', '/acme/en/Search-Results', known)).toBe(
+      '/acme/en/Products/Example-Item'
+    );
   });
 
   it('leaves content-root hrefs unchanged on custom domains', () => {
-    expect(
-      toSiteAwareHref('/Products/Insulating Glass Spacers/Super Spacer', '/Search-Results', KNOWN)
-    ).toBe('/Products/Insulating-Glass-Spacers/Super-Spacer');
-  });
-});
-
-describe('Quanex catalog matching', () => {
-  const pack = getSearchPack('quanex');
-
-  it('returns Super Spacer for warm-edge IG queries and never Pillsbury lawyers', () => {
-    const hits = pack.catalog.filter((item) =>
-      itemMatchesQuery(item, 'warm-edge spacer for residential IG', pack.bucketSynonyms)
+    expect(toSiteAwareHref('/Products/Example Item', '/Search-Results', known)).toBe(
+      '/Products/Example-Item'
     );
-    expect(hits.some((item) => /super spacer/i.test(item.title))).toBe(true);
-    expect(hits.every((item) => !/lawyer|abate|pillsbury/i.test(`${item.title} ${item.href}`))).toBe(
-      true
-    );
-  });
-
-  it('selects application-aware IG insight copy', () => {
-    const insight = selectAiSearchInsight('Super Spacer vs Duralite', pack.insightRules);
-    expect(insight?.id).toBe('ai-ig-spacers');
-    expect(insight?.headline.toLowerCase()).toMatch(/ig spacer|plant/);
-  });
-
-  it('does not leak Pillsbury popular searches', () => {
-    const joined = pack.popularSearches.join(' ').toLowerCase();
-    expect(joined).not.toMatch(/lawyer|saudi|export-control|mark abate/);
-  });
-});
-
-describe('Pillsbury catalog isolation', () => {
-  it('still matches lawyer bios on pillsburylaw', () => {
-    const pack = getSearchPack('pillsburylaw');
-    const hits = pack.catalog.filter((item) =>
-      itemMatchesQuery(item, 'Mark Abate intellectual property', pack.bucketSynonyms)
-    );
-    expect(hits.some((item) => /mark abate/i.test(item.title))).toBe(true);
   });
 });

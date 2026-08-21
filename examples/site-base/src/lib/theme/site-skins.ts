@@ -13,34 +13,16 @@
  * - Skin value must be a registered theme key (`APP_THEMES`).
  * - Omit a site here if Skin === site name and that name is already a theme
  *   (convention fallback in resolveTheme).
- * - Map explicitly when a site reuses another brand's skin
- *   (e.g. a demo site that uses `rockland`).
+ * - Map explicitly when a site reuses another brand's skin.
  */
 
 import type { AppTheme } from './themes';
 
 /**
  * Explicit overrides / documented skins.
- * Prefer matching Sitecore Skin field values exactly (lowercase).
+ * Empty until the first demo site is created. Add entries via create-new-theme.
  */
-export const SITE_SKINS: Readonly<Record<string, AppTheme>> = {
-  // Sites whose name matches a theme key are covered by convention;
-  // listed here so the map is a readable inventory of branded sites.
-  dwyeromega: 'dwyeromega',
-  builderfs: 'builderfs',
-  rockland: 'rockland',
-  pkm: 'pkm',
-  pillsburylaw: 'pillsburylaw',
-  quanex: 'quanex',
-  amesburytruth: 'amesburytruth',
-  era: 'era',
-  dfsupply: 'dfsupply',
-  /** DFS manager portal site — Skin field should be `dfsupply` in Sitecore. */
-  dfs: 'dfsupply',
-
-  // Example: site name differs from skin
-  // 'acme-demo': 'rockland',
-};
+export const SITE_SKINS: Readonly<Record<string, AppTheme>> = {};
 
 export function getConfiguredSkin(siteName: string | null | undefined): AppTheme | undefined {
   if (!siteName) return undefined;

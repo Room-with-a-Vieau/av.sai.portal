@@ -1,13 +1,13 @@
 /**
  * Demo preferences for KnowledgeListing (Recently Viewed / Favorites).
- * Persisted in localStorage for the PKM agent experience.
+ * Persisted in localStorage.
  */
 
-const FAVORITES_KEY = 'pkm.knowledge.favorites';
-const RECENT_KEY = 'pkm.knowledge.recentlyViewed';
+const FAVORITES_KEY = 'site-base.knowledge.favorites';
+const RECENT_KEY = 'site-base.knowledge.recentlyViewed';
 const MAX_RECENT = 40;
 
-export const KNOWLEDGE_PREFERENCES_CHANGE_EVENT = 'pkm:knowledge-preferences-change';
+export const KNOWLEDGE_PREFERENCES_CHANGE_EVENT = 'site-base:knowledge-preferences-change';
 
 function canUseStorage(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';

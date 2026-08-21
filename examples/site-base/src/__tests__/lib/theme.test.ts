@@ -17,28 +17,17 @@ describe('resolveTheme', () => {
     }
   });
 
-  it('uses explicit skin over site map', () => {
-    expect(resolveTheme({ site: 'rockland', skin: 'pkm' })).toBe('pkm');
+  it('uses explicit skin when it is a registered theme', () => {
+    expect(resolveTheme({ site: 'unknown', skin: 'bcbst' })).toBe('bcbst');
   });
 
-  it('uses SITE_SKINS for known sites', () => {
-    delete process.env.NEXT_PUBLIC_APP_THEME;
-    expect(resolveTheme({ site: 'rockland' })).toBe('rockland');
-    expect(resolveTheme({ site: 'pillsburylaw' })).toBe(SITE_SKINS.pillsburylaw);
-    expect(resolveTheme({ site: 'quanex' })).toBe('quanex');
-    expect(resolveTheme({ site: 'amesburytruth' })).toBe('amesburytruth');
-    expect(resolveTheme({ site: 'era' })).toBe('era');
-    expect(resolveTheme({ site: 'dfs' })).toBe('dfsupply');
-  });
-
-  it('treats site name as theme when registered', () => {
-    delete process.env.NEXT_PUBLIC_APP_THEME;
-    expect(resolveTheme({ site: 'dwyeromega' })).toBe('dwyeromega');
+  it('has an empty SITE_SKINS map until create-new-theme adds sites', () => {
+    expect(Object.keys(SITE_SKINS)).toEqual([]);
   });
 
   it('falls back to NEXT_PUBLIC_APP_THEME when site has no skin', () => {
-    process.env.NEXT_PUBLIC_APP_THEME = 'builderfs';
-    expect(resolveTheme({ site: 'alaris' })).toBe('builderfs');
+    process.env.NEXT_PUBLIC_APP_THEME = 'bcbst';
+    expect(resolveTheme({ site: 'alaris' })).toBe('bcbst');
   });
 
   it('falls back to DEFAULT_THEME', () => {
@@ -49,26 +38,15 @@ describe('resolveTheme', () => {
 
   it('ignores unknown skin values', () => {
     delete process.env.NEXT_PUBLIC_APP_THEME;
-    expect(resolveTheme({ skin: 'not-a-theme', site: 'rockland' })).toBe('rockland');
-  });
-
-  it('normalizes case and whitespace', () => {
-    expect(resolveTheme({ skin: ' RockLand ' })).toBe('rockland');
-    expect(resolveTheme({ site: 'PKM' })).toBe('pkm');
+    expect(resolveTheme({ skin: 'not-a-theme', site: 'alaris' })).toBe(DEFAULT_THEME);
   });
 });
 
 describe('theme registry', () => {
-  it('lists registered themes', () => {
-    expect(APP_THEMES).toContain('bcbst');
-    expect(APP_THEMES).toContain('rockland');
-    expect(APP_THEMES).toContain('quanex');
-    expect(APP_THEMES).toContain('amesburytruth');
-    expect(APP_THEMES).toContain('era');
-    expect(isAppTheme('rockland')).toBe(true);
-    expect(isAppTheme('quanex')).toBe(true);
-    expect(isAppTheme('amesburytruth')).toBe(true);
-    expect(isAppTheme('era')).toBe(true);
+  it('lists the starter default theme only', () => {
+    expect(APP_THEMES).toEqual(['bcbst']);
+    expect(isAppTheme('bcbst')).toBe(true);
+    expect(isAppTheme('rockland')).toBe(false);
     expect(isAppTheme('nope')).toBe(false);
   });
 });
