@@ -1,0 +1,313 @@
+# Demo Build Plan
+client:
+  name: "Guidestone Financial"
+  sourceUrl: "https://www.guidestone.org"
+  themeFile: "docs/ai/themes/guidestone-financial.theme.yaml"
+  analyzedAt: "2026-08-21T16:10:00Z"
+
+pageAnalysis:
+  screenshotFiles:
+    desktop: "docs/ai/themes/guidestone-financial/screenshot-desktop.png"
+    mobile: "docs/ai/themes/guidestone-financial/screenshot-mobile.png"
+    hero: "docs/ai/themes/guidestone-financial/screenshot-hero.png"
+  sourceLanguage: "en"
+  contentLanguage: "en"
+  totalSections: 12
+  templateMatches: 12
+  customRequired: 0
+  uniqueRegistryComponentsUsed: 9
+  unusedRegistryComponents: 10
+  variantGap:
+    exact: 4
+    partial: 7
+    none: 1
+  apiAddableSections: 12
+  contextOnlySections: 0
+  notes:
+    - "Desktop full-page capture retained scroll-animation opacity; hero, mobile, and live HTML supplied the missing detail."
+    - "The environment manifest currently has no component entries. Variant fit is evaluated against the planned registry."
+    - "This plan maps the homepage only. All 19 registry components will be built during the later library bootstrap."
+
+sections:
+  - position: 1
+    description: "Pale-blue Kingdom Impact Report announcement with inline Read now link."
+    componentName: "AnnouncementBar"
+    manifestName: "AnnouncementBar"
+    registryId: "announcement-bar"
+    kind: "simple"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "exact"
+    apiAddable: true
+    content:
+      Title: ""
+      Description: "The Kingdom Impact Report is here! Learn what faith-based investing means at GuideStone® and see the impact it can have for God’s Kingdom."
+      LinkText: "Read now."
+      LinkUrl: "https://www.guidestone.org/Updates/Impact-Investing/2025"
+
+  - position: 2
+    description: "White header with GuideStone logo, primary navigation, search, Sign in, and green Get Started CTA."
+    componentName: "NavigationHeader"
+    manifestName: "NavigationHeader"
+    registryId: "navigation-header"
+    kind: "list"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "exact"
+    apiAddable: true
+    content:
+      CtaLabel: "Get Started"
+      CtaLink: "https://www.guidestone.org/Get-Started"
+      NavItems:
+        - "Individual"
+        - "Organization"
+        - "Resources"
+        - "About Us"
+        - "Mission:Dignity"
+
+  - position: 3
+    description: "Rounded landscape hero with left-aligned white GuideStone title and tagline."
+    componentName: "HeroBanner"
+    manifestName: "HeroBanner"
+    registryId: "hero-banner"
+    kind: "simple"
+    variant: "BackgroundImage"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Title: "GuideStone®"
+      Subtitle: "Start well. Stay well. Finish well.®"
+      PrimaryLink: ""
+      SecondaryLink: ""
+    customVariantNeeded:
+      name: "GuideStoneRoundedOverlay"
+      description: "Contained rounded hero with left-aligned white overlay and no CTA row."
+      parentComponent: "HeroBanner"
+
+  - position: 4
+    description: "News & Highlights heading over three text-led highlight cards."
+    componentName: "FeatureCardsGrid"
+    manifestName: "FeatureCardsGrid"
+    registryId: "feature-cards-grid"
+    kind: "list"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Title: "News & Highlights"
+      children:
+        - CardTitle: "2026 SBC Church Compensation Survey"
+          CardEyebrow: "Highlight"
+        - CardTitle: "GuideStone Magazine"
+          CardEyebrow: "Highlight"
+        - CardTitle: "The Clergy Act Resources"
+          CardEyebrow: "Highlight"
+    customVariantNeeded:
+      name: "GuideStoneNewsHighlights"
+      description: "Text-only 3-up cards with small icon, Highlight eyebrow, and no card images."
+      parentComponent: "FeatureCardsGrid"
+
+  - position: 5
+    description: "Pale-blue mission band with centered heading, supporting copy, and green text CTA."
+    componentName: "RichTextBlock"
+    manifestName: "RichTextBlock"
+    registryId: "rich-text-block"
+    kind: "simple"
+    variant: "Centered"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Title: "Our mission is to enhance the financial security and resilience for those who serve the Lord."
+      LinkText: "Get to Know GuideStone"
+      LinkUrl: "https://www.guidestone.org/About-Us"
+    customVariantNeeded:
+      name: "GuideStoneMissionBand"
+      description: "Pale-blue full-width band with centered copy, text CTA, and optional V-divider."
+      parentComponent: "RichTextBlock"
+
+  - position: 6
+    description: "Three rounded documentary photographs in a row without captions."
+    componentName: "ImageGallery"
+    manifestName: "ImageGallery"
+    registryId: "image-gallery"
+    kind: "simple"
+    variant: "Gallery"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "exact"
+    apiAddable: true
+    content:
+      Title: ""
+      Description: ""
+
+  - position: 7
+    description: "Centered How can we help you today? introduction."
+    componentName: "RichTextBlock"
+    manifestName: "RichTextBlock"
+    registryId: "rich-text-block"
+    kind: "simple"
+    variant: "Centered"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "exact"
+    apiAddable: true
+    content:
+      Title: "How can we help you today?"
+      Description: "GuideStone provides churches, ministries, faith-aligned institutions and Christian households with financial solutions that support our shared biblical values."
+
+  - position: 8
+    description: "For Individuals and For Organizations audience toggle."
+    componentName: "TabNavigationSection"
+    manifestName: "TabNavigationSection"
+    registryId: "tab-navigation"
+    kind: "list"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "medium"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      children:
+        - TabLabel: "For Individuals"
+        - TabLabel: "For Organizations"
+    customVariantNeeded:
+      name: "GuideStoneAudienceToggle"
+      description: "Two-pill audience switch that swaps the adjacent services dataset."
+      parentComponent: "TabNavigationSection"
+
+  - position: 9
+    description: "Three stacked icon-left service rows for Retirement, Insurance and Health Plans, and Investments."
+    componentName: "FeatureCardsGrid"
+    manifestName: "FeatureCardsGrid"
+    registryId: "feature-cards-grid"
+    kind: "list"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "medium"
+    variantMatch: "none"
+    apiAddable: true
+    content:
+      audience: "Individuals"
+      children:
+        - CardTitle: "Retirement"
+          CardLinkText: "Find Out More"
+        - CardTitle: "Insurance and Health Plans"
+          CardLinkText: "Find Out More"
+        - CardTitle: "Investments"
+          CardLinkText: "Find Out More"
+    customVariantNeeded:
+      name: "GuideStoneServiceLongCards"
+      description: "Stacked full-width cards with icon left and title, long copy, and link right."
+      parentComponent: "FeatureCardsGrid"
+
+  - position: 10
+    description: "Six-item testimonial carousel with large author photo, quote, attribution, and dot controls."
+    componentName: "TestimonialBlock"
+    manifestName: "TestimonialBlock"
+    registryId: "testimonial-quote"
+    kind: "list"
+    variant: "Carousel"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Title: "What People Are Saying About GuideStone"
+      childrenExpected: 6
+    customVariantNeeded:
+      name: "GuideStoneTestimonialCarousel"
+      description: "Active quote with large left photo, attribution, and six-dot pagination."
+      parentComponent: "TestimonialBlock"
+
+  - position: 11
+    description: "Pale-blue three-column How can we help? conversion strip."
+    componentName: "FeatureCardsGrid"
+    manifestName: "FeatureCardsGrid"
+    registryId: "feature-cards-grid"
+    kind: "list"
+    variant: "Default"
+    matchType: "template"
+    matchConfidence: "medium"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Title: "How can we help?"
+      children:
+        - CardTitle: "New to GuideStone?"
+          CardLinkText: "Talk With Our Team"
+        - CardTitle: "Take the Next Step."
+          CardLinkText: "Get Started"
+        - CardTitle: "Already with GuideStone?"
+          CardLinkText: "Contact Us"
+    customVariantNeeded:
+      name: "GuideStoneHelpStrip"
+      description: "Pale-blue 3-column CTA strip with dividers, text links, and no icons."
+      parentComponent: "FeatureCardsGrid"
+
+  - position: 12
+    description: "Dark-green five-column mega footer with utility and legal links."
+    componentName: "SiteFooter"
+    manifestName: "SiteFooter"
+    registryId: "footer"
+    kind: "simple"
+    variant: "MegaFooter"
+    matchType: "template"
+    matchConfidence: "high"
+    variantMatch: "partial"
+    apiAddable: true
+    content:
+      Copyright: "© 2026 GuideStone®. All rights reserved."
+      Phone: "Call Toll Free: 1-888-98-GUIDE (18889848433)"
+    customVariantNeeded:
+      name: "GuideStoneMegaFooter"
+      description: "Dark-green mega footer with five link columns and lower utility/legal row."
+      parentComponent: "SiteFooter"
+
+customComponents: []
+
+unusedRegistryComponents:
+  - "hero-banner-carousel"
+  - "product-pricing-cards"
+  - "feature-highlight"
+  - "legal-compliance"
+  - "value-proposition-grid"
+  - "trust-stats"
+  - "cta-banner"
+  - "logo-cloud"
+  - "newsletter-signup"
+  - "faq-accordion"
+
+buildOrder:
+  phase1_sitecore:
+    - "AnnouncementBar"
+    - "HeroBanner"
+    - "FeatureCardsGrid (News & Highlights)"
+    - "RichTextBlock (Mission)"
+    - "ImageGallery"
+    - "RichTextBlock (Introduction)"
+    - "TabNavigationSection"
+    - "FeatureCardsGrid (Services)"
+    - "TestimonialBlock"
+    - "FeatureCardsGrid (Help strip)"
+    - "NavigationHeader"
+    - "SiteFooter"
+  phase1_manual_context: []
+  phase2_theme: "Apply GuideStone CSS variables and Poppins."
+  phase3_custom: []
+  phase5_5_variants:
+    - "GuideStoneRoundedOverlay"
+    - "GuideStoneNewsHighlights"
+    - "GuideStoneMissionBand"
+    - "GuideStoneAudienceToggle"
+    - "GuideStoneServiceLongCards"
+    - "GuideStoneTestimonialCarousel"
+    - "GuideStoneHelpStrip"
+    - "GuideStoneMegaFooter"

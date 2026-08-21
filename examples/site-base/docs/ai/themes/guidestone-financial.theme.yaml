@@ -1,0 +1,120 @@
+# Client Brand Theme
+# Extracted from https://www.guidestone.org on 2026-08-21.
+
+client:
+  name: "Guidestone Financial"
+  sourceUrl: "https://www.guidestone.org"
+  extractedAt: "2026-08-21T15:58:00Z"
+  extractedBy: "cursor-agent"
+
+colors:
+  primary: "#007A4C"
+  primaryForeground: "#FFFFFF"
+  secondary: "#004F3D"
+  secondaryForeground: "#FFFFFF"
+  accent: "#6ABF4B"
+  accentForeground: "#221F1F"
+  background: "#FFFFFF"
+  foreground: "#221F1F"
+  muted: "#F4F4F4"
+  mutedForeground: "#666666"
+  headerBackground: "#FFFFFF"
+  headerForeground: "#221F1F"
+  footerBackground: "#004F3D"
+  footerForeground: "#FFFFFF"
+  border: "#D9D9D9"
+  ring: "#007A4C"
+  extra:
+    - name: "announcement"
+      value: "#DDEFFA"
+    - name: "logo-lime"
+      value: "#6ABF4B"
+
+typography:
+  headingFamily: "Poppins, sans-serif"
+  headingWeight: "700"
+  bodyFamily: "Poppins, sans-serif"
+  bodyWeight: "400"
+  monoFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+  googleFontsUrl: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  scale:
+    hero: "3.25rem"
+    h1: "3.25rem"
+    h2: "2.25rem"
+    h3: "1.5rem"
+    body: "1rem"
+    small: "0.875rem"
+  headingTransform: "none"
+  letterSpacing: "normal"
+  lineHeight: "1.5"
+
+spacing:
+  density: "spacious"
+  sectionGap: "6rem"
+  containerMaxWidth: "1200px"
+  containerPadding: "2rem"
+
+shape:
+  borderRadius: "0.5rem"
+  buttonRadius: "0.25rem"
+  cardRadius: "0.75rem"
+  imageRadius: "0.75rem"
+  shadowStyle: "subtle"
+  borderStyle: "1px solid #D9D9D9"
+
+tone:
+  overall: "warm, trustworthy, faith-aligned financial services"
+  colorMode: "light with dark-green footer bands"
+  contrast: "medium"
+  imagery: "warm documentary photography and serene landscape photography"
+  heroStyle: "rounded full-width image with white text overlay"
+  cardStyle: "clean white cards with restrained borders and rounded corners"
+  navStyle: "solid white utility and primary navigation with green CTA"
+
+tailwind:
+  colors:
+    brand:
+      primary: "#007A4C"
+      secondary: "#004F3D"
+      accent: "#6ABF4B"
+  fontFamily:
+    heading: ["Poppins", "sans-serif"]
+    body: ["Poppins", "sans-serif"]
+  borderRadius:
+    DEFAULT: "0.5rem"
+    button: "0.25rem"
+    card: "0.75rem"
+
+cssVariables: |
+  :root {
+    --brand-primary: #007A4C;
+    --brand-primary-foreground: #FFFFFF;
+    --brand-secondary: #004F3D;
+    --brand-secondary-foreground: #FFFFFF;
+    --brand-accent: #6ABF4B;
+    --brand-accent-foreground: #221F1F;
+    --brand-bg: #FFFFFF;
+    --brand-fg: #221F1F;
+    --brand-muted: #F4F4F4;
+    --brand-muted-fg: #666666;
+    --brand-header-bg: #FFFFFF;
+    --brand-header-fg: #221F1F;
+    --brand-footer-bg: #004F3D;
+    --brand-footer-fg: #FFFFFF;
+    --brand-border: #D9D9D9;
+    --brand-ring: #007A4C;
+    --brand-heading-font: 'Poppins', sans-serif;
+    --brand-body-font: 'Poppins', sans-serif;
+    --brand-radius: 0.5rem;
+    --brand-button-radius: 0.25rem;
+    --brand-card-radius: 0.75rem;
+  }
+
+extraction:
+  confidence: "medium"
+  method: "playwright-partial"
+  notes:
+    - "Playwright captured desktop, hero, and mobile screenshots, but full-page desktop scroll animations remained partially transparent after an 8-second wait."
+    - "The primary green (#007A4C), lime accent (#6ABF4B), and charcoal (#221F1F) are exact values from the downloaded GuideStone logo."
+    - "The live site uses proprietary Sofia Pro for headings. Poppins is the closest practical Google Fonts substitute for this demo."
+    - "The dark-green footer and pale-blue announcement colors were visually sampled from the screenshots and should be confirmed during theme review."

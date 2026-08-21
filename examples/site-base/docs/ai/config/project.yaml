@@ -3,16 +3,19 @@
 # Commit this file to the repo. Update it when the project changes.
 
 # XM Cloud site identity
-siteCollection: "progressive"
-siteName: "pkm"
+# Collection display name is "Finance"; Sitecore item name is lowercase `finance`.
+# Site display name is "Guidestone Financial"; Sitecore site name is `guidestone-financial`.
+# Rendering / editing host: site-base
+siteCollection: "finance"
+siteName: "guidestone-financial"
 
 # Sitecore SDK used by this repo's React components
 sdk: "@sitecore-content-sdk/nextjs"
 
-# Sitecore item root paths
-renderingsRoot: "/sitecore/layout/Renderings/Project/progressive"
-projectTemplatesRoot: "/sitecore/templates/Project/progressive"
-dataRoot: "/sitecore/content/progressive/pkm/Data"
-projectFoldersRoot: "/sitecore/templates/Project/progressive/Folders"
-renderingParamsRoot: "/sitecore/templates/Project/progressive/Rendering Parameters"
-headlessVariantsRoot: "/sitecore/content/progressive/pkm/Presentation/Headless Variants"
+# Sitecore item root paths (verified via MCP 2026-08-21)
+renderingsRoot: "/sitecore/layout/Renderings/Project/finance"
+projectTemplatesRoot: "/sitecore/templates/Project/finance"
+dataRoot: "/sitecore/content/finance/guidestone-financial/Data"
+projectFoldersRoot: "/sitecore/templates/Project/finance/Folders"
+renderingParamsRoot: "/sitecore/templates/Project/finance/Rendering Parameters"
+headlessVariantsRoot: "/sitecore/content/finance/guidestone-financial/Presentation/Headless Variants"

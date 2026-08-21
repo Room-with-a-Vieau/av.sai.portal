@@ -1,19 +1,29 @@
 // Client-safe component map for App Router
+import { NextjsContentSdkComponent } from '@sitecore-content-sdk/nextjs';
 
-import { BYOCClientWrapper, NextjsContentSdkComponent, FEaaSClientWrapper } from '@sitecore-content-sdk/nextjs';
+
+import { BYOCClientWrapper, FEaaSClientWrapper } from '@sitecore-content-sdk/nextjs';
 import { Form } from '@sitecore-content-sdk/nextjs';
 
-import * as zipcodemodaldev from 'src/components/zipcode-modal/zipcode-modal.dev';
+// end of built-in import section
+import * as ZipcodeModaldev from 'src/components/zipcode-modal/zipcode-modal.dev';
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
 import * as VariantContent from 'src/components/variant-content/VariantContent';
+import * as TestimonialBlock from 'src/components/uiim/social-proof/TestimonialBlock';
 import * as ProductDetail from 'src/components/uiim/products/ProductDetail';
 import * as ProductCarousel from 'src/components/uiim/products/ProductCarousel';
+import * as TabNavigationSection from 'src/components/uiim/navigation/TabNavigationSection';
+import * as NavigationHeader from 'src/components/uiim/navigation/NavigationHeader';
 import * as CareerListing from 'src/components/uiim/lawyers/CareerListing';
 import * as BioListing from 'src/components/uiim/lawyers/BioListing';
 import * as BioDetail from 'src/components/uiim/lawyers/BioDetail';
 import * as BlogListing from 'src/components/uiim/insights/BlogListing';
+import * as NewsletterSignup from 'src/components/uiim/forms/NewsletterSignup';
+import * as FAQAccordion from 'src/components/uiim/content/FAQAccordion';
+import * as FeatureCardsGrid from 'src/components/uiim/cards/FeatureCardsGrid';
 import * as HeroCarousel from 'src/components/uiim/banners/HeroCarousel';
-import * as themeproviderdev from 'src/components/theme-provider/theme-provider.dev';
+import * as HeroBannerCarousel from 'src/components/uiim/banners/HeroBannerCarousel';
+import * as ThemeProviderdev from 'src/components/theme-provider/theme-provider.dev';
 import * as ApplySiteTheme from 'src/components/theme/ApplySiteTheme';
 import * as TextBannerTextTopdev from 'src/components/text-banner/TextBannerTextTop.dev';
 import * as TextBannerDefaultdev from 'src/components/text-banner/TextBannerDefault.dev';
@@ -56,7 +66,7 @@ import * as ProductListingDefaultdev from 'src/components/product-listing/Produc
 import * as ProductListing from 'src/components/product-listing/ProductListing';
 import * as PortalPageDetail from 'src/components/portal-page-detail/PortalPageDetail';
 import * as PortalHubViewclient from 'src/components/portal-hub/PortalHubView.client';
-import * as portaldev from 'src/components/portal/portal.dev';
+import * as Portaldev from 'src/components/portal/portal.dev';
 import * as PageHeaderFiftyFiftydev from 'src/components/page-header/PageHeaderFiftyFifty.dev';
 import * as PageHeaderDefaultdev from 'src/components/page-header/PageHeaderDefault.dev';
 import * as PageHeaderCentereddev from 'src/components/page-header/PageHeaderCentered.dev';
@@ -64,10 +74,10 @@ import * as PageHeaderBlueTextdev from 'src/components/page-header/PageHeaderBlu
 import * as PageHeaderBlueBackgrounddev from 'src/components/page-header/PageHeaderBlueBackground.dev';
 import * as PageHeader from 'src/components/page-header/PageHeader';
 import * as MultiPromoTabs from 'src/components/multi-promo-tabs/MultiPromoTabs';
-import * as modetoggledev from 'src/components/mode-toggle/mode-toggle.dev';
+import * as ModeToggledev from 'src/components/mode-toggle/mode-toggle.dev';
 import * as MediaSectiondev from 'src/components/media-section/MediaSection.dev';
 import * as MainNav from 'src/components/main-nav/MainNav';
-import * as meteors from 'src/components/magicui/meteors';
+import * as Meteors from 'src/components/magicui/meteors';
 import * as LogoTabs from 'src/components/logo-tabs/LogoTabs';
 import * as LocationSearchTitleZipCentereddev from 'src/components/location-search/LocationSearchTitleZipCentered.dev';
 import * as LocationSearchMapTopAllCentereddev from 'src/components/location-search/LocationSearchMapTopAllCentered.dev';
@@ -85,8 +95,8 @@ import * as ImageGalleryFiftyFiftydev from 'src/components/image-gallery/ImageGa
 import * as ImageGalleryFeaturedImagedev from 'src/components/image-gallery/ImageGalleryFeaturedImage.dev';
 import * as ImageGallerydev from 'src/components/image-gallery/ImageGallery.dev';
 import * as ImageGallery from 'src/components/image-gallery/ImageGallery';
+import * as ImageOptimizationcontext from 'src/components/image/image-optimization.context';
 import * as ImageWrapperclient from 'src/components/image/ImageWrapper.client';
-import * as imageoptimizationcontext from 'src/components/image/image-optimization.context';
 import * as Icon from 'src/components/icon/Icon';
 import * as HtmlSnippetBlock from 'src/components/html-snippet-block/HtmlSnippetBlock';
 import * as HeroImageRightdev from 'src/components/hero/HeroImageRight.dev';
@@ -109,7 +119,7 @@ import * as FooterNavigationColumn from 'src/components/global-footer/FooterNavi
 import * as ZipcodeSearchFormdev from 'src/components/forms/zipcode/ZipcodeSearchForm.dev';
 import * as SubmitInfoFormdev from 'src/components/forms/submitinfo/SubmitInfoForm.dev';
 import * as EmailSignupFormdev from 'src/components/forms/email/EmailSignupForm.dev';
-import * as floatingdockdev from 'src/components/floating-dock/floating-dock.dev';
+import * as FloatingDockdev from 'src/components/floating-dock/floating-dock.dev';
 import * as FAQListing from 'src/components/faq-listing/FAQListing';
 import * as DownloadList from 'src/components/download-list/DownloadList';
 import * as ProductsSection from 'src/components/component-library/ProductsSection';
@@ -118,7 +128,7 @@ import * as FeaturesSection from 'src/components/component-library/FeaturesSecti
 import * as FAQ from 'src/components/component-library/FAQ';
 import * as ContactSection from 'src/components/component-library/ContactSection';
 import * as Carousel from 'src/components/carousel/Carousel';
-import * as cardspotlightdev from 'src/components/card-spotlight/card-spotlight.dev';
+import * as CardSpotlightdev from 'src/components/card-spotlight/card-spotlight.dev';
 import * as Authentication from 'src/components/authentication/Authentication';
 import * as AuthPanel from 'src/components/auth-panel/AuthPanel';
 import * as ArticleListing from 'src/components/article-listing/ArticleListing';
@@ -132,17 +142,24 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCClientWrapper],
   ['FEaaSWrapper', FEaaSClientWrapper],
   ['Form', Form],
-  ['zipcode-modal', { ...zipcodemodaldev }],
+  ['ZipcodeModal', { ...ZipcodeModaldev }],
   ['VerticalImageAccordion', { ...VerticalImageAccordion }],
   ['VariantContent', { ...VariantContent }],
+  ['TestimonialBlock', { ...TestimonialBlock }],
   ['ProductDetail', { ...ProductDetail }],
   ['ProductCarousel', { ...ProductCarousel }],
+  ['TabNavigationSection', { ...TabNavigationSection }],
+  ['NavigationHeader', { ...NavigationHeader }],
   ['CareerListing', { ...CareerListing }],
   ['BioListing', { ...BioListing }],
   ['BioDetail', { ...BioDetail }],
   ['BlogListing', { ...BlogListing }],
+  ['NewsletterSignup', { ...NewsletterSignup }],
+  ['FAQAccordion', { ...FAQAccordion }],
+  ['FeatureCardsGrid', { ...FeatureCardsGrid }],
   ['HeroCarousel', { ...HeroCarousel }],
-  ['theme-provider', { ...themeproviderdev }],
+  ['HeroBannerCarousel', { ...HeroBannerCarousel }],
+  ['ThemeProvider', { ...ThemeProviderdev }],
   ['ApplySiteTheme', { ...ApplySiteTheme }],
   ['TextBannerTextTop', { ...TextBannerTextTopdev }],
   ['TextBannerDefault', { ...TextBannerDefaultdev }],
@@ -184,7 +201,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ProductListing', { ...ProductListing }],
   ['PortalPageDetail', { ...PortalPageDetail }],
   ['PortalHubView', { ...PortalHubViewclient }],
-  ['portal', { ...portaldev }],
+  ['Portal', { ...Portaldev }],
   ['PageHeaderFiftyFifty', { ...PageHeaderFiftyFiftydev }],
   ['PageHeaderDefault', { ...PageHeaderDefaultdev }],
   ['PageHeaderCentered', { ...PageHeaderCentereddev }],
@@ -192,10 +209,10 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['PageHeaderBlueBackground', { ...PageHeaderBlueBackgrounddev }],
   ['PageHeader', { ...PageHeader }],
   ['MultiPromoTabs', { ...MultiPromoTabs }],
-  ['mode-toggle', { ...modetoggledev }],
+  ['ModeToggle', { ...ModeToggledev }],
   ['MediaSection', { ...MediaSectiondev }],
   ['MainNav', { ...MainNav }],
-  ['meteors', { ...meteors }],
+  ['Meteors', { ...Meteors }],
   ['LogoTabs', { ...LogoTabs }],
   ['LocationSearchTitleZipCentered', { ...LocationSearchTitleZipCentereddev }],
   ['LocationSearchMapTopAllCentered', { ...LocationSearchMapTopAllCentereddev }],
@@ -212,8 +229,8 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ImageGalleryFiftyFifty', { ...ImageGalleryFiftyFiftydev }],
   ['ImageGalleryFeaturedImage', { ...ImageGalleryFeaturedImagedev }],
   ['ImageGallery', { ...ImageGallerydev, ...ImageGallery }],
+  ['ImageOptimization', { ...ImageOptimizationcontext }],
   ['ImageWrapper', { ...ImageWrapperclient }],
-  ['image-optimization', { ...imageoptimizationcontext }],
   ['Icon', { ...Icon }],
   ['HtmlSnippetBlock', { ...HtmlSnippetBlock }],
   ['HeroImageRight', { ...HeroImageRightdev }],
@@ -235,7 +252,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ZipcodeSearchForm', { ...ZipcodeSearchFormdev }],
   ['SubmitInfoForm', { ...SubmitInfoFormdev }],
   ['EmailSignupForm', { ...EmailSignupFormdev }],
-  ['floating-dock', { ...floatingdockdev }],
+  ['FloatingDock', { ...FloatingDockdev }],
   ['FAQListing', { ...FAQListing }],
   ['DownloadList', { ...DownloadList }],
   ['ProductsSection', { ...ProductsSection }],
@@ -244,7 +261,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['FAQ', { ...FAQ }],
   ['ContactSection', { ...ContactSection }],
   ['Carousel', { ...Carousel }],
-  ['card-spotlight', { ...cardspotlightdev }],
+  ['CardSpotlight', { ...CardSpotlightdev }],
   ['Authentication', { ...Authentication }],
   ['AuthPanel', { ...AuthPanel }],
   ['ArticleListing', { ...ArticleListing }],
