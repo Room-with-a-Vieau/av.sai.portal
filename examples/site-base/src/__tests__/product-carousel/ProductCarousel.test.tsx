@@ -29,15 +29,8 @@ const mockUseSitecore = jest.fn(() => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({
-    src,
-    alt,
-    className,
-  }: {
-    src: string;
-    alt: string;
-    className?: string;
-  }) => React.createElement('img', { src, alt, className }),
+  default: ({ src, alt, className }: { src: string; alt: string; className?: string }) =>
+    React.createElement('img', { src, alt, className }),
 }));
 
 jest.mock('next/link', () => ({
@@ -193,10 +186,7 @@ describe('ProductCarousel', () => {
     expect(screen.getByText('HINGES')).toBeInTheDocument();
     expect(screen.getAllByText('Learn More').length).toBeGreaterThan(0);
     const links = screen.getAllByRole('link', { name: 'Learn More' });
-    expect(links[0]).toHaveAttribute(
-      'href',
-      '/Products/Weatherseals/Q-LON Weatherseals'
-    );
+    expect(links[0]).toHaveAttribute('href', '/Products/Weatherseals/Q-LON Weatherseals');
   });
 
   it('renders ProductStrip with options hint and dark CTA', () => {

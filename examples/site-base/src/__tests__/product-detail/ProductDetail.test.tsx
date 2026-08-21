@@ -32,15 +32,8 @@ const mockUseSitecore = jest.fn(() => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({
-    src,
-    alt,
-    className,
-  }: {
-    src: string;
-    alt: string;
-    className?: string;
-  }) => React.createElement('img', { src, alt, className }),
+  default: ({ src, alt, className }: { src: string; alt: string; className?: string }) =>
+    React.createElement('img', { src, alt, className }),
 }));
 
 jest.mock('lucide-react', () => ({
@@ -205,15 +198,11 @@ describe('ProductDetail', () => {
       />
     );
 
-    expect(
-      screen.getByAltText('Commercial Vinyl Door Systems')
-    ).toHaveAttribute(
+    expect(screen.getByAltText('Commercial Vinyl Door Systems')).toHaveAttribute(
       'src',
       'https://www.quanex.com/wp-content/uploads/2022/07/Mikron-AW-Rated-Door-System-C3-11300_ProductImage_605x380.jpg'
     );
-    expect(
-      screen.getByAltText('Commercial Vinyl Door Systems alternate view')
-    ).toHaveAttribute(
+    expect(screen.getByAltText('Commercial Vinyl Door Systems alternate view')).toHaveAttribute(
       'src',
       'https://www.quanex.com/wp-content/uploads/2022/07/Quanex-5400-Sliding-Patio-Door-System_ProductImage_605x380.jpg'
     );

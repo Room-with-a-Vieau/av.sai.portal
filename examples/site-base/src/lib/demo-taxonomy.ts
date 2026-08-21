@@ -17,7 +17,9 @@ export function parseDemoUserTaxonomy(raw: string | undefined | null): DemoUserT
   const value = raw?.trim();
   if (!value) return null;
 
-  return (DEMO_USER_PERSONAS as readonly string[]).includes(value) ? (value as DemoUserTaxonomy) : null;
+  return (DEMO_USER_PERSONAS as readonly string[]).includes(value)
+    ? (value as DemoUserTaxonomy)
+    : null;
 }
 
 export function getPersonaCode(persona: DemoUserTaxonomy): string {
@@ -48,9 +50,7 @@ export function clearStoredDemoTaxonomy(): void {
 export function setStoredDemoTaxonomy(taxonomy: DemoUserTaxonomy): void {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(DEMO_TAXONOMY_STORAGE_KEY, taxonomy);
-  window.dispatchEvent(
-    new CustomEvent(DEMO_TAXONOMY_CHANGE_EVENT, { detail: { taxonomy } })
-  );
+  window.dispatchEvent(new CustomEvent(DEMO_TAXONOMY_CHANGE_EVENT, { detail: { taxonomy } }));
 }
 
 export function readStoredDemoTaxonomy(): DemoUserTaxonomy | null {

@@ -1,6 +1,9 @@
 import type { PortalHubModuleWire } from '@/lib/portal-hub-from-edge';
 
-import { getMockIndustryEntry, getRegisteredMockIndustryKeys } from '@/lib/portal-hub-mocks/registry';
+import {
+  getMockIndustryEntry,
+  getRegisteredMockIndustryKeys,
+} from '@/lib/portal-hub-mocks/registry';
 
 export type { PortalHubMockIndustry } from '@/lib/portal-hub-mocks/types';
 

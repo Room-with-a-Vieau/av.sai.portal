@@ -10,7 +10,7 @@ function flatFieldsWithoutData(fields: unknown): Record<string, unknown> {
 }
 
 function hasLayoutData(
-  fields: unknown,
+  fields: unknown
 ): fields is { data: { datasource?: Partial<ArticleHeaderFields> } } {
   if (typeof fields !== 'object' || fields === null || !('data' in fields)) return false;
   const data = (fields as { data: unknown }).data;
@@ -18,7 +18,7 @@ function hasLayoutData(
 }
 
 function unwrapTextField(
-  cell: Field<string> | { jsonValue?: Field<string> } | undefined,
+  cell: Field<string> | { jsonValue?: Field<string> } | undefined
 ): Field<string> | undefined {
   if (cell == null) return undefined;
   if (typeof cell === 'object' && 'jsonValue' in cell && cell.jsonValue !== undefined) {
@@ -30,7 +30,9 @@ function unwrapTextField(
 /** Sitecore template field is often `Eyebrow`; component prop is `eyebrowOptional`. */
 const EYEBROW_FIELD_KEYS = ['eyebrowOptional', 'Eyebrow', 'eyebrow'] as const;
 
-function pickEyebrowField(...bags: Array<Record<string, unknown> | undefined>): Field<string> | undefined {
+function pickEyebrowField(
+  ...bags: Array<Record<string, unknown> | undefined>
+): Field<string> | undefined {
   for (const bag of bags) {
     if (!bag) continue;
     for (const key of EYEBROW_FIELD_KEYS) {

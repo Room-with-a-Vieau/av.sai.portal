@@ -1,10 +1,4 @@
-import {
-  APP_THEMES,
-  DEFAULT_THEME,
-  isAppTheme,
-  resolveTheme,
-  SITE_SKINS,
-} from '@/lib/theme';
+import { APP_THEMES, DEFAULT_THEME, isAppTheme, resolveTheme, SITE_SKINS } from '@/lib/theme';
 
 describe('resolveTheme', () => {
   const originalEnv = process.env.NEXT_PUBLIC_APP_THEME;

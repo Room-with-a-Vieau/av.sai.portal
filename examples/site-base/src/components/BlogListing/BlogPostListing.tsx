@@ -19,7 +19,7 @@ async function resolveAfterCursor(
   datasourcePath: string,
   language: string,
   pageSize: number,
-  targetPage: number,
+  targetPage: number
 ): Promise<string | null | undefined> {
   if (targetPage <= 1) {
     return undefined;
@@ -89,7 +89,7 @@ async function BlogPostListingContent(props: BlogListingProps): Promise<ReactEle
 
   endCursorByPage.set(
     cacheKey(datasourcePath, pageSize, currentPage),
-    result.pageInfo.endCursor ?? null,
+    result.pageInfo.endCursor ?? null
   );
 
   const { posts, totalCount, pageInfo } = result;

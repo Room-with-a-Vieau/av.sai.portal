@@ -26,7 +26,7 @@ export async function Default(props: PortalHubProps): Promise<React.ReactElement
   });
 
   const initialIndustryKey = normalizeIndustryKey(
-    params.industryType ?? process.env.PORTAL_HUB_DEFAULT_INDUSTRY ?? '',
+    params.industryType ?? process.env.PORTAL_HUB_DEFAULT_INDUSTRY ?? ''
   );
 
   const initialModules =

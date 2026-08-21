@@ -10,7 +10,7 @@ describe('resolveArticleHeaderFields', () => {
       resolveArticleHeaderFields({
         imageRequired: mockImage,
         eyebrowOptional: { value: 'News' },
-      }),
+      })
     ).toEqual({
       imageRequired: mockImage,
       eyebrowOptional: { value: 'News' },

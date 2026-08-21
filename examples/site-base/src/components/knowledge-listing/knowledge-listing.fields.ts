@@ -27,7 +27,12 @@ export type ResolvedKnowledgeArticle = {
 
 function unwrapField<T>(cell: T | { jsonValue?: T } | undefined): T | undefined {
   if (!cell) return undefined;
-  if (typeof cell === 'object' && cell !== null && 'jsonValue' in cell && cell.jsonValue !== undefined) {
+  if (
+    typeof cell === 'object' &&
+    cell !== null &&
+    'jsonValue' in cell &&
+    cell.jsonValue !== undefined
+  ) {
     return cell.jsonValue;
   }
   return cell as T;
@@ -68,7 +73,10 @@ function normalizeId(id: string): string {
   return id.replace(/[{}]/g, '').toLowerCase();
 }
 
-function topicsFromGraph(item: KnowledgeArticleListItem, key: 'lob' | 'perilType'): TaxonomyTopicReference[] {
+function topicsFromGraph(
+  item: KnowledgeArticleListItem,
+  key: 'lob' | 'perilType'
+): TaxonomyTopicReference[] {
   const graph = item[key]?.targetItems;
   if (Array.isArray(graph) && graph.length) {
     return graph.map((t) => ({
@@ -82,18 +90,17 @@ function topicsFromGraph(item: KnowledgeArticleListItem, key: 'lob' | 'perilType
   return Array.isArray(layout) ? layout : [];
 }
 
-export function resolveDatasource(
-  props: KnowledgeListingProps
-): KnowledgeListingDatasource | null {
-  return props.fields?.data?.datasource || (props.fields as KnowledgeListingDatasource | undefined) || null;
+export function resolveDatasource(props: KnowledgeListingProps): KnowledgeListingDatasource | null {
+  return (
+    props.fields?.data?.datasource ||
+    (props.fields as KnowledgeListingDatasource | undefined) ||
+    null
+  );
 }
 
 export function mapArticle(item: KnowledgeArticleListItem): ResolvedKnowledgeArticle {
   const title =
-    textValue(item.title) ||
-    textValue(item.fields?.Title) ||
-    item.name ||
-    'Knowledge Article';
+    textValue(item.title) || textValue(item.fields?.Title) || item.name || 'Knowledge Article';
   const kbId = textValue(item.kbId) || textValue(item.fields?.['KB-ID']);
   const purposeHtml = richTextValue(item.purpose) || richTextValue(item.fields?.Purpose);
   return {
@@ -115,14 +122,18 @@ export function mapArticle(item: KnowledgeArticleListItem): ResolvedKnowledgeArt
 export function resolveMaxItems(datasource: KnowledgeListingDatasource | null): number {
   const field =
     unwrapField(datasource?.maxItems) ||
-    unwrapField(datasource?.MaxItems as Field<string | number> | { jsonValue?: Field<string | number> });
+    unwrapField(
+      datasource?.MaxItems as Field<string | number> | { jsonValue?: Field<string | number> }
+    );
   const raw = field?.value;
   const n = typeof raw === 'number' ? raw : Number(String(raw ?? '').trim());
   if (!Number.isFinite(n) || n < 1) return 6;
   return Math.min(Math.floor(n), 48);
 }
 
-export function resolveListingMode(datasource: KnowledgeListingDatasource | null): KnowledgeListingMode {
+export function resolveListingMode(
+  datasource: KnowledgeListingDatasource | null
+): KnowledgeListingMode {
   const field =
     unwrapField(datasource?.listingMode) ||
     unwrapField(datasource?.ListingMode as Field<string> | { jsonValue?: Field<string> });
@@ -132,8 +143,13 @@ export function resolveListingMode(datasource: KnowledgeListingDatasource | null
   return 'Recently Updated';
 }
 
-export function resolveTitle(datasource: KnowledgeListingDatasource | null): Field<string> | undefined {
-  return unwrapField(datasource?.title) || unwrapField(datasource?.Title as Field<string> | { jsonValue?: Field<string> });
+export function resolveTitle(
+  datasource: KnowledgeListingDatasource | null
+): Field<string> | undefined {
+  return (
+    unwrapField(datasource?.title) ||
+    unwrapField(datasource?.Title as Field<string> | { jsonValue?: Field<string> })
+  );
 }
 
 export function resolveDescription(

@@ -59,7 +59,11 @@ jest.mock('../../components/ui/button', () => ({
 // Mock next/link
 jest.mock('next/link', () => {
   const MockLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
-    return <a href={href} data-testid="link">{children}</a>;
+    return (
+      <a href={href} data-testid="link">
+        {children}
+      </a>
+    );
   };
   MockLink.displayName = 'MockLink';
   return MockLink;

@@ -20,21 +20,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
-import type {
-  MainNavProps,
-  MainNavSupportLink,
-  MainNavTreeNode,
-} from './main-nav.props';
+import type { MainNavProps, MainNavSupportLink, MainNavTreeNode } from './main-nav.props';
 import { extractNavigationRootId } from '@/lib/main-nav-utils';
 
 function textValue(field?: { value?: unknown } | null): string {
@@ -71,7 +61,13 @@ function nodeHref(node: MainNavTreeNode): string {
 }
 
 function nodeTitle(node: MainNavTreeNode): string {
-  return gqlText(node.navigationTitle) || gqlText(node.title) || gqlText(node.pageTitle) || node.name || '';
+  return (
+    gqlText(node.navigationTitle) ||
+    gqlText(node.title) ||
+    gqlText(node.pageTitle) ||
+    node.name ||
+    ''
+  );
 }
 
 function nodeChildren(node?: MainNavTreeNode | null): MainNavTreeNode[] {
@@ -79,7 +75,11 @@ function nodeChildren(node?: MainNavTreeNode | null): MainNavTreeNode[] {
   return Array.isArray(results) ? results.filter(Boolean) : [];
 }
 
-function sliceFromStart(nodes: MainNavTreeNode[], startLevel: number, currentLevel = 1): MainNavTreeNode[] {
+function sliceFromStart(
+  nodes: MainNavTreeNode[],
+  startLevel: number,
+  currentLevel = 1
+): MainNavTreeNode[] {
   if (startLevel <= currentLevel) return nodes;
   return nodes.flatMap((node) => sliceFromStart(nodeChildren(node), startLevel, currentLevel + 1));
 }
@@ -137,7 +137,9 @@ function MegaColumns({
   return (
     <div
       className="grid gap-6"
-      style={{ gridTemplateColumns: `repeat(${Math.min(columns.length, maxColumns)}, minmax(0, 1fr))` }}
+      style={{
+        gridTemplateColumns: `repeat(${Math.min(columns.length, maxColumns)}, minmax(0, 1fr))`,
+      }}
     >
       {columns.map((column) => {
         const href = nodeHref(column);
@@ -146,7 +148,10 @@ function MegaColumns({
         return (
           <div key={column.id || title} className="min-w-0">
             {href !== '#' ? (
-              <a href={href} className="mb-2 block text-sm font-semibold text-foreground hover:text-primary">
+              <a
+                href={href}
+                className="mb-2 block text-sm font-semibold text-foreground hover:text-primary"
+              >
                 {title}
               </a>
             ) : (
@@ -161,11 +166,16 @@ function MegaColumns({
                   return (
                     <li key={child.id || childTitle}>
                       {childHref !== '#' ? (
-                        <a href={childHref} className="block py-0.5 text-sm text-muted-foreground hover:text-primary">
+                        <a
+                          href={childHref}
+                          className="block py-0.5 text-sm text-muted-foreground hover:text-primary"
+                        >
                           {childTitle}
                         </a>
                       ) : (
-                        <span className="block py-0.5 text-sm text-muted-foreground">{childTitle}</span>
+                        <span className="block py-0.5 text-sm text-muted-foreground">
+                          {childTitle}
+                        </span>
                       )}
                       {l4.length > 0 && (
                         <ul className="mt-1 space-y-1 border-l border-border pl-3">
@@ -182,7 +192,9 @@ function MegaColumns({
                                     {leafTitle}
                                   </a>
                                 ) : (
-                                  <span className="block py-0.5 text-xs text-muted-foreground">{leafTitle}</span>
+                                  <span className="block py-0.5 text-xs text-muted-foreground">
+                                    {leafTitle}
+                                  </span>
                                 )}
                               </li>
                             );
@@ -238,15 +250,24 @@ function DesktopMegaNav({
                 {title}
               </button>
             ) : href !== '#' ? (
-              <a href={href} className="inline-flex h-full items-center px-3 py-3 text-sm font-medium text-foreground hover:text-primary">
+              <a
+                href={href}
+                className="inline-flex h-full items-center px-3 py-3 text-sm font-medium text-foreground hover:text-primary"
+              >
                 {title}
               </a>
             ) : (
-              <span className="inline-flex h-full items-center px-3 py-3 text-sm font-medium text-foreground">{title}</span>
+              <span className="inline-flex h-full items-center px-3 py-3 text-sm font-medium text-foreground">
+                {title}
+              </span>
             )}
             {children.length > 0 && isOpen && (
               <div className="absolute left-0 top-full z-40 min-w-[36rem] rounded-2xl border border-border bg-background p-6 shadow-lg">
-                <MegaColumns items={children} maxColumns={maxColumns} remainingDepth={remainingDepth - 1} />
+                <MegaColumns
+                  items={children}
+                  maxColumns={maxColumns}
+                  remainingDepth={remainingDepth - 1}
+                />
               </div>
             )}
           </li>
@@ -272,7 +293,11 @@ function MobileAccordionNav({
         const children = remainingDepth > 1 ? nodeChildren(item) : [];
         if (children.length === 0) {
           return href !== '#' ? (
-            <a key={id} href={href} className="block border-b border-border py-3 text-sm font-medium text-foreground">
+            <a
+              key={id}
+              href={href}
+              className="block border-b border-border py-3 text-sm font-medium text-foreground"
+            >
               {title}
             </a>
           ) : (
@@ -293,11 +318,16 @@ function MobileAccordionNav({
                   return (
                     <li key={child.id || childTitle}>
                       {childHref !== '#' ? (
-                        <a href={childHref} className="block py-1 text-sm text-muted-foreground hover:text-primary">
+                        <a
+                          href={childHref}
+                          className="block py-1 text-sm text-muted-foreground hover:text-primary"
+                        >
                           {childTitle}
                         </a>
                       ) : (
-                        <span className="block py-1 text-sm text-muted-foreground">{childTitle}</span>
+                        <span className="block py-1 text-sm text-muted-foreground">
+                          {childTitle}
+                        </span>
                       )}
                       {nested.length > 0 && (
                         <ul className="mt-1 space-y-1 pl-3">
@@ -307,11 +337,16 @@ function MobileAccordionNav({
                             return (
                               <li key={leaf.id || leafTitle}>
                                 {leafHref !== '#' ? (
-                                  <a href={leafHref} className="block py-0.5 text-xs text-muted-foreground hover:text-primary">
+                                  <a
+                                    href={leafHref}
+                                    className="block py-0.5 text-xs text-muted-foreground hover:text-primary"
+                                  >
                                     {leafTitle}
                                   </a>
                                 ) : (
-                                  <span className="block py-0.5 text-xs text-muted-foreground">{leafTitle}</span>
+                                  <span className="block py-0.5 text-xs text-muted-foreground">
+                                    {leafTitle}
+                                  </span>
                                 )}
                               </li>
                             );
@@ -361,9 +396,12 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
     const language =
       (page?.layout?.sitecore?.context as { language?: string } | undefined)?.language || 'en';
     const controller = new AbortController();
-    fetch(`/api/main-nav?path=${encodeURIComponent(rootId)}&language=${encodeURIComponent(language)}`, {
-      signal: controller.signal,
-    })
+    fetch(
+      `/api/main-nav?path=${encodeURIComponent(rootId)}&language=${encodeURIComponent(language)}`,
+      {
+        signal: controller.signal,
+      }
+    )
       .then((response) => (response.ok ? response.json() : { tree: null }))
       .then((payload: { tree?: MainNavTreeNode | null }) => {
         if (payload?.tree) setFetchedRoot(payload.tree);
@@ -399,7 +437,8 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
   const showCart = isChecked(datasource.showCart);
   const supportResults = datasource.children?.results;
   const supportLinks = (Array.isArray(supportResults) ? supportResults : []).filter(
-    (item: MainNavSupportLink) => Boolean(item?.linkUrl?.jsonValue) && linkHasHref(item.linkUrl?.jsonValue)
+    (item: MainNavSupportLink) =>
+      Boolean(item?.linkUrl?.jsonValue) && linkHasHref(item.linkUrl?.jsonValue)
   );
 
   const showSearch = Boolean(searchPage && linkHasHref(searchPage));
@@ -420,26 +459,48 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
           <div className="flex min-w-0 items-center">
             {logo && (imageHasSrc(logo) || isEditing) ? (
               logoLink && (linkHasHref(logoLink) || isEditing) ? (
-                <ContentSdkLink field={logoLink} prefetch={false} className="inline-flex items-center">
+                <ContentSdkLink
+                  field={logoLink}
+                  prefetch={false}
+                  className="inline-flex items-center"
+                >
                   <ContentSdkImage
                     field={logo}
                     className="h-10 w-auto max-w-[220px] object-contain sm:h-12"
                   />
                 </ContentSdkLink>
               ) : (
-                <ContentSdkImage field={logo} className="h-10 w-auto max-w-[220px] object-contain sm:h-12" />
+                <ContentSdkImage
+                  field={logo}
+                  className="h-10 w-auto max-w-[220px] object-contain sm:h-12"
+                />
               )
             ) : null}
           </div>
           <div className="flex items-center justify-end gap-1">
             {showSearch && searchPage && (
-              <UtilityLink field={searchPage} labelField={searchLabel} icon={<Search className="h-4 w-4" />} isEditing={isEditing} />
+              <UtilityLink
+                field={searchPage}
+                labelField={searchLabel}
+                icon={<Search className="h-4 w-4" />}
+                isEditing={isEditing}
+              />
             )}
             {showUser && userLink && (
-              <UtilityLink field={userLink} labelField={userLabel} icon={<User className="h-4 w-4" />} isEditing={isEditing} />
+              <UtilityLink
+                field={userLink}
+                labelField={userLabel}
+                icon={<User className="h-4 w-4" />}
+                isEditing={isEditing}
+              />
             )}
             {showCartLink && cartLink && (
-              <UtilityLink field={cartLink} labelField={cartLabel} icon={<ShoppingCart className="h-4 w-4" />} isEditing={isEditing} />
+              <UtilityLink
+                field={cartLink}
+                labelField={cartLabel}
+                icon={<ShoppingCart className="h-4 w-4" />}
+                isEditing={isEditing}
+              />
             )}
             {supportLinks.map((item) =>
               item.linkUrl?.jsonValue ? (
@@ -449,7 +510,9 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
                   prefetch={false}
                   className="hidden px-2 py-2 text-sm text-foreground hover:text-primary lg:inline-flex"
                 >
-                  {item.linkText?.jsonValue ? <Text field={item.linkText.jsonValue} tag="span" /> : null}
+                  {item.linkText?.jsonValue ? (
+                    <Text field={item.linkText.jsonValue} tag="span" />
+                  ) : null}
                 </ContentSdkLink>
               ) : null
             )}
@@ -467,7 +530,11 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="flex flex-col gap-6 overflow-y-auto bg-background" id={menuId}>
+              <SheetContent
+                side="right"
+                className="flex flex-col gap-6 overflow-y-auto bg-background"
+                id={menuId}
+              >
                 <SheetHeader>
                   <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
@@ -481,7 +548,9 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
                         prefetch={false}
                         className="text-sm text-foreground hover:text-primary"
                       >
-                        {item.linkText?.jsonValue ? <Text field={item.linkText.jsonValue} tag="span" /> : null}
+                        {item.linkText?.jsonValue ? (
+                          <Text field={item.linkText.jsonValue} tag="span" />
+                        ) : null}
                       </ContentSdkLink>
                     ) : null
                   )}
@@ -492,7 +561,11 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
         </div>
         <nav className="border-t border-border/40 px-4 sm:px-6 lg:px-8" aria-label="Primary">
           {navItems.length > 0 ? (
-            <DesktopMegaNav items={navItems} maxColumns={maxColumns} remainingDepth={remainingDepth} />
+            <DesktopMegaNav
+              items={navItems}
+              maxColumns={maxColumns}
+              remainingDepth={remainingDepth}
+            />
           ) : isEditing ? (
             <p className="py-3 text-sm text-muted-foreground">
               No navigation items. Set NavigationRoot to Home and publish that tree to Edge.
@@ -503,4 +576,3 @@ export function MainNavView(props: MainNavProps): React.JSX.Element {
     </header>
   );
 }
-

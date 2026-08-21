@@ -61,8 +61,11 @@ export const Default: React.FC<ArticleContentProps> = (props) => {
   const headingId = 'article-content-primary-heading';
   const pageShortTitleId = 'article-content-page-short-title';
 
-  const labelledBy =
-    showPrimaryHeading ? headingId : showPageShortTitleSlot ? pageShortTitleId : undefined;
+  const labelledBy = showPrimaryHeading
+    ? headingId
+    : showPageShortTitleSlot
+      ? pageShortTitleId
+      : undefined;
 
   return (
     <section
@@ -127,7 +130,7 @@ export const Default: React.FC<ArticleContentProps> = (props) => {
             <div
               className={cn(
                 'article-content__body text-foreground not-prose w-full max-w-3xl min-w-0',
-                (hasPageSummary || isEditing) && pageSummary && 'pt-6 md:pt-8',
+                (hasPageSummary || isEditing) && pageSummary && 'pt-6 md:pt-8'
               )}
             >
               <RichText field={ArticleBody} />
@@ -142,7 +145,10 @@ export const Default: React.FC<ArticleContentProps> = (props) => {
 export const ServicePageVariant: React.FC<ArticleContentProps> = (props) => {
   const { params, page } = props;
   const isEditing = page.mode.isEditing;
-  const { pageHeaderTitle, pageSummary, pageSubtitle } = mergeArticleContentFields(props, isEditing);
+  const { pageHeaderTitle, pageSummary, pageSubtitle } = mergeArticleContentFields(
+    props,
+    isEditing
+  );
 
   const hasPageHeaderTitle = hasText(pageHeaderTitle);
   const hasPageSubtitle = hasText(pageSubtitle);
@@ -268,7 +274,7 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
       data-variant="kmpage"
       className={cn(
         '@container article-content article-content--kmpage w-full bg-background',
-        params?.styles,
+        params?.styles
       )}
       aria-labelledby={showPrimaryHeading ? headingId : undefined}
     >
@@ -359,7 +365,7 @@ export const kmpage: React.FC<ArticleContentProps> = (props) => {
                 '[&_p]:mb-4 [&_p]:text-pretty',
                 '[&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6',
                 '[&_li]:mb-1.5 [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline',
-                '[&_strong]:font-semibold [&_strong]:text-foreground',
+                '[&_strong]:font-semibold [&_strong]:text-foreground'
               )}
             >
               <RichText field={Detail} />

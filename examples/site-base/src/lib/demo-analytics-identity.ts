@@ -38,7 +38,13 @@ function deleteBrowserCookie(cookieName: string, cookieDomain?: string): void {
 
   const hostname = window.location.hostname.replace(/^www\./, '');
   const domains = Array.from(
-    new Set([cookieDomain, hostname, cookieDomain ? `.${cookieDomain}` : undefined, `.${hostname}`, undefined])
+    new Set([
+      cookieDomain,
+      hostname,
+      cookieDomain ? `.${cookieDomain}` : undefined,
+      `.${hostname}`,
+      undefined,
+    ])
   );
 
   for (const domain of domains) {
@@ -80,7 +86,9 @@ export async function waitForAnalyticsSdk(timeoutMs = ANALYTICS_SDK_TIMEOUT_MS):
   return false;
 }
 
-export async function waitForAnalyticsClientId(timeoutMs = ANALYTICS_CLIENT_ID_TIMEOUT_MS): Promise<string | null> {
+export async function waitForAnalyticsClientId(
+  timeoutMs = ANALYTICS_CLIENT_ID_TIMEOUT_MS
+): Promise<string | null> {
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {

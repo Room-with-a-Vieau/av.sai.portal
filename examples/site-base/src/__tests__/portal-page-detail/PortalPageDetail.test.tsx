@@ -41,7 +41,7 @@ jest.mock('lucide-react', () => {
     {},
     {
       get: () => Icon,
-    },
+    }
   );
 });
 
@@ -113,10 +113,7 @@ describe('PortalPageDetail', () => {
     expect(portalLinks).toHaveLength(1);
     expect(portalLinks[0]).toHaveAttribute('href', '/portal');
 
-    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute(
-      'href',
-      '/portal',
-    );
+    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute('href', '/portal');
 
     expect(screen.getAllByText('Orders').length).toBeGreaterThanOrEqual(1);
   });
@@ -128,10 +125,7 @@ describe('PortalPageDetail', () => {
     expect(article).toBeInTheDocument();
     expect(article?.querySelector('h1')).toBeNull();
     expect(screen.getByText('Back to Portal')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute(
-      'href',
-      '/portal',
-    );
+    expect(screen.getByRole('link', { name: 'Back to Portal' })).toHaveAttribute('href', '/portal');
   });
 });
 
@@ -175,7 +169,7 @@ describe('PortalPageDetail (editing)', () => {
             body: { value: '', editable: true },
           } as PortalPageDetailFields,
         })}
-      />,
+      />
     );
 
     expect(document.querySelector('[data-component="portal-page-detail"]')).toBeInTheDocument();

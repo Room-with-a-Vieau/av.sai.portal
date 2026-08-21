@@ -335,10 +335,7 @@ describe('TopicListing Component', () => {
                 jsonValue: { value: 'Malformed Data Test' },
               },
               children: {
-                results: [
-                  { invalid: 'data' } as any,  
-                  null as any,
-                ],
+                results: [{ invalid: 'data' } as any, null as any],
               },
             },
           },

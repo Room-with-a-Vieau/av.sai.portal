@@ -134,9 +134,7 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
   const productId = textValue(fields.ProductID);
   const productSku = textValue(fields.ProductSKU);
   const categoryLabel = textValue(fields.CategoryLabel);
-  const descriptionField = richHasContent(fields.Description)
-    ? fields.Description
-    : fields.Detail;
+  const descriptionField = richHasContent(fields.Description) ? fields.Description : fields.Detail;
   const specSheet = fields.SpecSheetLink;
 
   const primaryImage = resolveProductImage({
@@ -168,8 +166,7 @@ export const Default: React.FC<ProductDetailProps> = (props) => {
   }
 
   const sectionId = params?.RenderingIdentifier || 'product-detail';
-  const showPrimary =
-    Boolean(primaryImage.src) || (isEditing && Boolean(primaryImage.imageField));
+  const showPrimary = Boolean(primaryImage.src) || (isEditing && Boolean(primaryImage.imageField));
   const showSecondary =
     Boolean(secondaryImage.src) || (isEditing && Boolean(secondaryImage.imageField));
 

@@ -15,7 +15,6 @@ import {
   AccordionTrigger,
 } from 'shadcd/components/ui/accordion';
 
-
 interface Fields {
   data: {
     datasource: {
@@ -77,10 +76,10 @@ export const Default = (props: AccordionProps) => {
                 <ContentSdkText field={datasource?.description?.jsonValue} />
               </p>
               <ContentSdkLink
-                  field={datasource?.link?.jsonValue}
-                  prefetch={false}
-                  className="btn btn-secondary btn-sharp"
-                />
+                field={datasource?.link?.jsonValue}
+                prefetch={false}
+                className="btn btn-secondary btn-sharp"
+              />
             </div>
           </div>
         </div>
@@ -110,10 +109,10 @@ export const TwoColumn = (props: AccordionProps) => {
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
             <ContentSdkLink
-                  field={datasource?.link?.jsonValue}
-                  prefetch={false}
-                  className="btn btn-secondary btn-sharp"
-                />
+              field={datasource?.link?.jsonValue}
+              prefetch={false}
+              className="btn btn-secondary btn-sharp"
+            />
           </div>
         </div>
       </div>
@@ -142,10 +141,10 @@ export const Vertical = (props: AccordionProps) => {
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
             <ContentSdkLink
-                  field={datasource?.link?.jsonValue}
-                  prefetch={false}
-                  className="btn btn-secondary btn-sharp"
-                />
+              field={datasource?.link?.jsonValue}
+              prefetch={false}
+              className="btn btn-secondary btn-sharp"
+            />
           </div>
         </div>
       </div>
@@ -175,10 +174,10 @@ export const BoxedAccordion = (props: AccordionProps) => {
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
             <ContentSdkLink
-                  field={datasource?.link?.jsonValue}
-                  prefetch={false}
-                  className="btn btn-secondary btn-sharp"
-                />
+              field={datasource?.link?.jsonValue}
+              prefetch={false}
+              className="btn btn-secondary btn-sharp"
+            />
           </div>
         </div>
       </div>
@@ -207,10 +206,10 @@ export const BoxedContent = (props: AccordionProps) => {
                 <ContentSdkText field={datasource?.description?.jsonValue} />
               </p>
               <ContentSdkLink
-                  field={datasource?.link?.jsonValue}
-                  prefetch={false}
-                  className="btn btn-secondary btn-sharp"
-                />
+                field={datasource?.link?.jsonValue}
+                prefetch={false}
+                className="btn btn-secondary btn-sharp"
+              />
             </div>
           </div>
         </div>
@@ -218,5 +217,3 @@ export const BoxedContent = (props: AccordionProps) => {
     </section>
   );
 };
-
-

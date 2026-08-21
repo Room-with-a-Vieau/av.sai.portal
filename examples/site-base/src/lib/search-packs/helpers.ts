@@ -146,7 +146,11 @@ export function itemMetadataLine(
   const parts = [
     labels.lob[item.lob],
     item.subtitle,
-    item.topics.map((t) => labels.topic[t]).filter(Boolean).slice(0, 2).join(' · ') || undefined,
+    item.topics
+      .map((t) => labels.topic[t])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join(' · ') || undefined,
     item.dateLabel,
   ].filter(Boolean);
   return parts.join(' · ');
@@ -214,7 +218,13 @@ export function resolveSearchSiteName(options: {
     pickKnownSite(options.routeSite, known) ||
     pickKnownSite(firstPathSegment(options.pathname), known) ||
     pickKnownSite(options.sitecoreSite, known) ||
-    (options.override || options.routeSite || firstPathSegment(options.pathname) || options.sitecoreSite || '')
+    (
+      options.override ||
+      options.routeSite ||
+      firstPathSegment(options.pathname) ||
+      options.sitecoreSite ||
+      ''
+    )
       .toLowerCase()
       .trim()
   );

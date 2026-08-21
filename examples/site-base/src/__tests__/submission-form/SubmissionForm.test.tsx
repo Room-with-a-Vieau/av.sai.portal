@@ -260,7 +260,9 @@ describe('SubmissionForm Component', () => {
     });
 
     it('passes same editing state to both variants', () => {
-      const { rerender } = render(<SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPageEditing} />);
+      const { rerender } = render(
+        <SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPageEditing} />
+      );
 
       expect(screen.getByTestId('submission-form-default')).toHaveAttribute('data-editing', 'true');
 
@@ -285,7 +287,9 @@ describe('SubmissionForm Component', () => {
     });
 
     it('manages page prop efficiently', () => {
-      const { rerender } = render(<SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPage} />);
+      const { rerender } = render(
+        <SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPage} />
+      );
 
       expect(screen.getByTestId('submission-form-default')).toBeInTheDocument();
 
@@ -369,7 +373,9 @@ describe('SubmissionForm Component', () => {
   describe('Data Flow', () => {
     it('correctly passes isPageEditing state to child components', () => {
       // Test editing state
-      const { rerender } = render(<SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPageEditing} />);
+      const { rerender } = render(
+        <SubmissionFormDefault {...defaultSubmissionFormProps} page={mockPageEditing} />
+      );
 
       expect(screen.getByTestId('submission-form-default')).toHaveAttribute('data-editing', 'true');
 

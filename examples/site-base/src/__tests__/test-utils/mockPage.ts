@@ -39,6 +39,3 @@ export const mockPageEditing = {
   },
   locale: 'en',
 } as Page;
-
-
-

@@ -1,4 +1,11 @@
-import type { Field, ImageField, LinkField, Page, ComponentRendering, PageMode } from '@sitecore-content-sdk/nextjs';
+import type {
+  Field,
+  ImageField,
+  LinkField,
+  Page,
+  ComponentRendering,
+  PageMode,
+} from '@sitecore-content-sdk/nextjs';
 import type { ArticleItemReferenceField } from '../../components/article-listing/article-listing.props';
 
 const mockPageBase: Page = {
@@ -243,7 +250,12 @@ export const mockFields = {
     editable: 'Discover our latest insights and tutorials',
   } as Field<string>,
   linkOptional: mockLinkField,
-  featuredContent: [mockArticle1, mockArticle2, mockArticle3, mockArticle4] as ArticleItemReferenceField[],
+  featuredContent: [
+    mockArticle1,
+    mockArticle2,
+    mockArticle3,
+    mockArticle4,
+  ] as ArticleItemReferenceField[],
 };
 
 export const mockFieldsWithoutTitle = {

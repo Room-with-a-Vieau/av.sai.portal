@@ -4,7 +4,10 @@
 
 import type { LinkField, TextField, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps } from 'lib/component-props';
-import { mockPage as sharedMockPage, mockPageEditing as sharedMockPageEditing } from '../../test-utils/mockPage';
+import {
+  mockPage as sharedMockPage,
+  mockPageEditing as sharedMockPageEditing,
+} from '../../test-utils/mockPage';
 
 interface TitleFields {
   data: {

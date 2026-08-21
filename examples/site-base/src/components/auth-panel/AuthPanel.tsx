@@ -45,12 +45,12 @@ const AuthPanelInner: React.FC<AuthPanelProps> = (props) => {
 
   const postLoginTarget = useMemo(
     () => resolvePostLoginRedirect(searchParams, params?.redirectUrl),
-    [searchParams, params?.redirectUrl],
+    [searchParams, params?.redirectUrl]
   );
 
   const postLogoutTarget = useMemo(
     () => resolvePostLogoutRedirect(searchParams, params?.postLogoutRedirect),
-    [searchParams, params?.postLogoutRedirect],
+    [searchParams, params?.postLogoutRedirect]
   );
 
   const handleCredentialsLogin = useCallback(
@@ -77,7 +77,7 @@ const AuthPanelInner: React.FC<AuthPanelProps> = (props) => {
         setIsSubmitting(false);
       }
     },
-    [password, postLoginTarget, router, username],
+    [password, postLoginTarget, router, username]
   );
 
   const handleLogout = useCallback(async () => {
@@ -131,7 +131,12 @@ const AuthPanelInner: React.FC<AuthPanelProps> = (props) => {
           ) : isAuthenticated ? (
             <div className="space-y-4 text-center">
               <p className="text-muted-foreground text-sm break-all">{session.user?.email}</p>
-              <Button type="button" variant="secondary" disabled={isSubmitting} onClick={handleLogout}>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={isSubmitting}
+                onClick={handleLogout}
+              >
                 <Text field={fields.logoutButtonText} tag="span" />
               </Button>
             </div>

@@ -65,7 +65,12 @@ function readScalarFromJsonField(field?: EdgeJsonField): string {
   if (!field || field.jsonValue == null) return '';
   const jv = field.jsonValue;
   if (typeof jv === 'string') return jv.trim();
-  if (typeof jv === 'object' && jv !== null && 'value' in jv && typeof (jv as { value?: unknown }).value === 'string') {
+  if (
+    typeof jv === 'object' &&
+    jv !== null &&
+    'value' in jv &&
+    typeof (jv as { value?: unknown }).value === 'string'
+  ) {
     return String((jv as { value: string }).value).trim();
   }
   return '';
@@ -127,7 +132,6 @@ function buildPortalHubQuery(industryType: string, moduleType: string): string {
   `;
 }
 
-
 function wireImageField(icon?: EdgeValueField): PortalHubModuleWire['icon'] {
   if (icon?.value == null) return undefined;
   const src = extractImageSrc(icon.value);
@@ -170,7 +174,9 @@ export function wireLinkField(link?: EdgeValueField): PortalHubModuleWire['link'
     } as LinkField,
   };
 }
-export async function fetchPortalHubModules(args: FetchPortalHubModulesArgs): Promise<PortalHubModuleWire[]> {
+export async function fetchPortalHubModules(
+  args: FetchPortalHubModulesArgs
+): Promise<PortalHubModuleWire[]> {
   const { path, language, industryKey } = args;
   const normalizedKey = normalizeIndustryKey(industryKey);
 
@@ -192,12 +198,12 @@ export async function fetchPortalHubModules(args: FetchPortalHubModulesArgs): Pr
   try {
     const result = await client.getData<PortalHubQueryResult>(
       buildPortalHubQuery(industryFragment, moduleFragment),
-      { path, language },
+      { path, language }
     );
 
     const industries = result?.item?.children?.results ?? [];
     const industryNode = industries.find(
-      (row) => normalizeIndustryKey(readScalarFromJsonField(row?.industryKey)) === normalizedKey,
+      (row) => normalizeIndustryKey(readScalarFromJsonField(row?.industryKey)) === normalizedKey
     );
 
     const modules = industryNode?.children?.results ?? [];

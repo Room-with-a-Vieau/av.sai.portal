@@ -156,10 +156,12 @@ export const Default = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -209,10 +211,12 @@ export const FAQ1 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -274,10 +278,12 @@ export const FAQ2 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -316,10 +322,12 @@ export const FAQ3 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -373,10 +381,12 @@ export const FAQ4 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -421,10 +431,12 @@ export const FAQ5 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -463,10 +475,12 @@ export const FAQ6 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -509,10 +523,12 @@ export const FAQ7 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 
@@ -555,10 +571,12 @@ export const FAQ8 = (props: FAQProps): JSX.Element => {
 
   // Generate JSON-LD structured data for FAQPage
   const faqSchema = useMemo(() => {
-    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map((q) => ({
-      question: String(q.question?.jsonValue?.value || ''),
-      answer: String(q.answer?.jsonValue?.value || ''),
-    }));
+    const faqs: Array<{ question: string; answer: string }> = datasource.children.results.map(
+      (q) => ({
+        question: String(q.question?.jsonValue?.value || ''),
+        answer: String(q.answer?.jsonValue?.value || ''),
+      })
+    );
     return generateFAQPageSchema(faqs);
   }, [datasource.children.results]);
 

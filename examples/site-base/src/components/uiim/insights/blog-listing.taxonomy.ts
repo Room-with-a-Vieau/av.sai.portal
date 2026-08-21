@@ -172,13 +172,22 @@ const SPECIALTY_INFERENCE: Array<{ specialty: BlogSpecialty; tokens: string[] }>
   { specialty: 'Insurance Recovery', tokens: ['insurance', 'coverage', 'policyholder'] },
   { specialty: 'International Trade', tokens: ['sanction', 'export', 'trade', 'customs'] },
   { specialty: 'Funds & Private Equity', tokens: ['fund', 'private equity', 'investor'] },
-  { specialty: 'Technology & Sourcing', tokens: ['technology', 'sourcing', 'outsourcing', 'saas', 'software'] },
-  { specialty: 'Energy & Infrastructure', tokens: ['energy', 'infrastructure', 'renewable', 'oil', 'gas'] },
+  {
+    specialty: 'Technology & Sourcing',
+    tokens: ['technology', 'sourcing', 'outsourcing', 'saas', 'software'],
+  },
+  {
+    specialty: 'Energy & Infrastructure',
+    tokens: ['energy', 'infrastructure', 'renewable', 'oil', 'gas'],
+  },
   { specialty: 'Environmental', tokens: ['environmental', 'pfas', 'epa', 'climate'] },
   { specialty: 'Communications & Media', tokens: ['fcc', 'communications', 'media', 'broadcast'] },
   { specialty: 'Consumer Protection', tokens: ['consumer', 'ftc', 'cfpb'] },
   { specialty: 'Maritime', tokens: ['maritime', 'shipping', 'admiralty'] },
-  { specialty: 'Government Contracts', tokens: ['protest', 'gao', 'procurement', 'government contract'] },
+  {
+    specialty: 'Government Contracts',
+    tokens: ['protest', 'gao', 'procurement', 'government contract'],
+  },
   { specialty: 'Aviation & UAS', tokens: ['drone', 'uas', 'aviation', 'faa'] },
   { specialty: 'Litigation', tokens: ['litigation', 'dispute', 'trial'] },
 ];

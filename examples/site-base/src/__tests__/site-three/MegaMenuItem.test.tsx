@@ -23,8 +23,10 @@ jest.mock('next-intl', () => ({
     selectOrdinal: jest.fn(),
     list: jest.fn(),
   }),
-  IntlProvider: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
-  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+  IntlProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
 }));
 
 // Mock useToggleWithClickOutside hook - allow control of state for testing

@@ -9,7 +9,11 @@ function toPlainText(raw: unknown): string {
 
   if (typeof raw === 'object') {
     const fields = raw as Record<string, unknown>;
-    if (typeof fields.value === 'string' || typeof fields.value === 'number' || typeof fields.value === 'boolean') {
+    if (
+      typeof fields.value === 'string' ||
+      typeof fields.value === 'number' ||
+      typeof fields.value === 'boolean'
+    ) {
       return String(fields.value);
     }
     if (fields.jsonValue) {
@@ -84,7 +88,8 @@ function parseRendering(rendering: unknown, headingLevel: number, lines: string[
     appendUnique(lines, `${'#'.repeat(Math.min(3, headingLevel))} ${componentHeading}`);
   }
 
-  const fields = (node.fields as Record<string, unknown>) ||
+  const fields =
+    (node.fields as Record<string, unknown>) ||
     (node.params as Record<string, unknown>) ||
     (node.properties as Record<string, unknown>) ||
     {};
@@ -109,7 +114,11 @@ function parseRendering(rendering: unknown, headingLevel: number, lines: string[
   }
 }
 
-function parsePlaceholders(placeholders: Record<string, unknown> | undefined, headingLevel: number, lines: string[]): void {
+function parsePlaceholders(
+  placeholders: Record<string, unknown> | undefined,
+  headingLevel: number,
+  lines: string[]
+): void {
   if (!placeholders || typeof placeholders !== 'object') return;
 
   Object.values(placeholders).forEach((placeholder) => {
@@ -123,12 +132,17 @@ function parsePlaceholders(placeholders: Record<string, unknown> | undefined, he
 
 export function generateMarkdownFromRoute(route: unknown): string {
   const lines: string[] = [];
-  const routeObj = (route && typeof route === 'object') ? (route as Record<string, unknown>) : {};
-  const routeFields = (routeObj.fields && typeof routeObj.fields === 'object') ? (routeObj.fields as Record<string, unknown>) : undefined;
+  const routeObj = route && typeof route === 'object' ? (route as Record<string, unknown>) : {};
+  const routeFields =
+    routeObj.fields && typeof routeObj.fields === 'object'
+      ? (routeObj.fields as Record<string, unknown>)
+      : undefined;
 
   const title = formatText(
     routeFields?.pageTitle ??
-      ((routeFields?.title && typeof routeFields.title === 'object') ? ((routeFields.title as Record<string, unknown>)?.value) : undefined) ??
+      (routeFields?.title && typeof routeFields.title === 'object'
+        ? (routeFields.title as Record<string, unknown>)?.value
+        : undefined) ??
       routeFields?.title
   );
   if (title) {
@@ -142,7 +156,13 @@ export function generateMarkdownFromRoute(route: unknown): string {
     appendUnique(lines, description);
   }
 
-  parsePlaceholders((routeObj.placeholders && typeof routeObj.placeholders === 'object') ? (routeObj.placeholders as Record<string, unknown>) : undefined, 2, lines);
+  parsePlaceholders(
+    routeObj.placeholders && typeof routeObj.placeholders === 'object'
+      ? (routeObj.placeholders as Record<string, unknown>)
+      : undefined,
+    2,
+    lines
+  );
 
   const renderings = Array.isArray(routeObj.renderings) ? routeObj.renderings : undefined;
   if (renderings) {
@@ -155,4 +175,3 @@ export function generateMarkdownFromRoute(route: unknown): string {
 
   return lines.join('\n\n');
 }
-

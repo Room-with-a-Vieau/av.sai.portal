@@ -15,12 +15,10 @@ function isUsableEnvValue(value: string | undefined): value is string {
 }
 
 /** Preview search widget rfkId (typeahead in header). */
-export const PREVIEW_WIDGET_ID =
-  process.env.NEXT_PUBLIC_SEARCH_PREVIEW_WIDGET_ID || 'rfkid_6';
+export const PREVIEW_WIDGET_ID = process.env.NEXT_PUBLIC_SEARCH_PREVIEW_WIDGET_ID || 'rfkid_6';
 
 /** Full search results widget rfkId. */
-export const SEARCH_WIDGET_ID =
-  process.env.NEXT_PUBLIC_SEARCH_RESULTS_WIDGET_ID || 'rfkid_7';
+export const SEARCH_WIDGET_ID = process.env.NEXT_PUBLIC_SEARCH_RESULTS_WIDGET_ID || 'rfkid_7';
 
 /** Homepage highlighted articles widget. */
 export const HOMEHIGHLIGHTED_WIDGET_ID =
@@ -35,12 +33,10 @@ export const HIGHLIGHTED_ARTICLES_CONTENT_TYPE =
   process.env.NEXT_PUBLIC_SEARCH_HIGHLIGHT_CONTENT_TYPE || 'Article';
 
 export const DEFAULT_IMG_URL =
-  process.env.NEXT_PUBLIC_SEARCH_DEFAULT_IMG_URL ||
-  'https://placehold.co/500x300?text=No+Image';
+  process.env.NEXT_PUBLIC_SEARCH_DEFAULT_IMG_URL || 'https://placehold.co/500x300?text=No+Image';
 
 export const DEFAULT_QUESTION =
-  process.env.NEXT_PUBLIC_SEARCH_DEFAULT_QUESTION ||
-  'What are the shared claim intake standards?';
+  process.env.NEXT_PUBLIC_SEARCH_DEFAULT_QUESTION || 'What are the shared claim intake standards?';
 
 /**
  * True when Sitecore Search legacy SDK credentials look real enough to initialize WidgetsProvider.

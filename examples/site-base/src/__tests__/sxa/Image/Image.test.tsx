@@ -36,7 +36,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     }
     return React.createElement('a', { href: field.value.href, title: field.value.title }, children);
   },
-   
+
   Text: ({
     field,
     tag: Tag = 'span',

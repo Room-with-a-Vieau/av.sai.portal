@@ -9,10 +9,7 @@ const SQLITE_FILE_PREFIX = /^file:/i;
  * Prisma Client in Next.js may resolve the same relative URL from a different cwd
  * (e.g. `.next`), so runtime always uses an absolute `file:` URL.
  */
-export function resolvePortalDatabaseUrl(
-  envUrl: string | undefined,
-  cwd = process.cwd(),
-): string {
+export function resolvePortalDatabaseUrl(envUrl: string | undefined, cwd = process.cwd()): string {
   const canonicalPath = path.resolve(cwd, 'prisma', 'dev.db').replace(/\\/g, '/');
   const canonicalUrl = `file:${canonicalPath}`;
 

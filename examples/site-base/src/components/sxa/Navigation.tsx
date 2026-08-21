@@ -1,9 +1,5 @@
 import React, { type JSX } from 'react';
-import {
-  LinkField,
-  Text,
-  TextField,
-} from '@sitecore-content-sdk/nextjs';
+import { LinkField, Text, TextField } from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
 import { NavigationMenuToggle } from './NavigationMenuToggle.client';
 import { NavigationList } from './NavigationList.client';

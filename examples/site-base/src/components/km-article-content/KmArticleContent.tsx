@@ -47,18 +47,15 @@ const VARIANT_CONTENT_ANCHOR = 'variant-content';
 
 const KmArticleContentEmpty: React.FC = () => (
   <div className="border-border bg-muted/30 text-muted-foreground mx-auto max-w-4xl rounded-2xl border border-dashed p-8 text-sm">
-    Knowledge Article fields are empty. Edit page fields (Title, Purpose, workflows, etc.) to populate
-    this component.
+    Knowledge Article fields are empty. Edit page fields (Title, Purpose, workflows, etc.) to
+    populate this component.
   </div>
 );
 
 function SectionNav({ sections }: { sections: { id: string; title: string; number: string }[] }) {
   if (sections.length === 0) return null;
   return (
-    <nav
-      aria-label="Article sections"
-      className="border-border bg-muted/40 rounded-2xl border p-4"
-    >
+    <nav aria-label="Article sections" className="border-border bg-muted/40 rounded-2xl border p-4">
       <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wide uppercase">
         On this page
       </p>
@@ -154,9 +151,15 @@ function StarRow({ average, total }: { average: number; total: number }) {
           const fill = Math.min(1, Math.max(0, rounded - i));
           return (
             <span key={i} className="relative inline-flex size-4">
-              <Star className="text-muted-foreground/35 absolute inset-0 size-4" strokeWidth={1.5} />
+              <Star
+                className="text-muted-foreground/35 absolute inset-0 size-4"
+                strokeWidth={1.5}
+              />
               {fill > 0 && (
-                <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
+                <span
+                  className="absolute inset-0 overflow-hidden"
+                  style={{ width: `${fill * 100}%` }}
+                >
                   <Star className="size-4 fill-amber-400 text-amber-400" strokeWidth={1.5} />
                 </span>
               )}
@@ -353,9 +356,7 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
       id: 'common-scenarios',
       number: '05',
       title: 'Common Scenarios',
-      blocks: [
-        { id: 'scenarios', label: 'Common Scenarios', field: fields['Common Scenarios'] },
-      ],
+      blocks: [{ id: 'scenarios', label: 'Common Scenarios', field: fields['Common Scenarios'] }],
     },
   ];
 
@@ -424,7 +425,9 @@ export const Default: React.FC<KmArticleContentProps> = (props) => {
                               <TopicIconChip key={topic.id || topic.name} topic={topic} />
                             ))
                           ) : (
-                            <p className="text-muted-foreground text-sm">Select LOB topics on the page.</p>
+                            <p className="text-muted-foreground text-sm">
+                              Select LOB topics on the page.
+                            </p>
                           )}
                         </div>
                       </div>

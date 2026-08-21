@@ -39,7 +39,10 @@ type InitialState = PreviewSearchInitialState<'itemsPerPage' | 'suggestionsList'
 function buildResultsUrl(resultsPath: string, query: string): string {
   const base = resultsPath || '/search';
   try {
-    const url = new URL(base, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+    const url = new URL(
+      base,
+      typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+    );
     if (query.trim()) {
       url.searchParams.set('q', query.trim());
     }
@@ -163,7 +166,10 @@ export const PreviewSearchComponent = ({
                                     url: article.url,
                                     widgetId: PREVIEW_WIDGET_ID,
                                     entityType: 'content',
-                                    events: ['EntityPageView', 'PreviewSearchClickEvent'] as Events[],
+                                    events: [
+                                      'EntityPageView',
+                                      'PreviewSearchClickEvent',
+                                    ] as Events[],
                                     entityId: article.id,
                                     itemIndex: index,
                                   })

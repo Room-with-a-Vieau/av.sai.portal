@@ -11,7 +11,11 @@ type HomeHighlightedProps = {
   widget: string;
 };
 
-export const HomeHighlightedComponent = ({ type = 'Article', source, widget }: HomeHighlightedProps): JSX.Element => {
+export const HomeHighlightedComponent = ({
+  type = 'Article',
+  source,
+  widget,
+}: HomeHighlightedProps): JSX.Element => {
   const {
     queryResult: { data: { content: articles = [] } = {} },
   } = useSearchResults({

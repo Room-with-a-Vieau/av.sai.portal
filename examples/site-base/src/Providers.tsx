@@ -43,6 +43,6 @@ export default function Providers({
           </VideoProvider>
         </SessionProvider>
       </ComponentPropsContext>
-      </SitecoreProvider>
+    </SitecoreProvider>
   );
 }

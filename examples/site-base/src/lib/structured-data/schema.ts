@@ -329,10 +329,12 @@ export function generateOrganizationSchema(org: {
       contactType: org.contactPoint.contactType || 'Customer Service',
     } as JsonLdValue;
     if (org.contactPoint.email) {
-      (schema.contactPoint as { [key: string]: JsonLdValue }).email = org.contactPoint.email as JsonLdValue;
+      (schema.contactPoint as { [key: string]: JsonLdValue }).email = org.contactPoint
+        .email as JsonLdValue;
     }
     if (org.contactPoint.telephone) {
-      (schema.contactPoint as { [key: string]: JsonLdValue }).telephone = org.contactPoint.telephone as JsonLdValue;
+      (schema.contactPoint as { [key: string]: JsonLdValue }).telephone = org.contactPoint
+        .telephone as JsonLdValue;
     }
   }
 
@@ -371,7 +373,9 @@ export function generateWebSiteSchema(site: {
 /**
  * Generate FAQPage JSON-LD structured data
  */
-export function generateFAQPageSchema(faqs: Array<{ question: string; answer: string }>): JsonLdValue {
+export function generateFAQPageSchema(
+  faqs: Array<{ question: string; answer: string }>
+): JsonLdValue {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

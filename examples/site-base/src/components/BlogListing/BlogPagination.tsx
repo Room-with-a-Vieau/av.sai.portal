@@ -56,13 +56,10 @@ export function BlogPagination({
       const qs = next.toString();
       router.push(qs ? `${pathname}?${qs}` : pathname);
     },
-    [pathname, router, searchParams],
+    [pathname, router, searchParams]
   );
 
-  const pages = useMemo(
-    () => buildPageNumbers(totalPages, currentPage),
-    [currentPage, totalPages],
-  );
+  const pages = useMemo(() => buildPageNumbers(totalPages, currentPage), [currentPage, totalPages]);
 
   if (totalPages <= 1) {
     return null;
@@ -112,7 +109,7 @@ export function BlogPagination({
             >
               {entry}
             </Button>
-          ),
+          )
         )}
       </div>
     </nav>

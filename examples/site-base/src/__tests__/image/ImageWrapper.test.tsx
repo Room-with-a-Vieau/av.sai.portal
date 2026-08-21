@@ -93,7 +93,7 @@ describe('ImageWrapper Component', () => {
 
     expect(screen.getByTestId('next-image')).toHaveAttribute(
       'src',
-      'https://example.com/media-by-href.jpg',
+      'https://example.com/media-by-href.jpg'
     );
   });
 

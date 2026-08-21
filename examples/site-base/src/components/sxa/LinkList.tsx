@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useEffect, useState, type JSX } from 'react';
-import { Link as ContentSdkLink, Text, LinkField, TextField, useSitecore } from '@sitecore-content-sdk/nextjs';
+import {
+  Link as ContentSdkLink,
+  Text,
+  LinkField,
+  TextField,
+  useSitecore,
+} from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
 
 type ResultsFieldLink = {
@@ -188,10 +194,7 @@ export const AnchorNav = (props: LinkListProps): JSX.Element => {
         id={id ? id : undefined}
       >
         <div className="container mx-auto px-4">
-          <ul
-            className="flex gap-12 list-none p-0 m-0"
-            aria-label="Navigation options"
-          >
+          <ul className="flex gap-12 list-none p-0 m-0" aria-label="Navigation options">
             {list}
           </ul>
         </div>

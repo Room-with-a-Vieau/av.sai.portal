@@ -203,7 +203,9 @@ function RowItem({ attorney }: { attorney: ResolvedAttorney }) {
           )}
 
           {attorney.summary && (
-            <p className="mt-3 line-clamp-2 text-sm leading-relaxed opacity-70">{attorney.summary}</p>
+            <p className="mt-3 line-clamp-2 text-sm leading-relaxed opacity-70">
+              {attorney.summary}
+            </p>
           )}
 
           {(attorney.phone || attorney.email) && (
@@ -270,7 +272,9 @@ function CardItem({ attorney }: { attorney: ResolvedAttorney }) {
         )}
 
         {attorney.summary && (
-          <p className="mt-auto line-clamp-3 text-sm leading-relaxed opacity-70">{attorney.summary}</p>
+          <p className="mt-auto line-clamp-3 text-sm leading-relaxed opacity-70">
+            {attorney.summary}
+          </p>
         )}
       </Link>
     </li>
@@ -344,7 +348,9 @@ function BioListingView({ props, layout }: { props: BioListingProps; layout: Lay
         return haystack.includes(q);
       })
       .sort((a, b) =>
-        (fieldValue(a.fullName) || a.name || '').localeCompare(fieldValue(b.fullName) || b.name || '')
+        (fieldValue(a.fullName) || a.name || '').localeCompare(
+          fieldValue(b.fullName) || b.name || ''
+        )
       )
       .map(resolveAttorney);
   }, [attorneys, office, practice, query]);

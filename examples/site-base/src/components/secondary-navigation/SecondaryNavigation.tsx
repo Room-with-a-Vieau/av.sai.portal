@@ -46,7 +46,10 @@ function SecondaryNavigationContent({
   const { parent, children } = datasource ?? {};
 
   return (
-    <NavigationMenu.Root className={cn('relative justify-center', className)} orientation="vertical">
+    <NavigationMenu.Root
+      className={cn('relative justify-center', className)}
+      orientation="vertical"
+    >
       <NavigationMenu.List className="m-0 flex list-none flex-col gap-2 pl-0">
         {parent?.children?.results?.map((item, index) => {
           const isParent = datasource?.id == item.id;

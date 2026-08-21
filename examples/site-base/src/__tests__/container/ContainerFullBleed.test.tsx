@@ -11,10 +11,14 @@ import {
 } from './ContainerFullBleed.mockProps';
 
 // Mock component-map to avoid circular dependency
-jest.mock('.sitecore/component-map', () => ({
-  __esModule: true,
-  default: new Map(),
-}), { virtual: true });
+jest.mock(
+  '.sitecore/component-map',
+  () => ({
+    __esModule: true,
+    default: new Map(),
+  }),
+  { virtual: true }
+);
 
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({

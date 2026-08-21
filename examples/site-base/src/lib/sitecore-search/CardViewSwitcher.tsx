@@ -10,9 +10,18 @@ type CardViewSwitcherProps = {
   ListIcon: React.FC;
 };
 
-const CardViewSwitcherComponent = ({ onToggle, defaultCardView, GridIcon, ListIcon }: CardViewSwitcherProps) => {
+const CardViewSwitcherComponent = ({
+  onToggle,
+  defaultCardView,
+  GridIcon,
+  ListIcon,
+}: CardViewSwitcherProps) => {
   return (
-    <CardViewSwitcher.Root onValueChange={onToggle} defaultValue={defaultCardView} className="inline-flex">
+    <CardViewSwitcher.Root
+      onValueChange={onToggle}
+      defaultValue={defaultCardView}
+      className="inline-flex"
+    >
       <CardViewSwitcher.Item
         value="grid"
         aria-label="Grid View"

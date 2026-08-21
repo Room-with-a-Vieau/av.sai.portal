@@ -75,15 +75,12 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
   const [resetDevLink, setResetDevLink] = useState<string | null>(null);
 
   const postLoginLinkHref = resolveLinkFieldHref(fields?.postLoginRedirect);
-  const resetPasswordPath =
-    fields?.resetPasswordPath?.value?.trim() || '/reset-password';
+  const resetPasswordPath = fields?.resetPasswordPath?.value?.trim() || '/reset-password';
 
   const resetReturnPath = useMemo(() => {
     const site = typeof routeParams.site === 'string' ? routeParams.site : '';
     const locale = typeof routeParams.locale === 'string' ? routeParams.locale : '';
-    const suffix = resetPasswordPath.startsWith('/')
-      ? resetPasswordPath
-      : `/${resetPasswordPath}`;
+    const suffix = resetPasswordPath.startsWith('/') ? resetPasswordPath : `/${resetPasswordPath}`;
     if (site && locale) {
       return `/${site}/${locale}${suffix}`;
     }
@@ -92,12 +89,12 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
 
   const postLoginTarget = useMemo(
     () => resolvePortalPostLoginRedirect(searchParams, params?.redirectUrl, postLoginLinkHref),
-    [searchParams, params?.redirectUrl, postLoginLinkHref],
+    [searchParams, params?.redirectUrl, postLoginLinkHref]
   );
 
   const postLogoutTarget = useMemo(
     () => resolvePostLogoutRedirect(searchParams, params?.postLogoutRedirect),
-    [searchParams, params?.postLogoutRedirect],
+    [searchParams, params?.postLogoutRedirect]
   );
 
   const forgotPasswordHref = useMemo(() => {
@@ -132,7 +129,7 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
         setIsSubmitting(false);
       }
     },
-    [email, password, postLoginTarget, router],
+    [email, password, postLoginTarget, router]
   );
 
   const handleLogout = useCallback(async () => {
@@ -190,7 +187,7 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
       data-component="Authentication"
       className={cn(
         '@container/authentication flex w-full items-center justify-center px-4 py-8 sm:py-12',
-        params?.styles,
+        params?.styles
       )}
       id={params?.RenderingIdentifier}
     >
@@ -251,7 +248,12 @@ const AuthenticationInner: React.FC<AuthenticationProps> = (props) => {
               {sessionCustomer ? (
                 <p className="text-muted-foreground text-xs">Tenant: {sessionCustomer}</p>
               ) : null}
-              <Button type="button" variant="secondary" disabled={isSubmitting} onClick={handleLogout}>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={isSubmitting}
+                onClick={handleLogout}
+              >
                 <FieldTextOrFallback
                   field={fields.logoutButtonText}
                   fallback={DEFAULT_LOGOUT_BUTTON_TEXT}
@@ -328,4 +330,3 @@ export const Default: React.FC<AuthenticationProps> = (props) => (
     <AuthenticationInner {...props} />
   </Suspense>
 );
-

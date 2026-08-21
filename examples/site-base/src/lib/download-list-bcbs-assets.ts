@@ -43,7 +43,7 @@ export function assertDownloadListGraphqlQueryOk(query: string): string | null {
 
 function buildGraphqlRequestBody(
   query: string,
-  variables?: Record<string, unknown> | null,
+  variables?: Record<string, unknown> | null
 ): Record<string, unknown> {
   const trimmed = query.trim();
   const body: Record<string, unknown> = { query: trimmed };
@@ -55,7 +55,7 @@ function buildGraphqlRequestBody(
 
 export async function fetchPlanAssetFileNamesForGraphqlQuery(
   query: string,
-  variables?: Record<string, unknown> | null,
+  variables?: Record<string, unknown> | null
 ): Promise<string[]> {
   const url = process.env.BCBS_GRAPHQL_ENDPOINT?.trim();
   const token = process.env.BCBS_GRAPHQL_TOKEN?.trim();

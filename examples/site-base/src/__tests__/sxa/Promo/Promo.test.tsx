@@ -5,7 +5,13 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Default as PromoDefault, CenteredCard, Left as PromoLeft, Right as PromoRight, Columns as PromoColumns } from 'components/sxa/Promo';
+import {
+  Default as PromoDefault,
+  CenteredCard,
+  Left as PromoLeft,
+  Right as PromoRight,
+  Columns as PromoColumns,
+} from 'components/sxa/Promo';
 import {
   defaultPromoProps,
   centeredCardPromoProps,
@@ -289,7 +295,9 @@ describe('Promo Component - Left Variant', () => {
     const { container } = render(<PromoLeft {...splitPromoProps} />);
 
     expect(container).toHaveTextContent('Personal Banking');
-    expect(container).toHaveTextContent('No minimum balance requirement or monthly maintenance fee');
+    expect(container).toHaveTextContent(
+      'No minimum balance requirement or monthly maintenance fee'
+    );
     expect(container.querySelector('.bg-accent.h-1.w-16')).toBeInTheDocument();
     expect(container.querySelector('.content-sdk-rich-text ul')).toBeInTheDocument();
 

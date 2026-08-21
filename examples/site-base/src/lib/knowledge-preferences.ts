@@ -68,9 +68,9 @@ export function getRecentlyViewedArticleIds(): string[] {
 export function recordArticleView(id: string): void {
   if (!id) return;
   const needle = normalizeId(id);
-  const next = [id, ...getRecentlyViewedArticleIds().filter((x) => normalizeId(x) !== needle)].slice(
-    0,
-    MAX_RECENT
-  );
+  const next = [
+    id,
+    ...getRecentlyViewedArticleIds().filter((x) => normalizeId(x) !== needle),
+  ].slice(0, MAX_RECENT);
   writeIds(RECENT_KEY, next);
 }

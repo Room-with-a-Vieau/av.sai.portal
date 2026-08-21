@@ -486,7 +486,9 @@ describe('MultiPromo', () => {
 
       render(<MultiPromoSideTabs {...propsWithoutSlug} />);
       expect(screen.getByRole('tab', { name: 'Promotion 1' })).toBeInTheDocument();
-      expect(screen.queryByRole('tab', { name: 'Long Promo Heading Title' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('tab', { name: 'Long Promo Heading Title' })
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -585,7 +587,9 @@ describe('MultiPromo', () => {
 
       render(<MultiPromoTopTabs {...propsWithoutSlug} />);
       expect(screen.getByRole('tab', { name: 'Promotion 1' })).toBeInTheDocument();
-      expect(screen.queryByRole('tab', { name: 'Long Promo Heading Title' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('tab', { name: 'Long Promo Heading Title' })
+      ).not.toBeInTheDocument();
     });
   });
 

@@ -45,8 +45,7 @@ const boldPromoBackgroundThemes: Record<PromoBackground, BoldPromoBackgroundThem
     containerBg: 'bg-[#0a1a44]',
     textColor: 'text-white',
     richTextClasses: boldRichTextOnDarkBg,
-    buttonClasses:
-      'border-white bg-transparent text-white hover:bg-white hover:text-[#0a1a44]',
+    buttonClasses: 'border-white bg-transparent text-white hover:bg-white hover:text-[#0a1a44]',
   },
   light: {
     containerBg: 'bg-background',
@@ -105,8 +104,14 @@ const columnsPromoRateBase =
 const columnsPromoButtonBase =
   'rounded-none bg-transparent px-6 py-2 text-sm font-semibold uppercase tracking-wide';
 
-const columnsTitleOnLight = cn(columnsPromoTitleBase, 'text-primary [&_h1]:text-primary [&_h2]:text-primary [&_p]:text-primary');
-const columnsTitleOnDark = cn(columnsPromoTitleBase, 'text-white [&_h1]:text-white [&_h2]:text-white [&_p]:text-white');
+const columnsTitleOnLight = cn(
+  columnsPromoTitleBase,
+  'text-primary [&_h1]:text-primary [&_h2]:text-primary [&_p]:text-primary'
+);
+const columnsTitleOnDark = cn(
+  columnsPromoTitleBase,
+  'text-white [&_h1]:text-white [&_h2]:text-white [&_p]:text-white'
+);
 
 const columnsRateOnLight = cn(
   columnsPromoRateBase,

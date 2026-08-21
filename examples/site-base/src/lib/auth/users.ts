@@ -49,14 +49,14 @@ export async function authenticatePortalUser(input: {
     if (/Environment variable not found:\s*DATABASE_URL/i.test(message)) {
       logAuthFailure(
         'DATABASE_URL missing in Prisma runtime',
-        'Demo file users still work without a DB. For Prisma local: set DATABASE_URL and run db:push/db:seed.',
+        'Demo file users still work without a DB. For Prisma local: set DATABASE_URL and run db:push/db:seed.'
       );
       return null;
     }
     if (/no such table|does not exist|Unable to open|ENOENT/i.test(message)) {
       logAuthFailure(
         'database unavailable',
-        'Using demo users only. For Prisma local: run `npm run db:push && npm run db:seed`.',
+        'Using demo users only. For Prisma local: run `npm run db:push && npm run db:seed`.'
       );
       return null;
     }

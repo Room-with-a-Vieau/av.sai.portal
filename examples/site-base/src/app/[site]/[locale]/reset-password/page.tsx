@@ -47,7 +47,11 @@ function ResetPasswordForm(): React.ReactElement {
               : '/reset-password',
         }),
       });
-      const data = (await response.json()) as { message?: string; resetUrl?: string; error?: string };
+      const data = (await response.json()) as {
+        message?: string;
+        resetUrl?: string;
+        error?: string;
+      };
       if (!response.ok) {
         setError(data.error ?? 'Request failed.');
         return;
@@ -104,7 +108,7 @@ function ResetPasswordForm(): React.ReactElement {
         setIsSubmitting(false);
       }
     },
-    [confirmPassword, password, router, token],
+    [confirmPassword, password, router, token]
   );
 
   return (
@@ -184,7 +188,12 @@ function ResetPasswordForm(): React.ReactElement {
                 disabled={isSubmitting}
               />
             </div>
-            <Button type="button" className="w-full" disabled={isSubmitting} onClick={handleRequestReset}>
+            <Button
+              type="button"
+              className="w-full"
+              disabled={isSubmitting}
+              onClick={handleRequestReset}
+            >
               Send reset link
             </Button>
           </div>
@@ -203,4 +212,3 @@ export default function ResetPasswordPage(): React.ReactElement {
     </main>
   );
 }
-

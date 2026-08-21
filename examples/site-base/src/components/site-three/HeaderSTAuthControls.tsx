@@ -42,7 +42,7 @@ export const HeaderSTAuthControls: React.FC<HeaderSTAuthControlsProps> = ({
 
   const postLogoutTarget = useMemo(
     () => resolvePostLogoutRedirect(searchParams, postLogoutRedirect),
-    [postLogoutRedirect, searchParams],
+    [postLogoutRedirect, searchParams]
   );
 
   const handleLogout = useCallback(async () => {
@@ -78,14 +78,13 @@ export const HeaderSTAuthControls: React.FC<HeaderSTAuthControlsProps> = ({
 
     return (
       <li className={cn('hidden items-center gap-2 lg:flex', className)}>
-        <span className="max-w-[12rem] truncate px-2 text-sm font-medium text-foreground" title={displayName}>
+        <span
+          className="max-w-[12rem] truncate px-2 text-sm font-medium text-foreground"
+          title={displayName}
+        >
           {displayName}
         </span>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className={cn(utilityLinkClass, 'text-sm')}
-        >
+        <button type="button" onClick={handleLogout} className={cn(utilityLinkClass, 'text-sm')}>
           Log out
         </button>
       </li>

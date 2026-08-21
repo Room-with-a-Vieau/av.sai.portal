@@ -35,7 +35,7 @@ describe('mergeArticleContentFields', () => {
           pageTitle: { value: 'Page title' } as Field<string>,
         },
       },
-      false,
+      false
     );
     expect(merged.pageTitle?.value).toBe('Datasource title');
   });
@@ -49,7 +49,7 @@ describe('mergeArticleContentFields', () => {
           pageTitle: { value: 'Page only' } as Field<string>,
         },
       },
-      false,
+      false
     );
     expect(merged.pageTitle?.value).toBe('Page only');
   });
@@ -69,7 +69,7 @@ describe('mergeArticleContentFields', () => {
           },
         },
       },
-      false,
+      false
     );
     expect(merged.pageTitle?.value).toBe('From datasource item');
   });
@@ -82,7 +82,7 @@ describe('mergeArticleContentFields', () => {
           Title: { value: 'Legacy title' } as Field<string>,
         },
       },
-      false,
+      false
     );
     expect(merged.pageTitle?.value).toBe('Legacy title');
   });
@@ -106,7 +106,7 @@ describe('mergeArticleContentFields', () => {
           },
         },
       },
-      false,
+      false
     );
     expect(merged.pageTitle?.value).toBe('From route');
   });
@@ -119,7 +119,7 @@ describe('mergeArticleContentFields', () => {
           ArticleBody: { value: '<p>Body HTML</p>' } as Field<string>,
         },
       },
-      false,
+      false
     );
     expect(merged.ArticleBody?.value).toBe('<p>Body HTML</p>');
   });

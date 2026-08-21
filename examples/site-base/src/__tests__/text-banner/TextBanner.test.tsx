@@ -328,7 +328,9 @@ describe('TextBanner Component', () => {
 
   describe('Editing Mode', () => {
     it('passes editing state to all variants', () => {
-      const { rerender } = render(<TextBannerDefault {...defaultTextBannerProps} page={mockPageEditing} />);
+      const { rerender } = render(
+        <TextBannerDefault {...defaultTextBannerProps} page={mockPageEditing} />
+      );
       expect(screen.getByTestId('text-banner-default')).toHaveAttribute('data-editing', 'true');
 
       rerender(<TextBanner01 {...defaultTextBannerProps} page={mockPageEditing} />);

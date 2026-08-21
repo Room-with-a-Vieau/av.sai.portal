@@ -24,10 +24,7 @@ import { extractImageSrc } from '@/lib/sitecore-image-field';
 import { shouldBypassOptimizer } from '@/lib/sitecore-image-loader';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
-import type {
-  ProductCarouselProductItem,
-  ProductCarouselProps,
-} from './product-carousel.props';
+import type { ProductCarouselProductItem, ProductCarouselProps } from './product-carousel.props';
 
 type CarouselVariant = 'default' | 'productStrip';
 
@@ -46,7 +43,9 @@ function isChecked(field?: { jsonValue?: { value?: unknown } } | null): boolean 
 
 function richPlainText(field?: RichTextField | null): string {
   if (!field?.value) return '';
-  return String(field.value).replace(/<[^>]*>/g, '').trim();
+  return String(field.value)
+    .replace(/<[^>]*>/g, '')
+    .trim();
 }
 
 function productHref(product: ProductCarouselProductItem): string {
@@ -80,15 +79,7 @@ function productImageSrc(product: ProductCarouselProductItem): string {
   );
 }
 
-function ProductImage({
-  src,
-  alt,
-  className,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-}) {
+function ProductImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
   if (!src) return null;
   return (
     <NextImage
@@ -370,9 +361,7 @@ const ProductCarouselBase: React.FC<ProductCarouselProps & { variant: CarouselVa
             />
           )}
 
-          {!isDefault && (
-            <div className="border-border mb-8 border-b md:mb-10" aria-hidden />
-          )}
+          {!isDefault && <div className="border-border mb-8 border-b md:mb-10" aria-hidden />}
 
           <div className="relative px-10 md:px-12">
             <Carousel
@@ -627,8 +616,7 @@ export const Spotlight: React.FC<ProductCarouselProps> = ({
   const id = params?.RenderingIdentifier;
   const canScrollPrev = selectedIndex > 0;
   const canScrollNext = scrollSnapCount > 0 && selectedIndex < scrollSnapCount - 1;
-  const progress =
-    scrollSnapCount > 1 ? ((selectedIndex + 1) / scrollSnapCount) * 100 : 100;
+  const progress = scrollSnapCount > 1 ? ((selectedIndex + 1) / scrollSnapCount) * 100 : 100;
 
   if (!datasource) {
     return <NoDataFallback componentName="ProductCarousel" />;
@@ -643,7 +631,10 @@ export const Spotlight: React.FC<ProductCarouselProps> = ({
       id={id}
       data-component="ProductCarousel"
       data-variant="spotlight"
-      className={cn('component product-carousel product-carousel--spotlight relative w-full', params?.styles)}
+      className={cn(
+        'component product-carousel product-carousel--spotlight relative w-full',
+        params?.styles
+      )}
       aria-roledescription="carousel"
       aria-label={gqlText(datasource.title) || 'Product carousel'}
     >

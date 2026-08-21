@@ -124,7 +124,7 @@ describe('HtmlSnippetBlock (editing)', () => {
             body: { value: '', editable: true },
           } as HtmlSnippetBlockFields,
         })}
-      />,
+      />
     );
 
     expect(document.querySelector('[data-component="html-snippet-block"]')).toBeInTheDocument();

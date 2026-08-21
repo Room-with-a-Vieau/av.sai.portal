@@ -17,7 +17,7 @@ const SitecoreStyles = ({
   enableThemes?: boolean;
 }) => {
   const headLinks = client.getHeadLinks(layoutData, { enableStyles, enableThemes });
-  
+
   // Filter stylesheet links
   const stylesheetLinks = headLinks.filter(({ rel }: HTMLLink) => rel === 'stylesheet');
 
@@ -36,12 +36,12 @@ const SitecoreStyles = ({
       link.rel = 'stylesheet';
       link.href = href;
       link.media = 'print';
-      
+
       // Switch to 'all' after load to apply styles
       const onLoad = () => {
         link.media = 'all';
       };
-      
+
       // Modern browsers support onload for link elements
       if ('onload' in link) {
         link.onload = onLoad;
@@ -49,7 +49,7 @@ const SitecoreStyles = ({
         // Fallback for older browsers: use setTimeout
         setTimeout(onLoad, 0);
       }
-      
+
       document.head.appendChild(link);
     });
     // headLinks is stable enough - duplicate check prevents issues if it changes
@@ -63,7 +63,7 @@ const SitecoreStyles = ({
   // Render non-stylesheet links normally (preconnect, etc. don't block render)
   // Stylesheet links are loaded asynchronously via useEffect above
   const nonStylesheetLinks = headLinks.filter(({ rel }: HTMLLink) => rel !== 'stylesheet');
-  
+
   if (nonStylesheetLinks.length === 0) {
     return null;
   }

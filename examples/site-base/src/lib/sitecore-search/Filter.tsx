@@ -1,13 +1,14 @@
 'use client';
 
-import {
-  useSearchResultsActions,
-  useSearchResultsSelectedFilters,
-} from '@sitecore-search/react';
+import { useSearchResultsActions, useSearchResultsSelectedFilters } from '@sitecore-search/react';
 import type { SearchResultsStoreSelectedFacet } from '@sitecore-search/widgets';
 
 const buildRangeLabel = (min: number | undefined, max: number | undefined): string => {
-  return typeof min === 'undefined' ? `< $${max}` : typeof max === 'undefined' ? ` > $${min}` : `$${min} - $${max}`;
+  return typeof min === 'undefined'
+    ? `< $${max}`
+    : typeof max === 'undefined'
+      ? ` > $${min}`
+      : `$${min} - $${max}`;
 };
 
 const buildFacetLabel = (selectedFacet: SearchResultsStoreSelectedFacet): string => {

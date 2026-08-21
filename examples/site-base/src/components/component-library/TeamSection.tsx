@@ -132,15 +132,13 @@ const SocialIcon = ({
   icon: JSX.Element;
 }) =>
   hasValidLink(field) && field ? (
-    <ContentSdkLink
-      field={field as LinkField}
-      prefetch={false}
-      aria-label={ariaLabel}
-    >
+    <ContentSdkLink field={field as LinkField} prefetch={false} aria-label={ariaLabel}>
       {icon}
     </ContentSdkLink>
   ) : (
-    <span role="img" aria-label={ariaLabel}>{icon}</span>
+    <span role="img" aria-label={ariaLabel}>
+      {icon}
+    </span>
   );
 
 const TeamMemberCard = (props: TeamMemberCardProps) => {

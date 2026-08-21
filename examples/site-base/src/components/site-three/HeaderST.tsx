@@ -123,13 +123,21 @@ const HeaderSTView = (props: HeaderSTViewProps) => {
 
             <ul className="flex min-h-[3.5rem] list-none flex-row items-center justify-end gap-0 p-0 lg:min-h-[4.5rem]">
               <li className="hidden lg:block">
-                <ContentSdkLink field={fields?.SupportLink} prefetch={false} className={navLinkClass} />
+                <ContentSdkLink
+                  field={fields?.SupportLink}
+                  prefetch={false}
+                  className={navLinkClass}
+                />
               </li>
               <li className="mr-auto flex min-w-0 flex-1 justify-end lg:mr-0 lg:justify-center lg:px-4">
                 {params.showSearchBox ? (
                   <HeaderPreviewSearch searchLink={fields?.SearchLink} />
                 ) : (
-                  <ContentSdkLink field={fields?.SearchLink} prefetch={false} className={navLinkClass} />
+                  <ContentSdkLink
+                    field={fields?.SearchLink}
+                    prefetch={false}
+                    className={navLinkClass}
+                  />
                 )}
               </li>
               <HeaderSTAuthControls

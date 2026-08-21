@@ -44,13 +44,7 @@ const SCRUNCH_AXP_HOST = 'axp-vercel.scrunch.com';
 const FORWARD_TIMEOUT_MS = 5000;
 
 /** AXP diagnostic headers kept on successful Scrunch responses. */
-const AXP_HEADERS = [
-  'x-axp-version',
-  'x-bot-id',
-  'x-bot-type',
-  'x-error-code',
-  'x-debug',
-] as const;
+const AXP_HEADERS = ['x-axp-version', 'x-bot-id', 'x-bot-type', 'x-error-code', 'x-debug'] as const;
 
 function isScrunchEnabled(): boolean {
   if (process.env.SCRUNCH_AXP_ENABLED === 'false') return false;

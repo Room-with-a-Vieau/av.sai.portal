@@ -12,7 +12,7 @@ import {
   propsWithNoMedia,
   propsWithVideoAndReducedMotion,
   propsWithCustomClass,
-  mockSitecoreContext
+  mockSitecoreContext,
 } from './MediaSection.mockProps';
 import { mockPageEditing } from '../test-utils/mockPage';
 

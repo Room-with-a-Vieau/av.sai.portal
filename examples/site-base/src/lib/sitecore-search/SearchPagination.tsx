@@ -47,7 +47,7 @@ const SearchPagination = ({ currentPage, totalPages }: SearchPaginationProps) =>
               </Pagination.Page>
             ) : (
               <span key={type}>...</span>
-            ),
+            )
           )
         }
       </Pagination.Pages>

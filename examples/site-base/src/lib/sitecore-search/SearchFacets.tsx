@@ -45,7 +45,7 @@ const SearchFacets = ({ facets }: SearchFacetsProps) => {
   const { onFacetClick } = useSearchResultsActions();
   return (
     <SearchResultsAccordionFacets
-      defaultFacetTypesExpandedList={["type"]}
+      defaultFacetTypesExpandedList={['type']}
       onFacetTypesExpandedListChange={() => {}}
       onFacetValueClick={onFacetClick}
       className="w-full"
@@ -66,7 +66,7 @@ const SearchFacets = ({ facets }: SearchFacetsProps) => {
               <AccordionFacets.ValueList className="list-none mt-2 flex flex-col space-y-2">
                 {f.value.map((v, index: number) => (
                   <FacetItem
-                  key={v.id}
+                    key={v.id}
                     {...{
                       index,
                       facetValueId: v.id,
@@ -85,7 +85,10 @@ const SearchFacets = ({ facets }: SearchFacetsProps) => {
                 ))}
               </AccordionFacets.ValueList>
             ) : (
-              <PriceFacet min={Math.floor(f.value[0].min)} max={Math.floor(f.value[f.value.length - 1].max)} />
+              <PriceFacet
+                min={Math.floor(f.value[0].min)}
+                max={Math.floor(f.value[f.value.length - 1].max)}
+              />
             )}
           </AccordionFacets.Content>
         </AccordionFacets.Facet>

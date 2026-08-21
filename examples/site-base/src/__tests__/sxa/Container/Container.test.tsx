@@ -14,8 +14,10 @@ jest.mock('next-intl', () => ({
     selectOrdinal: jest.fn(),
     list: jest.fn(),
   }),
-  IntlProvider: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
-  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+  IntlProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
 }));
 
 // Mock component-map to avoid circular dependency
@@ -41,8 +43,17 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       Placeholder Content
     </div>
   ),
-  AppPlaceholder: ({ name, rendering }: { name: string; rendering: { componentName?: string } & Record<string, unknown> }) => (
-    <div data-testid={`placeholder-${name}`} data-rendering={rendering?.componentName || JSON.stringify(rendering)}>
+  AppPlaceholder: ({
+    name,
+    rendering,
+  }: {
+    name: string;
+    rendering: { componentName?: string } & Record<string, unknown>;
+  }) => (
+    <div
+      data-testid={`placeholder-${name}`}
+      data-rendering={rendering?.componentName || JSON.stringify(rendering)}
+    >
       AppPlaceholder: {name}
     </div>
   ),

@@ -237,15 +237,14 @@ export async function fetchKnowledgeArticlePool(
       .map(mapNode)
       .filter((a): a is KnowledgeArticleListItem => Boolean(a));
   } catch (error) {
-    console.error(
-      `[fetchKnowledgeArticlePool] Edge search failed (mode=${edgeMode}):`,
-      error
-    );
+    console.error(`[fetchKnowledgeArticlePool] Edge search failed (mode=${edgeMode}):`, error);
     return [];
   }
 }
 
-export function sortByUpdatedDesc(articles: KnowledgeArticleListItem[]): KnowledgeArticleListItem[] {
+export function sortByUpdatedDesc(
+  articles: KnowledgeArticleListItem[]
+): KnowledgeArticleListItem[] {
   return [...articles].sort((a, b) => {
     const ta = a.updatedDate ? Date.parse(a.updatedDate) : 0;
     const tb = b.updatedDate ? Date.parse(b.updatedDate) : 0;

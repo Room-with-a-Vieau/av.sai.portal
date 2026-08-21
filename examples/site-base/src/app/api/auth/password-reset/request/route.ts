@@ -18,9 +18,7 @@ function buildResetUrl(token: string, origin: string, resetReturnPath?: string):
 }
 
 function shouldExposeResetLink(): boolean {
-  return (
-    process.env.NODE_ENV !== 'production' || process.env.AUTH_EXPOSE_RESET_LINK === 'true'
-  );
+  return process.env.NODE_ENV !== 'production' || process.env.AUTH_EXPOSE_RESET_LINK === 'true';
 }
 
 export async function POST(request: Request) {
@@ -63,4 +61,3 @@ export async function POST(request: Request) {
     message: 'If an account exists, a reset link has been sent.',
   });
 }
-

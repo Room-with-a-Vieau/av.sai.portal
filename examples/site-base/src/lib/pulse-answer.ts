@@ -125,9 +125,7 @@ export function composePulseAnswer(
   const insightHits = sources.filter((s) => s.type === 'knowledge-article');
   const learningHits = insightHits.filter(isLearningAsset);
   const otherInsightHits = insightHits.filter((s) => !isLearningAsset(s));
-  const stateHits = personaState
-    ? sources.filter((s) => s.stateCode === personaState)
-    : [];
+  const stateHits = personaState ? sources.filter((s) => s.stateCode === personaState) : [];
 
   // Product / category journey (manufacturing brands)
   if (productHits.length >= 1 && peopleHits.length === 0) {
@@ -212,10 +210,7 @@ export function composePulseAnswer(
     ...learningHits,
     ...otherInsightHits,
     ...sources.filter(
-      (s) =>
-        s.type !== 'people-and-teams' &&
-        s.type !== 'knowledge-article' &&
-        !isProductLike(s)
+      (s) => s.type !== 'people-and-teams' && s.type !== 'knowledge-article' && !isProductLike(s)
     ),
   ].filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
 
@@ -296,7 +291,9 @@ function composeCareerAnswer(
       !/how to apply/i.test(s.title) &&
       !new RegExp(`^careers at ${brandName}$`, 'i').test(s.title.trim())
   );
-  const hub = sources.find((s) => new RegExp(`^careers at ${brandName}$`, 'i').test(s.title.trim()));
+  const hub = sources.find((s) =>
+    new RegExp(`^careers at ${brandName}$`, 'i').test(s.title.trim())
+  );
   const howToApply = sources.find((s) => /how to apply/i.test(s.title));
   const people = sources.filter((s) => s.type === 'people-and-teams');
   const primary = openings[0] || hub || sources[0];

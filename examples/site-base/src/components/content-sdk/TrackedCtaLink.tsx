@@ -1,11 +1,7 @@
 'use client';
 
 import { forwardRef, type ComponentPropsWithoutRef, type MouseEventHandler } from 'react';
-import {
-  Link as ContentSdkLink,
-  type LinkField,
-  useSitecore,
-} from '@sitecore-content-sdk/nextjs';
+import { Link as ContentSdkLink, type LinkField, useSitecore } from '@sitecore-content-sdk/nextjs';
 
 import { trackCdpLinkClickEvent } from '@/lib/cdp-link-click-event';
 

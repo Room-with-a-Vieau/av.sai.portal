@@ -74,7 +74,7 @@ function ModuleCard({
               )}
             </Link>
           </Button>
-        ) : (ctaField?.value || isEditing) ? (
+        ) : ctaField?.value || isEditing ? (
           <Button type="button" variant="secondary" size="sm" disabled={!href}>
             <Text field={ctaField} tag="span" />
           </Button>
@@ -93,11 +93,14 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
     (page.layout?.sitecore?.context as { language?: string } | undefined)?.language || 'en';
 
   const queryIndustryRaw = searchParams.get('industry') ?? searchParams.get('industryType') ?? '';
-  const queryIndustryKey = useMemo(() => normalizeIndustryKey(queryIndustryRaw), [queryIndustryRaw]);
+  const queryIndustryKey = useMemo(
+    () => normalizeIndustryKey(queryIndustryRaw),
+    [queryIndustryRaw]
+  );
 
   const paramIndustryKey = useMemo(
     () => normalizeIndustryKey(params.industryType ?? initialIndustryKey ?? ''),
-    [initialIndustryKey, params.industryType],
+    [initialIndustryKey, params.industryType]
   );
 
   const effectiveIndustryKey = queryIndustryKey || paramIndustryKey;
@@ -138,7 +141,14 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
     } finally {
       setIsRefreshing(false);
     }
-  }, [effectiveIndustryKey, language, params.industryTemplateType, params.moduleTemplateType, resolvedHubPath, shouldRefetch]);
+  }, [
+    effectiveIndustryKey,
+    language,
+    params.industryTemplateType,
+    params.moduleTemplateType,
+    resolvedHubPath,
+    shouldRefetch,
+  ]);
 
   useEffect(() => {
     void runRefetch();
@@ -162,7 +172,10 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
       suppressHydrationWarning={isEditing}
     >
       <header className="mb-8 max-w-3xl space-y-2">
-        <h1 id="portal-hub-title" className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
+        <h1
+          id="portal-hub-title"
+          className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl"
+        >
           <Text field={fields.title} tag="span" />
         </h1>
         <p className="text-muted-foreground text-base md:text-lg">
@@ -184,7 +197,8 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
         </div>
       ) : null}
 
-      {refreshError && (fields.emptyModulesTitle?.value || fields.emptyModulesDescription?.value || isEditing) ? (
+      {refreshError &&
+      (fields.emptyModulesTitle?.value || fields.emptyModulesDescription?.value || isEditing) ? (
         <div className="text-destructive mb-6 space-y-1 text-sm" role="alert">
           {(fields.emptyModulesTitle?.value || isEditing) && (
             <p className="font-medium">
@@ -200,7 +214,10 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
       ) : null}
 
       {showMissingIndustry ? (
-        <div className="bg-muted/40 text-muted-foreground rounded-lg border p-6 md:p-8" role="status">
+        <div
+          className="bg-muted/40 text-muted-foreground rounded-lg border p-6 md:p-8"
+          role="status"
+        >
           {(fields.missingIndustryTitle?.value || isEditing) && (
             <h2 className="text-foreground mb-2 text-lg font-medium">
               <Text field={fields.missingIndustryTitle} tag="span" />
@@ -232,7 +249,12 @@ export const PortalHubViewClient: React.FC<PortalHubViewProps> = (props) => {
       {!showMissingIndustry && modules.length > 0 && !isRefreshing ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {modules.map((module, index) => (
-            <ModuleCard key={`module-${index}`} module={module} index={index} isEditing={isEditing} />
+            <ModuleCard
+              key={`module-${index}`}
+              module={module}
+              index={index}
+              isEditing={isEditing}
+            />
           ))}
         </div>
       ) : null}

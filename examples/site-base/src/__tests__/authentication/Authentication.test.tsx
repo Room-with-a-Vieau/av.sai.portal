@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react';
 
 import { createComponentProps } from '@/__tests__/test-utils/testHelpers';
 
-import type { AuthenticationFields, AuthenticationProps } from '@/components/authentication/authentication.props';
+import type {
+  AuthenticationFields,
+  AuthenticationProps,
+} from '@/components/authentication/authentication.props';
 
 const mockPush = jest.fn();
 const mockRefresh = jest.fn();
@@ -29,13 +32,7 @@ jest.mock('next/link', () => ({
 }));
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({
-    field,
-    tag: Tag = 'span',
-  }: {
-    field?: { value?: string };
-    tag?: React.ElementType;
-  }) => {
+  Text: ({ field, tag: Tag = 'span' }: { field?: { value?: string }; tag?: React.ElementType }) => {
     if (!field?.value?.trim()) return null;
     return React.createElement(Tag, null, field.value);
   },
@@ -63,7 +60,7 @@ import { Default as Authentication } from '@/components/authentication/Authentic
 
 function authenticationProps(
   fields: Partial<AuthenticationFields>,
-  params?: AuthenticationProps['params'],
+  params?: AuthenticationProps['params']
 ): AuthenticationProps {
   return {
     ...createComponentProps({}),
@@ -111,7 +108,7 @@ describe('Authentication', () => {
             },
           },
         })}
-      />,
+      />
     );
 
     const logo = screen.getByRole('img', { name: 'Diversified' });

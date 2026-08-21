@@ -79,9 +79,7 @@ export const Default: React.FC<VariantContentProps> = (props) => {
   }
 
   // Authors in Experience Editor always see every linked variant.
-  const chunks = isEditing
-    ? allChunks
-    : filterChunksByPersonaState(allChunks, personaStateCode);
+  const chunks = isEditing ? allChunks : filterChunksByPersonaState(allChunks, personaStateCode);
   const groups = groupChunksBySection(chunks);
 
   if (groups.length === 0) {

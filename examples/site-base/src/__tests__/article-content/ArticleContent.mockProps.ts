@@ -106,7 +106,9 @@ export const pageViaNestedExternalFieldsProps: ArticleContentProps = {
     data: {
       externalFields: {
         pageTitle: { jsonValue: { value: 'Title from nested externalFields' } as Field<string> },
-        pageSummary: { jsonValue: { value: 'Summary from nested externalFields.' } as Field<string> },
+        pageSummary: {
+          jsonValue: { value: 'Summary from nested externalFields.' } as Field<string>,
+        },
       },
     },
   },

@@ -118,7 +118,7 @@ jest.mock('../../components/icon/Icon', () => ({
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({ src, alt, className, width, height, ...props }: any) => (
-   <img
+    <img
       src={src || '/placeholder.svg'}
       alt={alt || ''}
       className={className}

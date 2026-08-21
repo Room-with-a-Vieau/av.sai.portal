@@ -68,10 +68,7 @@ function isDarkImageHero(params: PageHeaderSTProps['params'] | undefined): boole
 }
 
 function heroEyebrowOverPhotoClass(darkImage: boolean): string {
-  return cn(
-    'text-xl lg:text-3xl pb-4',
-    darkImage ? HERO_TEXT_ON_DARK_IMAGE_CLASS : 'text-primary'
-  );
+  return cn('text-xl lg:text-3xl pb-4', darkImage ? HERO_TEXT_ON_DARK_IMAGE_CLASS : 'text-primary');
 }
 
 function heroTitleOverPhotoClass(darkImage: boolean): string {
@@ -95,32 +92,32 @@ export const Default = (props: PageHeaderSTProps) => {
           className={HERO_BG_IMAGE_CLASS}
         />
       </div>
-        <div className="relative z-20 mx-auto w-full lg:container lg:flex">
-          <div
-            className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
-          >
-            <div className="lg:max-w-3xl">
-              <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Eyebrow} />
-              </h1>
-              <h1 className={heroTitleOverPhotoClass(darkImage)}>
-                <ContentSdkText field={props?.fields?.Title} />
-              </h1>
-              <div className="mt-8">
-                <TrackedCtaLink
-                  field={props?.fields?.Link1}
-                  prefetch={false}
-                  className="btn btn-primary mr-4"
-                />
-                <TrackedCtaLink
-                  field={props?.fields?.Link2}
-                  prefetch={false}
-                  className="btn btn-secondary"
-                />
-              </div>
+      <div className="relative z-20 mx-auto w-full lg:container lg:flex">
+        <div
+          className={`flex flex-col justify-center px-4 py-8 lg:w-2/3 lg:p-8 ${HERO_CONTENT_BAND_CLASS}`}
+        >
+          <div className="lg:max-w-3xl">
+            <h1 className={heroEyebrowOverPhotoClass(darkImage)}>
+              <ContentSdkText field={props?.fields?.Eyebrow} />
+            </h1>
+            <h1 className={heroTitleOverPhotoClass(darkImage)}>
+              <ContentSdkText field={props?.fields?.Title} />
+            </h1>
+            <div className="mt-8">
+              <TrackedCtaLink
+                field={props?.fields?.Link1}
+                prefetch={false}
+                className="btn btn-primary mr-4"
+              />
+              <TrackedCtaLink
+                field={props?.fields?.Link2}
+                prefetch={false}
+                className="btn btn-secondary"
+              />
             </div>
           </div>
         </div>
+      </div>
     </section>
   );
 };
@@ -220,7 +217,6 @@ export const Centered = (props: PageHeaderSTProps) => {
 };
 
 export const SplitScreen = (props: PageHeaderSTProps) => {
-
   return (
     <section
       className={`relative bg-primary border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
@@ -263,7 +259,6 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
 };
 
 export const Stacked = (props: PageHeaderSTProps) => {
-
   return (
     <section
       className={`relative flex flex-col bg-primary lg:flex-row lg:items-center lg:bg-transparent ${HERO_CONTENT_BAND_CLASS} ${props?.params?.styles || ''}`}

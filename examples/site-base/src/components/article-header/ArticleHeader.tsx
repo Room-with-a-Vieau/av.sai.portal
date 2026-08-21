@@ -338,10 +338,15 @@ export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields, 
                         </Avatar>
                         <div className="relative">
                           <p className="text-pretty font-medium text-white">
-                            {authorPerson.personFirstName?.value} {authorPerson.personLastName?.value}
+                            {authorPerson.personFirstName?.value}{' '}
+                            {authorPerson.personLastName?.value}
                           </p>
                           {authorPerson.personJobTitle && (
-                            <Text tag="p" field={authorPerson.personJobTitle} className="text-pretty text-sm text-white" />
+                            <Text
+                              tag="p"
+                              field={authorPerson.personJobTitle}
+                              className="text-pretty text-sm text-white"
+                            />
                           )}
                         </div>
                       </div>

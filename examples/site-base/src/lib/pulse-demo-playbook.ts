@@ -1,11 +1,7 @@
 /**
  * Compatibility shim — prefer `@/lib/pulse-packs` for new code.
  */
-import {
-  getPulsePack,
-  getPulseStarterPrompts,
-  matchPulseIntentForSite,
-} from '@/lib/pulse-packs';
+import { getPulsePack, getPulseStarterPrompts, matchPulseIntentForSite } from '@/lib/pulse-packs';
 import type { PulseSource } from '@/lib/pulse-types';
 
 export function matchPulseDemoIntent(question: string, siteName?: string | null) {
@@ -16,7 +12,10 @@ export function matchPulseDemoIntent(question: string, siteName?: string | null)
  * Build high-confidence sources for a matched demo intent.
  * Prefer Edge hydration via retrievePulseSources; this path uses citationFallbacks only.
  */
-export function buildDemoPlaybookSources(question: string, siteName?: string | null): PulseSource[] {
+export function buildDemoPlaybookSources(
+  question: string,
+  siteName?: string | null
+): PulseSource[] {
   const intent = matchPulseIntentForSite(question, siteName);
   if (!intent) return [];
 

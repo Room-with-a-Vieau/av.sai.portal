@@ -167,24 +167,24 @@ export const Default: FC<DownloadListProps> = ({ fields, page }) => {
 
         {links.length === 0 && !hasPlanAssets && planAssetsFetched && isEditing && (
           <p className="text-muted-foreground rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm">
-            Add <strong>child items</strong> under this Download List (each with a general / external link),
-            or use <strong>FeaturedContent</strong>, to list downloads here.
+            Add <strong>child items</strong> under this Download List (each with a general /
+            external link), or use <strong>FeaturedContent</strong>, to list downloads here.
           </p>
         )}
 
         {planAssetsMissingTaxonomy && isEditing && (
           <p className="text-muted-foreground mb-4 rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm">
-            This query uses <code className="text-xs">$taxonomy</code>. Sign in with a profile that includes{' '}
-            <strong>taxonomy</strong> (see NextAuth session), or remove <code className="text-xs">$taxonomy</code> from the
-            query for anonymous previews.
+            This query uses <code className="text-xs">$taxonomy</code>. Sign in with a profile that
+            includes <strong>taxonomy</strong> (see NextAuth session), or remove{' '}
+            <code className="text-xs">$taxonomy</code> from the query for anonymous previews.
           </p>
         )}
 
         {planAssetsFailed && isEditing && (
           <p className="text-muted-foreground mb-4 rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm">
             Plan asset GraphQL failed. Check the <strong>DownloadContent</strong> query, set{' '}
-            <code className="text-xs">BCBS_GRAPHQL_ENDPOINT</code> and <code className="text-xs">BCBS_GRAPHQL_TOKEN</code>{' '}
-            on the server, and review logs.
+            <code className="text-xs">BCBS_GRAPHQL_ENDPOINT</code> and{' '}
+            <code className="text-xs">BCBS_GRAPHQL_TOKEN</code> on the server, and review logs.
           </p>
         )}
 
@@ -236,7 +236,7 @@ function PlanAssetFileNameRow({
       className={cn(
         'border-border flex items-center gap-3 border-b p-4 text-sm last:border-b-0',
         isFirst && 'rounded-t-xl',
-        isLast && 'rounded-b-xl',
+        isLast && 'rounded-b-xl'
       )}
     >
       <span className="text-muted-foreground shrink-0" aria-hidden>
@@ -267,7 +267,7 @@ function DownloadRow({
         className={cn(
           'border-border flex items-center gap-3 border-b p-4 text-sm last:border-b-0',
           isFirst && 'rounded-t-xl',
-          isLast && 'rounded-b-xl',
+          isLast && 'rounded-b-xl'
         )}
       >
         <span className="text-muted-foreground shrink-0">{renderFileGlyph(href, 'size-5')}</span>
@@ -285,7 +285,7 @@ function DownloadRow({
       className={cn(
         'border-border hover:bg-muted/40 flex flex-col gap-1 border-b transition-colors last:border-b-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4',
         isFirst && 'rounded-t-xl',
-        isLast && 'rounded-b-xl',
+        isLast && 'rounded-b-xl'
       )}
     >
       <div className="flex min-w-0 flex-1 items-center gap-3 p-4 sm:py-3">

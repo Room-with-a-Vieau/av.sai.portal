@@ -39,10 +39,7 @@ describe('BackgroundThumbnail', () => {
     (useSitecore as jest.Mock).mockReturnValue(mockUseSitecoreEditing);
 
     render(
-      <BackgroundThumbnailDefault
-        {...defaultBackgroundThumbnailProps}
-        page={mockPageEditing}
-      />
+      <BackgroundThumbnailDefault {...defaultBackgroundThumbnailProps} page={mockPageEditing} />
     );
 
     expect(screen.getByTestId('badge')).toBeInTheDocument();
@@ -55,10 +52,7 @@ describe('BackgroundThumbnail', () => {
     (useSitecore as jest.Mock).mockReturnValue(mockUseSitecoreNormal);
 
     const { container } = render(
-      <BackgroundThumbnailDefault
-        {...defaultBackgroundThumbnailProps}
-        page={mockPageNormal}
-      />
+      <BackgroundThumbnailDefault {...defaultBackgroundThumbnailProps} page={mockPageNormal} />
     );
 
     expect(container.firstChild).toBeNull();

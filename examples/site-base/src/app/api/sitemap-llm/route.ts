@@ -41,9 +41,9 @@ function escapeXml(text: string): string {
  * Mirrors the options used by createSitemapRouteHandler.
  */
 function getSitemapOptions(request: NextRequest): SitemapXmlOptions {
-  const sitesNormalized: SiteInfo[] = (sites as { name: string; hostName?: string; language?: string }[]).map(
-    (s) => ({ name: s.name, hostName: s.hostName ?? '*', language: s.language ?? 'en' })
-  );
+  const sitesNormalized: SiteInfo[] = (
+    sites as { name: string; hostName?: string; language?: string }[]
+  ).map((s) => ({ name: s.name, hostName: s.hostName ?? '*', language: s.language ?? 'en' }));
   const siteResolver = new SiteResolver(sitesNormalized);
   const reqHost = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
   const forwardedProto = request.headers.get('x-forwarded-proto');
@@ -61,7 +61,9 @@ function getSitemapOptions(request: NextRequest): SitemapXmlOptions {
 }
 
 /** Parses <url> entries from sitemap XML. */
-function parseUrlEntriesFromXml(xml: string): { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] {
+function parseUrlEntriesFromXml(
+  xml: string
+): { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] {
   const urls: { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] = [];
   for (const block of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
     const loc = block[1].match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -130,12 +132,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const pageEntries = urls
       .filter((u) => shouldIncludeUrl(u.loc))
-      .map((u) => `  <url>
+      .map(
+        (u) => `  <url>
     <loc>${escapeXml(u.loc)}</loc>
     <lastmod>${u.lastmod || today}</lastmod>
     <changefreq>${u.changefreq || 'weekly'}</changefreq>
     <priority>${u.priority || '0.5'}</priority>
-  </url>`);
+  </url>`
+      );
 
     const aiEndpoints = ['/ai/faq.json', '/ai/summary.json', '/ai/service.json'] as const;
     const aiEntries = aiEndpoints.map(
@@ -147,8 +151,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   </url>`
     );
 
-    const entries =
-      pageEntries.length > 0 ? [...pageEntries, ...aiEntries].join('\n') : '';
+    const entries = pageEntries.length > 0 ? [...pageEntries, ...aiEntries].join('\n') : '';
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

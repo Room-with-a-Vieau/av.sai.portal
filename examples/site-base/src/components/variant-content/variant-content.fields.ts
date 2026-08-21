@@ -50,9 +50,7 @@ export function extractSectionFolder(pathOrUrl?: string): string | undefined {
 
 export function extractStateCode(pathOrUrl?: string, itemName?: string): string | undefined {
   if (pathOrUrl?.trim()) {
-    const fromPath = pathOrUrl
-      .replace(/\\/g, '/')
-      .match(/\/StateSpecific\/([A-Z]{2})(?:\/|$)/i);
+    const fromPath = pathOrUrl.replace(/\\/g, '/').match(/\/StateSpecific\/([A-Z]{2})(?:\/|$)/i);
     if (fromPath?.[1]) return fromPath[1].toUpperCase();
   }
 

@@ -33,10 +33,7 @@ const DEFAULT_TYPE_BADGE: Record<PulseSource['type'], string> = {
   other: 'Page',
 };
 
-function sourceBadge(
-  source: PulseSource,
-  typeBadges: Record<PulseSource['type'], string>
-): string {
+function sourceBadge(source: PulseSource, typeBadges: Record<PulseSource['type'], string>): string {
   const hay = `${source.title} ${source.url}`.toLowerCase();
   if (/webinar/.test(hay)) return 'Webinar';
   if (/podcast/.test(hay)) return 'Podcast';
@@ -82,7 +79,9 @@ function SourceCards({
             className="block rounded-xl border border-border bg-background/80 px-3 py-2 transition-colors hover:border-primary/40 hover:bg-muted/40"
           >
             <div className="flex items-start justify-between gap-2">
-              <span className="text-sm font-medium text-foreground leading-snug">{source.title}</span>
+              <span className="text-sm font-medium text-foreground leading-snug">
+                {source.title}
+              </span>
               <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                 {sourceBadge(source, typeBadges)}
               </span>
@@ -170,9 +169,7 @@ export function PulseAssistant({ hidden = false, siteName = null }: PulseAssista
   if (hidden) return null;
 
   const stateCode =
-    pack.enableStatePersona && persona
-      ? (getPersonaStateCode(persona) as PulseStateCode)
-      : null;
+    pack.enableStatePersona && persona ? (getPersonaStateCode(persona) as PulseStateCode) : null;
 
   async function ask(question: string) {
     const q = question.trim();

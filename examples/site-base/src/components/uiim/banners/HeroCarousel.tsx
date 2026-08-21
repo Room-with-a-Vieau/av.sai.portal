@@ -67,7 +67,9 @@ function hasText(field?: IGQLTextField | null): boolean {
 }
 
 function hasLink(field?: IGQLLinkField | null): boolean {
-  const value = field?.jsonValue?.value as { href?: string; text?: string; url?: string } | undefined;
+  const value = field?.jsonValue?.value as
+    | { href?: string; text?: string; url?: string }
+    | undefined;
   return Boolean(value?.href || value?.url || value?.text);
 }
 
@@ -88,8 +90,7 @@ function shouldShowImageField(
   return Boolean(field?.jsonValue) && (hasImage(field) || Boolean(isEditing));
 }
 
-const HEIGHT =
-  'min-h-[24rem] md:min-h-[30rem] lg:min-h-[35rem]';
+const HEIGHT = 'min-h-[24rem] md:min-h-[30rem] lg:min-h-[35rem]';
 
 const HeroCarouselEmpty: React.FC = () => (
   <div
@@ -179,9 +180,7 @@ const VerticalDots: React.FC<{
             onClick={() => onSelect(index)}
             className={cn(
               'h-2.5 w-2.5 rounded-full border border-primary-foreground transition-colors',
-              selected
-                ? 'bg-primary-foreground'
-                : 'bg-transparent hover:bg-primary-foreground/40'
+              selected ? 'bg-primary-foreground' : 'bg-transparent hover:bg-primary-foreground/40'
             )}
           />
         );
@@ -377,7 +376,10 @@ const FocusProductSlide: React.FC<{
         {showBackground && backgroundField && (
           <ContentSdkImage field={backgroundField} className="h-full w-full object-cover" />
         )}
-        <div className="pointer-events-none absolute inset-0 bg-[var(--color-overlay)]" aria-hidden="true" />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[var(--color-overlay)]"
+          aria-hidden="true"
+        />
       </div>
 
       <div
@@ -476,7 +478,10 @@ const SplitPanelSlide: React.FC<{
   const imagePanel = (
     <div className="bg-muted relative h-full min-h-[14rem] md:min-h-0">
       {showSplitImage && splitImageField ? (
-        <ContentSdkImage field={splitImageField} className="absolute inset-0 h-full w-full object-cover" />
+        <ContentSdkImage
+          field={splitImageField}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       ) : null}
     </div>
   );
@@ -552,9 +557,7 @@ const HeroCarouselBase: React.FC<HeroCarouselProps & { variant: CarouselVariant 
 
   const activeSlide = slides[activeIndex];
   const isIntro =
-    variant === 'default' && activeSlide
-      ? resolveIsIntro(activeSlide, activeIndex, slides)
-      : false;
+    variant === 'default' && activeSlide ? resolveIsIntro(activeSlide, activeIndex, slides) : false;
 
   const renderSlide = (slide: HeroCarouselSlideFields, index: number) => {
     const shared = {
@@ -599,20 +602,12 @@ const HeroCarouselBase: React.FC<HeroCarouselProps & { variant: CarouselVariant 
                 style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
               />
             )}
-            <VerticalDots
-              slides={slides}
-              activeIndex={activeIndex}
-              onSelect={setCurrentSlide}
-            />
+            <VerticalDots slides={slides} activeIndex={activeIndex} onSelect={setCurrentSlide} />
           </div>
         )}
 
         {variant === 'focusProduct' && (
-          <HorizontalDots
-            slides={slides}
-            activeIndex={activeIndex}
-            onSelect={setCurrentSlide}
-          />
+          <HorizontalDots slides={slides} activeIndex={activeIndex} onSelect={setCurrentSlide} />
         )}
 
         {variant === 'splitPanel' && (

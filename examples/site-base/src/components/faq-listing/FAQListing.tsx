@@ -95,7 +95,10 @@ export const Default: React.FC<FAQListingProps> = (props) => {
             Select AIFAQ items in the Featured FAQ Treelist to populate this accordion.
           </div>
         ) : (
-          <Accordion type="multiple" className="border-border w-full rounded-2xl border px-4 sm:px-6">
+          <Accordion
+            type="multiple"
+            className="border-border w-full rounded-2xl border px-4 sm:px-6"
+          >
             {faqItems.map((item, index) => {
               const id = item.id || `faq-${index}`;
               const question = item.fields?.Question;

@@ -22,7 +22,6 @@ import * as TabNavigationSection from 'src/components/uiim/navigation/TabNavigat
 import * as SiteFooter from 'src/components/uiim/navigation/SiteFooter';
 import * as NavigationHeader from 'src/components/uiim/navigation/NavigationHeader';
 import * as AnnouncementBar from 'src/components/uiim/navigation/AnnouncementBar';
-import * as ImageGallery from 'src/components/uiim/media/ImageGallery';
 import * as CareerListingprops from 'src/components/uiim/lawyers/career-listing.props';
 import * as CareerListing from 'src/components/uiim/lawyers/CareerListing';
 import * as BioRelatedContent from 'src/components/uiim/lawyers/bio-related-content';
@@ -334,7 +333,6 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['SiteFooter', { ...SiteFooter }],
   ['NavigationHeader', { ...NavigationHeader, componentType: 'client' }],
   ['AnnouncementBar', { ...AnnouncementBar }],
-  ['ImageGallery', { ...ImageGallery }],
   ['CareerListing', { ...CareerListingprops, ...CareerListing, componentType: 'client' }],
   ['BioRelatedContent', { ...BioRelatedContent }],
   ['BioDetail', { ...BioDetailprops, ...BioDetail, componentType: 'client' }],

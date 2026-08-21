@@ -67,8 +67,7 @@ const ATA_AKINER: BioRelatedContentProfile = {
       id: 'blog-global-trade',
       type: 'blog',
       title: 'Global Trade & Sanctions Law',
-      description:
-        'Ongoing commentary on OFAC, EAR, customs, and cross-border trade compliance.',
+      description: 'Ongoing commentary on OFAC, EAR, customs, and cross-border trade compliance.',
       href: '/Insights/Blogs/Global-Trade-and-Sanctions-Law',
       dateLabel: 'Blog',
     },
@@ -85,8 +84,7 @@ const ATA_AKINER: BioRelatedContentProfile = {
       id: 'webinar-mena-corporate',
       type: 'webinar',
       title: 'MENA Corporate Setup & U.S. Export Compliance',
-      description:
-        'Standing up a Saudi or Qatar entity without missing U.S. trade controls.',
+      description: 'Standing up a Saudi or Qatar entity without missing U.S. trade controls.',
       href: '/Insights/Events/Webinar/MENA-Corporate-Setup-and-US-Export-Compliance',
       dateLabel: 'On demand',
     },
@@ -151,7 +149,9 @@ export const BIO_RELATED_CONTENT_BY_NAME: Record<string, BioRelatedContentProfil
   'Ata-A-Akiner': ATA_AKINER,
 };
 
-export function resolveBioRelatedContent(itemName?: string | null): BioRelatedContentProfile | null {
+export function resolveBioRelatedContent(
+  itemName?: string | null
+): BioRelatedContentProfile | null {
   if (!itemName?.trim()) return null;
   return BIO_RELATED_CONTENT_BY_NAME[itemName.trim()] ?? null;
 }

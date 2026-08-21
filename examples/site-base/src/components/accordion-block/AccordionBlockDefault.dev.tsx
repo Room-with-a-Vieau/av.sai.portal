@@ -54,7 +54,10 @@ export const AccordionBlockDefault: React.FC<AccordionProps> = (props) => {
               </Accordion>
             </div>
             {(isPageEditing || description?.jsonValue?.value || link?.jsonValue?.value?.href) && (
-              <aside className="bg-primary @sm:flex-row @sm:text-start @md:flex-col @md:text-center @lg:flex-row @lg:text-start mt-6 flex flex-col flex-nowrap items-center gap-4 p-7 text-center" aria-label="Additional information">
+              <aside
+                className="bg-primary @sm:flex-row @sm:text-start @md:flex-col @md:text-center @lg:flex-row @lg:text-start mt-6 flex flex-col flex-nowrap items-center gap-4 p-7 text-center"
+                aria-label="Additional information"
+              >
                 <Text
                   tag="p"
                   className="text-primary-foreground font-heading text-lg font-light"

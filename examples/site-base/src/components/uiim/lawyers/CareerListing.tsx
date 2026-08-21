@@ -16,10 +16,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 
-import type {
-  CareerListingProps,
-  CareerListingRole,
-} from './career-listing.props';
+import type { CareerListingProps, CareerListingRole } from './career-listing.props';
 
 /** McKinsey-style hover shared with BioListing / MultiPromo cards. */
 const hoverSurfaceClassName =

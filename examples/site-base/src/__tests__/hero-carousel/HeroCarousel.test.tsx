@@ -1,6 +1,10 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Default as HeroCarousel, FocusProduct, SplitPanel } from '../../components/uiim/banners/HeroCarousel';
+import {
+  Default as HeroCarousel,
+  FocusProduct,
+  SplitPanel,
+} from '../../components/uiim/banners/HeroCarousel';
 import type { HeroCarouselProps } from '../../components/uiim/banners/HeroCarousel';
 
 jest.mock('@sitecore-content-sdk/nextjs', () => {

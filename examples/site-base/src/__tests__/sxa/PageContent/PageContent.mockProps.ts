@@ -2,7 +2,13 @@
  * Test fixtures and mock data for PageContent component
  */
 
-import type { RichTextField, LinkField, TextField, Page, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import type {
+  RichTextField,
+  LinkField,
+  TextField,
+  Page,
+  ComponentRendering,
+} from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps } from 'lib/component-props';
 import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 

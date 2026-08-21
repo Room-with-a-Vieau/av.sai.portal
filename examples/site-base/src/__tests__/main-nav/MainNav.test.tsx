@@ -79,19 +79,27 @@ jest.mock('@/components/ui/button', () => ({
 }));
 
 jest.mock('@/components/ui/sheet', () => ({
-  Sheet: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
-  SheetTrigger: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
-  SheetContent: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
-  SheetHeader: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
-  SheetTitle: ({ children }: { children?: React.ReactNode }) => React.createElement('h2', null, children),
+  Sheet: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
+  SheetTrigger: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
+  SheetContent: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
+  SheetHeader: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
+  SheetTitle: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('h2', null, children),
 }));
 
 jest.mock('@/components/ui/accordion', () => ({
-  Accordion: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
-  AccordionItem: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
+  Accordion: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
+  AccordionItem: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
   AccordionTrigger: ({ children }: { children?: React.ReactNode }) =>
     React.createElement('button', { type: 'button' }, children),
-  AccordionContent: ({ children }: { children?: React.ReactNode }) => React.createElement('div', null, children),
+  AccordionContent: ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', null, children),
 }));
 
 import { extractNavigationRootId } from '@/lib/main-nav-utils';
@@ -144,14 +152,16 @@ const tree = {
 describe('extractNavigationRootId', () => {
   it('reads Droptree jsonValue id', () => {
     expect(
-      extractNavigationRootId({ jsonValue: { value: { id: '{E6276198-3FC7-4D8B-BD14-8669B1701536}' } } })
+      extractNavigationRootId({
+        jsonValue: { value: { id: '{E6276198-3FC7-4D8B-BD14-8669B1701536}' } },
+      })
     ).toBe('{E6276198-3FC7-4D8B-BD14-8669B1701536}');
   });
 
   it('reads jsonValue.id when value wrapper is missing', () => {
-    expect(extractNavigationRootId({ jsonValue: { id: 'e6276198-3fc7-4d8b-bd14-8669b1701536' } })).toBe(
-      'e6276198-3fc7-4d8b-bd14-8669b1701536'
-    );
+    expect(
+      extractNavigationRootId({ jsonValue: { id: 'e6276198-3fc7-4d8b-bd14-8669b1701536' } })
+    ).toBe('e6276198-3fc7-4d8b-bd14-8669b1701536');
   });
 });
 

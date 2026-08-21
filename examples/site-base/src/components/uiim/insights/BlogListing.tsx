@@ -4,11 +4,7 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  RichText as ContentSdkRichText,
-  Text,
-  useSitecore,
-} from '@sitecore-content-sdk/nextjs';
+import { RichText as ContentSdkRichText, Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import { ChevronRight, Newspaper, Search, UserRound, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

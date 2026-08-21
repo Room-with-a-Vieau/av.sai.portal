@@ -104,7 +104,9 @@ export const BIO_HEADSHOT_BY_NAME: Record<string, { src: string; alt: string }> 
   },
 };
 
-export function bioHeadshotFallback(itemName?: string | null): { src: string; alt: string } | undefined {
+export function bioHeadshotFallback(
+  itemName?: string | null
+): { src: string; alt: string } | undefined {
   if (!itemName) return undefined;
   return BIO_HEADSHOT_BY_NAME[itemName];
 }

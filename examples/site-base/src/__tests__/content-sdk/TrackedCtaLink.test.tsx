@@ -10,7 +10,15 @@ jest.mock('@/lib/cdp-link-click-event', () => ({
 }));
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Link: ({ field, onClick, className }: { field: { value?: { href?: string; text?: string } }; onClick?: () => void; className?: string }) => (
+  Link: ({
+    field,
+    onClick,
+    className,
+  }: {
+    field: { value?: { href?: string; text?: string } };
+    onClick?: () => void;
+    className?: string;
+  }) => (
     <a href={field?.value?.href} className={className} onClick={onClick}>
       {field?.value?.text}
     </a>

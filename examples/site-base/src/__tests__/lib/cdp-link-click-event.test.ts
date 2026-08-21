@@ -30,8 +30,12 @@ describe('cdp-link-click-event', () => {
   });
 
   it('sanitizes link text into a valid CDP event type', () => {
-    expect(sanitizeCdpEventType('Open A Free Checking Account')).toBe('Open-A-Free-Checking-Account');
-    expect(sanitizeCdpEventType('OPEN A FREE CHECKING ACCOUNT')).toBe('OPEN-A-FREE-CHECKING-ACCOUNT');
+    expect(sanitizeCdpEventType('Open A Free Checking Account')).toBe(
+      'Open-A-Free-Checking-Account'
+    );
+    expect(sanitizeCdpEventType('OPEN A FREE CHECKING ACCOUNT')).toBe(
+      'OPEN-A-FREE-CHECKING-ACCOUNT'
+    );
   });
 
   it('sends a WEB channel event with a valid type and readable label', async () => {

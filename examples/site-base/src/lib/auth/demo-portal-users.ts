@@ -51,7 +51,7 @@ export function authenticateDemoPortalUser(input: {
   }
 
   const match = DEMO_PORTAL_USERS.find(
-    (user) => normalizeEmail(user.email) === email && user.password === password,
+    (user) => normalizeEmail(user.email) === email && user.password === password
   );
 
   if (!match) {

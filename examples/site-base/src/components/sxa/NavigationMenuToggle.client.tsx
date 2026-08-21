@@ -12,7 +12,11 @@ type NavigationMenuToggleProps = {
 /**
  * Client component for handling navigation menu toggle state
  */
-export const NavigationMenuToggle = ({ isEditing, onToggle, children }: NavigationMenuToggleProps) => {
+export const NavigationMenuToggle = ({
+  isEditing,
+  onToggle,
+  children,
+}: NavigationMenuToggleProps) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const handleToggleMenu = (event?: React.MouseEvent<HTMLElement>, flag?: boolean): void => {

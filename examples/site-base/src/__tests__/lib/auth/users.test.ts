@@ -24,7 +24,7 @@ describe('auth/demo-portal-users', () => {
       authenticateDemoPortalUser({
         email: 'chipotle@example.com',
         password: 'password123',
-      }),
+      })
     ).toEqual({
       id: 'demo:chipotle',
       email: 'chipotle@example.com',
@@ -38,7 +38,7 @@ describe('auth/demo-portal-users', () => {
       authenticateDemoPortalUser({
         email: '  TacoBell@Example.com  ',
         password: 'password123',
-      }),
+      })
     ).toMatchObject({
       customerSlug: 'tacobell',
       customerName: 'Taco Bell',
@@ -50,7 +50,7 @@ describe('auth/demo-portal-users', () => {
       authenticateDemoPortalUser({
         email: 'chipotle@example.com',
         password: 'wrong',
-      }),
+      })
     ).toBeNull();
   });
 });

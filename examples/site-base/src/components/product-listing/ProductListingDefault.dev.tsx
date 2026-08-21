@@ -71,7 +71,11 @@ export const ProductListingDefault: React.FC<ProductListingProps> = (props) => {
       >
         {/* JSON-LD structured data for products */}
         {productSchemas.map((schema, index) => (
-          <StructuredData key={`product-schema-${index}`} id={`product-schema-${index}`} data={schema} />
+          <StructuredData
+            key={`product-schema-${index}`}
+            id={`product-schema-${index}`}
+            data={schema}
+          />
         ))}
         <div className="@md:px-6 @md:py-20 @lg:py-28 mx-auto max-w-screen-xl px-4 py-12">
           <AnimatedSection

@@ -10,7 +10,7 @@ function flatFieldsWithoutData(fields: unknown): Record<string, unknown> {
 }
 
 function hasLayoutData(
-  fields: unknown,
+  fields: unknown
 ): fields is { data: { datasource?: Partial<DownloadListFields> } } {
   if (typeof fields !== 'object' || fields === null || !('data' in fields)) return false;
   const data = (fields as { data: unknown }).data;
@@ -18,7 +18,7 @@ function hasLayoutData(
 }
 
 function unwrapTextField(
-  cell: Field<string> | { jsonValue?: Field<string> } | undefined,
+  cell: Field<string> | { jsonValue?: Field<string> } | undefined
 ): Field<string> | undefined {
   if (cell == null) return undefined;
   if (typeof cell === 'object' && 'jsonValue' in cell && cell.jsonValue !== undefined) {
@@ -96,9 +96,7 @@ function extractLinkFromRow(row: unknown): LinkField | undefined {
   const field = r.field as Record<string, unknown> | undefined;
   if (field) {
     const fromField =
-      unwrapLinkField(field.link) ??
-      unwrapLinkField(field.Link) ??
-      unwrapLinkField(field.url);
+      unwrapLinkField(field.link) ?? unwrapLinkField(field.Link) ?? unwrapLinkField(field.url);
     if (fromField) return fromField;
   }
 
@@ -150,7 +148,10 @@ function pickFeaturedRaw(flat: Record<string, unknown>, ds: Record<string, unkno
   return undefined;
 }
 
-function pickDownloadContentRaw(flat: Record<string, unknown>, ds: Record<string, unknown>): unknown {
+function pickDownloadContentRaw(
+  flat: Record<string, unknown>,
+  ds: Record<string, unknown>
+): unknown {
   const keys = ['DownloadContent', 'downloadContent'] as const;
   for (const bag of [flat, ds]) {
     for (const key of keys) {
@@ -161,18 +162,26 @@ function pickDownloadContentRaw(flat: Record<string, unknown>, ds: Record<string
 }
 
 /** Reads GraphQL document text from the Download Content field (single- or multi-line / GraphQL field shapes). */
-export function extractGraphqlQueryFromDownloadContentField(downloadContent: unknown): string | undefined {
+export function extractGraphqlQueryFromDownloadContentField(
+  downloadContent: unknown
+): string | undefined {
   if (downloadContent == null) return undefined;
   if (typeof downloadContent === 'string') {
     const t = downloadContent.trim();
     return t || undefined;
   }
-  const unwrapped = unwrapTextField(downloadContent as Field<string> | { jsonValue?: Field<string> });
+  const unwrapped = unwrapTextField(
+    downloadContent as Field<string> | { jsonValue?: Field<string> }
+  );
   if (unwrapped?.value != null && typeof unwrapped.value === 'string') {
     const t = unwrapped.value.trim();
     return t || undefined;
   }
-  if (typeof downloadContent === 'object' && downloadContent !== null && 'value' in downloadContent) {
+  if (
+    typeof downloadContent === 'object' &&
+    downloadContent !== null &&
+    'value' in downloadContent
+  ) {
     const v = (downloadContent as { value?: unknown }).value;
     if (typeof v === 'string') {
       const t = v.trim();

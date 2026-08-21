@@ -151,9 +151,7 @@ export async function fetchBlogPosts({
     after: after ?? null,
   };
 
-  const data = await withRetries(() =>
-    client.request<BlogListingQueryResponse>(query, variables),
-  );
+  const data = await withRetries(() => client.request<BlogListingQueryResponse>(query, variables));
 
   const connection = data?.item?.children;
   const rawPosts = connection?.results ?? [];

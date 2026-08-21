@@ -165,7 +165,12 @@ export const GlobalHeaderDefault: React.FC<GlobalHeaderProps> = (props) => {
                 )}
               </AnimatePresence>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-transparent [&_svg]:size-8" aria-label="Toggle navigation menu">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-transparent [&_svg]:size-8"
+                  aria-label="Toggle navigation menu"
+                >
                   <Menu />
                   <span className="sr-only">Toggle menu</span>
                 </Button>

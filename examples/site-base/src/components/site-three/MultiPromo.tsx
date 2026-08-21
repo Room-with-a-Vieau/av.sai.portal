@@ -87,10 +87,7 @@ const DefaultPromoCard = ({ promo }: { promo: SimplePromoFields }) => {
 
   const content = (
     <>
-      <ContentSdkImage
-        field={image?.jsonValue}
-        className="mb-5 aspect-[4/3] w-full object-cover"
-      />
+      <ContentSdkImage field={image?.jsonValue} className="mb-5 aspect-[4/3] w-full object-cover" />
       <h3 className="mb-3 flex items-center gap-1 text-xl font-semibold lg:text-2xl">
         <ContentSdkText field={heading?.jsonValue} />
         <ChevronRight
@@ -529,12 +526,7 @@ const TopTabsLayout = ({
                 const isActive = index === activeIndex;
 
                 return (
-                  <div
-                    key={promo.id}
-                    data-promo-panel
-                    data-active={isActive}
-                    hidden={!isActive}
-                  >
+                  <div key={promo.id} data-promo-panel data-active={isActive} hidden={!isActive}>
                     <TopTabsPromoPanel
                       promo={promo}
                       tabId={`multi-promo-top-tab-${promo.id}`}

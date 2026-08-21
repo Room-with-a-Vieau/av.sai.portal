@@ -4,8 +4,8 @@ Multi-theme support for the shared **site-base** rendering host.
 
 ## Mental model
 
-| Sitecore | Code | CSS |
-|----------|------|-----|
+| Sitecore                       | Code                                       | CSS                   |
+| ------------------------------ | ------------------------------------------ | --------------------- |
 | Site definition field **Skin** | `site-skins.ts` + `resolveTheme({ site })` | `[data-theme='skin']` |
 
 Experience Edge does not expose custom Site fields in `sites.json`, so

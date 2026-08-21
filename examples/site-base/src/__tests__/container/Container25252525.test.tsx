@@ -29,7 +29,6 @@ jest.mock('../../utils/NoDataFallback', () => ({
   ),
 }));
 
-
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({
   cn: jest.fn((...classes) => {

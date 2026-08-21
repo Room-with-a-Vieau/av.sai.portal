@@ -217,12 +217,10 @@ export const columnsPromoProps: PromoProps = {
       value: 'Featured Rates',
     },
     PromoText: {
-      value:
-        '<h2>Express Mortgage</h2><p>20 year term as low as</p><h3>6.874% APR</h3>',
+      value: '<h2>Express Mortgage</h2><p>20 year term as low as</p><h3>6.874% APR</h3>',
     },
     PromoText2: {
-      value:
-        '<h2>Home Equity Line of Credit</h2><p>featured</p><h3>6.240% APR</h3>',
+      value: '<h2>Home Equity Line of Credit</h2><p>featured</p><h3>6.240% APR</h3>',
     },
     PromoLink: {
       value: {

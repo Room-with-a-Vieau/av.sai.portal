@@ -69,10 +69,7 @@ function SourceBreadcrumb({ field }: SourceBreadcrumbProps): React.ReactElement 
         return (
           <span key={`${segment}-${index}`} className="inline-flex items-center gap-1">
             {index > 0 && (
-              <ChevronRight
-                className="text-muted-foreground/70 size-3.5 shrink-0"
-                aria-hidden
-              />
+              <ChevronRight className="text-muted-foreground/70 size-3.5 shrink-0" aria-hidden />
             )}
             <span
               className={cn(

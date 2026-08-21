@@ -117,15 +117,16 @@ export default function ClientImage({ image, className, sizes, priority, ...rest
   // Set fetchPriority="high" for LCP images to reduce resource load delay
   const imageFetchPriority: 'high' | 'low' | 'auto' = shouldPrioritize ? 'high' : 'auto';
 
-  const { restWithoutBlur, blurDataURLRest } = peelRestForNextImage(rest as Record<string, unknown>);
+  const { restWithoutBlur, blurDataURLRest } = peelRestForNextImage(
+    rest as Record<string, unknown>
+  );
   const imageValueRest = peelValueForNextImage((image?.value as ImageProps) || ({} as ImageProps));
 
   // Next.js only accepts a tiny data URL for blur placeholders — never pass the image `src` here.
   const useBlurPlaceholder =
     typeof blurDataURLRest === 'string' && blurDataURLRest.startsWith('data:image');
 
-  const altFromRest =
-    typeof restWithoutBlur.alt === 'string' ? restWithoutBlur.alt.trim() : '';
+  const altFromRest = typeof restWithoutBlur.alt === 'string' ? restWithoutBlur.alt.trim() : '';
   const altText = altFromRest || String(image?.value?.alt ?? '');
 
   return (

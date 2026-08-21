@@ -57,7 +57,10 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mb-6">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
+          <p
+            className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`}
+            aria-label="Statistic value"
+          >
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>
@@ -90,7 +93,10 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mt-auto mb-12">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
+          <p
+            className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`}
+            aria-label="Statistic value"
+          >
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>
@@ -104,7 +110,10 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mb-6">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
+          <p
+            className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`}
+            aria-label="Statistic value"
+          >
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>

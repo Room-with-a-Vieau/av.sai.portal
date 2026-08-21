@@ -34,11 +34,7 @@ function hasValidLink(field: LinkField | undefined): boolean {
 const SocialLinks = ({ fields }: { fields: Fields }) => (
   <div className="flex justify-center gap-4">
     {hasValidLink(fields?.FacebookLink) ? (
-      <ContentSdkLink
-        field={fields?.FacebookLink}
-        prefetch={false}
-        aria-label="Facebook"
-      >
+      <ContentSdkLink field={fields?.FacebookLink} prefetch={false} aria-label="Facebook">
         <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
       </ContentSdkLink>
     ) : (
@@ -47,11 +43,7 @@ const SocialLinks = ({ fields }: { fields: Fields }) => (
       </span>
     )}
     {hasValidLink(fields?.InstagramLink) ? (
-      <ContentSdkLink
-        field={fields?.InstagramLink}
-        prefetch={false}
-        aria-label="Instagram"
-      >
+      <ContentSdkLink field={fields?.InstagramLink} prefetch={false} aria-label="Instagram">
         <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
       </ContentSdkLink>
     ) : (
@@ -60,11 +52,7 @@ const SocialLinks = ({ fields }: { fields: Fields }) => (
       </span>
     )}
     {hasValidLink(fields?.LinkedinLink) ? (
-      <ContentSdkLink
-        field={fields?.LinkedinLink}
-        prefetch={false}
-        aria-label="LinkedIn"
-      >
+      <ContentSdkLink field={fields?.LinkedinLink} prefetch={false} aria-label="LinkedIn">
         <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
       </ContentSdkLink>
     ) : (
@@ -157,10 +145,7 @@ export const LogoLeft = (props: FooterSTProps) => {
 
 export const LogoRight = (props: FooterSTProps) => {
   return (
-    <section
-      className={`relative bg-primary pb-8 ${props.params.styles}`}
-      data-class-change
-    >
+    <section className={`relative bg-primary pb-8 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2">
           <h2 className="lg:order-2 text-4xl lg:text-7xl mb-10 lg:mb-0 lg:text-right">

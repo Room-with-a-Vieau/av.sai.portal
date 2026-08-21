@@ -106,12 +106,7 @@ export const Default: React.FC<ArticleListingProps> = ({
               <article key={index} className="@md:mb-0 group/article mb-6">
                 {isPageEditing ? (
                   <div className="rounded-default @md:mb-0 relative mb-4 aspect-[3/2] w-full overflow-hidden">
-                    <Image
-                      src={article.image}
-                      alt={article.title}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={article.image} alt={article.title} fill className="object-cover" />
                   </div>
                 ) : (
                   <div

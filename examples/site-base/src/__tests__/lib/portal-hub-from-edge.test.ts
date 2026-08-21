@@ -46,7 +46,7 @@ describe('resolvePortalHubItemPath', () => {
       resolvePortalHubItemPath({
         paramsHubItemPath: '/sitecore/content/param/Data/Portal Hub',
         fieldsHubRootPath: { value: '/sitecore/content/field/Data/Portal Hub' } as Field<string>,
-      }),
+      })
     ).toBe('/sitecore/content/dfs/dfs/Data/Portal Hub');
   });
 
@@ -56,7 +56,7 @@ describe('resolvePortalHubItemPath', () => {
       resolvePortalHubItemPath({
         paramsHubItemPath: '/sitecore/content/dfs/dfs/Data/Portal Hub',
         fieldsHubRootPath: { value: '/sitecore/content/field/Data/Portal Hub' } as Field<string>,
-      }),
+      })
     ).toBe('/sitecore/content/dfs/dfs/Data/Portal Hub');
   });
 
@@ -65,7 +65,7 @@ describe('resolvePortalHubItemPath', () => {
     expect(
       resolvePortalHubItemPath({
         fieldsHubRootPath: { value: '/sitecore/content/dfs/dfs/Data/Portal Hub' } as Field<string>,
-      }),
+      })
     ).toBe('/sitecore/content/dfs/dfs/Data/Portal Hub');
   });
 

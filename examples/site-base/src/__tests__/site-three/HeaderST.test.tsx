@@ -339,7 +339,7 @@ describe('HeaderST Component', () => {
       // Check for responsive classes - desktop navigation should be hidden on mobile
       const desktopNavigation = screen.getByRole('navigation');
       expect(desktopNavigation).toBeInTheDocument();
-      
+
       // Check that mobile menu wrapper exists
       const mobileMenuButton = screen.getByLabelText('Toggle mobile menu');
       expect(mobileMenuButton).toBeInTheDocument();
@@ -553,7 +553,7 @@ describe('HeaderST Component', () => {
             ...defaultHeaderSTProps.params,
             FieldNames: '{197F5333-48FF-42CF-8357-B49796219679}',
           }}
-        />,
+        />
       );
 
       expect(screen.queryAllByTestId('app-placeholder')).toHaveLength(0);

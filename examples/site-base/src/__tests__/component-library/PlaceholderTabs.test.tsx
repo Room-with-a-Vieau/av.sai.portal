@@ -25,10 +25,14 @@ const mockPageNormal = {
 } as Page;
 
 // Mock component-map BEFORE importing PlaceholderTabs to avoid circular dependency
-jest.mock('../../components/component-library/.sitecore/component-map', () => ({
-  __esModule: true,
-  default: new Map(),
-}), { virtual: true });
+jest.mock(
+  '../../components/component-library/.sitecore/component-map',
+  () => ({
+    __esModule: true,
+    default: new Map(),
+  }),
+  { virtual: true }
+);
 
 // Import PlaceholderTabs after mocking component-map
 import { Default as PlaceholderTabs } from '../../components/component-library/PlaceholderTabs';
@@ -51,10 +55,14 @@ jest.mock('../../utils/NoDataFallback', () => ({
 }));
 
 // Mock component-map using virtual module
-jest.mock('.sitecore/component-map', () => ({
-  __esModule: true,
-  default: new Map(),
-}), { virtual: true });
+jest.mock(
+  '.sitecore/component-map',
+  () => ({
+    __esModule: true,
+    default: new Map(),
+  }),
+  { virtual: true }
+);
 
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({

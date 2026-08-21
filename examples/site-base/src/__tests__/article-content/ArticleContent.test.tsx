@@ -57,24 +57,28 @@ describe('ArticleContent', () => {
     render(<ArticleContent {...fullArticleContentProps} />);
 
     expect(screen.getByText('Insights')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Building resilient health platforms');
-    expect(
-      screen.getByText(/How modern integration patterns reduce risk/i)
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Building resilient health platforms'
+    );
+    expect(screen.getByText(/How modern integration patterns reduce risk/i)).toBeInTheDocument();
     expect(screen.getByText(/Teams often underestimate/i)).toBeInTheDocument();
   });
 
   it('renders pageTitle as h2 when pageHeaderTitle differs from pageTitle', () => {
     render(<ArticleContent {...splitTitleProps} />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Building resilient health platforms');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Building resilient health platforms'
+    );
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Technical deep dive');
   });
 
   it('uses pageTitle as h1 when pageHeaderTitle is absent', () => {
     render(<ArticleContent {...titleOnlyProps} />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Article without page header title field');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Article without page header title field'
+    );
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
   });
 
@@ -84,20 +88,27 @@ describe('ArticleContent', () => {
     expect(screen.getByText('Section label')).toBeInTheDocument();
     expect(screen.getByText(/Body intro without main header title/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Section label');
-    expect(container.querySelector('section')).toHaveAttribute('aria-labelledby', 'article-content-primary-heading');
+    expect(container.querySelector('section')).toHaveAttribute(
+      'aria-labelledby',
+      'article-content-primary-heading'
+    );
   });
 
   it('resolves copy from externalFields when datasource fields are empty', () => {
     render(<ArticleContent {...pageViaExternalFieldsProps} />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Title from page externalFields');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Title from page externalFields'
+    );
     expect(screen.getByText(/Summary from page externalFields/i)).toBeInTheDocument();
   });
 
   it('resolves copy from fields.data.externalFields jsonValue when no datasource', () => {
     render(<ArticleContent {...pageViaNestedExternalFieldsProps} />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Title from nested externalFields');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Title from nested externalFields'
+    );
     expect(screen.getByText(/Summary from nested externalFields/i)).toBeInTheDocument();
   });
 
@@ -120,7 +131,9 @@ describe('ArticleContent ServicePageVariant', () => {
     expect(
       screen.getByText(/Build faster with more control over schedule, labor, and quality/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Move critical work offsite into a controlled environment/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Move critical work offsite into a controlled environment/i)
+    ).toBeInTheDocument();
     expect(container.querySelector('[data-variant="ServicePageVariant"]')).toBeInTheDocument();
   });
 
@@ -138,16 +151,18 @@ describe('ArticleContent kmpage', () => {
 
     expect(screen.getByTestId('kmpage-hero-image')).toHaveAttribute(
       'src',
-      expect.stringContaining('89538338843c4f9ebab1c4128e14a6ff'),
+      expect.stringContaining('89538338843c4f9ebab1c4128e14a6ff')
     );
     expect(screen.getByText('Claims')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Claims Knowledge Base');
     expect(screen.getByText('Claim Intake & Standards')).toBeInTheDocument();
     expect(screen.getByText('Summary')).toBeInTheDocument();
     expect(
-      screen.getByText(/Shared internal standards for commercial lines claim intake/i),
+      screen.getByText(/Shared internal standards for commercial lines claim intake/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Progressive Claims Knowledge Base for associates/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Progressive Claims Knowledge Base for associates/i)
+    ).toBeInTheDocument();
     expect(container.querySelector('[data-variant="kmpage"]')).toBeInTheDocument();
   });
 

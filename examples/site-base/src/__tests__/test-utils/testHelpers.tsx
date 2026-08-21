@@ -35,4 +35,3 @@ export function createComponentProps<T extends Partial<ComponentProps>>(
     ...props,
   } as T & ComponentProps;
 }
-

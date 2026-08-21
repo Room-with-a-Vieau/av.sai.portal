@@ -1,15 +1,8 @@
 import { SitecoreClient } from '@sitecore-content-sdk/nextjs/client';
 import scConfig from 'sitecore.config';
 
-import {
-  isSitecoreSearchConfigured,
-  SEARCH_WIDGET_ID,
-} from '@/lib/search-customizations';
-import {
-  getPulsePack,
-  matchPulsePackIntent,
-  type PulseSitePack,
-} from '@/lib/pulse-packs';
+import { isSitecoreSearchConfigured, SEARCH_WIDGET_ID } from '@/lib/search-customizations';
+import { getPulsePack, matchPulsePackIntent, type PulseSitePack } from '@/lib/pulse-packs';
 import type {
   PulseRetrieveOptions,
   PulseSource,
@@ -312,11 +305,7 @@ function buildEdgeSearchQuery(keywordCount: number): string {
 
 function mapEdgeNode(node: EdgeNode): Omit<PulseSource, 'score'> | null {
   if (!node?.id) return null;
-  const title =
-    readString(node.title) ||
-    readString(node.pageTitle) ||
-    node.name ||
-    'Untitled';
+  const title = readString(node.title) || readString(node.pageTitle) || node.name || 'Untitled';
   const excerptRaw =
     readString(node.purpose) ||
     readString(node.pageSummary) ||
@@ -499,7 +488,10 @@ async function retrieveFromSitecoreSearch(
 
   if (source) {
     (widgetItem.search as Record<string, unknown>).source = {
-      id: source.split('|').map((s) => s.trim()).filter(Boolean),
+      id: source
+        .split('|')
+        .map((s) => s.trim())
+        .filter(Boolean),
     };
   }
 
@@ -626,7 +618,7 @@ export async function retrievePulseSources(
 
   const pack = getPulsePack(opts.siteName);
   const language = opts.language || 'en';
-  const stateCode = pack.enableStatePersona ? opts.stateCode ?? null : null;
+  const stateCode = pack.enableStatePersona ? (opts.stateCode ?? null) : null;
   const keywords = extractKeywords(question);
 
   const intent = matchPulsePackIntent(question, pack);

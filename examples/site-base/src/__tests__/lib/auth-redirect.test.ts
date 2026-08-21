@@ -25,7 +25,7 @@ describe('auth-redirect', () => {
 
   it('prefers datasource link over rendering param for login', () => {
     expect(resolvePostLoginRedirect(new URLSearchParams(), '/from-param', '/from-link')).toBe(
-      '/from-link',
+      '/from-link'
     );
   });
 
@@ -67,18 +67,18 @@ describe('auth-redirect', () => {
     expect(mapSitecorePortalItemPath('dfs/dfs/home/portal')).toBe('/portal');
     expect(mapSitecorePortalItemPath('/dfs/dfs/home/portal')).toBe('/portal');
     expect(mapSitecorePortalItemPath('/sitecore/content/dfs/dfs/Home/Portal/orders')).toBe(
-      '/portal/orders',
+      '/portal/orders'
     );
     expect(normalizePortalRedirectPath('/dfs/dfs/home/portal')).toBe('/portal');
-    expect(resolvePortalPostLoginRedirect(new URLSearchParams(), undefined, 'dfs/dfs/home/portal')).toBe(
-      '/portal',
-    );
+    expect(
+      resolvePortalPostLoginRedirect(new URLSearchParams(), undefined, 'dfs/dfs/home/portal')
+    ).toBe('/portal');
     expect(
       resolvePortalPostLoginRedirect(
         new URLSearchParams(),
         undefined,
-        '/sitecore/content/dfs/dfs/Home/Portal',
-      ),
+        '/sitecore/content/dfs/dfs/Home/Portal'
+      )
     ).toBe('/portal');
   });
 });
@@ -88,7 +88,7 @@ describe('resolveLinkFieldHref', () => {
     expect(
       resolveLinkFieldHref({
         value: { href: '/portal/dashboard', text: 'Dashboard', linktype: 'internal' },
-      }),
+      })
     ).toBe('/portal/dashboard');
   });
 
@@ -96,7 +96,7 @@ describe('resolveLinkFieldHref', () => {
     expect(
       resolveLinkFieldHref({
         value: { href: 'https://example.com', text: 'External', linktype: 'external' },
-      }),
+      })
     ).toBeUndefined();
   });
 
@@ -108,12 +108,12 @@ describe('resolveLinkFieldHref', () => {
           text: 'Portal',
           linktype: 'internal',
         },
-      }),
+      })
     ).toBe('/portal');
     expect(
       resolveLinkFieldHref({
         value: { href: 'dfs/dfs/home/portal', text: 'Portal', linktype: 'internal' },
-      }),
+      })
     ).toBe('/portal');
   });
 });

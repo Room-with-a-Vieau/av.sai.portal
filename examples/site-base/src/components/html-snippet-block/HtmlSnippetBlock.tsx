@@ -28,7 +28,7 @@ export const Default: React.FC<HtmlSnippetBlockProps> = (props) => {
     <article
       className={cn(
         'html-snippet-block w-full max-w-full min-w-0 px-4 py-8 md:px-6 md:py-10',
-        params?.styles,
+        params?.styles
       )}
       data-component="html-snippet-block"
     >
@@ -49,7 +49,7 @@ export const Default: React.FC<HtmlSnippetBlockProps> = (props) => {
       {(hasBody || isEditing) && (
         <div
           className={cn(
-            'html-snippet-block__body text-foreground not-prose w-full max-w-full min-w-0',
+            'html-snippet-block__body text-foreground not-prose w-full max-w-full min-w-0'
           )}
         >
           <RichText field={body} />

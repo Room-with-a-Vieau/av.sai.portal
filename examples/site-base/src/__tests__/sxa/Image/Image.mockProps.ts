@@ -2,9 +2,18 @@
  * Test fixtures and mock data for Image component
  */
 
-import type { ImageField, LinkField, Field, Page, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import type {
+  ImageField,
+  LinkField,
+  Field,
+  Page,
+  ComponentRendering,
+} from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps } from 'lib/component-props';
-import { mockPage as sharedMockPage, mockPageEditing as sharedMockPageEditing } from '../../test-utils/mockPage';
+import {
+  mockPage as sharedMockPage,
+  mockPageEditing as sharedMockPageEditing,
+} from '../../test-utils/mockPage';
 
 interface ImageFields {
   Image: ImageField & { metadata?: { [key: string]: unknown } };

@@ -49,7 +49,7 @@ function toSafeRedirect(value: string | undefined): string | undefined {
 
 function firstQueryMatch(
   searchParams: URLSearchParams | AuthRedirectSearchParams | null | undefined,
-  keys: readonly string[],
+  keys: readonly string[]
 ): string | undefined {
   if (!searchParams) {
     return undefined;
@@ -70,7 +70,7 @@ function firstQueryMatch(
 export function resolvePostLoginRedirect(
   searchParams: URLSearchParams | AuthRedirectSearchParams | null | undefined,
   paramRedirect?: string,
-  linkHref?: string,
+  linkHref?: string
 ): string {
   return (
     firstQueryMatch(searchParams, QUERY_LOGIN_KEYS) ??
@@ -86,7 +86,7 @@ export function resolvePostLoginRedirect(
  */
 export function resolvePostLogoutRedirect(
   searchParams: URLSearchParams | AuthRedirectSearchParams | null | undefined,
-  paramPostLogout?: string,
+  paramPostLogout?: string
 ): string {
   return (
     firstQueryMatch(searchParams, QUERY_LOGOUT_KEYS) ??
@@ -146,7 +146,7 @@ export function normalizePortalRedirectPath(path: string): string {
 export function resolvePortalPostLoginRedirect(
   searchParams: URLSearchParams | AuthRedirectSearchParams | null | undefined,
   paramRedirect?: string,
-  linkHref?: string,
+  linkHref?: string
 ): string {
   const resolved = resolvePostLoginRedirect(searchParams, paramRedirect, linkHref);
   if (resolved === DEFAULT_PATH) {

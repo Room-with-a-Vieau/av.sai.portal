@@ -20,10 +20,7 @@ function buildCacheControl(
   return parts.join(', ');
 }
 
-export function aiJsonResponse<T>(
-  data: T,
-  options?: AiJsonResponseOptions
-): NextResponse {
+export function aiJsonResponse<T>(data: T, options?: AiJsonResponseOptions): NextResponse {
   const maxAge = options?.maxAge ?? DEFAULT_MAX_AGE;
   const status = options?.status ?? 200;
   const cacheControl = buildCacheControl(maxAge, {

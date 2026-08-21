@@ -2,14 +2,23 @@ import type { Field, Page, RichTextField } from '@sitecore-content-sdk/nextjs';
 
 import { resolveTopicList, topicLabel, type TaxonomyTopicReference } from '@/lib/taxonomy-topic';
 
-import type { KmArticleContentFields, KmArticleContentProps, KmTopicReference } from './km-article-content.props';
+import type {
+  KmArticleContentFields,
+  KmArticleContentProps,
+  KmTopicReference,
+} from './km-article-content.props';
 
 export { topicLabel };
 export type { TaxonomyTopicReference };
 
 function unwrapCell<T>(cell: T | { jsonValue?: T } | undefined): T | undefined {
   if (!cell) return undefined;
-  if (typeof cell === 'object' && cell !== null && 'jsonValue' in cell && cell.jsonValue !== undefined) {
+  if (
+    typeof cell === 'object' &&
+    cell !== null &&
+    'jsonValue' in cell &&
+    cell.jsonValue !== undefined
+  ) {
     return cell.jsonValue;
   }
   return cell as T;
@@ -22,7 +31,9 @@ function pickText(
 ): Field<string> | undefined {
   if (!bag) return undefined;
   for (const name of names) {
-    const field = unwrapCell(bag[name] as Field<string> | { jsonValue?: Field<string> } | undefined);
+    const field = unwrapCell(
+      bag[name] as Field<string> | { jsonValue?: Field<string> } | undefined
+    );
     if (!field) continue;
     if (!requireNonEmpty || Boolean(field.value?.trim())) return field;
   }
@@ -36,7 +47,9 @@ function pickRichText(
 ): RichTextField | undefined {
   if (!bag) return undefined;
   for (const name of names) {
-    const field = unwrapCell(bag[name] as RichTextField | { jsonValue?: RichTextField } | undefined);
+    const field = unwrapCell(
+      bag[name] as RichTextField | { jsonValue?: RichTextField } | undefined
+    );
     if (!field) continue;
     if (!requireNonEmpty || Boolean(field.value?.trim())) return field;
   }
@@ -70,14 +83,14 @@ export function fieldNumber(field?: Field<string | number>): number | undefined 
   return Number.isFinite(n) ? n : undefined;
 }
 
-function pickTopics(
-  bag: Record<string, unknown> | undefined,
-  names: string[]
-): KmTopicReference[] {
+function pickTopics(bag: Record<string, unknown> | undefined, names: string[]): KmTopicReference[] {
   return resolveTopicList(bag, names);
 }
 
-function readBag(bag: Record<string, unknown> | undefined, requireNonEmpty: boolean): KmArticleContentFields {
+function readBag(
+  bag: Record<string, unknown> | undefined,
+  requireNonEmpty: boolean
+): KmArticleContentFields {
   if (!bag) return {};
   return {
     'KB-ID': pickText(bag, ['KB-ID', 'kbId', 'KbId'], requireNonEmpty),
@@ -106,7 +119,11 @@ function readBag(bag: Record<string, unknown> | undefined, requireNonEmpty: bool
       ['Photo Video Standards', 'photoVideoStandards'],
       requireNonEmpty
     ),
-    'General Mitigation': pickRichText(bag, ['General Mitigation', 'generalMitigation'], requireNonEmpty),
+    'General Mitigation': pickRichText(
+      bag,
+      ['General Mitigation', 'generalMitigation'],
+      requireNonEmpty
+    ),
     'Baseline Reserve Guidelines': pickRichText(
       bag,
       ['Baseline Reserve Guidelines', 'baselineReserveGuidelines'],
@@ -143,7 +160,10 @@ function readBag(bag: Record<string, unknown> | undefined, requireNonEmpty: bool
   };
 }
 
-function mergeBags(bags: (Record<string, unknown> | undefined)[], isEditing: boolean): KmArticleContentFields {
+function mergeBags(
+  bags: (Record<string, unknown> | undefined)[],
+  isEditing: boolean
+): KmArticleContentFields {
   const filled = readBag({}, false);
   const keys: (keyof KmArticleContentFields)[] = [
     'KB-ID',
@@ -180,7 +200,10 @@ function mergeBags(bags: (Record<string, unknown> | undefined)[], isEditing: boo
   for (const key of keys) {
     if (key === 'LOB' || key === 'Peril type') {
       for (const bag of bags) {
-        const topics = pickTopics(bag, key === 'LOB' ? ['LOB', 'lob'] : ['Peril type', 'perilType', 'PerilType']);
+        const topics = pickTopics(
+          bag,
+          key === 'LOB' ? ['LOB', 'lob'] : ['Peril type', 'perilType', 'PerilType']
+        );
         if (topics.length) {
           filled[key] = topics;
           break;
@@ -231,9 +254,8 @@ export function mergeKmArticleContentFields(
 
   const nestedExternal =
     fields && typeof fields === 'object' && 'data' in fields
-      ? ((fields as { data?: { externalFields?: Record<string, unknown> } }).data?.externalFields as
-          | Record<string, unknown>
-          | undefined)
+      ? ((fields as { data?: { externalFields?: Record<string, unknown> } }).data
+          ?.externalFields as Record<string, unknown> | undefined)
       : undefined;
 
   return mergeBags([flat, nestedExternal, routeFields(page)], isEditing);

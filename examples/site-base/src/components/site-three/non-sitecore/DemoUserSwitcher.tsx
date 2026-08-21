@@ -72,9 +72,7 @@ export function DemoUserSwitcher() {
           className="h-10 w-[min(100%,18.5rem)] justify-between gap-2 px-3 font-normal"
           aria-label={isLoggedIn ? 'Demo persona' : 'Login as demo persona'}
         >
-          <span className="truncate text-left">
-            {taxonomy ?? 'Login / Logout'}
-          </span>
+          <span className="truncate text-left">{taxonomy ?? 'Login / Logout'}</span>
           <ChevronDown className="size-4 shrink-0 opacity-50" aria-hidden />
         </Button>
       </DropdownMenuTrigger>

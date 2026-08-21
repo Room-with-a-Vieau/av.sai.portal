@@ -1,10 +1,7 @@
 import React from 'react';
 import { render, cleanup, screen } from '@testing-library/react';
 import * as ProductListing from '@/components/product-listing/ProductListing';
-import {
-  defaultProductListingProps,
-  productListingPropsEditing,
-} from './ProductListing.mockProps';
+import { defaultProductListingProps, productListingPropsEditing } from './ProductListing.mockProps';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({

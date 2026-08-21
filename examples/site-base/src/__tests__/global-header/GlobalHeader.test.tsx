@@ -169,7 +169,9 @@ describe('GlobalHeader Component', () => {
   describe('Editing Mode', () => {
     it('indicates editing state correctly', () => {
       // Test editing mode
-      const { unmount: unmountEditing } = render(<GlobalHeaderDefault {...globalHeaderPropsEditing} />);
+      const { unmount: unmountEditing } = render(
+        <GlobalHeaderDefault {...globalHeaderPropsEditing} />
+      );
       expect(screen.getByTestId('editing-mode')).toHaveTextContent('editing');
       unmountEditing();
 

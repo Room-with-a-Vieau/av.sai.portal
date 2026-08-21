@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
     // Check if Sitecore returned a blocking robots.txt
     // Common blocking patterns: "Disallow: /" without any "Allow:" rules
     const hasBlockingRule = text.includes('Disallow: /') && !text.includes('Allow:');
-    
+
     if (hasBlockingRule) {
       // Return our permissive robots.txt with AI crawler allowances
       const baseUrl = new URL(request.url).origin;
@@ -179,16 +179,16 @@ export async function GET(request: NextRequest) {
  */
 function ensureAICrawlerAccess(existingContent: string, baseUrl: string): string {
   const aiCrawlers = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'ChatGPT-User', 'anthropic-ai'];
-  const missingCrawlers = aiCrawlers.filter(crawler => !existingContent.includes(crawler));
+  const missingCrawlers = aiCrawlers.filter((crawler) => !existingContent.includes(crawler));
 
   let enhanced = existingContent;
 
   // Add missing AI crawler rules
   if (missingCrawlers.length > 0) {
-    const aiRules = missingCrawlers.map(crawler => 
-      `\n# AI Crawler - ${crawler}\nUser-agent: ${crawler}\nAllow: /`
-    ).join('\n');
-    
+    const aiRules = missingCrawlers
+      .map((crawler) => `\n# AI Crawler - ${crawler}\nUser-agent: ${crawler}\nAllow: /`)
+      .join('\n');
+
     enhanced += `\n\n# ==============================================\n# AI Crawlers - Added for discoverability\n# ==============================================\n${aiRules}`;
   }
 

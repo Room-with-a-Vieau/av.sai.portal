@@ -62,13 +62,7 @@ function ModeBadge({ mode }: { mode: KnowledgeListingMode }) {
   );
 }
 
-function FavoriteButton({
-  articleId,
-  className,
-}: {
-  articleId: string;
-  className?: string;
-}) {
+function FavoriteButton({ articleId, className }: { articleId: string; className?: string }) {
   const [fav, setFav] = useState(false);
 
   useEffect(() => {
@@ -119,7 +113,9 @@ function CardItem({ article }: { article: ResolvedKnowledgeArticle }) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           {article.kbId ? (
-            <p className="text-muted-foreground mb-1 font-mono text-xs tracking-wide">{article.kbId}</p>
+            <p className="text-muted-foreground mb-1 font-mono text-xs tracking-wide">
+              {article.kbId}
+            </p>
           ) : null}
           <h3 className="text-foreground text-lg font-semibold leading-snug tracking-tight">
             <Link
@@ -141,7 +137,10 @@ function CardItem({ article }: { article: ResolvedKnowledgeArticle }) {
       ) : null}
       <div className="text-primary mt-auto inline-flex items-center gap-1 text-sm font-medium">
         Open article
-        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+        <ArrowRight
+          className="size-4 transition-transform group-hover:translate-x-0.5"
+          aria-hidden
+        />
       </div>
     </article>
   );
@@ -178,10 +177,16 @@ function DetailItem({ article }: { article: ResolvedKnowledgeArticle }) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           {article.kbId ? (
-            <p className="text-muted-foreground mb-1 font-mono text-xs tracking-wide">{article.kbId}</p>
+            <p className="text-muted-foreground mb-1 font-mono text-xs tracking-wide">
+              {article.kbId}
+            </p>
           ) : null}
           <h3 className="text-foreground text-xl font-semibold tracking-tight">
-            <Link href={article.href} prefetch={false} className="hover:text-primary transition-colors">
+            <Link
+              href={article.href}
+              prefetch={false}
+              className="hover:text-primary transition-colors"
+            >
               {article.title}
             </Link>
           </h3>
@@ -209,13 +214,7 @@ function DetailItem({ article }: { article: ResolvedKnowledgeArticle }) {
   );
 }
 
-function KnowledgeListingView({
-  props,
-  view,
-}: {
-  props: KnowledgeListingProps;
-  view: ViewKind;
-}) {
+function KnowledgeListingView({ props, view }: { props: KnowledgeListingProps; view: ViewKind }) {
   const { params, isPageEditing: propIsEditing } = props;
   const { page } = useSitecore();
   const isEditing = propIsEditing !== undefined ? propIsEditing : page.mode.isEditing;

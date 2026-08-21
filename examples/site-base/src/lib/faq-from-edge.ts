@@ -74,10 +74,10 @@ export async function fetchFaqFromEdge(): Promise<FaqEdgeResult> {
   const language = scConfig.defaultLanguage || 'en';
 
   try {
-    const result = await client.getData<FaqQueryResult>(
-      buildFaqQuery(FAQ_GRAPHQL_TYPE),
-      { path, language }
-    );
+    const result = await client.getData<FaqQueryResult>(buildFaqQuery(FAQ_GRAPHQL_TYPE), {
+      path,
+      language,
+    });
 
     const items = (result?.item?.children?.results ?? [])
       .map((child) => ({

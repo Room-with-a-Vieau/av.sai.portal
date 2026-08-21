@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Link as ContentSdkLink,
-  LinkField,
-  TextField,
-} from '@sitecore-content-sdk/nextjs';
+import { Link as ContentSdkLink, LinkField, TextField } from '@sitecore-content-sdk/nextjs';
 import type { JSX } from 'react';
 
 interface Fields {

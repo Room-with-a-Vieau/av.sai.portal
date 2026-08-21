@@ -95,7 +95,7 @@ export const Default: React.FC<PortalPageDetailProps> = (props) => {
         // Full width of the Sitecore placeholder so embedded layout HTML (e.g. flex dashboards) is not
         // squeezed or offset; use params.styles from CM if you need a max-width text column.
         'portal-page-detail w-full max-w-full min-w-0 px-4 py-8 md:px-6 md:py-10',
-        params?.styles,
+        params?.styles
       )}
       data-component="portal-page-detail"
     >
@@ -118,7 +118,7 @@ export const Default: React.FC<PortalPageDetailProps> = (props) => {
         <div
           className={cn(
             // not-prose: avoid typography plugin rules on nested flex/grid (common cause of drift in RTE HTML).
-            'portal-page-detail__body text-foreground not-prose w-full max-w-full min-w-0',
+            'portal-page-detail__body text-foreground not-prose w-full max-w-full min-w-0'
           )}
         >
           <RichText field={body} />

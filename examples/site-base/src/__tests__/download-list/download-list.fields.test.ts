@@ -41,7 +41,9 @@ describe('resolveDownloadListFields', () => {
       },
     });
     expect(extractDownloadLinks(resolved.featuredContent)).toHaveLength(1);
-    expect(extractDownloadLinks(resolved.featuredContent)[0].value?.href).toBe('https://x.com/b.pdf');
+    expect(extractDownloadLinks(resolved.featuredContent)[0].value?.href).toBe(
+      'https://x.com/b.pdf'
+    );
   });
 
   it('prefers FeaturedContent over children when both are present', () => {
@@ -59,7 +61,7 @@ describe('resolveDownloadListFields', () => {
       },
     });
     expect(extractDownloadLinks(resolved.featuredContent)[0].value?.href).toBe(
-      'https://featured.only/file.pdf',
+      'https://featured.only/file.pdf'
     );
   });
 
@@ -88,11 +90,13 @@ describe('resolveDownloadListFields', () => {
 
 describe('extractGraphqlQueryFromDownloadContentField', () => {
   it('reads Field value and jsonValue', () => {
-    expect(extractGraphqlQueryFromDownloadContentField({ value: '  query { a }  ' })).toBe('query { a }');
+    expect(extractGraphqlQueryFromDownloadContentField({ value: '  query { a }  ' })).toBe(
+      'query { a }'
+    );
     expect(
       extractGraphqlQueryFromDownloadContentField({
         jsonValue: { value: 'query { b }' },
-      }),
+      })
     ).toBe('query { b }');
   });
 

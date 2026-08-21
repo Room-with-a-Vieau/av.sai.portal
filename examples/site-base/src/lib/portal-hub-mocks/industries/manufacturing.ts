@@ -1,4 +1,9 @@
-import { mockImageField, mockLinkField, mockModule, mockTextField } from '@/lib/portal-hub-mocks/mock-field-helpers';
+import {
+  mockImageField,
+  mockLinkField,
+  mockModule,
+  mockTextField,
+} from '@/lib/portal-hub-mocks/mock-field-helpers';
 import type { PortalHubMockIndustry } from '@/lib/portal-hub-mocks/types';
 
 export const manufacturingMock: PortalHubMockIndustry = {
