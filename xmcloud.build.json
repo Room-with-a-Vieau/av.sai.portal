@@ -44,16 +44,7 @@
       "type": "sxa",
       "buildCommand": "build",
       "runCommand": "next:start"
-    }, 
-    "illumina": {
-      "path": "./examples/illumina",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },   
+    },
     "cooley": {
       "path": "./examples/cooley",
       "nodeVersion": "24.14.1",
@@ -62,36 +53,9 @@
       "type": "sxa",
       "buildCommand": "build",
       "runCommand": "next:start"
-    },  
+    },
     "site-base": {
       "path": "./examples/site-base",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },   
-    "Chiesi": {
-      "path": "./examples/Chiesi",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },   
-    "novacare": {
-      "path": "./examples/novacare",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },  
-    "microbiologics": {
-      "path": "./examples/microbiologics",
       "nodeVersion": "24.14.1",
       "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
       "enabled": true,
@@ -101,69 +65,6 @@
     },
     "rockland": {
       "path": "./examples/rockland",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "pkm": {
-      "path": "./examples/pkm",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "pillsbury": {
-      "path": "./examples/pillsbury",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "dwh": {
-      "path": "./examples/dwh",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "threatlocker": {
-      "path": "./examples/threatlocker",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "syngenta": {
-      "path": "./examples/syngenta",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "dycom": {
-      "path": "./examples/dycom",
-      "nodeVersion": "24.14.1",
-      "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
-      "enabled": true,
-      "type": "sxa",
-      "buildCommand": "build",
-      "runCommand": "next:start"
-    },
-    "builderfs": {
-      "path": "./examples/builderfs",
       "nodeVersion": "24.14.1",
       "jssDeploymentSecret": "110F1C44A496B45478640DD36F80C18C9",
       "enabled": true,
